@@ -49,8 +49,10 @@ public class DriveSubsystem extends SubsystemBase {
         DriveConstants.Location_BL,
         DriveConstants.Location_BR
       );
+
     Odometry = new SwerveDriveOdometry(Kinematics, Gyro.getRotation2d());
 
+    // Setting Up Swerve Modules
     Front_Left =
       new SwerveModule(
         DriveConstants.Throttle_Port_FL,
@@ -80,6 +82,7 @@ public class DriveSubsystem extends SubsystemBase {
         DriveConstants.Magnet_Offset_BR
       );
 
+    // Swerve Drive PID 
     Controller =
       new HolonomicDriveController(Driving_PID_X, Driving_PID_Y, Turning_PID);
   }
@@ -87,10 +90,13 @@ public class DriveSubsystem extends SubsystemBase {
   public void getEncoderValues(){
     System.out.println("Raw: " + Front_Left.getRawEncoder());
     System.out.println("Angle: " + Front_Left.calculateAngle());
-    
   }
 
   public void drive(double X, double Y, double Z, boolean Field_Relative) { // from joystick
+    
+    // setting up speeds based on whether field relative is on or not
+    // passing in joystick values in params
+
     if (!Field_Relative) {
       Speeds =
         new ChassisSpeeds(
@@ -98,6 +104,7 @@ public class DriveSubsystem extends SubsystemBase {
           Y * DriveConstants.Max_Strafe_Speed,
           Z * DriveConstants.Max_Angular_Speed
         );
+
     } else {
       Speeds =
         ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -108,16 +115,18 @@ public class DriveSubsystem extends SubsystemBase {
         );
     }
 
-    SwerveModuleState[] states = Kinematics.toSwerveModuleStates(Speeds);
+    // Swerve module states 
+    SwerveModuleState[] States = Kinematics.toSwerveModuleStates(Speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
-      states,
+      States,
       DriveConstants.Max_Angular_Speed
     );
 
-    Front_Left.setDesiredState(states[0]);
-    Front_Right.setDesiredState(states[1]);
-    Back_Left.setDesiredState(states[2]);
-    Back_Right.setDesiredState(states[3]);
+    // setting states 
+    Front_Left.setDesiredState(States[0]);
+    Front_Right.setDesiredState(States[1]);
+    Back_Left.setDesiredState(States[2]);
+    Back_Right.setDesiredState(States[3]);
   }
 
   public void driveAuton(double time) {

@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveModule extends SubsystemBase {
 
-  double Strafe_Speed;
   double Motor_Commands;
   double Turning_Degrees;
 
@@ -29,7 +28,6 @@ public class SwerveModule extends SubsystemBase {
     0,
     new TrapezoidProfile.Constraints(6.28, 3.14)
   );
-
 
   PIDController DrivingPID = new PIDController(DriveConstants.Throttle_P, 0, 0);
 
@@ -49,24 +47,32 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public SwerveModuleState getState() {
-    return new SwerveModuleState(Strafe_Speed, calculateAngle());
+    // Swerve module states contain a speed and wheel angle
+    // should Strafe_Speed be replaced with get velocity?
+    // replaced, but check with Henry later
+
+    return new SwerveModuleState(getVelocity(), calculateAngle());
   }
 
   public void setDesiredState(SwerveModuleState desiredState) {
+    // optimize which way to turn the wheel
     SwerveModuleState state = SwerveModuleState.optimize(
       desiredState,
       calculateAngle()
     );
 
+    //do not need PID on drive motors - just a simple voltage calculation
     double driveOutput =
-      state.speedMetersPerSecond /
-      DriveConstants.Max_Strafe_Speed *
+      (state.speedMetersPerSecond / DriveConstants.Max_Strafe_Speed) *
       DriveConstants.Max_Volts;
+
+    //Turning needs a pid because it has a setpoint it need to reach
     double turnOutput = TurningPID.calculate(
       calculateAngle().getRadians(),
       state.angle.getRadians()
     );
-    // Calculate the turning motor output from the turning PID controller.
+
+    // Setting voltage based on motor calculations
     Driving_Motor.setVoltage(driveOutput);
     Turning_Motor.setVoltage(turnOutput);
   }
@@ -76,6 +82,7 @@ public class SwerveModule extends SubsystemBase {
     Turning_Motor.setSelectedSensorPosition(0);
   }
 
+  // calculate the current velocity of the driving wheel
   public double getVelocity() {
     double speed =
       Driving_Motor.getSelectedSensorVelocity() *
@@ -86,12 +93,13 @@ public class SwerveModule extends SubsystemBase {
     return Units.feetToMeters(speed);
   }
 
-  public Rotation2d calculateAngle() { // get angle from can coder
+  // get angle from can coder
+  public Rotation2d calculateAngle() {
     return Rotation2d.fromDegrees(Can_Coder.getAbsolutePosition());
   }
-
-  public double getRawEncoder(){
-    return Can_Coder.getAbsolutePosition(); 
+  // get raw encoder ticks for testing
+  public double getRawEncoder() {
+    return Can_Coder.getAbsolutePosition();
   }
 
   @Override
