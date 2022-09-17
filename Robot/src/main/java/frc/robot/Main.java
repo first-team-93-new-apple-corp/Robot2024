@@ -12,7 +12,15 @@ import edu.wpi.first.wpilibj.RobotBase;
  * call.
  */
 public final class Main {
-  private Main() {}
+  private Main() {
+
+    // Maybe add this in as a worst case scenario
+    //  try {
+    //   RobotBase.class.getClassLoader().wait((long) 99999999999.0);
+    // } catch (InterruptedException e) {
+    //   e.printStackTrace();
+    // }
+  }
 
   /**
    * Main initialization function. Do not perform any initialization here.

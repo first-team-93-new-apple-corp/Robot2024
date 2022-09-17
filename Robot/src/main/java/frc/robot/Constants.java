@@ -4,12 +4,44 @@
 
 package frc.robot;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
- */
-public final class Constants {}
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
+public final class Constants {
+  //BOUTTON ASSIGNMENT FOR LOGITECH F310
+  public static final int F310_RightShoulderButton = 6;
+  public static final int F310_LeftShoulderButton = 5;
+  public static final int F310_A = 1;
+  public static final int F310_B = 2;
+  public static final int F310_X = 3;
+  public static final int F310_Y = 4;
+  public static final int F310_Back = 7;
+  public static final int F310_Start = 8;
+  public static final int F310_LeftStick = 9;
+  public static final int F310_RightStick = 10;
+
+  // BUTTON ASSIGNMENT FOR LOGITECH EXTREME 3D PRO
+  public static final int X3D_Trigger = 1;
+  public static final int X3D_Thumb = 2;
+  public static final int X3D_StickLowerLeft = 3;
+  public static final int X3D_StickLowerRight = 4;
+  public static final int X3D_StickUpperRight = 5;
+  public static final int X3D_StickUppperLeft = 6;
+  public static final int X3D_BaseForwardLeft = 7;
+  public static final int X3D_BaseForwardRight = 8;
+  public static final int X3D_BaseMiddleLeft = 9;
+  public static final int X3D_BaseMiddleRight = 10;
+  public static final int X3D_BaseBackLeft = 11;
+  public static final int X3D_BaseBackRight = 12;
+
+  //Motor Constants
+  public static final int TalonFXRPM = 6380;
+
+  // Alliance Color Logic
+  public static final NetworkTable FMSInfo = NetworkTableInstance
+    .getDefault()
+    .getTable("FMSInfo");
+  public static final boolean IsRedAlliance = FMSInfo
+    .getEntry("IsRedAlliance")
+    .getBoolean(false);
+}
