@@ -16,115 +16,167 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
-  AHRS gyro;
-  SwerveDriveOdometry odometry;
-  SwerveDriveKinematics kinematics;
 
-  SwerveModule frontLeft;
-  SwerveModule frontRight;
-  SwerveModule backLeft;
-  SwerveModule backRight;
-  Trajectory trajectory;
+  AHRS Gyro;
+  SwerveDriveOdometry Odometry;
+  SwerveDriveKinematics Kinematics;
 
-  ProfiledPIDController TurningPID = new ProfiledPIDController(SwerveDriveConstantsFalcon.TurningP, 0, 0,
-      new TrapezoidProfile.Constraints(6.28, 3.14));
-  PIDController DrivingPIDX = new PIDController(1, 0, 0);
-  PIDController DrivingPIDY = new PIDController(1, 0, 0);
+  SwerveModule Front_Left;
+  SwerveModule Front_Right;
+  SwerveModule Back_Left;
+  SwerveModule Back_Right;
+  Trajectory Trajectory;
+
+  ProfiledPIDController Turning_PID = new ProfiledPIDController(
+    DriveConstants.TurningP,
+    0,
+    0,
+    new TrapezoidProfile.Constraints(6.28, 3.14)
+  );
+  PIDController Driving_PID_X = new PIDController(1, 0, 0);
+  PIDController Driving_PID_Y = new PIDController(1, 0, 0);
 
   ChassisSpeeds Speeds;
-  HolonomicDriveController controller;
+  HolonomicDriveController Controller;
 
-  public Drivetrain() {
-    gyro = new AHRS(SPI.Port.kMXP);
+  public DriveSubsystem() {
+    Gyro = new AHRS(SPI.Port.kMXP);
 
-    kinematics = new SwerveDriveKinematics(SwerveDriveConstantsFalcon.locationFL, SwerveDriveConstantsFalcon.locationFR,
-        SwerveDriveConstantsFalcon.locationBL, SwerveDriveConstantsFalcon.locationBR);
-    odometry = new SwerveDriveOdometry(kinematics, gyro.getRotation2d());
+    Kinematics =
+      new SwerveDriveKinematics(
+        DriveConstants.locationFL,
+        DriveConstants.locationFR,
+        DriveConstants.locationBL,
+        DriveConstants.locationBR
+      );
+    Odometry = new SwerveDriveOdometry(Kinematics, Gyro.getRotation2d());
 
-    frontLeft = new SwerveModule(SwerveDriveConstantsFalcon.FLThrottlePort,
-        SwerveDriveConstantsFalcon.FLTurningPort, SwerveDriveConstantsFalcon.FLEncoderPort,SwerveDriveConstantsFalcon.FLMagnetOffset);
-    frontRight = new SwerveModule(SwerveDriveConstantsFalcon.FRThrottlePort,
-        SwerveDriveConstantsFalcon.FRTurningPort, SwerveDriveConstantsFalcon.FREncoderPort,SwerveDriveConstantsFalcon.FRMagnetOffset);
-    backLeft = new SwerveModule(SwerveDriveConstantsFalcon.BLThrottlePort,
-        SwerveDriveConstantsFalcon.BLTurningPort, SwerveDriveConstantsFalcon.BLEncoderPort,SwerveDriveConstantsFalcon.BLMagnetOffset);
-    backRight = new SwerveModule(SwerveDriveConstantsFalcon.BRThrottlePort,
-        SwerveDriveConstantsFalcon.BRTurningPort, SwerveDriveConstantsFalcon.BREncoderPort,SwerveDriveConstantsFalcon.BRMagnetOffset);
+    Front_Left =
+      new SwerveModule(
+        DriveConstants.FLThrottlePort,
+        DriveConstants.FLTurningPort,
+        DriveConstants.FLEncoderPort,
+        DriveConstants.FLMagnetOffset
+      );
+    Front_Right =
+      new SwerveModule(
+        DriveConstants.FRThrottlePort,
+        DriveConstants.FRTurningPort,
+        DriveConstants.FREncoderPort,
+        DriveConstants.FRMagnetOffset
+      );
+    Back_Left =
+      new SwerveModule(
+        DriveConstants.BLThrottlePort,
+        DriveConstants.BLTurningPort,
+        DriveConstants.BLEncoderPort,
+        DriveConstants.BLMagnetOffset
+      );
+    Back_Right =
+      new SwerveModule(
+        DriveConstants.BRThrottlePort,
+        DriveConstants.BRTurningPort,
+        DriveConstants.BREncoderPort,
+        DriveConstants.BRMagnetOffset
+      );
 
-    controller = new HolonomicDriveController(DrivingPIDX, DrivingPIDY, TurningPID); 
+    Controller =
+      new HolonomicDriveController(Driving_PID_X, Driving_PID_Y, Turning_PID);
   }
 
-  public void drive(double X, double Y, double Z, boolean Fieldrelative) { // from joystick
-    if (!Fieldrelative) {
-      Speeds = new ChassisSpeeds(X * SwerveDriveConstantsFalcon.maxStrafeSpeed,
-          Y * SwerveDriveConstantsFalcon.maxStrafeSpeed, Z * SwerveDriveConstantsFalcon.maxAngularSpeed);
+  public void drive(double X, double Y, double Z, boolean Field_Relative) { // from joystick
+    if (!Field_Relative) {
+      Speeds =
+        new ChassisSpeeds(
+          X * DriveConstants.maxStrafeSpeed,
+          Y * DriveConstants.maxStrafeSpeed,
+          Z * DriveConstants.maxAngularSpeed
+        );
     } else {
-      Speeds = ChassisSpeeds.fromFieldRelativeSpeeds(X * SwerveDriveConstantsFalcon.maxStrafeSpeed,
-          Y * SwerveDriveConstantsFalcon.maxStrafeSpeed, Z * SwerveDriveConstantsFalcon.maxAngularSpeed,
-          gyro.getRotation2d());
+      Speeds =
+        ChassisSpeeds.fromFieldRelativeSpeeds(
+          X * DriveConstants.maxStrafeSpeed,
+          Y * DriveConstants.maxStrafeSpeed,
+          Z * DriveConstants.maxAngularSpeed,
+          Gyro.getRotation2d()
+        );
     }
 
-    SwerveModuleState[] states = kinematics.toSwerveModuleStates(Speeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, SwerveDriveConstantsFalcon.maxStrafeSpeed);
+    SwerveModuleState[] states = Kinematics.toSwerveModuleStates(Speeds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+      states,
+      DriveConstants.maxStrafeSpeed
+    );
 
-    frontLeft.setDesiredState(states[0]);
-    frontRight.setDesiredState(states[1]);
-    backLeft.setDesiredState(states[2]);
-    backRight.setDesiredState(states[3]);
-
+    Front_Left.setDesiredState(states[0]);
+    Front_Right.setDesiredState(states[1]);
+    Back_Left.setDesiredState(states[2]);
+    Back_Right.setDesiredState(states[3]);
   }
 
-  public void driveAuton(double time) {
+  public void drive_Auton(double time) {
     // we are passing in time from the command, this could then get passed into the
     // sample
-    Trajectory.State goal = trajectory.sample(time);
-    ChassisSpeeds adjustedSpeeds = controller.calculate(getPose(), goal, Rotation2d.fromDegrees(0));
-    SwerveModuleState[] states = kinematics.toSwerveModuleStates(adjustedSpeeds);
+    Trajectory.State goal = Trajectory.sample(time);
+    ChassisSpeeds adjustedSpeeds = Controller.calculate(
+      getPose(),
+      goal,
+      Rotation2d.fromDegrees(0)
+    );
+    SwerveModuleState[] states = Kinematics.toSwerveModuleStates(
+      adjustedSpeeds
+    );
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, SwerveDriveConstantsFalcon.maxStrafeSpeed);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+      states,
+      DriveConstants.maxStrafeSpeed
+    );
 
-    frontLeft.setDesiredState(states[0]);
-    frontRight.setDesiredState(states[1]);
-    backLeft.setDesiredState(states[2]);
-    backRight.setDesiredState(states[3]);
-
+    Front_Left.setDesiredState(states[0]);
+    Front_Right.setDesiredState(states[1]);
+    Back_Left.setDesiredState(states[2]);
+    Back_Right.setDesiredState(states[3]);
   }
 
   public void getStates() {
-
-    frontLeft.getState();
-    frontRight.getState();
-    backLeft.getState();
-    backRight.getState();
+    Front_Left.getState();
+    Front_Right.getState();
+    Back_Left.getState();
+    Back_Right.getState();
   }
 
   public Pose2d getPose() {
-    return odometry.getPoseMeters();
+    return Odometry.getPoseMeters();
   }
 
   public double getHeading() {
-    return gyro.getRotation2d().getDegrees();
+    return Gyro.getRotation2d().getDegrees();
   }
 
   public void zeroHeading() {
-    gyro.reset();
+    Gyro.reset();
   }
 
   public void resetEncoders() {
-    frontLeft.resetEncoders();
-    frontRight.resetEncoders();
-    backLeft.resetEncoders();
-    backRight.resetEncoders();
+    Front_Left.resetEncoders();
+    Front_Right.resetEncoders();
+    Back_Left.resetEncoders();
+    Back_Right.resetEncoders();
   }
 
   public void resetOdometry(Pose2d pose) {
-    odometry.resetPosition(pose, gyro.getRotation2d());
+    Odometry.resetPosition(pose, Gyro.getRotation2d());
   }
 
   @Override
   public void periodic() {
-    odometry.update(gyro.getRotation2d(), frontLeft.getState(), frontRight.getState(), backLeft.getState(),
-        backRight.getState());
-
+    Odometry.update(
+      Gyro.getRotation2d(),
+      Front_Left.getState(),
+      Front_Right.getState(),
+      Back_Left.getState(),
+      Back_Right.getState()
+    );
   }
 
   @Override

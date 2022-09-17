@@ -20,7 +20,7 @@ public class SwerveModule extends SubsystemBase {
     WPI_TalonFX DrivingMotor;
     WPI_TalonFX TurningMotor;
     WPI_CANCoder CanCoder;
-    ProfiledPIDController TurningPID = new ProfiledPIDController(SwerveDriveConstantsFalcon.TurningP, 0, 0,
+    ProfiledPIDController TurningPID = new ProfiledPIDController(DriveConstants.TurningP, 0, 0,
             new TrapezoidProfile.Constraints(6.28, 3.14));
     PIDController DrivingPID = new PIDController(1, 0, 0);
 
@@ -38,7 +38,7 @@ public class SwerveModule extends SubsystemBase {
     public void setDesiredState(SwerveModuleState desiredState) {
         SwerveModuleState state = SwerveModuleState.optimize(desiredState, calculateAngle());
 
-        double driveOutput = state.speedMetersPerSecond / SwerveDriveConstantsFalcon.maxStrafeSpeed * SwerveDriveConstantsFalcon.MaxVolts; 
+        double driveOutput = state.speedMetersPerSecond / DriveConstants.maxStrafeSpeed * DriveConstants.MaxVolts; 
         double turnOutput = TurningPID.calculate(calculateAngle().getRadians(), state.angle.getRadians());
         // Calculate the turning motor output from the turning PID controller.
         DrivingMotor.setVoltage(driveOutput);
@@ -52,8 +52,8 @@ public class SwerveModule extends SubsystemBase {
 
     public double getVelocity() {
         double speed = DrivingMotor.getSelectedSensorVelocity() * 10
-                / SwerveDriveConstantsFalcon.TalonFXEncoderResolution / SwerveDriveConstantsFalcon.drivingGearing
-                * SwerveDriveConstantsFalcon.WheelCircumference;
+                / DriveConstants.TalonFXEncoderResolution / DriveConstants.drivingGearing
+                * DriveConstants.WheelCircumference;
         return Units.feetToMeters(speed);
     }
 

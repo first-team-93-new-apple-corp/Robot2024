@@ -34,14 +34,5 @@ public final class Constants {
   public static final int X3D_BaseBackLeft = 11;
   public static final int X3D_BaseBackRight = 12;
 
-  //Motor Constants
-  public static final int TalonFXRPM = 6380;
 
-  // Alliance Color Logic
-  public static final NetworkTable FMSInfo = NetworkTableInstance
-    .getDefault()
-    .getTable("FMSInfo");
-  public static final boolean IsRedAlliance = FMSInfo
-    .getEntry("IsRedAlliance")
-    .getBoolean(false);
 }
