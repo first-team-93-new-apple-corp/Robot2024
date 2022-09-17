@@ -28,7 +28,7 @@ public class DriveSubsystem extends SubsystemBase {
   Trajectory Trajectory;
 
   ProfiledPIDController Turning_PID = new ProfiledPIDController(
-    DriveConstants.TurningP,
+    DriveConstants.Turning_P,
     0,
     0,
     new TrapezoidProfile.Constraints(6.28, 3.14)
@@ -44,60 +44,66 @@ public class DriveSubsystem extends SubsystemBase {
 
     Kinematics =
       new SwerveDriveKinematics(
-        DriveConstants.locationFL,
-        DriveConstants.locationFR,
-        DriveConstants.locationBL,
-        DriveConstants.locationBR
+        DriveConstants.Location_FL,
+        DriveConstants.Location_FR,
+        DriveConstants.Location_BL,
+        DriveConstants.Location_BR
       );
     Odometry = new SwerveDriveOdometry(Kinematics, Gyro.getRotation2d());
 
     Front_Left =
       new SwerveModule(
-        DriveConstants.FLThrottlePort,
-        DriveConstants.FLTurningPort,
-        DriveConstants.FLEncoderPort,
-        DriveConstants.FLMagnetOffset
+        DriveConstants.Throttle_Port_FL,
+        DriveConstants.Turning_Port_FL,
+        DriveConstants.Encoder_Port_FL,
+        DriveConstants.Magnet_Offset_FL
       );
     Front_Right =
       new SwerveModule(
-        DriveConstants.FRThrottlePort,
-        DriveConstants.FRTurningPort,
-        DriveConstants.FREncoderPort,
-        DriveConstants.FRMagnetOffset
+        DriveConstants.Throttle_Port_FR,
+        DriveConstants.Turning_Port_FR,
+        DriveConstants.Encoder_Port_FR,
+        DriveConstants.Magnet_Offset_FR
       );
     Back_Left =
       new SwerveModule(
-        DriveConstants.BLThrottlePort,
-        DriveConstants.BLTurningPort,
-        DriveConstants.BLEncoderPort,
-        DriveConstants.BLMagnetOffset
+        DriveConstants.Throttle_Port_BL,
+        DriveConstants.Turning_Port_BL,
+        DriveConstants.Encoder_Port_BL,
+        DriveConstants.Magnet_Offset_BL
       );
     Back_Right =
       new SwerveModule(
-        DriveConstants.BRThrottlePort,
-        DriveConstants.BRTurningPort,
-        DriveConstants.BREncoderPort,
-        DriveConstants.BRMagnetOffset
+        DriveConstants.Throttle_Port_BR,
+        DriveConstants.Turning_Port_BR,
+        DriveConstants.Encoder_Port_BR,
+        DriveConstants.Magnet_Offset_BR
       );
 
     Controller =
       new HolonomicDriveController(Driving_PID_X, Driving_PID_Y, Turning_PID);
   }
 
+  public void getEncoderValues(){
+    System.out.println("Raw: " + Front_Left.getRawEncoder());
+    System.out.println("Angle: " + Front_Left.calculateAngle());
+    
+  }
+
   public void drive(double X, double Y, double Z, boolean Field_Relative) { // from joystick
     if (!Field_Relative) {
       Speeds =
         new ChassisSpeeds(
-          X * DriveConstants.maxStrafeSpeed,
-          Y * DriveConstants.maxStrafeSpeed,
-          Z * DriveConstants.maxAngularSpeed
+          X * DriveConstants.Max_Strafe_Speed,
+          Y * DriveConstants.Max_Strafe_Speed,
+          Z * DriveConstants.Max_Angular_Speed
         );
     } else {
       Speeds =
         ChassisSpeeds.fromFieldRelativeSpeeds(
-          X * DriveConstants.maxStrafeSpeed,
-          Y * DriveConstants.maxStrafeSpeed,
-          Z * DriveConstants.maxAngularSpeed,
+          X * DriveConstants.Max_Strafe_Speed,
+          Y * DriveConstants.Max_Strafe_Speed,
+          Z * DriveConstants.Max_Angular_Speed,
           Gyro.getRotation2d()
         );
     }
@@ -105,7 +111,7 @@ public class DriveSubsystem extends SubsystemBase {
     SwerveModuleState[] states = Kinematics.toSwerveModuleStates(Speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
       states,
-      DriveConstants.maxStrafeSpeed
+      DriveConstants.Max_Angular_Speed
     );
 
     Front_Left.setDesiredState(states[0]);
@@ -114,7 +120,7 @@ public class DriveSubsystem extends SubsystemBase {
     Back_Right.setDesiredState(states[3]);
   }
 
-  public void drive_Auton(double time) {
+  public void driveAuton(double time) {
     // we are passing in time from the command, this could then get passed into the
     // sample
     Trajectory.State goal = Trajectory.sample(time);
@@ -129,7 +135,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     SwerveDriveKinematics.desaturateWheelSpeeds(
       states,
-      DriveConstants.maxStrafeSpeed
+      DriveConstants.Max_Angular_Speed
     );
 
     Front_Left.setDesiredState(states[0]);
@@ -180,7 +186,5 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
-  }
+  public void simulationPeriodic() {}
 }

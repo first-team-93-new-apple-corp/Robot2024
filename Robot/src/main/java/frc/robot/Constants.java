@@ -4,11 +4,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 
 public final class Constants {
-  //BOUTTON ASSIGNMENT FOR LOGITECH F310
+  //BUTTON ASSIGNMENT FOR LOGITECH F310
   public static final int F310_RightShoulderButton = 6;
   public static final int F310_LeftShoulderButton = 5;
   public static final int F310_A = 1;
@@ -26,7 +24,7 @@ public final class Constants {
   public static final int X3D_StickLowerLeft = 3;
   public static final int X3D_StickLowerRight = 4;
   public static final int X3D_StickUpperRight = 5;
-  public static final int X3D_StickUppperLeft = 6;
+  public static final int X3D_StickUpperLeft = 6;
   public static final int X3D_BaseForwardLeft = 7;
   public static final int X3D_BaseForwardRight = 8;
   public static final int X3D_BaseMiddleLeft = 9;

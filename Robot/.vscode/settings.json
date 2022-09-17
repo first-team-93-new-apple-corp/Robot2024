@@ -28,7 +28,10 @@
   "java.test.defaultConfig": "WPIlibUnitTests",
   "cSpell.words": [
     "AHRS",
+    "ctre",
     "Holonomic",
-    "Odometry"
+    "motorcontrol",
+    "Odometry",
+    "Trackwidth"
   ]
 }
