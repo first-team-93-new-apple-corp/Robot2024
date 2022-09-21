@@ -15,21 +15,20 @@ public final class DriveConstants {
     public static final double Throttle_D = 0;
 
 
-    //TODO: Setup ports before testing
-    public static final int Throttle_Port_FL = 0;
-    public static final int Throttle_Port_FR = 0;
-    public static final int Throttle_Port_BL = 0;
-    public static final int Throttle_Port_BR = 0;
+    public static final int Throttle_Port_FL = 1;
+    public static final int Throttle_Port_FR = 2;
+    public static final int Throttle_Port_BL = 3;
+    public static final int Throttle_Port_BR = 4;
 
-    public static final int Turning_Port_FL = 0;
-    public static final int Turning_Port_FR = 0;
-    public static final int Turning_Port_BL = 0;
-    public static final int Turning_Port_BR = 0;
+    public static final int Turning_Port_FL = 5;
+    public static final int Turning_Port_FR = 6;
+    public static final int Turning_Port_BL = 7;
+    public static final int Turning_Port_BR = 8;
 
-    public static final int Encoder_Port_FL = 0;
-    public static final int Encoder_Port_FR = 0;
-    public static final int Encoder_Port_BL = 0;
-    public static final int Encoder_Port_BR = 0;
+    public static final int Encoder_Port_FL = 10;
+    public static final int Encoder_Port_FR = 11;
+    public static final int Encoder_Port_BL = 12;
+    public static final int Encoder_Port_BR = 13;
 
     public static final double Magnet_Offset_FL = 0.0;
     public static final double Magnet_Offset_FR = 0.0;
