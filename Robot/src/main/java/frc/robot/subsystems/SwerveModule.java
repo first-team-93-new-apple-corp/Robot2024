@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -9,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveModule extends SubsystemBase {
@@ -24,12 +26,12 @@ public class SwerveModule extends SubsystemBase {
 
   ProfiledPIDController TurningPID = new ProfiledPIDController(
     DriveConstants.Turning_P,
-    0,
-    0,
+    DriveConstants.Turning_I,
+    DriveConstants.Turning_D,
     new TrapezoidProfile.Constraints(6.28, 3.14)
   );
 
-  PIDController DrivingPID = new PIDController(DriveConstants.Throttle_P, 0, 0);
+  // PIDController DrivingPID = new PIDController(DriveConstants.Throttle_P, 0, 0);
 
   public SwerveModule(
     int driveMotorID,
@@ -43,7 +45,11 @@ public class SwerveModule extends SubsystemBase {
     Can_Coder.configMagnetOffset(magnetOffset);
 
     TurningPID.setTolerance(DriveConstants.Turning_Tolerance);
-    DrivingPID.setTolerance(DriveConstants.Throttle_Tolerance);
+
+    // SmartDashboard.putNumber("Turning P", 0); 
+    // SmartDashboard.putNumber("Turning I", 0); 
+    // SmartDashboard.putNumber("Turning D", 0); 
+    // DrivingPID.setTolerance(DriveConstants.Throttle_Tolerance);
   }
 
   public SwerveModuleState getState() {
@@ -71,6 +77,12 @@ public class SwerveModule extends SubsystemBase {
       calculateAngle().getRadians(),
       state.angle.getRadians()
     );
+
+    SmartDashboard.putNumber("Actual Angle", calculateAngle().getDegrees());
+    SmartDashboard.putNumber("Set Angle", state.angle.getDegrees());
+    SmartDashboard.putNumber("Turn Output", turnOutput);
+    
+
 
     // Setting voltage based on motor calculations
     Driving_Motor.setVoltage(driveOutput);
@@ -103,7 +115,12 @@ public class SwerveModule extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    // TurningPID.setP(SmartDashboard.getNumber("Turning P", 0)); 
+    // TurningPID.setI(SmartDashboard.getNumber("Turning I", 0)); 
+    // TurningPID.setD(SmartDashboard.getNumber("Turning D", 0)); 
+
+  }
 
   @Override
   public void simulationPeriodic() {}

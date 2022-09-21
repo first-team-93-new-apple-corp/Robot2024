@@ -9,9 +9,8 @@ import frc.robot.subsystems.DriveSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class DriveCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final DriveSubsystem m_DriveSubsystem; 
-
+  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
+  private final DriveSubsystem m_DriveSubsystem;
 
   public DriveCommand(DriveSubsystem m_DriveSubsystem) {
     this.m_DriveSubsystem = m_DriveSubsystem;
@@ -20,20 +19,20 @@ public class DriveCommand extends CommandBase {
 
   @Override
   public void initialize() {
-
-    // encoders should be absolute so no need to reset them except for once? 
-    // test encoder values 
-    // reset them right before matches? 
+    // encoders should be absolute so no need to reset them except for once?
+    // test encoder values
+    // reset them right before matches?
     // will require testing to figure out
 
-
     // m_DriveSubsystem.resetEncoders();
+    
 
   }
 
   @Override
   public void execute() {
-    m_DriveSubsystem.getEncoderValues();
+    // m_DriveSubsystem.getEncoderValues();
+    m_DriveSubsystem.drive(0.5, 0, 0, false);
   }
 
   @Override

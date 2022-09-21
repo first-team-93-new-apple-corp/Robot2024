@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -87,10 +88,12 @@ public class DriveSubsystem extends SubsystemBase {
       new HolonomicDriveController(Driving_PID_X, Driving_PID_Y, Turning_PID);
   }
 
-  public void getEncoderValues(){
-    System.out.println("Raw: " + Front_Left.getRawEncoder());
-    System.out.println("Angle: " + Front_Left.calculateAngle());
-  }
+  // public void getEncoderValues(){
+  //   System.out.println("Front Right: " + Front_Right.calculateAngle());
+  //   System.out.println("Front Left: " + Front_Left.calculateAngle());
+  //   System.out.println("Back Right: " + Back_Right.calculateAngle());
+  //   System.out.println("Back Left: " + Back_Left.calculateAngle());
+  // }
 
   public void drive(double X, double Y, double Z, boolean Field_Relative) { // from joystick
     
@@ -185,13 +188,16 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    Odometry.update(
-      Gyro.getRotation2d(),
-      Front_Left.getState(),
-      Front_Right.getState(),
-      Back_Left.getState(),
-      Back_Right.getState()
-    );
+    // Odometry.update(
+    //   Gyro.getRotation2d(),
+    //   Front_Left.getState(),
+    //   Front_Right.getState(),
+    //   Back_Left.getState(),
+    //   Back_Right.getState()
+    // );
+
+    SmartDashboard.putNumber("Actual Angle", Front_Left.calculateAngle().getDegrees());
+
   }
 
   @Override
