@@ -28,7 +28,7 @@ public class SwerveModule extends SubsystemBase {
     DriveConstants.Turning_P,
     DriveConstants.Turning_I,
     DriveConstants.Turning_D,
-    new TrapezoidProfile.Constraints(6.28, 3.14)
+    new TrapezoidProfile.Constraints(3.14, 1.57)
   );
 
   // PIDController DrivingPID = new PIDController(DriveConstants.Throttle_P, 0, 0);
@@ -46,9 +46,9 @@ public class SwerveModule extends SubsystemBase {
 
     TurningPID.setTolerance(DriveConstants.Turning_Tolerance);
 
-    // SmartDashboard.putNumber("Turning P", 0); 
-    // SmartDashboard.putNumber("Turning I", 0); 
-    // SmartDashboard.putNumber("Turning D", 0); 
+    SmartDashboard.putNumber("Turning P", 0); 
+    SmartDashboard.putNumber("Turning I", 0); 
+    SmartDashboard.putNumber("Turning D", 0); 
     // DrivingPID.setTolerance(DriveConstants.Throttle_Tolerance);
   }
 
@@ -116,10 +116,10 @@ public class SwerveModule extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // TurningPID.setP(SmartDashboard.getNumber("Turning P", 0)); 
-    // TurningPID.setI(SmartDashboard.getNumber("Turning I", 0)); 
-    // TurningPID.setD(SmartDashboard.getNumber("Turning D", 0)); 
-
+    DriveConstants.Turning_P = (SmartDashboard.getNumber("Turning P", 0)); 
+    DriveConstants.Turning_I = (SmartDashboard.getNumber("Turning I", 0)); 
+    DriveConstants.Turning_D = (SmartDashboard.getNumber("Turning D", 0));
+  
   }
 
   @Override

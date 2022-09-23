@@ -197,7 +197,9 @@ public class DriveSubsystem extends SubsystemBase {
     // );
 
     SmartDashboard.putNumber("Actual Angle", Front_Left.calculateAngle().getDegrees());
-
+    SmartDashboard.putNumber("Actual Angle", Front_Right.calculateAngle().getDegrees());
+    SmartDashboard.putNumber("Actual Angle", Back_Left.calculateAngle().getDegrees());
+    SmartDashboard.putNumber("Actual Angle", Back_Right.calculateAngle().getDegrees());
   }
 
   @Override

@@ -5,9 +5,9 @@ import edu.wpi.first.math.util.Units;
 
 public final class DriveConstants {
   public static final double Turning_Tolerance = 1;
-  public static final double Turning_P = 2;
-  public static final double Turning_I = 0.15;
-  public static final double Turning_D = 0.06;
+  public static double Turning_P = 0;
+  public static double Turning_I = 0;
+  public static double Turning_D = 0;
 
   public static final double Throttle_Tolerance = 0.1;
   // public static final double Throttle_P = 0;
