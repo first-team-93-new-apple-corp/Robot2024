@@ -13,8 +13,8 @@ import frc.robot.subsystems.DriveSubsystem;
 public class RobotContainer {
   // Joysticks
   public Joystick Driver1;
-  public Joystick Driver2;
-  public XboxController Operator;
+  // public Joystick Driver2;
+  // public XboxController Operator;
 
 
   //Subsystem Definitions
@@ -30,14 +30,14 @@ public class RobotContainer {
   public RobotContainer() {
     //Controllers
     Driver1 = new Joystick(0);
-    Driver2 = new Joystick(1);
-    Operator = new XboxController(2);
+    // Driver2 = new Joystick(1);
+    // Operator = new XboxController(2);
 
     //Subsystems
     m_DriveSubsystem = new DriveSubsystem(); 
 
     //Commands
-    m_DriveCommand = new DriveCommand(m_DriveSubsystem); 
+    m_DriveCommand = new DriveCommand(m_DriveSubsystem, Driver1); 
 
 
     configureButtonBindings();

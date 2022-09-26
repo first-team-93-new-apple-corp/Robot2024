@@ -61,31 +61,33 @@ public class DriveSubsystem extends SubsystemBase {
         DriveConstants.Encoder_Port_FL,
         DriveConstants.Magnet_Offset_FL
       );
-    Front_Right =
-      new SwerveModule(
-        DriveConstants.Throttle_Port_FR,
-        DriveConstants.Turning_Port_FR,
-        DriveConstants.Encoder_Port_FR,
-        DriveConstants.Magnet_Offset_FR
-      );
-    Back_Left =
-      new SwerveModule(
-        DriveConstants.Throttle_Port_BL,
-        DriveConstants.Turning_Port_BL,
-        DriveConstants.Encoder_Port_BL,
-        DriveConstants.Magnet_Offset_BL
-      );
-    Back_Right =
-      new SwerveModule(
-        DriveConstants.Throttle_Port_BR,
-        DriveConstants.Turning_Port_BR,
-        DriveConstants.Encoder_Port_BR,
-        DriveConstants.Magnet_Offset_BR
-      );
+    // Front_Right =
+    //   new SwerveModule(
+    //     DriveConstants.Throttle_Port_FR,
+    //     DriveConstants.Turning_Port_FR,
+    //     DriveConstants.Encoder_Port_FR,
+    //     DriveConstants.Magnet_Offset_FR
+    //   );
+    // Back_Left =
+    //   new SwerveModule(
+    //     DriveConstants.Throttle_Port_BL,
+    //     DriveConstants.Turning_Port_BL,
+    //     DriveConstants.Encoder_Port_BL,
+    //     DriveConstants.Magnet_Offset_BL
+    //   );
+    // Back_Right =
+    //   new SwerveModule(
+    //     DriveConstants.Throttle_Port_BR,
+    //     DriveConstants.Turning_Port_BR,
+    //     DriveConstants.Encoder_Port_BR,
+    //     DriveConstants.Magnet_Offset_BR
+    //   );
 
     // Swerve Drive PID 
     Controller =
       new HolonomicDriveController(Driving_PID_X, Driving_PID_Y, Turning_PID);
+
+      SmartDashboard.putNumber("Swerve Module Angle", 0);
   }
 
   // public void getEncoderValues(){
@@ -95,12 +97,12 @@ public class DriveSubsystem extends SubsystemBase {
   //   System.out.println("Back Left: " + Back_Left.calculateAngle());
   // }
 
-  public void drive(double X, double Y, double Z, boolean Field_Relative) { // from joystick
+  public void drive(double X, double Y, double Z){ //, boolean Field_Relative) { // from joystick
     
     // setting up speeds based on whether field relative is on or not
     // passing in joystick values in params
 
-    if (!Field_Relative) {
+    // if (!Field_Relative) {
       Speeds =
         new ChassisSpeeds(
           X * DriveConstants.Max_Strafe_Speed,
@@ -108,15 +110,16 @@ public class DriveSubsystem extends SubsystemBase {
           Z * DriveConstants.Max_Angular_Speed
         );
 
-    } else {
-      Speeds =
-        ChassisSpeeds.fromFieldRelativeSpeeds(
-          X * DriveConstants.Max_Strafe_Speed,
-          Y * DriveConstants.Max_Strafe_Speed,
-          Z * DriveConstants.Max_Angular_Speed,
-          Gyro.getRotation2d()
-        );
-    }
+    // } 
+    // else {
+    //   Speeds =
+    //     ChassisSpeeds.fromFieldRelativeSpeeds(
+    //       X * DriveConstants.Max_Strafe_Speed,
+    //       Y * DriveConstants.Max_Strafe_Speed,
+    //       Z * DriveConstants.Max_Angular_Speed,
+    //       Gyro.getRotation2d()
+    //     );
+    // }
 
     // Swerve module states 
     SwerveModuleState[] States = Kinematics.toSwerveModuleStates(Speeds);
@@ -126,41 +129,42 @@ public class DriveSubsystem extends SubsystemBase {
     );
 
     // setting states 
-    Front_Left.setDesiredState(States[0]);
-    Front_Right.setDesiredState(States[1]);
-    Back_Left.setDesiredState(States[2]);
-    Back_Right.setDesiredState(States[3]);
+  SwerveModuleState testing =  new SwerveModuleState(0.2, new Rotation2d(SmartDashboard.getNumber("Swerve Module Angle", 0)));
+    Front_Left.setDesiredState(testing);
+    // Front_Right.setDesiredState(States[1]);
+    // Back_Left.setDesiredState(States[2]);
+    // Back_Right.setDesiredState(States[3]);
   }
 
-  public void driveAuton(double time) {
-    // we are passing in time from the command, this could then get passed into the
-    // sample
-    Trajectory.State goal = Trajectory.sample(time);
-    ChassisSpeeds adjustedSpeeds = Controller.calculate(
-      getPose(),
-      goal,
-      Rotation2d.fromDegrees(0)
-    );
-    SwerveModuleState[] states = Kinematics.toSwerveModuleStates(
-      adjustedSpeeds
-    );
+  // public void driveAuton(double time) {
+  //   // we are passing in time from the command, this could then get passed into the
+  //   // sample
+  //   Trajectory.State goal = Trajectory.sample(time);
+  //   ChassisSpeeds adjustedSpeeds = Controller.calculate(
+  //     getPose(),
+  //     goal,
+  //     Rotation2d.fromDegrees(0)
+  //   );
+  //   SwerveModuleState[] states = Kinematics.toSwerveModuleStates(
+  //     adjustedSpeeds
+  //   );
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-      states,
-      DriveConstants.Max_Angular_Speed
-    );
+  //   SwerveDriveKinematics.desaturateWheelSpeeds(
+  //     states,
+  //     DriveConstants.Max_Angular_Speed
+  //   );
 
-    Front_Left.setDesiredState(states[0]);
-    Front_Right.setDesiredState(states[1]);
-    Back_Left.setDesiredState(states[2]);
-    Back_Right.setDesiredState(states[3]);
-  }
+  //   Front_Left.setDesiredState(states[0]);
+  //   Front_Right.setDesiredState(states[1]);
+  //   Back_Left.setDesiredState(states[2]);
+  //   Back_Right.setDesiredState(states[3]);
+  // }
 
   public void getStates() {
     Front_Left.getState();
-    Front_Right.getState();
-    Back_Left.getState();
-    Back_Right.getState();
+    // Front_Right.getState();
+    // Back_Left.getState();
+    // Back_Right.getState();
   }
 
   public Pose2d getPose() {
@@ -177,9 +181,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void resetEncoders() {
     Front_Left.resetEncoders();
-    Front_Right.resetEncoders();
-    Back_Left.resetEncoders();
-    Back_Right.resetEncoders();
+    // Front_Right.resetEncoders();
+    // Back_Left.resetEncoders();
+    // Back_Right.resetEncoders();
   }
 
   public void resetOdometry(Pose2d pose) {

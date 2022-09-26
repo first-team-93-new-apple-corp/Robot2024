@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -11,9 +12,11 @@ import frc.robot.subsystems.DriveSubsystem;
 public class DriveCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final DriveSubsystem m_DriveSubsystem;
+  private Joystick m_Joystick; 
 
-  public DriveCommand(DriveSubsystem m_DriveSubsystem) {
+  public DriveCommand(DriveSubsystem m_DriveSubsystem, Joystick m_Joystick) {
     this.m_DriveSubsystem = m_DriveSubsystem;
+    this.m_Joystick = m_Joystick; 
     addRequirements(m_DriveSubsystem);
   }
 
@@ -32,7 +35,7 @@ public class DriveCommand extends CommandBase {
   @Override
   public void execute() {
     // m_DriveSubsystem.getEncoderValues();
-    m_DriveSubsystem.drive(0.5, 0, 0, false);
+    m_DriveSubsystem.drive(0, 0, 0);
   }
 
   @Override

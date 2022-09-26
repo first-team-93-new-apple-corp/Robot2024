@@ -2,9 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
-import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -79,7 +77,7 @@ public class SwerveModule extends SubsystemBase {
     );
 
     SmartDashboard.putNumber("Actual Angle", calculateAngle().getDegrees());
-    SmartDashboard.putNumber("Set Angle", state.angle.getDegrees());
+    // SmartDashboard.putNumber("Set Angle", state.angle.getDegrees());
     SmartDashboard.putNumber("Turn Output", turnOutput);
     
 
@@ -116,9 +114,9 @@ public class SwerveModule extends SubsystemBase {
 
   @Override
   public void periodic() {
-    DriveConstants.Turning_P = (SmartDashboard.getNumber("Turning P", 0)); 
-    DriveConstants.Turning_I = (SmartDashboard.getNumber("Turning I", 0)); 
-    DriveConstants.Turning_D = (SmartDashboard.getNumber("Turning D", 0));
+    TurningPID.setP(SmartDashboard.getNumber("Turning P", 0)); 
+    TurningPID.setI(SmartDashboard.getNumber("Turning I", 0)); 
+    TurningPID.setD(SmartDashboard.getNumber("Turning D", 0));
   
   }
 
