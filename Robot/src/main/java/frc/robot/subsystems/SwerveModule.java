@@ -26,7 +26,7 @@ public class SwerveModule extends SubsystemBase {
     DriveConstants.Turning_P,
     DriveConstants.Turning_I,
     DriveConstants.Turning_D,
-    new TrapezoidProfile.Constraints(3.14, 1.57)
+    new TrapezoidProfile.Constraints(1, 0.15)
   );
 
   // PIDController DrivingPID = new PIDController(DriveConstants.Throttle_P, 0, 0);
