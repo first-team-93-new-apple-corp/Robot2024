@@ -28,17 +28,17 @@ public class DriveSubsystem extends SubsystemBase {
   SwerveModule Back_Right;
   Trajectory Trajectory;
 
-  ProfiledPIDController Turning_PID = new ProfiledPIDController(
-    DriveConstants.Turning_P,
-    0,
-    0,
-    new TrapezoidProfile.Constraints(6.28, 3.14)
-  );
-  PIDController Driving_PID_X = new PIDController(1, 0, 0);
-  PIDController Driving_PID_Y = new PIDController(1, 0, 0);
+  // ProfiledPIDController Turning_PID = new ProfiledPIDController(
+  //   DriveConstants.Turning_P,
+  //   0,
+  //   0,
+  //   new TrapezoidProfile.Constraints(6.28, 3.14)
+  // );
+  // PIDController Driving_PID_X = new PIDController(1, 0, 0);
+  // PIDController Driving_PID_Y = new PIDController(1, 0, 0);
 
   ChassisSpeeds Speeds;
-  HolonomicDriveController Controller;
+  // HolonomicDriveController Controller;
 
   public DriveSubsystem() {
     Gyro = new AHRS(SPI.Port.kMXP);
@@ -83,9 +83,9 @@ public class DriveSubsystem extends SubsystemBase {
     //     DriveConstants.Magnet_Offset_BR
     //   );
 
-    // Swerve Drive PID 
-    Controller =
-      new HolonomicDriveController(Driving_PID_X, Driving_PID_Y, Turning_PID);
+    // // Swerve Drive PID 
+    // Controller =
+    //   new HolonomicDriveController(Driving_PID_X, Driving_PID_Y, Turning_PID);
 
       SmartDashboard.putNumber("Swerve Module Angle", 0);
   }
