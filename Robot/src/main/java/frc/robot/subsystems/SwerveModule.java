@@ -1,8 +1,10 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -12,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveModule extends SubsystemBase {
-
   double Motor_Commands;
   double Turning_Degrees;
 
@@ -22,12 +23,19 @@ public class SwerveModule extends SubsystemBase {
   WPI_TalonFX Turning_Motor;
   WPI_CANCoder Can_Coder;
 
-  ProfiledPIDController TurningPID = new ProfiledPIDController(
+  // ProfiledPIDController TurningPID = new ProfiledPIDController(
+  //   DriveConstants.Turning_P,
+  //   DriveConstants.Turning_I,
+  //   DriveConstants.Turning_D,
+  //   new TrapezoidProfile.Constraints(0.5, 0.15)
+  // );
+
+  PIDController TurningPID = new PIDController(
     DriveConstants.Turning_P,
     DriveConstants.Turning_I,
-    DriveConstants.Turning_D,
-    new TrapezoidProfile.Constraints(0.5, 0.15)
+    DriveConstants.Turning_D
   );
+  
 
   // PIDController DrivingPID = new PIDController(DriveConstants.Throttle_P, 0, 0);
 
@@ -37,16 +45,21 @@ public class SwerveModule extends SubsystemBase {
     int CanCoderID,
     double magnetOffset
   ) {
+  // TurningPID.setIntegratorRange(-0.1,0.1);
     Driving_Motor = new WPI_TalonFX(driveMotorID);
     Turning_Motor = new WPI_TalonFX(turnMotorID);
+    // Turning_Motor.setInverted(true);
+    Turning_Motor.setNeutralMode(NeutralMode.Brake);
+
     Can_Coder = new WPI_CANCoder(CanCoderID);
     Can_Coder.configMagnetOffset(magnetOffset);
 
     TurningPID.setTolerance(DriveConstants.Turning_Tolerance);
 
-    SmartDashboard.putNumber("Turning P", 0); 
-    SmartDashboard.putNumber("Turning I", 0); 
-    SmartDashboard.putNumber("Turning D", 0); 
+    SmartDashboard.putNumber("Turning P", 0);
+    SmartDashboard.putNumber("Turning I", 0);
+    SmartDashboard.putNumber("Turning D", 0);
+    SmartDashboard.putBoolean("At Setpoint", TurningPID.atSetpoint());
     // DrivingPID.setTolerance(DriveConstants.Throttle_Tolerance);
   }
 
@@ -64,11 +77,17 @@ public class SwerveModule extends SubsystemBase {
       desiredState,
       calculateAngle()
     );
+    // SwerveModuleState state = desiredState;
+
+    // System.out.println(state);
+    // System.out.println(state.angle.getRadians());
+    // System.out.println(calculateAngle().getRadians());
+    // System.out.println(calculateAngle().getDegrees());
 
     //do not need PID on drive motors - just a simple voltage calculation
-    double driveOutput =
-      (state.speedMetersPerSecond / DriveConstants.Max_Strafe_Speed) *
-      DriveConstants.Max_Volts;
+    // double driveOutput =
+    //   (state.speedMetersPerSecond / DriveConstants.Max_Strafe_Speed) *
+    //   DriveConstants.Max_Volts;
 
     //Turning needs a pid because it has a setpoint it need to reach
     double turnOutput = TurningPID.calculate(
@@ -76,15 +95,15 @@ public class SwerveModule extends SubsystemBase {
       state.angle.getRadians()
     );
 
-    SmartDashboard.putNumber("Actual Angle", calculateAngle().getDegrees());
-    // SmartDashboard.putNumber("Set Angle", state.angle.getDegrees());
+    // System.out.println(turnOutput);
+    SmartDashboard.putNumber("Set Angle in Radians", state.angle.getRadians());
     SmartDashboard.putNumber("Turn Output", turnOutput);
-    
-
+    SmartDashboard.putBoolean("At Setpoint", TurningPID.atSetpoint());
 
     // Setting voltage based on motor calculations
-    Driving_Motor.setVoltage(driveOutput);
+    // Driving_Motor.setVoltage(driveOutput);
     Turning_Motor.setVoltage(turnOutput);
+    // Turning_Motor.set(0.04);
   }
 
   public void resetEncoders() { //need to figure out offsets
@@ -107,6 +126,7 @@ public class SwerveModule extends SubsystemBase {
   public Rotation2d calculateAngle() {
     return Rotation2d.fromDegrees(Can_Coder.getAbsolutePosition());
   }
+
   // get raw encoder ticks for testing
   public double getRawEncoder() {
     return Can_Coder.getAbsolutePosition();
@@ -114,10 +134,9 @@ public class SwerveModule extends SubsystemBase {
 
   @Override
   public void periodic() {
-    TurningPID.setP(SmartDashboard.getNumber("Turning P", 0)); 
-    TurningPID.setI(SmartDashboard.getNumber("Turning I", 0)); 
+    TurningPID.setP(SmartDashboard.getNumber("Turning P", 0));
+    TurningPID.setI(SmartDashboard.getNumber("Turning I", 0));
     TurningPID.setD(SmartDashboard.getNumber("Turning D", 0));
-  
   }
 
   @Override

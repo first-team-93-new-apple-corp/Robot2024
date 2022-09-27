@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
 public final class DriveConstants {
-  public static final double Turning_Tolerance = 1;
+  public static final double Turning_Tolerance = Units.degreesToRadians(2);
   public static double Turning_P = 0;
   public static double Turning_I = 0;
   public static double Turning_D = 0;

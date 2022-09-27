@@ -12,12 +12,12 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
-
   AHRS Gyro;
   SwerveDriveOdometry Odometry;
   SwerveDriveKinematics Kinematics;
@@ -38,6 +38,7 @@ public class DriveSubsystem extends SubsystemBase {
   // PIDController Driving_PID_Y = new PIDController(1, 0, 0);
 
   ChassisSpeeds Speeds;
+
   // HolonomicDriveController Controller;
 
   public DriveSubsystem() {
@@ -83,11 +84,11 @@ public class DriveSubsystem extends SubsystemBase {
     //     DriveConstants.Magnet_Offset_BR
     //   );
 
-    // // Swerve Drive PID 
+    // // Swerve Drive PID
     // Controller =
     //   new HolonomicDriveController(Driving_PID_X, Driving_PID_Y, Turning_PID);
 
-      SmartDashboard.putNumber("Swerve Module Angle", 0);
+    SmartDashboard.putNumber("Passing in angle to state", 0);
   }
 
   // public void getEncoderValues(){
@@ -97,20 +98,19 @@ public class DriveSubsystem extends SubsystemBase {
   //   System.out.println("Back Left: " + Back_Left.calculateAngle());
   // }
 
-  public void drive(double X, double Y, double Z){ //, boolean Field_Relative) { // from joystick
-    
+  public void drive(double X, double Y, double Z) { //, boolean Field_Relative) { // from joystick
     // setting up speeds based on whether field relative is on or not
     // passing in joystick values in params
 
     // if (!Field_Relative) {
-      Speeds =
-        new ChassisSpeeds(
-          X * DriveConstants.Max_Strafe_Speed,
-          Y * DriveConstants.Max_Strafe_Speed,
-          Z * DriveConstants.Max_Angular_Speed
-        );
+    // Speeds =
+    //   new ChassisSpeeds(
+    //     X * DriveConstants.Max_Strafe_Speed,
+    //     Y * DriveConstants.Max_Strafe_Speed,
+    //     Z * DriveConstants.Max_Angular_Speed
+    //   );
 
-    // } 
+    // }
     // else {
     //   Speeds =
     //     ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -121,15 +121,23 @@ public class DriveSubsystem extends SubsystemBase {
     //     );
     // }
 
-    // Swerve module states 
-    SwerveModuleState[] States = Kinematics.toSwerveModuleStates(Speeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-      States,
-      DriveConstants.Max_Angular_Speed
+    // Swerve module states
+    // SwerveModuleState[] States = Kinematics.toSwerveModuleStates(Speeds);
+    // SwerveDriveKinematics.desaturateWheelSpeeds(
+    //   States,
+    //   DriveConstants.Max_Angular_Speed
+    // );
+
+    // setting states
+    SwerveModuleState testing = new SwerveModuleState(
+      0,
+      Rotation2d.fromDegrees(
+        SmartDashboard.getNumber("Passing in angle to state", 0)
+      )
     );
 
-    // setting states 
-  SwerveModuleState testing =  new SwerveModuleState(0.2, new Rotation2d(SmartDashboard.getNumber("Swerve Module Angle", 0)));
+
+
     Front_Left.setDesiredState(testing);
     // Front_Right.setDesiredState(States[1]);
     // Back_Left.setDesiredState(States[2]);
@@ -200,10 +208,22 @@ public class DriveSubsystem extends SubsystemBase {
     //   Back_Right.getState()
     // );
 
-    SmartDashboard.putNumber("Actual Angle", Front_Left.calculateAngle().getDegrees());
-    SmartDashboard.putNumber("Actual Angle", Front_Right.calculateAngle().getDegrees());
-    SmartDashboard.putNumber("Actual Angle", Back_Left.calculateAngle().getDegrees());
-    SmartDashboard.putNumber("Actual Angle", Back_Right.calculateAngle().getDegrees());
+    // SmartDashboard.putNumber(
+    //   "Actual Angle",
+    //   Front_Left.calculateAngle().getRadians()
+    // );
+
+    SmartDashboard.putNumber(
+      "Actual Angle Radians",
+      Front_Left.calculateAngle().getRadians()
+    );
+    SmartDashboard.putNumber(
+      "Actual Angle Degrees",
+      Front_Left.calculateAngle().getDegrees()
+    );
+    // SmartDashboard.putNumber("Actual Angle", Front_Right.calculateAngle().getDegrees());
+    // SmartDashboard.putNumber("Actual Angle", Back_Left.calculateAngle().getDegrees());
+    // SmartDashboard.putNumber("Actual Angle", Back_Right.calculateAngle().getDegrees());
   }
 
   @Override
