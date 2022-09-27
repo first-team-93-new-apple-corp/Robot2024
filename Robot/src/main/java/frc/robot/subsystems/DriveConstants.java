@@ -44,10 +44,15 @@ public final class DriveConstants {
   public static final double Wheel_Circumference = Wheel_Radius * 2 * Math.PI;
 
   // Drivetrain Information
-  public static final double Trackwidth = Units.inchesToMeters(26); // right wheel to left wheel
+  public static final double Track_Width = Units.inchesToMeters(26); // right wheel to left wheel
   public static final double Wheel_Base = Units.inchesToMeters(26); //Front To Back
+  
+  
+  //TODO: UPDATE
   public static final double Turning_Gearing = 12.8;
   public static final double Driving_Gearing = 6.75;
+
+
   public static final double Max_Strafe_Speed =
     TalonFX_RPS / Driving_Gearing * Wheel_Circumference; // m/s
   public static final double Max_Angular_Speed = 2; // m/s
@@ -56,19 +61,19 @@ public final class DriveConstants {
   //Swerve Locations
   public static final Translation2d Location_FL = new Translation2d(
     Wheel_Base / 2,
-    Trackwidth / 2
+    Track_Width / 2
   );
   public static final Translation2d Location_FR = new Translation2d(
     Wheel_Base / 2,
-    -Trackwidth / 2
+    -Track_Width / 2
   );
   public static final Translation2d Location_BL = new Translation2d(
     -Wheel_Base / 2,
-    Trackwidth / 2
+    Track_Width / 2
   );
   public static final Translation2d Location_BR = new Translation2d(
     -Wheel_Base / 2,
-    -Trackwidth / 2
+    -Track_Width / 2
   );
 
   public static final double Max_Volts = 12.0;
