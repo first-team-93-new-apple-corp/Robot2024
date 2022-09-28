@@ -41,7 +41,7 @@ public class SwerveModule extends SubsystemBase {
     Can_Coder.configMagnetOffset(magnetOffset);
 
     TurningPID.setTolerance(DriveConstants.Turning_Tolerance);
-    TurningPID.enableContinuousInput(-Math.PI, Math.PI);
+    TurningPID.enableContinuousInput(0, 2 * Math.PI);
 
   }
 
