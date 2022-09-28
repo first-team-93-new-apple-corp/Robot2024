@@ -41,17 +41,17 @@ public class DriveCommand extends CommandBase {
   public void execute() {
     // m_DriveSubsystem.getEncoderValues();
 
-    x = m_Joystick.getRawAxis(1) * 0.85;
+    x = m_Joystick.getRawAxis(1);
     if (Math.abs(x) < Joystick_Deadzone) {
       x = 0;
     }
 
-    y = m_Joystick.getRawAxis(0) * 0.85;
+    y = m_Joystick.getRawAxis(0);
     if (Math.abs(y) < Joystick_Deadzone) {
       y = 0;
     }
 
-    z = m_Joystick.getRawAxis(2) * 0.85;
+    z = m_Joystick.getRawAxis(2);
     if (Math.abs(z) < Joystick_Deadzone) {
       z = 0;
     }
