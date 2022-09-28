@@ -12,11 +12,13 @@ import frc.robot.subsystems.DriveSubsystem;
 public class DriveCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final DriveSubsystem m_DriveSubsystem;
-  private Joystick m_Joystick; 
+
+  private Joystick m_Joystick;
+  private double Joystick_Deadzone = 0.1;
 
   public DriveCommand(DriveSubsystem m_DriveSubsystem, Joystick m_Joystick) {
     this.m_DriveSubsystem = m_DriveSubsystem;
-    this.m_Joystick = m_Joystick; 
+    this.m_Joystick = m_Joystick;
     addRequirements(m_DriveSubsystem);
   }
 
@@ -28,14 +30,33 @@ public class DriveCommand extends CommandBase {
     // will require testing to figure out
 
     // m_DriveSubsystem.resetEncoders();
-    
 
   }
+
+  private double x = 0;
+  private double y = 0;
+  private double z = 0;
 
   @Override
   public void execute() {
     // m_DriveSubsystem.getEncoderValues();
-    m_DriveSubsystem.drive(0, 0, 0);
+
+    x = m_Joystick.getRawAxis(1) * 0.85;
+    if (Math.abs(x) < Joystick_Deadzone) {
+      x = 0;
+    }
+
+    y = m_Joystick.getRawAxis(0) * 0.85;
+    if (Math.abs(y) < Joystick_Deadzone) {
+      y = 0;
+    }
+
+    z = m_Joystick.getRawAxis(2) * 0.85;
+    if (Math.abs(z) < Joystick_Deadzone) {
+      z = 0;
+    }
+
+    m_DriveSubsystem.drive(x, y, z, false);
   }
 
   @Override

@@ -5,9 +5,9 @@ import edu.wpi.first.math.util.Units;
 
 public final class DriveConstants {
   public static final double Turning_Tolerance = Units.degreesToRadians(2);
-  public static double Turning_P = 0;
+  public static double Turning_P = 3.5; //5
   public static double Turning_I = 0;
-  public static double Turning_D = 0;
+  public static double Turning_D = 0.1; //0.2
 
   public static final double Throttle_Tolerance = 0.1;
   // public static final double Throttle_P = 0;
@@ -46,12 +46,10 @@ public final class DriveConstants {
   // Drivetrain Information
   public static final double Track_Width = Units.inchesToMeters(26); // right wheel to left wheel
   public static final double Wheel_Base = Units.inchesToMeters(26); //Front To Back
-  
-  
+
   //TODO: UPDATE
   public static final double Turning_Gearing = 12.8;
   public static final double Driving_Gearing = 6.75;
-
 
   public static final double Max_Strafe_Speed =
     TalonFX_RPS / Driving_Gearing * Wheel_Circumference; // m/s
