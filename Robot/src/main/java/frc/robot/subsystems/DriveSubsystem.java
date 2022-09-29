@@ -29,6 +29,8 @@ public class DriveSubsystem extends SubsystemBase {
   SwerveModule Back_Right;
   Trajectory Trajectory;
 
+  SwerveModuleState savedstates[];
+
   // ProfiledPIDController Turning_PID = new ProfiledPIDController(
   //   DriveConstants.Turning_P,
   //   0,
@@ -110,6 +112,7 @@ public class DriveSubsystem extends SubsystemBase {
         Y * DriveConstants.Max_Strafe_Speed,
         Z * DriveConstants.Max_Angular_Speed
       );
+      System.out.println("Joystick X " + X + " Joystick Y " + Y + " Joystick Z " + Z);
 
     }
     else {
@@ -122,13 +125,27 @@ public class DriveSubsystem extends SubsystemBase {
         );
     }
 
+
+
     // Swerve module states
     SwerveModuleState[] States = Kinematics.toSwerveModuleStates(Speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
       States,
       DriveConstants.Max_Angular_Speed
     );
-
+    //this is so that the angle is saved and not auto set to 0 even after strafe
+    if(X==0&&Y==0&&Z==0){
+      if(savedstates == null){
+        savedstates = States;
+      }
+      for(int i = 0; i<savedstates.length; i++){
+        States[i].speedMetersPerSecond = 0;
+        States[i].angle = savedstates[i].angle;
+      }
+    }
+    else{
+      savedstates = States;
+    }
 
 
 
@@ -136,6 +153,9 @@ public class DriveSubsystem extends SubsystemBase {
     Front_Right.setDesiredState(States[1]);
     Back_Left.setDesiredState(States[2]);
     Back_Right.setDesiredState(States[3]);
+
+
+   
   }
 
   // public void driveAuton(double time) {

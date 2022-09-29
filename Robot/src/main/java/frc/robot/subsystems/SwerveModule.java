@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.kauailabs.navx.frc.AHRS;
@@ -33,7 +34,13 @@ public class SwerveModule extends SubsystemBase {
   ) {
 
     Driving_Motor = new WPI_TalonFX(driveMotorID);
-
+    Driving_Motor.setNeutralMode(NeutralMode.Coast);
+    TalonFXConfiguration driveConfig = new TalonFXConfiguration();
+    driveConfig.supplyCurrLimit.enable = true;
+    driveConfig.supplyCurrLimit.currentLimit = 80;
+    driveConfig.supplyCurrLimit.triggerThresholdCurrent = 120;
+    driveConfig.supplyCurrLimit.triggerThresholdTime = 2;
+    Driving_Motor.configAllSettings(driveConfig);
     Turning_Motor = new WPI_TalonFX(turnMotorID);
     Turning_Motor.setNeutralMode(NeutralMode.Brake);
 
@@ -41,7 +48,7 @@ public class SwerveModule extends SubsystemBase {
     Can_Coder.configMagnetOffset(magnetOffset);
 
     TurningPID.setTolerance(DriveConstants.Turning_Tolerance);
-    TurningPID.enableContinuousInput(0, 2 * Math.PI);
+    TurningPID.enableContinuousInput(-Math.PI, Math.PI);
 
   }
 
@@ -57,6 +64,7 @@ public class SwerveModule extends SubsystemBase {
       desiredState,
       calculateAngle()
     );
+    // System.out.println(state.toString());
     //do not need PID on drive motors - just a simple voltage calculation
     double driveOutput =
       (state.speedMetersPerSecond / DriveConstants.Max_Strafe_Speed) *
