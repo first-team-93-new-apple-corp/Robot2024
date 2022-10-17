@@ -19,20 +19,20 @@ public final class DriveConstants {
   public static final int Encoder_Port_FL = 10;
   public static final double Magnet_Offset_FL = -316.44;
 
-  public static final int Throttle_Port_BR = 2;
-  public static final int Turning_Port_BR = 6;
-  public static final int Encoder_Port_BR = 11;
-  public static final double Magnet_Offset_BR = -299;
+  public static final int Throttle_Port_BR = 3;
+  public static final int Turning_Port_BR = 7;
+  public static final int Encoder_Port_BR = 12;
+  public static final double Magnet_Offset_BR = -143.79;
 
   public static final int Throttle_Port_BL = 4;
   public static final int Turning_Port_BL = 8;
   public static final int Encoder_Port_BL = 13;
   public static final double Magnet_Offset_BL = -94.2;
 
-  public static final int Throttle_Port_FR = 3;
-  public static final int Turning_Port_FR = 7;
-  public static final int Encoder_Port_FR = 12;
-  public static final double Magnet_Offset_FR = -143.79;
+  public static final int Throttle_Port_FR = 2;
+  public static final int Turning_Port_FR = 6;
+  public static final int Encoder_Port_FR = 11;
+  public static final double Magnet_Offset_FR = -299;
 
   // Motor Information
   public static final double TalonFX_RPM = 6380;
