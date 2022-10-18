@@ -22,7 +22,7 @@ public final class DriveConstants {
   public static final int Throttle_Port_BR = 3;
   public static final int Turning_Port_BR = 7;
   public static final int Encoder_Port_BR = 12;
-  public static final double Magnet_Offset_BR = -143.79;
+  public static final double Magnet_Offset_BR = -143.79-85;
 
   public static final int Throttle_Port_BL = 4;
   public static final int Turning_Port_BL = 8;
@@ -32,7 +32,7 @@ public final class DriveConstants {
   public static final int Throttle_Port_FR = 2;
   public static final int Turning_Port_FR = 6;
   public static final int Encoder_Port_FR = 11;
-  public static final double Magnet_Offset_FR = -299;
+  public static final double Magnet_Offset_FR = -299+90;
 
   // Motor Information
   public static final double TalonFX_RPM = 6380;
@@ -53,7 +53,7 @@ public final class DriveConstants {
 
   public static final double Max_Strafe_Speed =
     TalonFX_RPS / Driving_Gearing * Wheel_Circumference; // m/s
-  public static final double Max_Angular_Speed = 2 * Math.PI ; // m/s
+  public static final double Max_Angular_Speed = 2* Math.PI ; // m/s
   public static final double Max_Angular_Acceleration = 2 * Math.PI;
 
   //Swerve Locations
