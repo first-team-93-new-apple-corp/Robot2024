@@ -4,11 +4,10 @@
 
 package frc.robot.commands;
 
-import java.lang.reflect.Field;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
+import java.lang.reflect.Field;
 
 /** An example command that uses an example subsystem. */
 public class DriveCommand extends CommandBase {
@@ -21,10 +20,12 @@ public class DriveCommand extends CommandBase {
   private double Joystick_Deadzone = 0.05;
 
   enum DriveState {
-    REGULAR_DRIVE,
+    DEFAULT_STATE,
+    HELD_INIT,
+    HELD_FIELD_RELATIVE,
     TOGGLE_SETUP,
-    TOGGLE_FIELD_RELATIVE,
-    // FULL_FIELD_RELATIVE,
+    TOGGLE_FIELD_RELATIVE_STAGE_1,
+    TOGGLE_FIELD_RELATIVE_STAGE_2,
   }
 
   DriveState Current_Drive_State;
@@ -34,109 +35,86 @@ public class DriveCommand extends CommandBase {
     this.m_Joystick = m_Joystick;
     addRequirements(m_DriveSubsystem);
 
-    Current_Drive_State = DriveState.REGULAR_DRIVE;
+    Current_Drive_State = DriveState.DEFAULT_STATE;
   }
 
   @Override
   public void initialize() {
-    // encoders should be absolute so no need to reset them except for once?
-    // test encoder values
-    // reset them right before matches?
-    // will require testing to figure out
-    // m_DriveSubsystem.resetEncoders();
-
   }
 
   private double x = 0;
   private double y = 0;
   private double z = 0;
-  public double recordY = 0;
-  public double recordX = 0;
-  public double recordZ = 0;
+  // public double recordY = 0;
+  // public double recordX = 0;
+  // public double recordZ = 0;
 
-  public boolean Toggle_Start = true; 
-  public boolean Field_Relative_Released = true; 
-  boolean Field_Relative_Activated = false; 
+  private boolean Toggle_Start = true;
+  private boolean Field_Relative_Released = true;
+  private boolean Field_Relative_Activated = false;
+
   @Override
   public void execute() {
     // m_DriveSubsystem.getEncoderValues();
 
-    x = m_Joystick.getRawAxis(1);
-    if (Math.abs(x) < Joystick_Deadzone) {
-      x = 0.00;
-    } else {
-      recordX = x;
-    }
+    x = checkJoystickDeadzone(m_Joystick.getRawAxis(1));
+    y = checkJoystickDeadzone(m_Joystick.getRawAxis(0));
+    z = checkJoystickDeadzone(m_Joystick.getRawAxis(2));
 
-    y = m_Joystick.getRawAxis(0);
-    if (Math.abs(y) < Joystick_Deadzone) {
-      y = 0.0;
-    }
-
-    z = m_Joystick.getRawAxis(2);
-    if (Math.abs(z) < Joystick_Deadzone) {
-      z = 0;
-    }
-
-    if (m_Joystick.getRawButton(13)) {
-        if(Toggle_Start){
-          Toggle_Start = false; 
-          Current_Drive_State = DriveState.TOGGLE_SETUP;
-        }
-    }
-    else if(!Field_Relative_Activated){
-      Toggle_Start = true; 
-      Current_Drive_State = DriveState.REGULAR_DRIVE;
-    }
-
-
-    if(m_Joystick.getRawButtonReleased(12)){
-      System.out.println("Button Released");
-      Field_Relative_Released = true; 
-    }
-
-    if (m_Joystick.getRawButton(12) && Field_Relative_Released) {
-      Field_Relative_Activated = true; 
-      if (Current_Drive_State == DriveState.TOGGLE_FIELD_RELATIVE) {
-        System.out.println("Regular Drive Relative Activated");
-        Current_Drive_State = DriveState.REGULAR_DRIVE;
-        Field_Relative_Released = true; 
-        Field_Relative_Activated = false; 
-      } else {
-        System.out.println("Field Relative Activated");
-        Field_Relative_Released = false; 
-        Current_Drive_State = DriveState.TOGGLE_SETUP;
-        // m_DriveSubsystem.zeroHeading();
-      }
-    }
-
-
-
-    System.out.println(Current_Drive_State);
+    // BUTTON 13 HELD FIELD RELATIVE
+    // BUTTON 12 TOGGLE FIELD RELATIVE
 
     switch (Current_Drive_State) {
-      case REGULAR_DRIVE:
-        m_DriveSubsystem.drive(x, y, z, false);
+      case DEFAULT_STATE:
+        if (m_Joystick.getRawButton(13)) {
+          Current_Drive_State = DriveState.HELD_INIT;
+        } else if (m_Joystick.getRawButton(12)) {
+          Current_Drive_State = DriveState.TOGGLE_SETUP;
+        } else {
+          m_DriveSubsystem.drive(x, y, z, false);
+        }
+      case HELD_INIT:
+        m_DriveSubsystem.zeroHeading();
+        if (m_Joystick.getRawButtonReleased(13)) {
+          Current_Drive_State = DriveState.DEFAULT_STATE;
+        } else {
+          Current_Drive_State = DriveState.HELD_FIELD_RELATIVE;
+        }
+      case HELD_FIELD_RELATIVE:
+        m_DriveSubsystem.drive(x, y, z, true);
+        if (m_Joystick.getRawButtonReleased(13)) {
+          Current_Drive_State = DriveState.DEFAULT_STATE;
+        }
         break;
       case TOGGLE_SETUP:
         m_DriveSubsystem.zeroHeading();
-        Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE;
-      case TOGGLE_FIELD_RELATIVE:
+
+        if (m_Joystick.getRawButtonReleased(12)) {
+          Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
+        } else {
+          Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_1;
+        }
+      case TOGGLE_FIELD_RELATIVE_STAGE_1:
         m_DriveSubsystem.drive(x, y, z, true);
+        if (m_Joystick.getRawButtonReleased(12)) {
+          Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
+        }
         break;
-      
-      // case FULL_FIELD_RELATIVE:
-      //   m_DriveSubsystem.drive(x, y, z, true);
-      //   break;
-
-
-
-
-    // System.out.println(m_Joystick.getRawButton(13));
-
-
+      case TOGGLE_FIELD_RELATIVE_STAGE_2:
+        m_DriveSubsystem.drive(x, y, z, true);
+        if (m_Joystick.getRawButton(12)) {
+          Current_Drive_State = DriveState.DEFAULT_STATE;
+        }
+        break;
     }
-    
+  }
+
+  public double checkJoystickDeadzone(double joystickValue) {
+    if (Math.abs(joystickValue) < Joystick_Deadzone) {
+      return 0.0;
+    } else {
+      return joystickValue;
+    }
   }
 
   @Override
