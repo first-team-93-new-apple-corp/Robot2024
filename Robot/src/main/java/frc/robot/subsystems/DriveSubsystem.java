@@ -46,7 +46,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public DriveSubsystem() {
     Gyro = new AHRS(SPI.Port.kMXP);
-
+    Gyro.reset();
     Kinematics =
       new SwerveDriveKinematics(
         DriveConstants.Location_FL,
@@ -112,7 +112,7 @@ public class DriveSubsystem extends SubsystemBase {
         Y * DriveConstants.Max_Strafe_Speed,
         Z * DriveConstants.Max_Angular_Speed
       );
-      System.out.println("Joystick X " + X + " Joystick Y " + Y + " Joystick Z " + Z);
+      // System.out.println("Joystick X " + X + " Joystick Y " + Y + " Joystick Z " + Z);
 
     }
     else {
