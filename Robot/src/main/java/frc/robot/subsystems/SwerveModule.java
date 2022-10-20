@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.controller.PIDController;
@@ -23,6 +24,7 @@ public class SwerveModule extends SubsystemBase {
   WPI_TalonFX Driving_Motor;
   WPI_TalonFX Turning_Motor;
   WPI_CANCoder Can_Coder;
+  AbsoluteSensorRange Range;
 
   PIDController TurningPID = new PIDController(DriveConstants.Turning_P, DriveConstants.Turning_I, DriveConstants.Turning_D);
 
@@ -46,6 +48,8 @@ public class SwerveModule extends SubsystemBase {
 
     Can_Coder = new WPI_CANCoder(CanCoderID);
     Can_Coder.configMagnetOffset(magnetOffset);
+    Range = AbsoluteSensorRange.valueOf(1);
+    Can_Coder.configAbsoluteSensorRange(Range);
 
     TurningPID.setTolerance(DriveConstants.Turning_Tolerance);
     TurningPID.enableContinuousInput(-Math.PI, Math.PI);
@@ -105,6 +109,7 @@ public class SwerveModule extends SubsystemBase {
 
   @Override
   public void periodic() {
+
   }
 
   @Override
