@@ -6,6 +6,9 @@ import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -21,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
   AHRS Gyro;
+  Pigeon2 Pigeon;
   SwerveDriveOdometry Odometry;
   SwerveDriveKinematics Kinematics;
 
@@ -45,6 +49,11 @@ public class DriveSubsystem extends SubsystemBase {
   // HolonomicDriveController Controller;
 
   public DriveSubsystem() {
+  Pigeon = new Pigeon2(0);
+  Pigeon.configMountPose(AxisDirection.PositiveX, AxisDirection.PositiveZ);
+  Pigeon.setYaw(0);
+
+
     Gyro = new AHRS(SPI.Port.kMXP);
     Gyro.reset();
     Kinematics =
@@ -54,6 +63,8 @@ public class DriveSubsystem extends SubsystemBase {
         DriveConstants.Location_BL,
         DriveConstants.Location_BR
       );
+
+
 
     Odometry = new SwerveDriveOdometry(Kinematics, Gyro.getRotation2d());
 
@@ -121,7 +132,7 @@ public class DriveSubsystem extends SubsystemBase {
           X * DriveConstants.Max_Strafe_Speed,
           Y * DriveConstants.Max_Strafe_Speed,
           Z * DriveConstants.Max_Angular_Speed,
-          Gyro.getRotation2d()
+          Gyro.getRotation2d() //Pigeon.getYaw()
         );
     }
 
@@ -194,10 +205,12 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getHeading() {
+  //return Pigeon.getYaw();
     return Gyro.getRotation2d().getDegrees();
   }
 
   public void zeroHeading() {
+  //Pigeon.setYaw(0);
     Gyro.reset();
   }
 
