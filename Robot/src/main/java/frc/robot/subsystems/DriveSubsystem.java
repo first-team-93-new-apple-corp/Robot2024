@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
-  AHRS Gyro;
+  // AHRS Gyro;
   Pigeon2 Pigeon;
   SwerveDriveOdometry Odometry;
   SwerveDriveKinematics Kinematics;
@@ -33,6 +33,7 @@ public class DriveSubsystem extends SubsystemBase {
   SwerveModule Back_Left;
   SwerveModule Back_Right;
   Trajectory Trajectory;
+  Rotation2d getRotation2d;
 
   SwerveModuleState savedstates[];
 
@@ -53,9 +54,10 @@ public class DriveSubsystem extends SubsystemBase {
   Pigeon.configMountPose(AxisDirection.PositiveX, AxisDirection.PositiveZ);
   Pigeon.setYaw(0);
 
+getRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
 
-    Gyro = new AHRS(SPI.Port.kMXP);
-    Gyro.reset();
+    // Gyro = new AHRS(SPI.Port.kMXP);
+    // Gyro.reset();
     Kinematics =
       new SwerveDriveKinematics(
         DriveConstants.Location_FL,
@@ -66,7 +68,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 
 
-    Odometry = new SwerveDriveOdometry(Kinematics, Gyro.getRotation2d());
+    Odometry = new SwerveDriveOdometry(Kinematics, getRotation2d);
 
     // Setting Up Swerve Modules
     Front_Left =
@@ -132,14 +134,14 @@ public class DriveSubsystem extends SubsystemBase {
           X * DriveConstants.Max_Strafe_Speed,
           Y * DriveConstants.Max_Strafe_Speed,
           Z * DriveConstants.Max_Angular_Speed,
-          Gyro.getRotation2d() //Pigeon.getYaw()
+          Rotation2d.fromDegrees(getHeading())
         );
     }
 
 
 
     // Swerve module states
-    SwerveModuleState[] States = Kinematics.toSwerveModuleStates(Speeds);
+    SwerveModuleState[] States = Kinematics.toSwerveModuleStates(Speeds, DriveConstants.Center);
     SwerveDriveKinematics.desaturateWheelSpeeds(
       States,
       DriveConstants.Max_Angular_Speed
@@ -205,13 +207,15 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getHeading() {
-  //return Pigeon.getYaw();
-    return Gyro.getRotation2d().getDegrees();
+    double yaw = Pigeon.getYaw();
+    yaw = yaw % 360;
+  return yaw;
+    // return Gyro.getRotation2d().getDegrees();
   }
 
   public void zeroHeading() {
-  //Pigeon.setYaw(0);
-    Gyro.reset();
+  Pigeon.setYaw(0);
+    // Gyro.reset();
   }
 
   // public void resetEncoders() {
@@ -222,7 +226,7 @@ public class DriveSubsystem extends SubsystemBase {
   // }
 
   public void resetOdometry(Pose2d pose) {
-    Odometry.resetPosition(pose, Gyro.getRotation2d());
+    Odometry.resetPosition(pose, getRotation2d);
   }
 
   @Override

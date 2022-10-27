@@ -53,10 +53,12 @@ public final class DriveConstants {
 
   public static final double Max_Strafe_Speed =
     TalonFX_RPS / Driving_Gearing * Wheel_Circumference; // m/s
-  public static final double Max_Angular_Speed = Math.PI ; // m/s
-  public static final double Max_Angular_Acceleration = Math.PI;
+  public static final double Max_Angular_Speed = 2*Math.PI ; // m/s
+  public static final double Max_Angular_Acceleration = 2*Math.PI;
 
   //Swerve Locations
+  public static final Translation2d Center = new Translation2d(-.05,0);
+
   public static final Translation2d Location_FL = new Translation2d(
     Wheel_Base / 2,
     Track_Width / 2
