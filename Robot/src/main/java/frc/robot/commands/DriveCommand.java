@@ -6,40 +6,41 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
-import java.lang.reflect.Field;
 
-/** An example command that uses an example subsystem. */
 public class DriveCommand extends CommandBase {
+
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-  private final DriveSubsystem m_DriveSubsystem;
+  private enum DriveModes {
+    One_Stick_Drive,
+    Two_Stick_Drive,
+    F310_Drive,
+  }
+
+  private DriveSubsystem m_DriveSubsystem;
 
   private XboxController F310;
   private Joystick m_Joystick1;
   private Joystick m_Joystick2;
+
+  private boolean ToggleButton;
+  private boolean HeldButton;
+  private boolean ToggleButtonReleased = false;
+  private boolean HeldButtonReleased = false;
+
   private double Joystick_Deadzone = 0.05;
 
-  public int DriveSchematic;
-  public int DriveMode;
+  private double x = 0;
+  private double y = 0;
+  private double z = 0;
 
+  public DriveModes CurrentDriveMode;
+  private DriveModes LastDriveMode = DriveModes.One_Stick_Drive;
 
-
-  public boolean ToggleButton;
-  public boolean HeldButton;
-
-  enum DriveState {
-    DEFAULT_SETUP,
-    DEFAULT_STATE,
-    HELD_INIT,
-    HELD_FIELD_RELATIVE,
-    TOGGLE_SETUP,
-    TOGGLE_FIELD_RELATIVE_STAGE_1,
-    TOGGLE_FIELD_RELATIVE_STAGE_2,
-  }
-
-  DriveState Current_Drive_State;
+  private SendableChooser<DriveModes> DriveModeChooser;
 
   public DriveCommand(
     DriveSubsystem m_DriveSubsystem,
@@ -51,204 +52,85 @@ public class DriveCommand extends CommandBase {
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.F310 = F310;
-    SmartDashboard.putNumber("DriveScheme", 0);
-    addRequirements(m_DriveSubsystem);
 
-    Current_Drive_State = DriveState.DEFAULT_STATE;
+    DriveModeChooser.setDefaultOption(
+      "1 Stick Drive",
+      DriveModes.One_Stick_Drive
+    );
+    DriveModeChooser.setDefaultOption(
+      "2 Stick Drive",
+      DriveModes.Two_Stick_Drive
+    );
+    DriveModeChooser.setDefaultOption("F310 Drive", DriveModes.F310_Drive);
+    SmartDashboard.putData("Drive Scheme", DriveModeChooser);
+    addRequirements(m_DriveSubsystem);
   }
 
   @Override
   public void initialize() {}
 
-  private double x = 0;
-  private double y = 0;
-  private double z = 0;
-
-  private boolean Toggle_State = false;
-  private boolean Last_Toggle_State = false;
-
-  private int Last_Drive_Scheme = 0;
-
-
-
   @Override
   public void execute() {
-    HeldButton = m_Joystick1.getRawButton(13);
-    
-    // ButtonReleased = m_Joystick1.getRawButtonReleased(12);
+    CurrentDriveMode = DriveModeChooser.getSelected();
 
-    ToggleButton = m_Joystick1.getRawButton(12);
-
-    DriveSchematic = (int) SmartDashboard.getNumber("DriveScheme", 0);
-
-    if (DriveSchematic != Last_Drive_Scheme) {
-      Current_Drive_State = DriveState.DEFAULT_SETUP;
+    if (CurrentDriveMode != LastDriveMode) {
+      m_DriveSubsystem.resetDriveMode();
     }
 
-    Last_Drive_Scheme = DriveSchematic;
+    LastDriveMode = CurrentDriveMode;
 
-    // System.out.println(DriveSchematic);
-
-    // System.out.println(Current_Drive_State);
-
-    switch (DriveSchematic) {
+    switch (CurrentDriveMode) {
       // regular drive
-      case 0:
+      case One_Stick_Drive:
         x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1));
         y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0));
         z = checkJoystickDeadzone(m_Joystick1.getRawAxis(2));
-        RegularDrive();
+
+        HeldButton = m_Joystick1.getRawButton(13);
+        HeldButtonReleased = m_Joystick1.getRawButtonReleased(13);
+
+        ToggleButton = m_Joystick1.getRawButton(12);
+        ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
+
         break;
-      // drive with 2 sticks
-      case 1:
+      // drive with 2 sticksRegularDrive
+      case Two_Stick_Drive:
         x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1));
         y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0));
         z = checkJoystickDeadzone(m_Joystick2.getRawAxis(0));
+
+        HeldButton = m_Joystick1.getRawButton(13);
+        HeldButtonReleased = m_Joystick1.getRawButtonReleased(13);
+
+        ToggleButton = m_Joystick1.getRawButton(12);
+        ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
+
         break;
       // F310 Drive
-      case 2:
+      case F310_Drive:
         x = F310.getRightY();
         y = F310.getRightX();
         z = F310.getLeftX();
+
+
+        HeldButton = F310.getAButton();
+        HeldButtonReleased = F310.getAButtonReleased();
+
+        ToggleButton = F310.getBButton();
+        ToggleButtonReleased = F310.getBButtonReleased();
         break;
     }
-    System.out.println(Current_Drive_State);
-    // System.out.println(m_Joystick1.getRawButtonReleased(12));
-    //State Machine for Field Relative
 
-    // switch (Current_Drive_State) {
-    //   case DEFAULT_SETUP:
-
-    //     // if (ButtonReleased) {
-    //     //   if (Toggle) {
-    //     //     Current_Drive_State = DriveState.DEFAULT_STATE;
-    //     //   } else {
-    //     //     Current_Drive_State = DriveState.TOGGLE_SETUP;
-    //     //   }
-    //     // }
-
-    //     break;
-
-    //   case DEFAULT_STATE:
-    //     Toggle = false;
-    //     if (DriveMode == 0) {
-    //       if (HeldButton) {
-    //         Current_Drive_State = DriveState.HELD_INIT;
-    //       } else if (m_Joystick1.getRawButton(12)) {
-    //         Current_Drive_State = DriveState.TOGGLE_SETUP;
-    //       } else {
-    //         m_DriveSubsystem.drive(x, y, z, false);
-    //       }
-    //     } else {
-    //       if (F310.getAButton()) {
-    //         if (!Toggle) Current_Drive_State =
-    //           DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
-    //       } else {
-    //         m_DriveSubsystem.drive(x, y, z, false);
-    //       }
-    //     }
-    //     break;
-    //   case HELD_INIT:
-    //     m_DriveSubsystem.zeroHeading();
-    //     if (m_Joystick1.getRawButtonReleased(13)) {
-    //       Current_Drive_State = DriveState.DEFAULT_STATE;
-    //     } else {
-    //       Current_Drive_State = DriveState.HELD_FIELD_RELATIVE;
-    //     }
-    //   case HELD_FIELD_RELATIVE:
-    //     m_DriveSubsystem.drive(x, y, z, true);
-    //     if (m_Joystick1.getRawButtonReleased(13)) {
-    //       Current_Drive_State = DriveState.DEFAULT_STATE;
-    //     }
-    //     break;
-    //   case TOGGLE_SETUP:
-    //     m_DriveSubsystem.zeroHeading();
-    //     if (ButtonReleased) {
-    //       Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
-    //     } else {
-    //       Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_1;
-    //     }
-    //   case TOGGLE_FIELD_RELATIVE_STAGE_1:
-    //     m_DriveSubsystem.drive(x, y, z, true);
-    //     if (ButtonReleased) {
-    //       Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
-    //     }
-    //     break;
-    //   case TOGGLE_FIELD_RELATIVE_STAGE_2:
-    //     if (DriveMode == 0) {
-    //       m_DriveSubsystem.drive(x, y, z, true);
-    //       if (m_Joystick1.getRawButton(12)) {
-    //         Toggle = true;
-    //         Current_Drive_State = DriveState.DEFAULT_SETUP;
-    //       }
-    //     } else {
-    //       m_DriveSubsystem.drive(x, y, z, true);
-    //       if (F310.getAButton()) {
-    //         Toggle = true;
-    //         Current_Drive_State = DriveState.DEFAULT_STATE;
-    //       }
-    //     }
-    //     break;
-    // }
+    m_DriveSubsystem.DriveStateMachine(
+      x,
+      y,
+      z,
+      ToggleButton,
+      ToggleButtonReleased,
+      HeldButton,
+      HeldButtonReleased
+    );
   }
-
-  public void RegularDrive() {
-    // BUTTON 12: TOGGLE FIELD RELATIVE
-    // BUTTON 13: HOLD FOR FIELD RELATIVE
-
-    // Starting State
-    if (Current_Drive_State == DriveState.DEFAULT_STATE) {
-      // if the toggle button is pressed
-
-      if (ToggleButton != Last_Toggle_State) {
-        Last_Toggle_State = ToggleButton;
-        m_DriveSubsystem.zeroHeading();
-        Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_1;
-      }
-      // if the held button is pressed
-      else if (m_Joystick1.getRawButton(13)) {
-        m_DriveSubsystem.zeroHeading();
-        Current_Drive_State = DriveState.HELD_FIELD_RELATIVE;
-      } else {
-        m_DriveSubsystem.drive(x, y, z, false);
-      }
-    }
-
-    switch (Current_Drive_State) {
-      // keep field relative drive until button is released
-      case HELD_FIELD_RELATIVE:
-        m_DriveSubsystem.drive(x, y, z, true);
-        if (m_Joystick1.getRawButtonReleased(13)) {
-          Current_Drive_State = DriveState.DEFAULT_STATE;
-        }
-        break;
-      // waiting for button to be released
-      case TOGGLE_FIELD_RELATIVE_STAGE_1:
-        m_DriveSubsystem.drive(x, y, z, true);
-        // System.out.println(m_Joystick1.getRawButtonReleased(12));
-        // m_Joystick1.getRaw
-        if (Last_Toggle_State != ToggleButton) {
-          Current_Drive_State = DriveState.DEFAULT_STATE;
-        }
-        break;
-      // waiting for button to be pressed again
-      // case TOGGLE_FIELD_RELATIVE_STAGE_2:
-      //   m_DriveSubsystem.drive(x, y, z, true);
-      //   if (m_Joystick1.getRawButton(12)) {
-      //     // Toggle = true;
-      //     Current_Drive_State = DriveState.DEFAULT_STATE;
-      //   }
-      //   break;
-      default:
-        break;
-    }
-
-    Last_Toggle_State = ToggleButton;
-  }
-
-  public void SpinnyDrive() {}
-
-  public void F310Drive() {}
 
   public double checkJoystickDeadzone(double joystickValue) {
     if (Math.abs(joystickValue) < Joystick_Deadzone) {

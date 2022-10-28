@@ -69,8 +69,7 @@ public class SwerveModule extends SubsystemBase {
       desiredState,
       calculateAngle()
     );
-    // SwerveModuleState state = desiredState;
-    // System.out.println(state.toString());
+
     //do not need PID on drive motors - just a simple voltage calculation
     double driveOutput =
       (state.speedMetersPerSecond / DriveConstants.Max_Strafe_Speed) *

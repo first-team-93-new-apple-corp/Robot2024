@@ -5,14 +5,11 @@ import edu.wpi.first.math.util.Units;
 
 public final class DriveConstants {
   public static final double Turning_Tolerance = Units.degreesToRadians(2);
-  public static double Turning_P = 3.7; //5
+  public static double Turning_P = 3.7;
   public static double Turning_I = 0;
-  public static double Turning_D = 0.1; //0.2
+  public static double Turning_D = 0.1; 
 
   public static final double Throttle_Tolerance = 0.1;
-  // public static final double Throttle_P = 0;
-  // public static final double Throttle_I = 0;
-  // public static final double Throttle_D = 0;
 
   public static final int Throttle_Port_FL = 1;
   public static final int Turning_Port_FL = 5;

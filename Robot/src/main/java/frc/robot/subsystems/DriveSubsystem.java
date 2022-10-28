@@ -1,29 +1,19 @@
-
 package frc.robot.subsystems;
 
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.math.controller.HolonomicDriveController;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
-
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.Trajectory.State;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
-  // AHRS Gyro;
+
   Pigeon2 Pigeon;
   SwerveDriveOdometry Odometry;
   SwerveDriveKinematics Kinematics;
@@ -35,29 +25,31 @@ public class DriveSubsystem extends SubsystemBase {
   Trajectory Trajectory;
   Rotation2d getRotation2d;
 
-  SwerveModuleState savedstates[];
-
-  // ProfiledPIDController Turning_PID = new ProfiledPIDController(
-  //   DriveConstants.Turning_P,
-  //   0,
-  //   0,
-  //   new TrapezoidProfile.Constraints(6.28, 3.14)
-  // );
- 
+  SwerveModuleState SavedStates[];
 
   ChassisSpeeds Speeds;
 
-  // HolonomicDriveController Controller;
+  enum DriveState {
+    DEFAULT_STATE,
+    HELD_FIELD_RELATIVE,
+    TOGGLE_FIELD_RELATIVE_STAGE_1,
+    TOGGLE_FIELD_RELATIVE_STAGE_2,
+    TOGGLE_HOLD_STATE,
+  }
+
+  private DriveState CurrentDriveState = DriveState.DEFAULT_STATE;
 
   public DriveSubsystem() {
-  Pigeon = new Pigeon2(0);
-  Pigeon.configMountPose(AxisDirection.PositiveX, AxisDirection.PositiveZ);
-  Pigeon.setYaw(0);
 
-getRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
+    SmartDashboard.putBoolean("Field Relative" , false);
+    SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
 
-    // Gyro = new AHRS(SPI.Port.kMXP);
-    // Gyro.reset();
+    Pigeon = new Pigeon2(0);
+    Pigeon.configMountPose(AxisDirection.PositiveX, AxisDirection.PositiveZ);
+    Pigeon.setYaw(0);
+
+    getRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
+
     Kinematics =
       new SwerveDriveKinematics(
         DriveConstants.Location_FL,
@@ -65,8 +57,6 @@ getRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
         DriveConstants.Location_BL,
         DriveConstants.Location_BR
       );
-
-
 
     Odometry = new SwerveDriveOdometry(Kinematics, getRotation2d);
 
@@ -100,35 +90,21 @@ getRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
         DriveConstants.Magnet_Offset_BR
       );
 
-    // // Swerve Drive PID
-    // Controller =
-    //   new HolonomicDriveController(Driving_PID_X, Driving_PID_Y, Turning_PID);
-
     SmartDashboard.putNumber("Passing in angle to state", 0);
   }
-
-  // public void getEncoderValues(){
-  //   System.out.println("Front Right: " + Front_Right.calculateAngle());
-  //   System.out.println("Front Left: " + Front_Left.calculateAngle());
-  //   System.out.println("Back Right: " + Back_Right.calculateAngle());
-  //   System.out.println("Back Left: " + Back_Left.calculateAngle());
-  // }
 
   public void drive(double X, double Y, double Z, boolean Field_Relative) { // from joystick
     // setting up speeds based on whether field relative is on or not
     // passing in joystick values in params
 
     if (!Field_Relative) {
-    Speeds =
-      new ChassisSpeeds(
-        X * DriveConstants.Max_Strafe_Speed,
-        Y * DriveConstants.Max_Strafe_Speed,
-        Z * DriveConstants.Max_Angular_Speed
-      );
-      // System.out.println("Joystick X " + X + " Joystick Y " + Y + " Joystick Z " + Z);
-
-    }
-    else {
+      Speeds =
+        new ChassisSpeeds(
+          X * DriveConstants.Max_Strafe_Speed,
+          Y * DriveConstants.Max_Strafe_Speed,
+          Z * DriveConstants.Max_Angular_Speed
+        );
+    } else {
       Speeds =
         ChassisSpeeds.fromFieldRelativeSpeeds(
           X * DriveConstants.Max_Strafe_Speed,
@@ -138,37 +114,107 @@ getRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
         );
     }
 
-
-
     // Swerve module states
-    SwerveModuleState[] States = Kinematics.toSwerveModuleStates(Speeds, DriveConstants.Center);
+    SwerveModuleState[] States = Kinematics.toSwerveModuleStates(
+      Speeds,
+      DriveConstants.Center
+    );
     SwerveDriveKinematics.desaturateWheelSpeeds(
       States,
       DriveConstants.Max_Angular_Speed
     );
     //this is so that the angle is saved and not auto set to 0 even after strafe
-    if(X==0&&Y==0&&Z==0){
-      if(savedstates == null){
-        savedstates = States;
+    if (X == 0 && Y == 0 && Z == 0) {
+      if (SavedStates == null) {
+        SavedStates = States;
       }
-      for(int i = 0; i<savedstates.length; i++){
+      for (int i = 0; i < SavedStates.length; i++) {
         States[i].speedMetersPerSecond = 0;
-        States[i].angle = savedstates[i].angle;
+        States[i].angle = SavedStates[i].angle;
       }
+    } else {
+      SavedStates = States;
     }
-    else{
-      savedstates = States;
-    }
-
-
 
     Front_Left.setDesiredState(States[0]);
     Front_Right.setDesiredState(States[1]);
     Back_Left.setDesiredState(States[2]);
     Back_Right.setDesiredState(States[3]);
+  }
 
 
-   
+
+  public void resetDriveMode(){
+    CurrentDriveState = DriveState.DEFAULT_STATE;
+  }
+  public void DriveStateMachine(
+    double x,
+    double y,
+    double z,
+    Boolean HeldButton,
+    Boolean HeldButtonReleased,
+    Boolean ToggleButton,
+    Boolean ToggleButtonReleased
+  ) {
+    // Setting up Starting State or simple driving
+
+    SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
+
+    if (CurrentDriveState == DriveState.DEFAULT_STATE) {
+      // if the toggle button is pressed
+
+      if (ToggleButton) {
+        SmartDashboard.putBoolean("Field Relative" , true);
+        zeroHeading();
+        CurrentDriveState = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_1;
+      }
+      // if the held button is pressed
+      else if (HeldButton) {
+        SmartDashboard.putBoolean("Field Relative" , true);
+        zeroHeading();
+        CurrentDriveState = DriveState.HELD_FIELD_RELATIVE;
+      } else {
+        SmartDashboard.putBoolean("Field Relative" , false);
+        drive(x, y, z, false);
+      }
+    }
+
+    // running held and toggle field modes
+    switch (CurrentDriveState) {
+      // keep field relative drive until button is released
+      case HELD_FIELD_RELATIVE:
+        ;
+        drive(x, y, z, true);
+        if (HeldButtonReleased) {
+          CurrentDriveState = DriveState.DEFAULT_STATE;
+        }
+        break;
+      // waiting for button to be released
+      case TOGGLE_FIELD_RELATIVE_STAGE_1:
+        drive(x, y, z, true);
+        if (ToggleButtonReleased) {
+          CurrentDriveState = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_1;
+        }
+        break;
+      // waiting for button to be pressed again
+      case TOGGLE_FIELD_RELATIVE_STAGE_2:
+        drive(x, y, z, true);
+        if (ToggleButton) {
+          CurrentDriveState = DriveState.TOGGLE_HOLD_STATE;
+        }
+        break;
+
+      // waiting for button 12 to be released, stay in this mode until it has been released, but run non-field relative drive in the meantime
+      case TOGGLE_HOLD_STATE:
+        SmartDashboard.putBoolean("Field Relative" , false);
+        drive(x, y, z, false);
+        if (ToggleButtonReleased) {
+          CurrentDriveState = DriveState.DEFAULT_STATE;
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   // public void driveAuton(double time) {
@@ -209,21 +255,12 @@ getRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
   public double getHeading() {
     double yaw = Pigeon.getYaw();
     yaw = yaw % 360;
-  return yaw;
-    // return Gyro.getRotation2d().getDegrees();
+    return yaw;
   }
 
   public void zeroHeading() {
-  Pigeon.setYaw(0);
-    // Gyro.reset();
+    Pigeon.setYaw(0);
   }
-
-  // public void resetEncoders() {
-  //   Front_Left.resetEncoders();
-  //   Front_Right.resetEncoders();
-  //   Back_Left.resetEncoders();
-  //   Back_Right.resetEncoders();
-  // }
 
   public void resetOdometry(Pose2d pose) {
     Odometry.resetPosition(pose, getRotation2d);
@@ -239,22 +276,6 @@ getRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
     //   Back_Right.getState()
     // );
 
-    // SmartDashboard.putNumber(
-    //   "Actual Angle",
-    //   Front_Left.calculateAngle().getRadians()
-    // );
-
-    // SmartDashboard.putNumber(
-    //   "Actual Angle Radians",
-    //   Front_Left.calculateAngle().getRadians()
-    // );
-    // SmartDashboard.putNumber(
-    //   "Actual Angle Degrees",
-    //   Front_Left.calculateAngle().getDegrees()
-    // );
-    // SmartDashboard.putNumber("Actual Angle", Front_Right.calculateAngle().getDegrees());
-    // SmartDashboard.putNumber("Actual Angle", Back_Left.calculateAngle().getDegrees());
-    // SmartDashboard.putNumber("Actual Angle", Back_Right.calculateAngle().getDegrees());
   }
 
   @Override
