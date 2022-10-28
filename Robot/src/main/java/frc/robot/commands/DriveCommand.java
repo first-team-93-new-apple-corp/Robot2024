@@ -13,7 +13,6 @@ import java.lang.reflect.Field;
 
 /** An example command that uses an example subsystem. */
 public class DriveCommand extends CommandBase {
-
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final DriveSubsystem m_DriveSubsystem;
 
@@ -24,9 +23,11 @@ public class DriveCommand extends CommandBase {
 
   public int DriveSchematic;
   public int DriveMode;
+
+
+
   public boolean ToggleButton;
   public boolean HeldButton;
-  public boolean ButtonReleased;
 
   enum DriveState {
     DEFAULT_SETUP,
@@ -37,9 +38,15 @@ public class DriveCommand extends CommandBase {
     TOGGLE_FIELD_RELATIVE_STAGE_1,
     TOGGLE_FIELD_RELATIVE_STAGE_2,
   }
+
   DriveState Current_Drive_State;
 
-  public DriveCommand(DriveSubsystem m_DriveSubsystem, Joystick m_Joystick1, Joystick m_Joystick2, XboxController F310) {
+  public DriveCommand(
+    DriveSubsystem m_DriveSubsystem,
+    Joystick m_Joystick1,
+    Joystick m_Joystick2,
+    XboxController F310
+  ) {
     this.m_DriveSubsystem = m_DriveSubsystem;
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
@@ -51,137 +58,197 @@ public class DriveCommand extends CommandBase {
   }
 
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   private double x = 0;
   private double y = 0;
   private double z = 0;
 
-  private boolean Toggle = false;
+  private boolean Toggle_State = false;
+  private boolean Last_Toggle_State = false;
+
+  private int Last_Drive_Scheme = 0;
 
 
 
   @Override
   public void execute() {
+    HeldButton = m_Joystick1.getRawButton(13);
+    
+    // ButtonReleased = m_Joystick1.getRawButtonReleased(12);
 
-  HeldButton = m_Joystick1.getRawButton(13);
-  ButtonReleased = m_Joystick1.getRawButtonReleased(12);
+    ToggleButton = m_Joystick1.getRawButton(12);
 
-  DriveSchematic = (int) SmartDashboard.getNumber("DriveScheme", 0);
+    DriveSchematic = (int) SmartDashboard.getNumber("DriveScheme", 0);
 
-  System.out.println(Current_Drive_State);
+    if (DriveSchematic != Last_Drive_Scheme) {
+      Current_Drive_State = DriveState.DEFAULT_SETUP;
+    }
 
-    switch(DriveSchematic){
+    Last_Drive_Scheme = DriveSchematic;
+
+    // System.out.println(DriveSchematic);
+
+    // System.out.println(Current_Drive_State);
+
+    switch (DriveSchematic) {
+      // regular drive
       case 0:
         x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1));
         y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0));
         z = checkJoystickDeadzone(m_Joystick1.getRawAxis(2));
-      ;
+        RegularDrive();
+        break;
+      // drive with 2 sticks
       case 1:
         x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1));
         y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0));
         z = checkJoystickDeadzone(m_Joystick2.getRawAxis(0));
-      ;
+        break;
+      // F310 Drive
       case 2:
-      x = F310.getRightY();
-      y = F310.getRightX();
-      z = F310.getLeftX();
-    ;
+        x = F310.getRightY();
+        y = F310.getRightX();
+        z = F310.getLeftX();
+        break;
     }
-
-    if(DriveSchematic == 0){
-      DriveMode = 0;
-    }
-    else if(DriveSchematic == 1){
-      DriveMode = 0;
-    }
-    else {
-      DriveMode = 1;
-    }
-
+    System.out.println(Current_Drive_State);
+    // System.out.println(m_Joystick1.getRawButtonReleased(12));
     //State Machine for Field Relative
-  switch (Current_Drive_State) {
-    case DEFAULT_SETUP:
-        if(ButtonReleased){
-          if(Toggle){
-            Current_Drive_State = DriveState.DEFAULT_STATE;
-          }
-        else{
-            Current_Drive_State = DriveState.TOGGLE_SETUP;
-        }
-        }
-    break;
-    case DEFAULT_STATE:
-    Toggle = false;
-      if(DriveMode == 0){
-        if (HeldButton) {
-          Current_Drive_State = DriveState.HELD_INIT;
-        } 
-        else if (m_Joystick1.getRawButton(12)) {
-          Current_Drive_State = DriveState.TOGGLE_SETUP;
-        } 
-        else {
-          m_DriveSubsystem.drive(x, y, z, false);
-        }
-      }
-      else {
-        if (F310.getAButton()) {
-          if(!Toggle)
-          Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
-        } 
-        else {
-          m_DriveSubsystem.drive(x, y, z, false);
-        }
-      }
-    break;
-    case HELD_INIT:
-    m_DriveSubsystem.zeroHeading();
-      if (m_Joystick1.getRawButtonReleased(13)) {
-        Current_Drive_State = DriveState.DEFAULT_STATE;
-      } 
-      else {
-          Current_Drive_State = DriveState.HELD_FIELD_RELATIVE;
-      }
-    case HELD_FIELD_RELATIVE:
-    m_DriveSubsystem.drive(x, y, z, true);
-      if (m_Joystick1.getRawButtonReleased(13)) {
-          Current_Drive_State = DriveState.DEFAULT_STATE;
-      }
-    break;
-    case TOGGLE_SETUP:
-    m_DriveSubsystem.zeroHeading();
-      if (ButtonReleased) {
-          Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
-      } 
-      else {
-          Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_1;
-      }
-    case TOGGLE_FIELD_RELATIVE_STAGE_1:
-    m_DriveSubsystem.drive(x, y, z, true);
-      if (ButtonReleased) {
-        Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
-      }
-    break;
-    case TOGGLE_FIELD_RELATIVE_STAGE_2:
-      if(DriveMode == 0){
-      m_DriveSubsystem.drive(x, y, z, true);
-        if (m_Joystick1.getRawButton(12)) {
-          Toggle = true;
-          Current_Drive_State = DriveState.DEFAULT_SETUP;
-        }
-      }
-      else {
-      m_DriveSubsystem.drive(x, y, z, true);
-        if(F310.getAButton()){
-          Toggle = true;
-          Current_Drive_State = DriveState.DEFAULT_STATE;
-        }
-      }
-    break;
-    }
+
+    // switch (Current_Drive_State) {
+    //   case DEFAULT_SETUP:
+
+    //     // if (ButtonReleased) {
+    //     //   if (Toggle) {
+    //     //     Current_Drive_State = DriveState.DEFAULT_STATE;
+    //     //   } else {
+    //     //     Current_Drive_State = DriveState.TOGGLE_SETUP;
+    //     //   }
+    //     // }
+
+    //     break;
+
+    //   case DEFAULT_STATE:
+    //     Toggle = false;
+    //     if (DriveMode == 0) {
+    //       if (HeldButton) {
+    //         Current_Drive_State = DriveState.HELD_INIT;
+    //       } else if (m_Joystick1.getRawButton(12)) {
+    //         Current_Drive_State = DriveState.TOGGLE_SETUP;
+    //       } else {
+    //         m_DriveSubsystem.drive(x, y, z, false);
+    //       }
+    //     } else {
+    //       if (F310.getAButton()) {
+    //         if (!Toggle) Current_Drive_State =
+    //           DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
+    //       } else {
+    //         m_DriveSubsystem.drive(x, y, z, false);
+    //       }
+    //     }
+    //     break;
+    //   case HELD_INIT:
+    //     m_DriveSubsystem.zeroHeading();
+    //     if (m_Joystick1.getRawButtonReleased(13)) {
+    //       Current_Drive_State = DriveState.DEFAULT_STATE;
+    //     } else {
+    //       Current_Drive_State = DriveState.HELD_FIELD_RELATIVE;
+    //     }
+    //   case HELD_FIELD_RELATIVE:
+    //     m_DriveSubsystem.drive(x, y, z, true);
+    //     if (m_Joystick1.getRawButtonReleased(13)) {
+    //       Current_Drive_State = DriveState.DEFAULT_STATE;
+    //     }
+    //     break;
+    //   case TOGGLE_SETUP:
+    //     m_DriveSubsystem.zeroHeading();
+    //     if (ButtonReleased) {
+    //       Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
+    //     } else {
+    //       Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_1;
+    //     }
+    //   case TOGGLE_FIELD_RELATIVE_STAGE_1:
+    //     m_DriveSubsystem.drive(x, y, z, true);
+    //     if (ButtonReleased) {
+    //       Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
+    //     }
+    //     break;
+    //   case TOGGLE_FIELD_RELATIVE_STAGE_2:
+    //     if (DriveMode == 0) {
+    //       m_DriveSubsystem.drive(x, y, z, true);
+    //       if (m_Joystick1.getRawButton(12)) {
+    //         Toggle = true;
+    //         Current_Drive_State = DriveState.DEFAULT_SETUP;
+    //       }
+    //     } else {
+    //       m_DriveSubsystem.drive(x, y, z, true);
+    //       if (F310.getAButton()) {
+    //         Toggle = true;
+    //         Current_Drive_State = DriveState.DEFAULT_STATE;
+    //       }
+    //     }
+    //     break;
+    // }
   }
+
+  public void RegularDrive() {
+    // BUTTON 12: TOGGLE FIELD RELATIVE
+    // BUTTON 13: HOLD FOR FIELD RELATIVE
+
+    // Starting State
+    if (Current_Drive_State == DriveState.DEFAULT_STATE) {
+      // if the toggle button is pressed
+
+      if (ToggleButton != Last_Toggle_State) {
+        Last_Toggle_State = ToggleButton;
+        m_DriveSubsystem.zeroHeading();
+        Current_Drive_State = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_1;
+      }
+      // if the held button is pressed
+      else if (m_Joystick1.getRawButton(13)) {
+        m_DriveSubsystem.zeroHeading();
+        Current_Drive_State = DriveState.HELD_FIELD_RELATIVE;
+      } else {
+        m_DriveSubsystem.drive(x, y, z, false);
+      }
+    }
+
+    switch (Current_Drive_State) {
+      // keep field relative drive until button is released
+      case HELD_FIELD_RELATIVE:
+        m_DriveSubsystem.drive(x, y, z, true);
+        if (m_Joystick1.getRawButtonReleased(13)) {
+          Current_Drive_State = DriveState.DEFAULT_STATE;
+        }
+        break;
+      // waiting for button to be released
+      case TOGGLE_FIELD_RELATIVE_STAGE_1:
+        m_DriveSubsystem.drive(x, y, z, true);
+        // System.out.println(m_Joystick1.getRawButtonReleased(12));
+        // m_Joystick1.getRaw
+        if (Last_Toggle_State != ToggleButton) {
+          Current_Drive_State = DriveState.DEFAULT_STATE;
+        }
+        break;
+      // waiting for button to be pressed again
+      // case TOGGLE_FIELD_RELATIVE_STAGE_2:
+      //   m_DriveSubsystem.drive(x, y, z, true);
+      //   if (m_Joystick1.getRawButton(12)) {
+      //     // Toggle = true;
+      //     Current_Drive_State = DriveState.DEFAULT_STATE;
+      //   }
+      //   break;
+      default:
+        break;
+    }
+
+    Last_Toggle_State = ToggleButton;
+  }
+
+  public void SpinnyDrive() {}
+
+  public void F310Drive() {}
 
   public double checkJoystickDeadzone(double joystickValue) {
     if (Math.abs(joystickValue) < Joystick_Deadzone) {
@@ -189,7 +256,6 @@ public class DriveCommand extends CommandBase {
     } else {
       return joystickValue;
     }
-  
   }
 
   @Override
