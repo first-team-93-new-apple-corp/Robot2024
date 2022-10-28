@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.text.DecimalFormat;
+
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -89,6 +91,8 @@ public class DriveSubsystem extends SubsystemBase {
         DriveConstants.Encoder_Port_BR,
         DriveConstants.Magnet_Offset_BR
       );
+
+      
 
     SmartDashboard.putNumber("Passing in angle to state", 0);
   }
@@ -193,7 +197,7 @@ public class DriveSubsystem extends SubsystemBase {
       case TOGGLE_FIELD_RELATIVE_STAGE_1:
         drive(x, y, z, true);
         if (ToggleButtonReleased) {
-          CurrentDriveState = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_1;
+          CurrentDriveState = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
         }
         break;
       // waiting for button to be pressed again
@@ -266,8 +270,22 @@ public class DriveSubsystem extends SubsystemBase {
     Odometry.resetPosition(pose, getRotation2d);
   }
 
+  DecimalFormat round = new DecimalFormat("#.###"); 
+
+  public void printEncoderValues(){
+    SmartDashboard.putString("Front Right Encoder", round.format(Front_Right.getAngle().getDegrees())); 
+    SmartDashboard.putString("Front Left Encoder", round.format(Front_Left.getAngle().getDegrees())); 
+    SmartDashboard.putString("Back Right Encoder", round.format(Back_Right.getAngle().getDegrees())); 
+    SmartDashboard.putString("Back Left Encoder", round.format(Back_Left.getAngle().getDegrees())); 
+
+
+  }
+
   @Override
   public void periodic() {
+
+    printEncoderValues(); 
+    
     // Odometry.update(
     //   Gyro.getRotation2d(),
     //   Front_Left.getState(),
@@ -275,6 +293,7 @@ public class DriveSubsystem extends SubsystemBase {
     //   Back_Left.getState(),
     //   Back_Right.getState()
     // );
+    
 
   }
 

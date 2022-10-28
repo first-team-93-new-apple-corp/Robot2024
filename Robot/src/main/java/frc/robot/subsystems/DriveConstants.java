@@ -5,7 +5,7 @@ import edu.wpi.first.math.util.Units;
 
 public final class DriveConstants {
   public static final double Turning_Tolerance = Units.degreesToRadians(2);
-  public static double Turning_P = 3.7;
+  public static double Turning_P = 4.2;
   public static double Turning_I = 0;
   public static double Turning_D = 0.1; 
 
@@ -14,22 +14,22 @@ public final class DriveConstants {
   public static final int Throttle_Port_FL = 1;
   public static final int Turning_Port_FL = 5;
   public static final int Encoder_Port_FL = 10;
-  public static final double Magnet_Offset_FL = 43.59;
+  public static final double Magnet_Offset_FL = -136.318+180;
 
   public static final int Throttle_Port_BR = 3;
   public static final int Turning_Port_BR = 7;
   public static final int Encoder_Port_BR = 12;
-  public static final double Magnet_Offset_BR = 124.37;
+  public static final double Magnet_Offset_BR = 124.541;
 
   public static final int Throttle_Port_BL = 4;
   public static final int Turning_Port_BL = 8;
   public static final int Encoder_Port_BL = 13;
-  public static final double Magnet_Offset_BL = -95.19;
+  public static final double Magnet_Offset_BL = 85.078-180;
 
   public static final int Throttle_Port_FR = 2;
   public static final int Turning_Port_FR = 6;
   public static final int Encoder_Port_FR = 11;
-  public static final double Magnet_Offset_FR = 150.73;
+  public static final double Magnet_Offset_FR = 149.941;
 
   // Motor Information
   public static final double TalonFX_RPM = 6380;
@@ -54,7 +54,7 @@ public final class DriveConstants {
   public static final double Max_Angular_Acceleration = 2*Math.PI;
 
   //Swerve Locations
-  public static final Translation2d Center = new Translation2d(-.05,0);
+  public static final Translation2d Center = new Translation2d(-.15, .05);
 
   public static final Translation2d Location_FL = new Translation2d(
     Wheel_Base / 2,

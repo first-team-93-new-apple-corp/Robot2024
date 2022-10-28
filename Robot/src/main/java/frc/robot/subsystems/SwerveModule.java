@@ -39,9 +39,9 @@ public class SwerveModule extends SubsystemBase {
     Driving_Motor.setNeutralMode(NeutralMode.Brake);
     TalonFXConfiguration driveConfig = new TalonFXConfiguration();
     driveConfig.supplyCurrLimit.enable = true;
-    driveConfig.supplyCurrLimit.currentLimit = 80;
-    driveConfig.supplyCurrLimit.triggerThresholdCurrent = 120;
-    driveConfig.supplyCurrLimit.triggerThresholdTime = 2;
+    driveConfig.supplyCurrLimit.currentLimit = 5;
+    driveConfig.supplyCurrLimit.triggerThresholdCurrent = 5;
+    driveConfig.supplyCurrLimit.triggerThresholdTime = .254;
     Driving_Motor.configAllSettings(driveConfig);
     Turning_Motor = new WPI_TalonFX(turnMotorID);
     Turning_Motor.setNeutralMode(NeutralMode.Brake);
@@ -59,7 +59,7 @@ public class SwerveModule extends SubsystemBase {
 
   public SwerveModuleState getState() {
 
-    return new SwerveModuleState(getVelocity(), calculateAngle());
+    return new SwerveModuleState(getVelocity(), getAngle());
   }
 
   public void setDesiredState(SwerveModuleState desiredState) {
@@ -67,7 +67,7 @@ public class SwerveModule extends SubsystemBase {
     // optimize which way to turn the wheel
     SwerveModuleState state = SwerveModuleState.optimize(
       desiredState,
-      calculateAngle()
+      getAngle()
     );
 
     //do not need PID on drive motors - just a simple voltage calculation
@@ -77,7 +77,7 @@ public class SwerveModule extends SubsystemBase {
 
     //Turning needs a pid because it has a setpoint it need to reach
     double turnOutput = TurningPID.calculate(
-      calculateAngle().getRadians(),
+      getAngle().getRadians(),
       state.angle.getRadians()
     );
 
@@ -102,9 +102,10 @@ public class SwerveModule extends SubsystemBase {
   }
 
   // get angle from can coder
-  public Rotation2d calculateAngle() {
+  public Rotation2d getAngle() {
     return Rotation2d.fromDegrees(Can_Coder.getAbsolutePosition());
   }
+
 
 
 

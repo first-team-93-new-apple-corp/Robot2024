@@ -31,7 +31,7 @@ public class DriveCommand extends CommandBase {
   private boolean ToggleButtonReleased = false;
   private boolean HeldButtonReleased = false;
 
-  private double Joystick_Deadzone = 0.05;
+  private double Joystick_Deadzone = 0.1;
 
   private double x = 0;
   private double y = 0;
@@ -43,31 +43,31 @@ public class DriveCommand extends CommandBase {
   private SendableChooser<DriveModes> DriveModeChooser;
 
   public DriveCommand(
-    DriveSubsystem m_DriveSubsystem,
-    Joystick m_Joystick1,
-    Joystick m_Joystick2,
-    XboxController F310
-  ) {
+      DriveSubsystem m_DriveSubsystem,
+      Joystick m_Joystick1,
+      Joystick m_Joystick2,
+      XboxController F310) {
     this.m_DriveSubsystem = m_DriveSubsystem;
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.F310 = F310;
 
+    DriveModeChooser = new SendableChooser<DriveModes>();
+
     DriveModeChooser.setDefaultOption(
-      "1 Stick Drive",
-      DriveModes.One_Stick_Drive
-    );
-    DriveModeChooser.setDefaultOption(
-      "2 Stick Drive",
-      DriveModes.Two_Stick_Drive
-    );
-    DriveModeChooser.setDefaultOption("F310 Drive", DriveModes.F310_Drive);
+        "1 Stick Drive",
+        DriveModes.One_Stick_Drive);
+    DriveModeChooser.addOption(
+        "2 Stick Drive",
+        DriveModes.Two_Stick_Drive);
+    DriveModeChooser.addOption("F310 Drive", DriveModes.F310_Drive);
     SmartDashboard.putData("Drive Scheme", DriveModeChooser);
     addRequirements(m_DriveSubsystem);
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   @Override
   public void execute() {
@@ -109,27 +109,28 @@ public class DriveCommand extends CommandBase {
       // F310 Drive
       case F310_Drive:
         x = F310.getRightY();
+        x = Math.pow(x, 2) * Math.signum(x);
+
         y = F310.getRightX();
+        y = Math.pow(y, 2) * Math.signum(y);
+
         z = F310.getLeftX();
 
+        HeldButton = F310.getLeftBumper();
+        HeldButtonReleased = F310.getLeftBumperReleased();
 
-        HeldButton = F310.getAButton();
-        HeldButtonReleased = F310.getAButtonReleased();
-
-        ToggleButton = F310.getBButton();
-        ToggleButtonReleased = F310.getBButtonReleased();
+        ToggleButton = F310.getRightBumper();
+        ToggleButtonReleased = F310.getRightBumperReleased();
         break;
     }
 
     m_DriveSubsystem.DriveStateMachine(
-      x,
-      y,
-      z,
-      ToggleButton,
-      ToggleButtonReleased,
-      HeldButton,
-      HeldButtonReleased
-    );
+        x, y,
+        z,
+        HeldButton,
+        HeldButtonReleased,
+        ToggleButton,
+        ToggleButtonReleased);
   }
 
   public double checkJoystickDeadzone(double joystickValue) {
@@ -141,7 +142,8 @@ public class DriveCommand extends CommandBase {
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   @Override
   public boolean isFinished() {
