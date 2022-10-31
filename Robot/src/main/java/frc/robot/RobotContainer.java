@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.AutoCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -22,6 +23,7 @@ public class RobotContainer {
 
   //Command Definitions 
   DriveCommand m_DriveCommand; 
+  AutoCommand m_AutoCommand;
   
 
   /**
@@ -38,7 +40,7 @@ public class RobotContainer {
 
     //Commands
     m_DriveCommand = new DriveCommand(m_DriveSubsystem, Driver1, Driver2, F310); 
-
+    m_AutoCommand = new AutoCommand(m_DriveSubsystem);
 
     configureButtonBindings();
   }
@@ -52,6 +54,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-   return null;
+   return m_AutoCommand;
   }
 }

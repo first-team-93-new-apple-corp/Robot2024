@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import javax.sound.midi.Track;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
@@ -55,6 +57,11 @@ public final class DriveConstants {
 
   //Swerve Locations
   public static final Translation2d Center = new Translation2d(-.15, .05);
+  public static final Translation2d Front = new Translation2d(Wheel_Base/2,0);
+  public static final Translation2d Right = new Translation2d(0,-Track_Width/2);
+  public static final Translation2d Back = new Translation2d(-Wheel_Base/2,0);
+  public static final Translation2d Left = new Translation2d(0,Track_Width/2);
+  
 
   public static final Translation2d Location_FL = new Translation2d(
     Wheel_Base / 2,

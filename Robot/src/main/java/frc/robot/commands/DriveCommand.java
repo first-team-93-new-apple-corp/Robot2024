@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.CustomRotationHelper;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveCommand extends CommandBase {
@@ -21,6 +23,7 @@ public class DriveCommand extends CommandBase {
   }
 
   private DriveSubsystem m_DriveSubsystem;
+  private CustomRotationHelper rotationHelper;
 
   private XboxController F310;
   private Joystick m_Joystick1;
@@ -41,6 +44,7 @@ public class DriveCommand extends CommandBase {
   private DriveModes LastDriveMode = DriveModes.One_Stick_Drive;
 
   private SendableChooser<DriveModes> DriveModeChooser;
+  private POVButton POV;
 
   public DriveCommand(
       DriveSubsystem m_DriveSubsystem,
@@ -51,8 +55,11 @@ public class DriveCommand extends CommandBase {
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.F310 = F310;
+    
 
     DriveModeChooser = new SendableChooser<DriveModes>();
+    
+    rotationHelper = new CustomRotationHelper(m_Joystick1);
 
     DriveModeChooser.setDefaultOption(
         "1 Stick Drive",
@@ -130,7 +137,8 @@ public class DriveCommand extends CommandBase {
         HeldButton,
         HeldButtonReleased,
         ToggleButton,
-        ToggleButtonReleased);
+        ToggleButtonReleased,
+        rotationHelper.povButton());
   }
 
   public double checkJoystickDeadzone(double joystickValue) {

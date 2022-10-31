@@ -4,13 +4,21 @@ import java.text.DecimalFormat;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.Pigeon2.AxisDirection;
+import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
+
+import edu.wpi.first.math.controller.HolonomicDriveController;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.Trajectory.State;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -26,6 +34,9 @@ public class DriveSubsystem extends SubsystemBase {
   SwerveModule Back_Right;
   Trajectory Trajectory;
   Rotation2d getRotation2d;
+  HolonomicDriveController AutoController;
+  PIDController XYPIDController;
+  ProfiledPIDController ThetaController;
 
   SwerveModuleState SavedStates[];
 
@@ -43,7 +54,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public DriveSubsystem() {
 
-    SmartDashboard.putBoolean("Field Relative" , false);
+    SmartDashboard.putBoolean("Field Relative", false);
     SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
 
     Pigeon = new Pigeon2(0);
@@ -52,82 +63,68 @@ public class DriveSubsystem extends SubsystemBase {
 
     getRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
 
-    Kinematics =
-      new SwerveDriveKinematics(
+    Kinematics = new SwerveDriveKinematics(
         DriveConstants.Location_FL,
         DriveConstants.Location_FR,
         DriveConstants.Location_BL,
-        DriveConstants.Location_BR
-      );
+        DriveConstants.Location_BR);
 
     Odometry = new SwerveDriveOdometry(Kinematics, getRotation2d);
 
     // Setting Up Swerve Modules
-    Front_Left =
-      new SwerveModule(
+    Front_Left = new SwerveModule(
         DriveConstants.Throttle_Port_FL,
         DriveConstants.Turning_Port_FL,
         DriveConstants.Encoder_Port_FL,
-        DriveConstants.Magnet_Offset_FL
-      );
-    Front_Right =
-      new SwerveModule(
+        DriveConstants.Magnet_Offset_FL);
+    Front_Right = new SwerveModule(
         DriveConstants.Throttle_Port_FR,
         DriveConstants.Turning_Port_FR,
         DriveConstants.Encoder_Port_FR,
-        DriveConstants.Magnet_Offset_FR
-      );
-    Back_Left =
-      new SwerveModule(
+        DriveConstants.Magnet_Offset_FR);
+    Back_Left = new SwerveModule(
         DriveConstants.Throttle_Port_BL,
         DriveConstants.Turning_Port_BL,
         DriveConstants.Encoder_Port_BL,
-        DriveConstants.Magnet_Offset_BL
-      );
-    Back_Right =
-      new SwerveModule(
+        DriveConstants.Magnet_Offset_BL);
+    Back_Right = new SwerveModule(
         DriveConstants.Throttle_Port_BR,
         DriveConstants.Turning_Port_BR,
         DriveConstants.Encoder_Port_BR,
-        DriveConstants.Magnet_Offset_BR
-      );
+        DriveConstants.Magnet_Offset_BR);
 
-      
-
+    XYPIDController = new PIDController(1, 0, 0);
+    Constraints constraints = new Constraints(Math.PI, Math.PI);
+    ThetaController = new ProfiledPIDController(Math.PI / 2, 0, 0, constraints);
+    AutoController = new HolonomicDriveController(XYPIDController, XYPIDController, ThetaController);
     SmartDashboard.putNumber("Passing in angle to state", 0);
   }
 
-  public void drive(double X, double Y, double Z, boolean Field_Relative) { // from joystick
+  public void drive(double X, double Y, double Z, boolean Field_Relative, Translation2d COR) { // from joystick
     // setting up speeds based on whether field relative is on or not
     // passing in joystick values in params
 
     if (!Field_Relative) {
-      Speeds =
-        new ChassisSpeeds(
+      Speeds = new ChassisSpeeds(
           X * DriveConstants.Max_Strafe_Speed,
           Y * DriveConstants.Max_Strafe_Speed,
-          Z * DriveConstants.Max_Angular_Speed
-        );
+          Z * DriveConstants.Max_Angular_Speed);
     } else {
-      Speeds =
-        ChassisSpeeds.fromFieldRelativeSpeeds(
+      Speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
           X * DriveConstants.Max_Strafe_Speed,
           Y * DriveConstants.Max_Strafe_Speed,
           Z * DriveConstants.Max_Angular_Speed,
-          Rotation2d.fromDegrees(getHeading())
-        );
+          Rotation2d.fromDegrees(getHeading()));
     }
 
     // Swerve module states
     SwerveModuleState[] States = Kinematics.toSwerveModuleStates(
-      Speeds,
-      DriveConstants.Center
-    );
+        Speeds,
+        COR);
     SwerveDriveKinematics.desaturateWheelSpeeds(
-      States,
-      DriveConstants.Max_Angular_Speed
-    );
-    //this is so that the angle is saved and not auto set to 0 even after strafe
+        States,
+        DriveConstants.Max_Angular_Speed);
+    // this is so that the angle is saved and not auto set to 0 even after strafe
     if (X == 0 && Y == 0 && Z == 0) {
       if (SavedStates == null) {
         SavedStates = States;
@@ -146,20 +143,19 @@ public class DriveSubsystem extends SubsystemBase {
     Back_Right.setDesiredState(States[3]);
   }
 
-
-
-  public void resetDriveMode(){
+  public void resetDriveMode() {
     CurrentDriveState = DriveState.DEFAULT_STATE;
   }
+
   public void DriveStateMachine(
-    double x,
-    double y,
-    double z,
-    Boolean HeldButton,
-    Boolean HeldButtonReleased,
-    Boolean ToggleButton,
-    Boolean ToggleButtonReleased
-  ) {
+      double x,
+      double y,
+      double z,
+      Boolean HeldButton,
+      Boolean HeldButtonReleased,
+      Boolean ToggleButton,
+      Boolean ToggleButtonReleased,
+      Translation2d Rotation) {
     // Setting up Starting State or simple driving
 
     SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
@@ -168,18 +164,18 @@ public class DriveSubsystem extends SubsystemBase {
       // if the toggle button is pressed
 
       if (ToggleButton) {
-        SmartDashboard.putBoolean("Field Relative" , true);
+        SmartDashboard.putBoolean("Field Relative", true);
         zeroHeading();
         CurrentDriveState = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_1;
       }
       // if the held button is pressed
       else if (HeldButton) {
-        SmartDashboard.putBoolean("Field Relative" , true);
+        SmartDashboard.putBoolean("Field Relative", true);
         zeroHeading();
         CurrentDriveState = DriveState.HELD_FIELD_RELATIVE;
       } else {
-        SmartDashboard.putBoolean("Field Relative" , false);
-        drive(x, y, z, false);
+        SmartDashboard.putBoolean("Field Relative", false);
+        drive(x, y, z, false, Rotation);
       }
     }
 
@@ -188,30 +184,31 @@ public class DriveSubsystem extends SubsystemBase {
       // keep field relative drive until button is released
       case HELD_FIELD_RELATIVE:
         ;
-        drive(x, y, z, true);
+        drive(x, y, z, true,Rotation);
         if (HeldButtonReleased) {
           CurrentDriveState = DriveState.DEFAULT_STATE;
         }
         break;
       // waiting for button to be released
       case TOGGLE_FIELD_RELATIVE_STAGE_1:
-        drive(x, y, z, true);
+        drive(x, y, z, true,Rotation);
         if (ToggleButtonReleased) {
           CurrentDriveState = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
         }
         break;
       // waiting for button to be pressed again
       case TOGGLE_FIELD_RELATIVE_STAGE_2:
-        drive(x, y, z, true);
+        drive(x, y, z, true,Rotation);
         if (ToggleButton) {
           CurrentDriveState = DriveState.TOGGLE_HOLD_STATE;
         }
         break;
 
-      // waiting for button 12 to be released, stay in this mode until it has been released, but run non-field relative drive in the meantime
+      // waiting for button 12 to be released, stay in this mode until it has been
+      // released, but run non-field relative drive in the meantime
       case TOGGLE_HOLD_STATE:
-        SmartDashboard.putBoolean("Field Relative" , false);
-        drive(x, y, z, false);
+        SmartDashboard.putBoolean("Field Relative", false);
+        drive(x, y, z, false,Rotation);
         if (ToggleButtonReleased) {
           CurrentDriveState = DriveState.DEFAULT_STATE;
         }
@@ -221,29 +218,31 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
-  // public void driveAuton(double time) {
-  //   // we are passing in time from the command, this could then get passed into the
-  //   // sample
-  //   Trajectory.State goal = Trajectory.sample(time);
-  //   ChassisSpeeds adjustedSpeeds = Controller.calculate(
-  //     getPose(),
-  //     goal,
-  //     Rotation2d.fromDegrees(0)
-  //   );
-  //   SwerveModuleState[] states = Kinematics.toSwerveModuleStates(
-  //     adjustedSpeeds
-  //   );
+  public void driveAuton(PathPlannerState desiredCurState) {
+    State pathStateToState= new State(
+    desiredCurState.timeSeconds,
+    desiredCurState.velocityMetersPerSecond,
+    desiredCurState.accelerationMetersPerSecondSq,
+    desiredCurState.poseMeters,
+    desiredCurState.curvatureRadPerMeter);
+    ChassisSpeeds adjustedSpeeds = AutoController.calculate(
+      getPose(),
+      pathStateToState,
+      desiredCurState.holonomicRotation
 
-  //   SwerveDriveKinematics.desaturateWheelSpeeds(
-  //     states,
-  //     DriveConstants.Max_Angular_Speed
-  //   );
+    );
+    SwerveModuleState[] states = Kinematics.toSwerveModuleStates(adjustedSpeeds);
 
-  //   Front_Left.setDesiredState(states[0]);
-  //   Front_Right.setDesiredState(states[1]);
-  //   Back_Left.setDesiredState(states[2]);
-  //   Back_Right.setDesiredState(states[3]);
-  // }
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+      states,
+      DriveConstants.Max_Strafe_Speed
+    );
+
+    Front_Left.setDesiredState(states[0]);
+    Front_Right.setDesiredState(states[1]);
+    Back_Left.setDesiredState(states[2]);
+    Back_Right.setDesiredState(states[3]);
+  }
 
   public void getStates() {
     Front_Left.getState();
@@ -270,33 +269,45 @@ public class DriveSubsystem extends SubsystemBase {
     Odometry.resetPosition(pose, getRotation2d);
   }
 
-  DecimalFormat round = new DecimalFormat("#.###"); 
+  DecimalFormat round = new DecimalFormat("#.###");
 
-  public void printEncoderValues(){
-    SmartDashboard.putString("Front Right Encoder", round.format(Front_Right.getAngle().getDegrees())); 
-    SmartDashboard.putString("Front Left Encoder", round.format(Front_Left.getAngle().getDegrees())); 
-    SmartDashboard.putString("Back Right Encoder", round.format(Back_Right.getAngle().getDegrees())); 
-    SmartDashboard.putString("Back Left Encoder", round.format(Back_Left.getAngle().getDegrees())); 
+  public void printEncoderValues() {
+    SmartDashboard.putString("Front Right Encoder", round.format(Front_Right.getAngle().getDegrees()));
+    SmartDashboard.putString("Front Left Encoder", round.format(Front_Left.getAngle().getDegrees()));
+    SmartDashboard.putString("Back Right Encoder", round.format(Back_Right.getAngle().getDegrees()));
+    SmartDashboard.putString("Back Left Encoder", round.format(Back_Left.getAngle().getDegrees()));
 
-
+  }
+  public void TryingAccelerometer(){
+    double[] GravVec = new double[3];
+    // System.out.println(Pigeon.getGravityVector(GravVec));
+    // System.out.println(GravVec[0]);
+    double[] QuaternionOutput = new double[4];
+    // System.out.println(QuaternionOutput[2]);
+    System.out.println(Pigeon.get6dQuaternion(QuaternionOutput));
+    System.out.println(QuaternionOutput[2]);
+    short[] AccelerometerData = new short[3];
+    Pigeon.getBiasedAccelerometer(AccelerometerData);
+    System.out.println(AccelerometerData[1]);
   }
 
   @Override
   public void periodic() {
+    TryingAccelerometer();
 
-    printEncoderValues(); 
-    
+    printEncoderValues();
+
     // Odometry.update(
-    //   Gyro.getRotation2d(),
-    //   Front_Left.getState(),
-    //   Front_Right.getState(),
-    //   Back_Left.getState(),
-    //   Back_Right.getState()
+    // Gyro.getRotation2d(),
+    // Front_Left.getState(),
+    // Front_Right.getState(),
+    // Back_Left.getState(),
+    // Back_Right.getState()
     // );
-    
 
   }
 
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+  }
 }
