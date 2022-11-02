@@ -183,7 +183,6 @@ public class DriveSubsystem extends SubsystemBase {
     switch (CurrentDriveState) {
       // keep field relative drive until button is released
       case HELD_FIELD_RELATIVE:
-        ;
         drive(x, y, z, true,Rotation);
         if (HeldButtonReleased) {
           CurrentDriveState = DriveState.DEFAULT_STATE;
@@ -279,16 +278,20 @@ public class DriveSubsystem extends SubsystemBase {
 
   }
   public void TryingAccelerometer(){
-    double[] GravVec = new double[3];
+    // double[] GravVec = new double[3];
     // System.out.println(Pigeon.getGravityVector(GravVec));
     // System.out.println(GravVec[0]);
-    double[] QuaternionOutput = new double[4];
+    // double[] QuaternionOutput = new double[4];
     // System.out.println(QuaternionOutput[2]);
-    System.out.println(Pigeon.get6dQuaternion(QuaternionOutput));
-    System.out.println(QuaternionOutput[2]);
+    // System.out.println(Pigeon.get6dQuaternion(QuaternionOutput));
+    // System.out.println(QuaternionOutput[2]);
     short[] AccelerometerData = new short[3];
     Pigeon.getBiasedAccelerometer(AccelerometerData);
-    System.out.println(AccelerometerData[1]);
+    double gsX = AccelerometerData[0]/16384.;
+
+    double accelerationX = gsX/9.8;
+    SmartDashboard.putNumber("X Acceleration", gsX);
+
   }
 
   @Override
