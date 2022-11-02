@@ -1,1 +1,116 @@
-{"waypoints":[{"anchorPoint":{"x":7.665222779101131,"y":1.793914359402585},"prevControl":null,"nextControl":{"x":8.231743217242428,"y":1.330397637286978},"holonomicAngle":-90.0,"isReversal":false,"velOverride":null,"isLocked":false},{"anchorPoint":{"x":7.680011142096098,"y":0.7954813800664507},"prevControl":{"x":7.680011142096098,"y":0.7954813800664507},"nextControl":{"x":7.680011142096098,"y":0.7954813800664507},"holonomicAngle":-90.0,"isReversal":true,"velOverride":null,"isLocked":false},{"anchorPoint":{"x":6.277071253615266,"y":0.9835042517185215},"prevControl":{"x":6.86596137198212,"y":0.3810261487427745},"nextControl":{"x":5.640441319328186,"y":1.6348237137780204},"holonomicAngle":148.67130713219578,"isReversal":false,"velOverride":null,"isLocked":false},{"anchorPoint":{"x":5.526216159657697,"y":1.953022372860096},"prevControl":{"x":5.86678611924621,"y":1.8845188560237578},"nextControl":{"x":4.564883233982341,"y":2.146388476960691},"holonomicAngle":-176.50726504022106,"isReversal":false,"velOverride":null,"isLocked":false},{"anchorPoint":{"x":1.5609713310963271,"y":1.5005165583424342},"prevControl":{"x":2.819278241383258,"y":2.0356585776598655},"nextControl":null,"holonomicAngle":-137.72631099390654,"isReversal":false,"velOverride":null,"isLocked":false}],"maxVelocity":3.0,"maxAcceleration":3.5,"isReversed":false}
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 7.665222779101131,
+        "y": 1.793914359402585
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 8.231743217242428,
+        "y": 1.330397637286978
+      },
+      "holonomicAngle": -90.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false
+    },
+    {
+      "anchorPoint": {
+        "x": 7.680011142096098,
+        "y": 0.7954813800664507
+      },
+      "prevControl": {
+        "x": 7.680011142096098,
+        "y": 0.7954813800664507
+      },
+      "nextControl": {
+        "x": 7.680011142096098,
+        "y": 0.7954813800664507
+      },
+      "holonomicAngle": -90.0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false
+    },
+    {
+      "anchorPoint": {
+        "x": 6.277071253615266,
+        "y": 0.9835042517185215
+      },
+      "prevControl": {
+        "x": 6.86596137198212,
+        "y": 0.3810261487427745
+      },
+      "nextControl": {
+        "x": 5.640441319328186,
+        "y": 1.6348237137780204
+      },
+      "holonomicAngle": 148.67130713219578,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false
+    },
+    {
+      "anchorPoint": {
+        "x": 5.526216159657697,
+        "y": 1.953022372860096
+      },
+      "prevControl": {
+        "x": 5.86678611924621,
+        "y": 1.8845188560237578
+      },
+      "nextControl": {
+        "x": 4.564883233982341,
+        "y": 2.146388476960691
+      },
+      "holonomicAngle": -176.50726504022106,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false
+    },
+    {
+      "anchorPoint": {
+        "x": 1.5609713310963271,
+        "y": 1.5005165583424342
+      },
+      "prevControl": {
+        "x": 2.819278241383258,
+        "y": 2.0356585776598655
+      },
+      "nextControl": {
+        "x": 0.30266442080939626,
+        "y": 0.965374539025003
+      },
+      "holonomicAngle": -137.72631099390654,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false
+    },
+    {
+      "anchorPoint": {
+        "x": 1.8957509343590118,
+        "y": 1.6312275481693823
+      },
+      "prevControl": {
+        "x": 1.0992076775842041,
+        "y": 1.2983010435971927
+      },
+      "nextControl": null,
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false
+    }
+  ],
+  "maxVelocity": 3.0,
+  "maxAcceleration": 3.5,
+  "isReversed": false,
+  "markers": []
+}

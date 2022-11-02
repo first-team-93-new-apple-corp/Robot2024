@@ -27,7 +27,7 @@ public class AutoCommand extends CommandBase {
      * @param subsystem The subsystem used by this command.
      */
     public AutoCommand(DriveSubsystem subsystem) {
-        straightWithATwist = PathPlanner.loadPath("StraightWithATwist", 3, 3);
+        straightWithATwist = PathPlanner.loadPath("StraightWithATwist", 0.5, .25);
         m_DriveSubsystem = subsystem;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(subsystem);

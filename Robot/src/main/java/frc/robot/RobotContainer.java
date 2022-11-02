@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.PathPlanner;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -54,6 +56,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-   return m_AutoCommand;
+   return m_DriveSubsystem.followTrajectoryCommand(PathPlanner.loadPath("StraightWithATwist", 3, 3), true);
   }
 }

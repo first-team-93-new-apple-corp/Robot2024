@@ -34,7 +34,7 @@ public class DriveCommand extends CommandBase {
   private boolean ToggleButtonReleased = false;
   private boolean HeldButtonReleased = false;
 
-  private double Joystick_Deadzone = 0.1;
+  private double Joystick_Deadzone = 0.04;
 
   private double x = 0;
   private double y = 0;
@@ -59,7 +59,7 @@ public class DriveCommand extends CommandBase {
 
     DriveModeChooser = new SendableChooser<DriveModes>();
     
-    rotationHelper = new CustomRotationHelper(m_Joystick1);
+    rotationHelper = new CustomRotationHelper(m_Joystick2);
 
     DriveModeChooser.setDefaultOption(
         "1 Stick Drive",
@@ -116,7 +116,7 @@ public class DriveCommand extends CommandBase {
       // F310 Drive
       case F310_Drive:
         x = F310.getRightY();
-        x = Math.pow(x, 2) * Math.signum(x);
+        x = Math.pow(x, 2) * Math.signum(x) ;
 
         y = F310.getRightX();
         y = Math.pow(y, 2) * Math.signum(y);
@@ -132,8 +132,8 @@ public class DriveCommand extends CommandBase {
     }
 
     m_DriveSubsystem.DriveStateMachine(
-        x, y,
-        z,
+        -x, -y,
+        -z,
         HeldButton,
         HeldButtonReleased,
         ToggleButton,

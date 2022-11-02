@@ -37,6 +37,8 @@ public class SwerveModule extends SubsystemBase {
 
     Driving_Motor = new WPI_TalonFX(driveMotorID);
     Driving_Motor.setNeutralMode(NeutralMode.Brake);
+    Driving_Motor.setInverted(true);
+
     TalonFXConfiguration driveConfig = new TalonFXConfiguration();
     driveConfig.supplyCurrLimit.enable = true;
     driveConfig.supplyCurrLimit.currentLimit = 5;

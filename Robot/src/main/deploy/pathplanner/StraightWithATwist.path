@@ -1,1 +1,56 @@
-{"waypoints":[{"anchorPoint":{"x":0.9401143582638732,"y":2.936049457331599},"prevControl":null,"nextControl":{"x":1.9401143582638734,"y":2.936049457331599},"holonomicAngle":0.0,"isReversal":false,"velOverride":null,"isLocked":false},{"anchorPoint":{"x":2.733563287864713,"y":3.051755839891294},"prevControl":{"x":1.7338605972216676,"y":3.027372847436585},"nextControl":{"x":3.9195537090546875,"y":3.080682435530074},"holonomicAngle":-62.59242456218155,"isReversal":false,"velOverride":null,"isLocked":false},{"anchorPoint":{"x":5.047690938967115,"y":3.1529989246270236},"prevControl":{"x":3.225315413723974,"y":3.0372925420719032},"nextControl":null,"holonomicAngle":-172.69424046668914,"isReversal":false,"velOverride":null,"isLocked":false}],"maxVelocity":3.0,"maxAcceleration":3.5,"isReversed":null}
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.0,
+        "y": 3.0
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.0,
+        "y": 3.0
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false
+    },
+    {
+      "anchorPoint": {
+        "x": 2.0110661842945308,
+        "y": 3.5124151329383744
+      },
+      "prevControl": {
+        "x": 1.9832634259863116,
+        "y": 3.521682719041114
+      },
+      "nextControl": {
+        "x": 1.9832634259863116,
+        "y": 3.521682719041114
+      },
+      "holonomicAngle": -124.04593735660166,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false
+    },
+    {
+      "anchorPoint": {
+        "x": 3.234387549856181,
+        "y": 2.9285572084657683
+      },
+      "prevControl": {
+        "x": 2.234387549856181,
+        "y": 2.9285572084657683
+      },
+      "nextControl": null,
+      "holonomicAngle": 79.13594007791228,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false
+    }
+  ],
+  "markers": []
+}
