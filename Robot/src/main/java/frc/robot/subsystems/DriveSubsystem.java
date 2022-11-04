@@ -108,6 +108,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void setModuleStates(SwerveModuleState[] States) {
+    SavedStates = States; 
     Front_Left.setDesiredState(States[0]);
     Front_Right.setDesiredState(States[1]);
     Back_Left.setDesiredState(States[2]);
@@ -115,11 +116,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void stopMotors(){
-    SwerveModuleState blankModuleState = new SwerveModuleState(0.0, Rotation2d.fromDegrees(1)); 
-    Front_Left.setDesiredState(blankModuleState);
-    Front_Right.setDesiredState(blankModuleState);
-    Back_Left.setDesiredState(blankModuleState);
-    Back_Right.setDesiredState(blankModuleState);
+    drive(0,0,0, false, DriveConstants.Center);
   }
   public void drive(double X, double Y, double Z, boolean Field_Relative, Translation2d COR) { // from joystick
     // setting up speeds based on whether field relative is on or not
