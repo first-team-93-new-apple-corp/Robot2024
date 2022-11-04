@@ -173,8 +173,15 @@ public class DriveSubsystem extends SubsystemBase {
       Boolean HeldButtonReleased,
       Boolean ToggleButton,
       Boolean ToggleButtonReleased,
-      Translation2d Rotation) {
-    // Setting up Starting State or simple driving
+      Translation2d Rotation,
+      double MaxSpeedMultipier) {
+
+//configuring speed multiplier; 
+        x=x*MaxSpeedMultipier;
+        y=y*MaxSpeedMultipier;
+        z=z*MaxSpeedMultipier;
+
+           // Setting up Starting State or simple driving
 
     SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
 

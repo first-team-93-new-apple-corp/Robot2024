@@ -79,7 +79,7 @@ public class DriveCommand extends CommandBase {
   @Override
   public void execute() {
     CurrentDriveMode = DriveModeChooser.getSelected();
-
+    double SpeedMult = getMaxSpeedMultiplier(m_Joystick1);
     if (CurrentDriveMode != LastDriveMode) {
       m_DriveSubsystem.resetDriveMode();
     }
@@ -138,9 +138,14 @@ public class DriveCommand extends CommandBase {
         HeldButtonReleased,
         ToggleButton,
         ToggleButtonReleased,
-        rotationHelper.povButton());
+        rotationHelper.povButton(),
+        SpeedMult);
   }
-
+  public double getMaxSpeedMultiplier(Joystick Joystick){
+    double slideAxis = -Joystick.getRawAxis(3);
+    double output = ((slideAxis+1)/4)+0.25;
+    return output;
+  }
   public double checkJoystickDeadzone(double joystickValue) {
     if (Math.abs(joystickValue) < Joystick_Deadzone) {
       return 0.0;
