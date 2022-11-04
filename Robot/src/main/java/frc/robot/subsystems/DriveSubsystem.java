@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.commands.StopDriveCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -114,6 +114,13 @@ public class DriveSubsystem extends SubsystemBase {
     Back_Right.setDesiredState(States[3]);
   }
 
+  public void stopMotors(){
+    SwerveModuleState blankModuleState = new SwerveModuleState(0.0, Rotation2d.fromDegrees(1)); 
+    Front_Left.setDesiredState(blankModuleState);
+    Front_Right.setDesiredState(blankModuleState);
+    Back_Left.setDesiredState(blankModuleState);
+    Back_Right.setDesiredState(blankModuleState);
+  }
   public void drive(double X, double Y, double Z, boolean Field_Relative, Translation2d COR) { // from joystick
     // setting up speeds based on whether field relative is on or not
     // passing in joystick values in params
@@ -254,35 +261,9 @@ public class DriveSubsystem extends SubsystemBase {
             new PIDController(0.7, 0, 0), // if undertuned, robot will not reach chassis heading
             this::setModuleStates, // Module states consumer
             this // Requires this drive subsystem
-        ));
-  }
+        ),
 
-  public void driveAuton(PathPlannerState desiredCurState) {
-    // State pathStateToState= new State(
-    // desiredCurState.timeSeconds,
-    // desiredCurState.velocityMetersPerSecond,
-    // desiredCurState.accelerationMetersPerSecondSq,
-    // desiredCurState.poseMeters,
-    // desiredCurState.curvatureRadPerMeter);
-    // ChassisSpeeds adjustedSpeeds = AutoController.calculate(
-    // getPose(),
-    // pathStateToState,
-    // desiredCurState.holonomicRotation
-
-    // );
-    // SwerveModuleState[] states = Kinematics.toSwerveModuleStates(adjustedSpeeds);
-
-    // SwerveDriveKinematics.desaturateWheelSpeeds(
-    // states,
-    // DriveConstants.Max_Strafe_Speed
-    // );
-
-    // PPSwerveControllerCommand.
-    // Front_Left.setDesiredState(states[0]);
-    // Front_Right.setDesiredState(states[1]);
-    // Back_Left.setDesiredState(states[2]);
-    // Back_Right.setDesiredState(states[3]);
-
+        new StopDriveCommand(this)); 
   }
 
   public void getStates() {

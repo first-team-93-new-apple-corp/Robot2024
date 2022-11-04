@@ -33,7 +33,9 @@ public class StopDriveCommand extends CommandBase {
 
   @Override
   public void initialize() {
-    m_DriveSubsystem.drive(0, 0, 0, true, DriveConstants.Center);
+    System.out.println("EXITED AUTON PATH");
+    // m_DriveSubsystem.drive(0, 0, 0, true, DriveConstants.Center);
+    m_DriveSubsystem.stopMotors();
   }
 
   @Override
