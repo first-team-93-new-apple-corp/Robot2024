@@ -54,6 +54,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-     return m_DriveSubsystem.followTrajectoryCommand(PathPlanner.loadPath("StraightWithATwist", 3, 3), true);
+     return m_DriveSubsystem.followTrajectoryCommand(PathPlanner.loadPath("Straight", 3, 4), true);
   }
 }

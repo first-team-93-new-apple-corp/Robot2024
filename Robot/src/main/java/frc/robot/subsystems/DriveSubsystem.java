@@ -253,9 +253,9 @@ public class DriveSubsystem extends SubsystemBase {
             traj,
             this::getPose, // Pose supplier
             this.Kinematics, // SwerveDriveKinematics
-            new PIDController(0.1, 0, 0), // if overtuned robot will never stop
-            new PIDController(0.1, 0, 0), // if overtuned, robot will never stop
-            new PIDController(0.7, 0, 0), // if undertuned, robot will not reach chassis heading
+            new PIDController(1, 0, 0), // if overtuned robot will never stop
+            new PIDController(1, 0, 0), // if overtuned, robot will never stop
+            new PIDController(1, 0, 0), // if undertuned, robot will not reach chassis heading
             this::setModuleStates, // Module states consumer
             this // Requires this drive subsystem
         ),
