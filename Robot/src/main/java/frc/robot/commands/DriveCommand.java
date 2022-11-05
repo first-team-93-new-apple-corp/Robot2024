@@ -87,7 +87,7 @@ public class DriveCommand extends CommandBase {
   }
   public void HumanDrive(){
     CurrentDriveMode = DriveModeChooser.getSelected();
-
+    double SpeedMult = getMaxSpeedMultiplier(m_Joystick1);
     if (CurrentDriveMode != LastDriveMode) {
       m_DriveSubsystem.resetDriveMode();
     }
@@ -146,7 +146,13 @@ public class DriveCommand extends CommandBase {
         HeldButtonReleased,
         ToggleButton,
         ToggleButtonReleased,
-        rotationHelper.povButton());
+        rotationHelper.povButton(),
+        SpeedMult);
+  }
+  public double getMaxSpeedMultiplier(Joystick Joystick){
+    double slideAxis = -Joystick.getRawAxis(3);
+    double output = ((slideAxis+1)/4)+0.25;
+    return output;
   }
   public void OTFAuto(){ // OTF has to be here so we can get odometry without double calling
     m_VisionSubsystem.getTrajectory(0,0, m_DriveSubsystem.getPose());

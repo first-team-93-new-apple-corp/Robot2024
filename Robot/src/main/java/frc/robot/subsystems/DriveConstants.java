@@ -1,22 +1,21 @@
 package frc.robot.subsystems;
 
-import javax.sound.midi.Track;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import javax.sound.midi.Track;
 
 public final class DriveConstants {
   public static final double Turning_Tolerance = Units.degreesToRadians(1);
   public static double Turning_P = 4.5;
   public static double Turning_I = 0;
-  public static double Turning_D = 0.1; 
+  public static double Turning_D = 0.1;
 
   public static final double Throttle_Tolerance = 0.1;
 
   public static final int Throttle_Port_FL = 1;
   public static final int Turning_Port_FL = 5;
   public static final int Encoder_Port_FL = 10;
-  public static final double Magnet_Offset_FL = -136.318+180;
+  public static final double Magnet_Offset_FL = -136.318 + 180;
 
   public static final int Throttle_Port_BR = 3;
   public static final int Turning_Port_BR = 7;
@@ -26,7 +25,7 @@ public final class DriveConstants {
   public static final int Throttle_Port_BL = 4;
   public static final int Turning_Port_BL = 8;
   public static final int Encoder_Port_BL = 13;
-  public static final double Magnet_Offset_BL = 85.078-180;
+  public static final double Magnet_Offset_BL = 85.078 - 180;
 
   public static final int Throttle_Port_FR = 2;
   public static final int Turning_Port_FR = 6;
@@ -52,16 +51,27 @@ public final class DriveConstants {
 
   public static final double Max_Strafe_Speed =
     TalonFX_RPS / Driving_Gearing * Wheel_Circumference; // m/s
-  public static final double Max_Angular_Speed = 2*Math.PI ; // m/s
-  public static final double Max_Angular_Acceleration = 2*Math.PI;
+  public static final double Max_Angular_Speed = 2 * Math.PI; // m/s
+  public static final double Max_Angular_Acceleration = 2 * Math.PI;
 
   //Swerve Locations
   public static final Translation2d Center = new Translation2d(-.15, .05);
-  public static final Translation2d Front = new Translation2d(Wheel_Base/2,0);
-  public static final Translation2d Right = new Translation2d(0,-Track_Width/2);
-  public static final Translation2d Back = new Translation2d(-Wheel_Base/2,0);
-  public static final Translation2d Left = new Translation2d(0,Track_Width/2);
-  
+  public static final Translation2d Front = new Translation2d(
+    Wheel_Base / 2,
+    0
+  );
+  public static final Translation2d Right = new Translation2d(
+    0,
+    -Track_Width / 2
+  );
+  public static final Translation2d Back = new Translation2d(
+    -Wheel_Base / 2,
+    0
+  );
+  public static final Translation2d Left = new Translation2d(
+    0,
+    Track_Width / 2
+  );
 
   public static final Translation2d Location_FL = new Translation2d(
     Wheel_Base / 2,
