@@ -6,6 +6,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -65,12 +67,15 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public void setDesiredState(SwerveModuleState desiredState) {
+    // if 0,0,0 is in here after auto what happens?
 
     // optimize which way to turn the wheel
     SwerveModuleState state = SwerveModuleState.optimize(
       desiredState,
       getAngle()
     );
+
+
 
     //do not need PID on drive motors - just a simple voltage calculation
     double driveOutput =
@@ -81,6 +86,7 @@ public class SwerveModule extends SubsystemBase {
     double turnOutput = TurningPID.calculate(
       getAngle().getRadians(),
       state.angle.getRadians()
+      //why doesn't optimize or this fix this if states aren't recorded
     );
 
     Driving_Motor.setVoltage(driveOutput);
@@ -104,6 +110,7 @@ public class SwerveModule extends SubsystemBase {
   }
 
   // get angle from can coder
+  //test to see if get absolute position is continuous
   public Rotation2d getAngle() {
     return Rotation2d.fromDegrees(Can_Coder.getAbsolutePosition());
   }
@@ -113,6 +120,8 @@ public class SwerveModule extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // System.out.println(MathUtil.angleModulus(100000));
+    //this for example does wrap the angle
 
   }
 

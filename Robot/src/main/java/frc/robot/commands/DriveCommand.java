@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.CustomRotationHelper;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class DriveCommand extends CommandBase {
 
@@ -23,6 +24,7 @@ public class DriveCommand extends CommandBase {
   }
 
   private DriveSubsystem m_DriveSubsystem;
+  private VisionSubsystem m_VisionSubsystem;
   private CustomRotationHelper rotationHelper;
 
   private XboxController F310;
@@ -50,17 +52,19 @@ public class DriveCommand extends CommandBase {
       DriveSubsystem m_DriveSubsystem,
       Joystick m_Joystick1,
       Joystick m_Joystick2,
-      XboxController F310) {
+      XboxController F310
+      // ,VisionSubsystem m_VisionSubsystem
+      ) {
     this.m_DriveSubsystem = m_DriveSubsystem;
+    // this.m_VisionSubsystem = m_VisionSubsystem;
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.F310 = F310;
     
-
-    DriveModeChooser = new SendableChooser<DriveModes>();
-    
     rotationHelper = new CustomRotationHelper(m_Joystick2);
-
+    
+    // SmartDashboard Declarations
+    DriveModeChooser = new SendableChooser<DriveModes>();
     DriveModeChooser.setDefaultOption(
         "1 Stick Drive",
         DriveModes.One_Stick_Drive);
@@ -78,6 +82,10 @@ public class DriveCommand extends CommandBase {
 
   @Override
   public void execute() {
+    HumanDrive();
+    OTFAuto();
+  }
+  public void HumanDrive(){
     CurrentDriveMode = DriveModeChooser.getSelected();
 
     if (CurrentDriveMode != LastDriveMode) {
@@ -140,7 +148,10 @@ public class DriveCommand extends CommandBase {
         ToggleButtonReleased,
         rotationHelper.povButton());
   }
+  public void OTFAuto(){ // OTF has to be here so we can get odometry without double calling
+    m_VisionSubsystem.getTrajectory(0,0, m_DriveSubsystem.getPose());
 
+  }
   public double checkJoystickDeadzone(double joystickValue) {
     if (Math.abs(joystickValue) < Joystick_Deadzone) {
       return 0.0;
