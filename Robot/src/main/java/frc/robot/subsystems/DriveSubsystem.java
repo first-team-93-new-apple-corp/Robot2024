@@ -9,9 +9,13 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -34,6 +38,7 @@ public class DriveSubsystem extends SubsystemBase {
   Pigeon2 Pigeon;
   SwerveDriveOdometry Odometry;
   SwerveDriveKinematics Kinematics;
+  SwerveDrivePoseEstimator poseEstimator;
 
   SwerveModule Front_Left;
   SwerveModule Front_Right;
@@ -105,6 +110,11 @@ public class DriveSubsystem extends SubsystemBase {
     ThetaController = new ProfiledPIDController(Math.PI / 2, 0, 0, constraints);
     AutoController = new HolonomicDriveController(XYPIDController, XYPIDController, ThetaController);
     SmartDashboard.putNumber("Passing in angle to state", 0);
+    Matrix mat = new MatBuilder<>(Nat.N5(), Nat.N1()).fill(0.02, 0.02, 0.01, 0.02, 0.02); // x y theta state, stdevs
+    Matrix mat2 = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 0.01); //left encoder, right encoder, gyro, stdevs
+    Matrix mat3 = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.1,.1,.01); // vision stdevs
+
+    poseEstimator = new SwerveDrivePoseEstimator(Rotation2d.fromDegrees(getHeading()), Odometry.getPoseMeters(), Kinematics, mat, mat2, mat3);
   }
 
   public void setModuleStates(SwerveModuleState[] States) {
@@ -336,7 +346,6 @@ public class DriveSubsystem extends SubsystemBase {
         Front_Right.getState(),
         Back_Left.getState(),
         Back_Right.getState());
-
   }
 
   @Override
