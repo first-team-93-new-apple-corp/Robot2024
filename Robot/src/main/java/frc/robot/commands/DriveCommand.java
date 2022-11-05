@@ -59,7 +59,7 @@ public class DriveCommand extends CommandBase {
 
     DriveModeChooser = new SendableChooser<DriveModes>();
     
-    rotationHelper = new CustomRotationHelper(m_Joystick2);
+    rotationHelper = new CustomRotationHelper(m_Joystick1);
 
     DriveModeChooser.setDefaultOption(
         "1 Stick Drive",
@@ -132,8 +132,8 @@ public class DriveCommand extends CommandBase {
     }
 
     m_DriveSubsystem.DriveStateMachine(
-        -x, -y,
-        -z,
+        -(x), -(y),
+        -(z),
         HeldButton,
         HeldButtonReleased,
         ToggleButton,
@@ -143,7 +143,7 @@ public class DriveCommand extends CommandBase {
   }
   public double getMaxSpeedMultiplier(Joystick Joystick){
     double slideAxis = -Joystick.getRawAxis(3);
-    double output = ((slideAxis+1)/4)+0.25;
+    double output = ((slideAxis+1)/8)+0.25;
     return output;
   }
   public double checkJoystickDeadzone(double joystickValue) {
