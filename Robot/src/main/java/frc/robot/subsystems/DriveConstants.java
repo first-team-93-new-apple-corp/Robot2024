@@ -6,7 +6,7 @@ import javax.sound.midi.Track;
 
 public final class DriveConstants {
   public static final double Turning_Tolerance = Units.degreesToRadians(1);
-  public static double Turning_P = 5.25;
+  public static double Turning_P = 5;
   public static double Turning_I = 0;
   public static double Turning_D = 0;
 
