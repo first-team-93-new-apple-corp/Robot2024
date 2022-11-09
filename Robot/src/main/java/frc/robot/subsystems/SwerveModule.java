@@ -169,12 +169,14 @@ public class SwerveModule extends SubsystemBase {
     // double feedOutput = feedforward.calculate(turnOutput/12.0*6.28);
 
     Driving_Motor.setVoltage(driveOutput);
-
+    state.angle = new Rotation2d(2);
     Turning_Motor.set(TalonFXControlMode.Position, radsToTicks(state.angle.getRadians()));
   }
 
+
   public double radsToTicks(double radians){
-    return radians * 2048; 
+    // return radians / (2*Math.PI / (6.28 * 2048)); 
+    return radians * 2048.;
   }
 
   public void resetEncoders() { //need to figure out offsets
