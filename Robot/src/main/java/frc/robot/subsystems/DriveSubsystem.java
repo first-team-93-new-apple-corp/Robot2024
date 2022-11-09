@@ -28,7 +28,6 @@ import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.StopDriveCommand;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -252,33 +251,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
-  // Assuming this method is part of a drivetrain subsystem that provides the
-  // necessary methods
-  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-    // This is just an example event map. It would be better to have a constant,
-    // global event map
-    // in your code that will be used by all path following commands.
-
-    return new SequentialCommandGroup(
-        new InstantCommand(() -> {
-          // Reset odometry for the first path you run during auto
-          if (isFirstPath) {
-            this.resetOdometry(traj.getInitialHolonomicPose());
-          }
-        }),
-        new PPSwerveControllerCommand(
-            traj,
-            this::getPose, // Pose supplier
-            this.Kinematics, // SwerveDriveKinematics
-            new PIDController(1, 0, 0), // if overtuned robot will never stop
-            new PIDController(1, 0, 0), // if overtuned, robot will never stop
-            new PIDController(1, 0, 0), // if undertuned, robot will not reach chassis heading
-            this::setModuleStates, // Module states consumer
-            this // Requires this drive subsystem
-        ),
-
-        new StopDriveCommand(this)); 
-  }
+ 
 
   public void getStates() {
     Front_Left.getState();

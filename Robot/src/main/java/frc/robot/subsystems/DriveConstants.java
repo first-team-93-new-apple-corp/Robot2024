@@ -6,16 +6,16 @@ import javax.sound.midi.Track;
 
 public final class DriveConstants {
   public static final double Turning_Tolerance = Units.degreesToRadians(1);
-  public static double Turning_P = 4.2;
+  public static double Turning_P = 5.25;
   public static double Turning_I = 0;
-  public static double Turning_D = 0.1;
+  public static double Turning_D = 0;
 
   public static final double Throttle_Tolerance = 0.1;
 
   public static final int Throttle_Port_FL = 1;
   public static final int Turning_Port_FL = 5;
   public static final int Encoder_Port_FL = 10;
-  public static final double Magnet_Offset_FL = -136.318 + 180;
+  public static final double Magnet_Offset_FL = -136.318 + 180 - 1.846;
 
   public static final int Throttle_Port_BR = 3;
   public static final int Turning_Port_BR = 7;
@@ -25,12 +25,12 @@ public final class DriveConstants {
   public static final int Throttle_Port_BL = 4;
   public static final int Turning_Port_BL = 8;
   public static final int Encoder_Port_BL = 13;
-  public static final double Magnet_Offset_BL = 85.078 - 180;
+  public static final double Magnet_Offset_BL = 85.078 - 180 + 0.439;
 
   public static final int Throttle_Port_FR = 2;
   public static final int Turning_Port_FR = 6;
   public static final int Encoder_Port_FR = 11;
-  public static final double Magnet_Offset_FR = 149.941;
+  public static final double Magnet_Offset_FR = 149.941 + 1.406;
 
   // Motor Information
   public static final double TalonFX_RPM = 6380;

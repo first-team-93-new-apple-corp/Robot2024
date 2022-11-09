@@ -84,7 +84,7 @@ public class DriveCommand extends CommandBase {
   @Override
   public void execute() {
     HumanDrive();
-    OTFAuto();
+    // OTFAuto();
   }
   public void HumanDrive(){
     CurrentDriveMode = DriveModeChooser.getSelected();
@@ -112,7 +112,8 @@ public class DriveCommand extends CommandBase {
       // drive with 2 sticksRegularDrive
       case Two_Stick_Drive:
         x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1));
-        y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0));
+        y =checkJoystickDeadzone(m_Joystick1.getRawAxis(0));
+         
         z = checkJoystickDeadzone(m_Joystick2.getRawAxis(0));
 
         HeldButton = m_Joystick1.getRawButton(13);
@@ -153,7 +154,7 @@ public class DriveCommand extends CommandBase {
   public double getMaxSpeedMultiplier(Joystick Joystick){
     double slideAxis = -Joystick.getRawAxis(3);
     double output = ((slideAxis+1)/8)+0.25;
-    return output;
+    return 1;
   }
   public void OTFAuto(){ // OTF has to be here so we can get odometry without double calling
     m_VisionSubsystem.getTrajectory(0,0, m_DriveSubsystem.getPose());
