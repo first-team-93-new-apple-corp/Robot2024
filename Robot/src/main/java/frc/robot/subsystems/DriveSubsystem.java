@@ -71,6 +71,7 @@ public class DriveSubsystem extends SubsystemBase {
     Pigeon = new Pigeon2(0);
     Pigeon.configMountPose(AxisDirection.PositiveY, AxisDirection.PositiveZ);
     Pigeon.setYaw(0);
+    
 
     getRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
 
@@ -104,17 +105,17 @@ public class DriveSubsystem extends SubsystemBase {
         DriveConstants.Encoder_Port_BR,
         DriveConstants.Magnet_Offset_BR);
 
-    XYPIDController = new PIDController(1, 0, 0);
-    Constraints constraints = new Constraints(Math.PI, Math.PI);
-    ThetaController = new ProfiledPIDController(Math.PI / 2, 0, 0, constraints);
-    AutoController = new HolonomicDriveController(XYPIDController, XYPIDController, ThetaController);
+    // XYPIDController = new PIDController(1, 0, 0);
+    // Constraints constraints = new Constraints(Math.PI, Math.PI);
+    // ThetaController = new ProfiledPIDController(Math.PI / 2, 0, 0, constraints);
+    // AutoController = new HolonomicDriveController(XYPIDController, XYPIDController, ThetaController);
 
 
-    Matrix mat = new MatBuilder<>(Nat.N5(), Nat.N1()).fill(0.02, 0.02, 0.01, 0.02, 0.02); // x y theta state, stdevs
-    Matrix mat2 = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 0.01); //left encoder, right encoder, gyro, stdevs
-    Matrix mat3 = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.1,.1,.01); // vision stdevs
+    // Matrix mat = new MatBuilder<>(Nat.N5(), Nat.N1()).fill(0.02, 0.02, 0.01, 0.02, 0.02); // x y theta state, stdevs
+    // Matrix mat2 = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 0.01); //left encoder, right encoder, gyro, stdevs
+    // Matrix mat3 = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.1,.1,.01); // vision stdevs
 
-    poseEstimator = new SwerveDrivePoseEstimator(Rotation2d.fromDegrees(getHeading()), Odometry.getPoseMeters(), Kinematics, mat, mat2, mat3);
+    // poseEstimator = new SwerveDrivePoseEstimator(Rotation2d.fromDegrees(getHeading()), Odometry.getPoseMeters(), Kinematics, mat, mat2, mat3);
   }
 
   public void setModuleStates(SwerveModuleState[] States) {

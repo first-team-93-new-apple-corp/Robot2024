@@ -72,6 +72,7 @@ public class SwerveModule extends SubsystemBase {
 
 
     /*This is Nolen test code no touchy */
+    Turning_Motor.configFactoryDefault();
     // TalonFXConfiguration turnConfig = new TalonFXConfiguration();
     // turnConfig.supplyCurrLimit.enable = true;
     // turnConfig.supplyCurrLimit.currentLimit = 5;
@@ -81,11 +82,7 @@ public class SwerveModule extends SubsystemBase {
     // turnConfig.slot0.kI = DriveConstants.Turning_I;
     // turnConfig.slot0.kD = DriveConstants.Turning_D;
     // Turning_Motor.configAllSettings(turnConfig);
-
-
-
-    /* Factory Default all hardware to prevent unexpected behaviour */
-    Turning_Motor.configFactoryDefault();
+    
 
     /* Config the sensor used for Primary PID and sensor direction */
     Turning_Motor.configSelectedFeedbackSensor(
@@ -160,9 +157,7 @@ public class SwerveModule extends SubsystemBase {
     TurningProfiledPID.enableContinuousInput(-Math.PI, Math.PI);
   }
 
-  public SwerveModuleState getState() {
-    return new SwerveModuleState(getVelocity(), getAngle());
-  }
+
 
   public void setDesiredState(SwerveModuleState desiredState) {
     // if 0,0,0 is in here after auto what happens?
@@ -186,8 +181,7 @@ public class SwerveModule extends SubsystemBase {
     );
 
     /*Nolen's Stuff */
-    // double angle = (Math.abs(desiredState.speedMetersPerSecond) <= (4.5 * 0.01)) ? LastAngle : state.angle.getRadians();
-
+    // double angle = (Math.abs(desiredState.speedMetersPerSecond) <= (DriveConstants.Max_Angular_Speed * 0.01)) ? LastAngle : state.angle.getRadians();
 
     // double feedOutput = feedforward.calculate(turnOutput/12.0*6.28);
 
@@ -199,6 +193,9 @@ public class SwerveModule extends SubsystemBase {
     // LastAngle = angle;
   }
 
+  public SwerveModuleState getState() {
+    return new SwerveModuleState(getVelocity(), getAngle());
+  }
 
   public double radsToTicks(double radians){
     // return radians / (2*Math.PI / (6.28 * 2048)); 
