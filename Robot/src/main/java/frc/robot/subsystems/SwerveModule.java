@@ -32,6 +32,7 @@ public class SwerveModule extends SubsystemBase {
   WPI_CANCoder Can_Coder;
   AbsoluteSensorRange Range;
   SimpleMotorFeedforward feedforward;
+  double LastAngle;
 
   PIDController TurningPID = new PIDController(
     DriveConstants.Turning_P,
@@ -64,6 +65,20 @@ public class SwerveModule extends SubsystemBase {
     Driving_Motor.configAllSettings(driveConfig);
     Turning_Motor = new WPI_TalonFX(turnMotorID);
     Turning_Motor.setNeutralMode(NeutralMode.Brake);
+
+
+    /*This is Nolen test code no touchy */
+    // TalonFXConfiguration turnConfig = new TalonFXConfiguration();
+    // turnConfig.supplyCurrLimit.enable = true;
+    // turnConfig.supplyCurrLimit.currentLimit = 5;
+    // turnConfig.supplyCurrLimit.triggerThresholdCurrent = 5;
+    // turnConfig.supplyCurrLimit.triggerThresholdTime = .254;
+    // turnConfig.slot0.kP = DriveConstants.Turning_P;
+    // turnConfig.slot0.kI = DriveConstants.Turning_I;
+    // turnConfig.slot0.kD = DriveConstants.Turning_D;
+    // Turning_Motor.configAllSettings(turnConfig);
+
+
 
     /* Factory Default all hardware to prevent unexpected behaviour */
     Turning_Motor.configFactoryDefault();
@@ -166,11 +181,18 @@ public class SwerveModule extends SubsystemBase {
       //why doesn't optimize or this fix this if states aren't recorded
     );
 
+    /*Nolen's Stuff */
+    // double angle = (Math.abs(desiredState.speedMetersPerSecond) <= (4.5 * 0.01)) ? LastAngle : state.angle.getRadians();
+
+
     // double feedOutput = feedforward.calculate(turnOutput/12.0*6.28);
 
     Driving_Motor.setVoltage(driveOutput);
     state.angle = new Rotation2d(2);
     Turning_Motor.set(TalonFXControlMode.Position, radsToTicks(state.angle.getRadians()));
+
+    /*Nolen's Stuff */
+    // LastAngle = angle;
   }
 
 
