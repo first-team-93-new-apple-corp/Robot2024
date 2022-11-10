@@ -62,7 +62,11 @@ public class SwerveModule extends SubsystemBase {
     driveConfig.supplyCurrLimit.currentLimit = 5;
     driveConfig.supplyCurrLimit.triggerThresholdCurrent = 5;
     driveConfig.supplyCurrLimit.triggerThresholdTime = .254;
+
+    Driving_Motor.configFactoryDefault(); 
     Driving_Motor.configAllSettings(driveConfig);
+
+    
     Turning_Motor = new WPI_TalonFX(turnMotorID);
     Turning_Motor.setNeutralMode(NeutralMode.Brake);
 

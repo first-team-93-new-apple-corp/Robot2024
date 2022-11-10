@@ -108,7 +108,8 @@ public class DriveSubsystem extends SubsystemBase {
     Constraints constraints = new Constraints(Math.PI, Math.PI);
     ThetaController = new ProfiledPIDController(Math.PI / 2, 0, 0, constraints);
     AutoController = new HolonomicDriveController(XYPIDController, XYPIDController, ThetaController);
-    SmartDashboard.putNumber("Passing in angle to state", 0);
+
+
     Matrix mat = new MatBuilder<>(Nat.N5(), Nat.N1()).fill(0.02, 0.02, 0.01, 0.02, 0.02); // x y theta state, stdevs
     Matrix mat2 = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 0.01); //left encoder, right encoder, gyro, stdevs
     Matrix mat3 = new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.1,.1,.01); // vision stdevs
@@ -124,9 +125,12 @@ public class DriveSubsystem extends SubsystemBase {
     Back_Right.setDesiredState(States[3]);
   }
 
+  
+  // TODO: Remove this once auto is able to be used without it
   public void stopMotors(){
     drive(0,0,0, false, DriveConstants.Center);
   }
+
   public void drive(double X, double Y, double Z, boolean Field_Relative, Translation2d COR) { // from joystick
     // setting up speeds based on whether field relative is on or not
     // passing in joystick values in params
@@ -151,6 +155,8 @@ public class DriveSubsystem extends SubsystemBase {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         States,
         DriveConstants.Max_Angular_Speed);
+
+
     // this is so that the angle is saved and not auto set to 0 even after strafe
     if (X == 0 && Y == 0 && Z == 0) {
       if (SavedStates == null) {
@@ -160,17 +166,13 @@ public class DriveSubsystem extends SubsystemBase {
         States[i].speedMetersPerSecond = 0;
         States[i].angle = SavedStates[i].angle;
       }
-    } else {
-      SavedStates = States;
     }
 
-    Front_Left.setDesiredState(States[0]);
-    Front_Right.setDesiredState(States[1]);
-    Back_Left.setDesiredState(States[2]);
-    Back_Right.setDesiredState(States[3]);
+    setModuleStates(States);
+
   }
 
-  public void resetDriveMode() {
+  public void resetDriveStateMachine() {
     CurrentDriveState = DriveState.DEFAULT_STATE;
   }
 
@@ -290,7 +292,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   }
 
-  public void TryingAccelerometer() {
+  public void tryingAccelerometer() {
     // double[] GravVec = new double[3];
     // System.out.println(Pigeon.getGravityVector(GravVec));
     // System.out.println(GravVec[0]);
@@ -309,7 +311,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    TryingAccelerometer();
+    tryingAccelerometer();
 
     printEncoderValues();
 

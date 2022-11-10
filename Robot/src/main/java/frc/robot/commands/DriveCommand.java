@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.CustomRotationHelper;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 
 public class DriveCommand extends CommandBase {
 
@@ -24,7 +23,6 @@ public class DriveCommand extends CommandBase {
   }
 
   private DriveSubsystem m_DriveSubsystem;
-  private VisionSubsystem m_VisionSubsystem;
   private CustomRotationHelper rotationHelper;
 
   private XboxController F310;
@@ -46,22 +44,19 @@ public class DriveCommand extends CommandBase {
   private DriveModes LastDriveMode = DriveModes.One_Stick_Drive;
 
   private SendableChooser<DriveModes> DriveModeChooser;
-  private POVButton POV;
 
   public DriveCommand(
       DriveSubsystem m_DriveSubsystem,
       Joystick m_Joystick1,
       Joystick m_Joystick2,
       XboxController F310
-      // ,VisionSubsystem m_VisionSubsystem
       ) {
+
     this.m_DriveSubsystem = m_DriveSubsystem;
-    // this.m_VisionSubsystem = m_VisionSubsystem;
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.F310 = F310;
-    
-
+  
     DriveModeChooser = new SendableChooser<DriveModes>();
     
     rotationHelper = new CustomRotationHelper(m_Joystick1);
@@ -69,11 +64,15 @@ public class DriveCommand extends CommandBase {
     DriveModeChooser.setDefaultOption(
         "1 Stick Drive",
         DriveModes.One_Stick_Drive);
+
     DriveModeChooser.addOption(
         "2 Stick Drive",
         DriveModes.Two_Stick_Drive);
+
     DriveModeChooser.addOption("F310 Drive", DriveModes.F310_Drive);
+
     SmartDashboard.putData("Drive Scheme", DriveModeChooser);
+
     addRequirements(m_DriveSubsystem);
   }
 
@@ -86,11 +85,15 @@ public class DriveCommand extends CommandBase {
     HumanDrive();
     // OTFAuto();
   }
+
+  //TODO: Make Button States into an arraylist to pass it cleaner? maybe?
+  //TODO: Also make x, y, z into arraylist to pass it cleaner?
+
   public void HumanDrive(){
     CurrentDriveMode = DriveModeChooser.getSelected();
     double SpeedMult = getMaxSpeedMultiplier(m_Joystick1);
     if (CurrentDriveMode != LastDriveMode) {
-      m_DriveSubsystem.resetDriveMode();
+      m_DriveSubsystem.resetDriveStateMachine();
     }
 
     LastDriveMode = CurrentDriveMode;
@@ -151,15 +154,30 @@ public class DriveCommand extends CommandBase {
         rotationHelper.povButton(),
         SpeedMult);
   }
+
+  // TODO: this should eventually be removed but for now, make sure to replace return 1 with return output when someone stupid is driving
+
+    /**
+   * Speed multiplier based on Joystick Slider
+   * 
+   * @deprecated will be removed and max speed allowed instead.  
+   * @param Joystick: the Joystick
+   * @return the calculated speed multiplier
+   */
   public double getMaxSpeedMultiplier(Joystick Joystick){
     double slideAxis = -Joystick.getRawAxis(3);
     double output = ((slideAxis+1)/8)+0.25;
+
     return 1;
   }
-  public void OTFAuto(){ // OTF has to be here so we can get odometry without double calling
-    m_VisionSubsystem.getTrajectory(0,0, m_DriveSubsystem.getPose());
 
-  }
+
+  /**
+   * Checks if the joystick is within the deadzone
+   * 
+   * @param joystickValue: the value of the joystick
+   * @return the joystick value if it is outside the deadzone, 0 if it is inside
+   */
   public double checkJoystickDeadzone(double joystickValue) {
     if (Math.abs(joystickValue) < Joystick_Deadzone) {
       return 0.0;
