@@ -114,7 +114,7 @@ public class SwerveModule extends SubsystemBase {
       DriveConstants.Max_Volts;
 
     //Turning needs a pid because it has a setpoint it need to reach
-    double turnOutput = TurningProfiledPID.calculate(
+    double turnOutput = TurningPID.calculate(
       getAngle().getRadians(),
       state.angle.getRadians()
       //why doesn't optimize or this fix this if states aren't recorded
