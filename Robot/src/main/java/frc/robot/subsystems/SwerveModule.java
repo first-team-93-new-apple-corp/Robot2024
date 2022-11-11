@@ -69,88 +69,91 @@ public class SwerveModule extends SubsystemBase {
     
     Turning_Motor = new WPI_TalonFX(turnMotorID);
     Turning_Motor.setNeutralMode(NeutralMode.Brake);
+    
 
 
     /*This is Nolen test code no touchy */
     Turning_Motor.configFactoryDefault();
-    // TalonFXConfiguration turnConfig = new TalonFXConfiguration();
-    // turnConfig.supplyCurrLimit.enable = true;
-    // turnConfig.supplyCurrLimit.currentLimit = 5;
-    // turnConfig.supplyCurrLimit.triggerThresholdCurrent = 5;
-    // turnConfig.supplyCurrLimit.triggerThresholdTime = .254;
-    // turnConfig.slot0.kP = DriveConstants.Turning_P;
-    // turnConfig.slot0.kI = DriveConstants.Turning_I;
-    // turnConfig.slot0.kD = DriveConstants.Turning_D;
-    // Turning_Motor.configAllSettings(turnConfig);
+    TalonFXConfiguration turnConfig = new TalonFXConfiguration();
+    turnConfig.supplyCurrLimit.enable = true;
+    turnConfig.supplyCurrLimit.currentLimit = 5;
+    turnConfig.supplyCurrLimit.triggerThresholdCurrent = 5;
+    turnConfig.supplyCurrLimit.triggerThresholdTime = .254;
+    turnConfig.slot0.kP = DriveConstants.Turning_P;
+    turnConfig.slot0.kI = DriveConstants.Turning_I;
+    turnConfig.slot0.kD = DriveConstants.Turning_D;
+    Turning_Motor.configAllSettings(turnConfig);
     
 
-    /* Config the sensor used for Primary PID and sensor direction */
-    Turning_Motor.configSelectedFeedbackSensor(
-      TalonFXFeedbackDevice.IntegratedSensor,
-      Constants.kPIDLoopIdx,
-      Constants.kTimeoutMs
-    );
+    // /* Config the sensor used for Primary PID and sensor direction */
+    // Turning_Motor.configSelectedFeedbackSensor(
+    //   TalonFXFeedbackDevice.IntegratedSensor,
+    //   Constants.kPIDLoopIdx,
+    //   Constants.kTimeoutMs
+    // );
 
-    /* Ensure sensor is positive when output is positive */
-    Turning_Motor.setSensorPhase(Constants.kSensorPhase);
+    // /* Ensure sensor is positive when output is positive */
+    // Turning_Motor.setSensorPhase(Constants.kSensorPhase);
 
-    /**
-     * Set based on what direction you want forward/positive to be.
-     * This does not affect sensor phase.
-     */
-    // Turning_Motor.setInverted(Constants.kMotorInvert);
-    /*
-     * Talon FX does not need sensor phase set for its integrated sensor
-     * This is because it will always be correct if the selected feedback device is integrated sensor (default value)
-     * and the user calls getSelectedSensor* to get the sensor's position/velocity.
-     *
-     * https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-phase
-     */
-    // Turning_Motor.setSensorPhase(true);
+    // /**
+    //  * Set based on what direction you want forward/positive to be.
+    //  * This does not affect sensor phase.
+    //  */
+    // // Turning_Motor.setInverted(Constants.kMotorInvert);
+    // /*
+    //  * Talon FX does not need sensor phase set for its integrated sensor
+    //  * This is because it will always be correct if the selected feedback device is integrated sensor (default value)
+    //  * and the user calls getSelectedSensor* to get the sensor's position/velocity.
+    //  *
+    //  * https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-phase
+    //  */
+    // // Turning_Motor.setSensorPhase(true);
 
-    /* Config the peak and nominal outputs, 12V means full */
-    Turning_Motor.configNominalOutputForward(0, Constants.kTimeoutMs);
-    Turning_Motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
-    Turning_Motor.configPeakOutputForward(1, Constants.kTimeoutMs);
-    Turning_Motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+    // /* Config the peak and nominal outputs, 12V means full */
+    // Turning_Motor.configNominalOutputForward(0, Constants.kTimeoutMs);
+    // Turning_Motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
+    // Turning_Motor.configPeakOutputForward(1, Constants.kTimeoutMs);
+    // Turning_Motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
 
-    /**
-     * Config the allowable closed-loop error, Closed-Loop output will be
-     * neutral within this range. See Table in Section 17.2.1 for native
-     * units per rotation.
-     */
-    Turning_Motor.configAllowableClosedloopError(
-      0,
-      Constants.kPIDLoopIdx,
-      Constants.kTimeoutMs
-    );
+    // /**
+    //  * Config the allowable closed-loop error, Closed-Loop output will be
+    //  * neutral within this range. See Table in Section 17.2.1 for native
+    //  * units per rotation.
+    //  */
+    // Turning_Motor.configAllowableClosedloopError(
+    //   0,
+    //   Constants.kPIDLoopIdx,
+    //   Constants.kTimeoutMs
+    // );
 
-    /* Config Position Closed Loop gains in slot0, tsypically kF stays zero. */
-    Turning_Motor.config_kF(
-      Constants.kPIDLoopIdx,
-      Constants.kGains.kF,
-      Constants.kTimeoutMs
-    );
-    Turning_Motor.config_kP(
-      Constants.kPIDLoopIdx,
-      Constants.kGains.kP,
-      Constants.kTimeoutMs
-    );
-    Turning_Motor.config_kI(
-      Constants.kPIDLoopIdx,
-      Constants.kGains.kI,
-      Constants.kTimeoutMs
-    );
-    Turning_Motor.config_kD(
-      Constants.kPIDLoopIdx,
-      Constants.kGains.kD,
-      Constants.kTimeoutMs
-    );
+    // /* Config Position Closed Loop gains in slot0, tsypically kF stays zero. */
+    // Turning_Motor.config_kF(
+    //   Constants.kPIDLoopIdx,
+    //   Constants.kGains.kF,
+    //   Constants.kTimeoutMs
+    // );
+    // Turning_Motor.config_kP(
+    //   Constants.kPIDLoopIdx,
+    //   Constants.kGains.kP,
+    //   Constants.kTimeoutMs
+    // );
+    // Turning_Motor.config_kI(
+    //   Constants.kPIDLoopIdx,
+    //   Constants.kGains.kI,
+    //   Constants.kTimeoutMs
+    // );
+    // Turning_Motor.config_kD(
+    //   Constants.kPIDLoopIdx,
+    //   Constants.kGains.kD,
+    //   Constants.kTimeoutMs
+    // );
 
     Can_Coder = new WPI_CANCoder(CanCoderID);
     Can_Coder.configMagnetOffset(magnetOffset);
     Range = AbsoluteSensorRange.valueOf(0);
     Can_Coder.configAbsoluteSensorRange(Range);
+    Turning_Motor.setSelectedSensorPosition(Can_Coder.getAbsolutePosition() / 360 * 4096);
+
 
     TurningPID.setTolerance(DriveConstants.Turning_Tolerance);
     TurningPID.enableContinuousInput(-Math.PI, Math.PI);
@@ -181,16 +184,16 @@ public class SwerveModule extends SubsystemBase {
     );
 
     /*Nolen's Stuff */
-    // double angle = (Math.abs(desiredState.speedMetersPerSecond) <= (DriveConstants.Max_Angular_Speed * 0.01)) ? LastAngle : state.angle.getRadians();
+    double angle = (Math.abs(desiredState.speedMetersPerSecond) <= (DriveConstants.Max_Angular_Speed * 0.01)) ? LastAngle : state.angle.getRadians();
 
     // double feedOutput = feedforward.calculate(turnOutput/12.0*6.28);
 
     Driving_Motor.setVoltage(driveOutput);
-    state.angle = new Rotation2d(2);
-    Turning_Motor.set(TalonFXControlMode.Position, radsToTicks(state.angle.getRadians()));
+    // state.angle = new Rotation2d(2);
+    Turning_Motor.set(TalonFXControlMode.Position, radsToTicks(angle));
 
     /*Nolen's Stuff */
-    // LastAngle = angle;
+    LastAngle = angle;
   }
 
   public SwerveModuleState getState() {
@@ -202,10 +205,10 @@ public class SwerveModule extends SubsystemBase {
     return radians * 2048.;
   }
 
-  public void resetEncoders() { //need to figure out offsets
-    Driving_Motor.setSelectedSensorPosition(0);
-    Turning_Motor.setSelectedSensorPosition(0);
-  }
+  // public void resetEncoders() { //need to figure out offsets
+  //   Driving_Motor.setSelectedSensorPosition(0);
+  //   Turning_Motor.setSelectedSensorPosition(0);
+  // }
 
   // calculate the current velocity of the driving wheel
   public double getVelocity() {
@@ -221,14 +224,14 @@ public class SwerveModule extends SubsystemBase {
   // get angle from can coder
   //test to see if get absolute position is continuous
   public Rotation2d getAngle() {
-    return Rotation2d.fromDegrees(Can_Coder.getAbsolutePosition());
+    return Rotation2d.fromDegrees((Turning_Motor.getSelectedSensorPosition() / 2048) * 360);
   }
 
   @Override
   public void periodic() {
     // System.out.println(MathUtil.angleModulus(100000));
     //this for example does wrap the angle
-
+// System.out.println(getAngle());
   }
 
   @Override
