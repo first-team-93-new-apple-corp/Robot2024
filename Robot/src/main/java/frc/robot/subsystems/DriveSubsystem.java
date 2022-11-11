@@ -185,7 +185,7 @@ public class DriveSubsystem extends SubsystemBase {
       Boolean HeldButtonReleased,
       Boolean ToggleButton,
       Boolean ToggleButtonReleased,
-      Translation2d Rotation,
+      Translation2d COR,
       double MaxSpeedMultipier) {
 
 //configuring speed multiplier; 
@@ -212,7 +212,7 @@ public class DriveSubsystem extends SubsystemBase {
         CurrentDriveState = DriveState.HELD_FIELD_RELATIVE;
       } else {
         SmartDashboard.putBoolean("Field Relative", false);
-        drive(x, y, z, false, Rotation);
+        drive(x, y, z, false, DriveConstants.Center);
       }
     }
 
@@ -220,21 +220,21 @@ public class DriveSubsystem extends SubsystemBase {
     switch (CurrentDriveState) {
       // keep field relative drive until button is released
       case HELD_FIELD_RELATIVE:
-        drive(x, y, z, true, Rotation);
+        drive(x, y, z, true, DriveConstants.Center);
         if (HeldButtonReleased) {
           CurrentDriveState = DriveState.DEFAULT_STATE;
         }
         break;
       // waiting for button to be released
       case TOGGLE_FIELD_RELATIVE_STAGE_1:
-        drive(x, y, z, true, Rotation);
+        drive(x, y, z, true, DriveConstants.Center);
         if (ToggleButtonReleased) {
           CurrentDriveState = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
         }
         break;
       // waiting for button to be pressed again
       case TOGGLE_FIELD_RELATIVE_STAGE_2:
-        drive(x, y, z, true, Rotation);
+        drive(x, y, z, true, DriveConstants.Center);
         if (ToggleButton) {
           CurrentDriveState = DriveState.TOGGLE_HOLD_STATE;
         }
@@ -244,7 +244,7 @@ public class DriveSubsystem extends SubsystemBase {
       // released, but run non-field relative drive in the meantime
       case TOGGLE_HOLD_STATE:
         SmartDashboard.putBoolean("Field Relative", false);
-        drive(x, y, z, false, Rotation);
+        drive(x, y, z, false, DriveConstants.Center);
         if (ToggleButtonReleased) {
           CurrentDriveState = DriveState.DEFAULT_STATE;
         }

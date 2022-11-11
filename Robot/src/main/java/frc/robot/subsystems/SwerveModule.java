@@ -34,6 +34,7 @@ public class SwerveModule extends SubsystemBase {
   SimpleMotorFeedforward feedforward;
   double LastAngle;
 
+/*PID's are Unused for now. Leaving them in code. */
   PIDController TurningPID = new PIDController(
     DriveConstants.Turning_P,
     DriveConstants.Turning_I,
@@ -83,76 +84,16 @@ public class SwerveModule extends SubsystemBase {
     turnConfig.slot0.kI = DriveConstants.Turning_I;
     turnConfig.slot0.kD = DriveConstants.Turning_D;
     Turning_Motor.configAllSettings(turnConfig);
-    
-
-    // /* Config the sensor used for Primary PID and sensor direction */
-    // Turning_Motor.configSelectedFeedbackSensor(
-    //   TalonFXFeedbackDevice.IntegratedSensor,
-    //   Constants.kPIDLoopIdx,
-    //   Constants.kTimeoutMs
-    // );
-
-    // /* Ensure sensor is positive when output is positive */
-    // Turning_Motor.setSensorPhase(Constants.kSensorPhase);
-
-    // /**
-    //  * Set based on what direction you want forward/positive to be.
-    //  * This does not affect sensor phase.
-    //  */
-    // // Turning_Motor.setInverted(Constants.kMotorInvert);
-    // /*
-    //  * Talon FX does not need sensor phase set for its integrated sensor
-    //  * This is because it will always be correct if the selected feedback device is integrated sensor (default value)
-    //  * and the user calls getSelectedSensor* to get the sensor's position/velocity.
-    //  *
-    //  * https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-phase
-    //  */
-    // // Turning_Motor.setSensorPhase(true);
-
-    // /* Config the peak and nominal outputs, 12V means full */
-    // Turning_Motor.configNominalOutputForward(0, Constants.kTimeoutMs);
-    // Turning_Motor.configNominalOutputReverse(0, Constants.kTimeoutMs);
-    // Turning_Motor.configPeakOutputForward(1, Constants.kTimeoutMs);
-    // Turning_Motor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
-
-    // /**
-    //  * Config the allowable closed-loop error, Closed-Loop output will be
-    //  * neutral within this range. See Table in Section 17.2.1 for native
-    //  * units per rotation.
-    //  */
-    // Turning_Motor.configAllowableClosedloopError(
-    //   0,
-    //   Constants.kPIDLoopIdx,
-    //   Constants.kTimeoutMs
-    // );
-
-    // /* Config Position Closed Loop gains in slot0, tsypically kF stays zero. */
-    // Turning_Motor.config_kF(
-    //   Constants.kPIDLoopIdx,
-    //   Constants.kGains.kF,
-    //   Constants.kTimeoutMs
-    // );
-    // Turning_Motor.config_kP(
-    //   Constants.kPIDLoopIdx,
-    //   Constants.kGains.kP,
-    //   Constants.kTimeoutMs
-    // );
-    // Turning_Motor.config_kI(
-    //   Constants.kPIDLoopIdx,
-    //   Constants.kGains.kI,
-    //   Constants.kTimeoutMs
-    // );
-    // Turning_Motor.config_kD(
-    //   Constants.kPIDLoopIdx,
-    //   Constants.kGains.kD,
-    //   Constants.kTimeoutMs
-    // );
+    Turning_Motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,30);
+    LastAngle = getState().angle.getRadians();
+    Turning_Motor.setSelectedSensorPosition(Can_Coder.getAbsolutePosition() / 360 * 4096);
 
     Can_Coder = new WPI_CANCoder(CanCoderID);
     Can_Coder.configMagnetOffset(magnetOffset);
     Range = AbsoluteSensorRange.valueOf(0);
     Can_Coder.configAbsoluteSensorRange(Range);
-    Turning_Motor.setSelectedSensorPosition(Can_Coder.getAbsolutePosition() / 360 * 4096);
+
+
 
 
     TurningPID.setTolerance(DriveConstants.Turning_Tolerance);
@@ -166,25 +107,25 @@ public class SwerveModule extends SubsystemBase {
     // if 0,0,0 is in here after auto what happens?
 
     // optimize which way to turn the wheel
-    SwerveModuleState state = SwerveModuleState.optimize(
+    desiredState = CTREModuleState.optimize(
       desiredState,
       getAngle()
     );
 
     //do not need PID on drive motors - just a simple voltage calculation
     double driveOutput =
-      (state.speedMetersPerSecond / DriveConstants.Max_Strafe_Speed) *
+      (desiredState.speedMetersPerSecond / DriveConstants.Max_Strafe_Speed) *
       DriveConstants.Max_Volts;
 
     //Turning needs a pid because it has a setpoint it need to reach
-    double turnOutput = TurningProfiledPID.calculate(
-      getAngle().getRadians(),
-      state.angle.getRadians()
-      //why doesn't optimize or this fix this if states aren't recorded
-    );
+    // double turnOutput = TurningProfiledPID.calculate(
+    //   getAngle().getRadians(),
+    //   desiredState.angle.getRadians()
+    //   //why doesn't optimize or this fix this if states aren't recorded
+    // );
 
     /*Nolen's Stuff */
-    double angle = (Math.abs(desiredState.speedMetersPerSecond) <= (DriveConstants.Max_Angular_Speed * 0.01)) ? LastAngle : state.angle.getRadians();
+    double angle = (Math.abs(desiredState.speedMetersPerSecond) <= (DriveConstants.Max_Angular_Speed * 0.01)) ? LastAngle : desiredState.angle.getRadians();
 
     // double feedOutput = feedforward.calculate(turnOutput/12.0*6.28);
 

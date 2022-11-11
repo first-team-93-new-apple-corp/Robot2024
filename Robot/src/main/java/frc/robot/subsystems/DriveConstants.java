@@ -16,7 +16,7 @@ public final class DriveConstants {
   public static final int Throttle_Port_FL = 1;
   public static final int Turning_Port_FL = 5;
   public static final int Encoder_Port_FL = 10;
-  public static final double Magnet_Offset_FL = -136.318 + 180 - 1.846;
+  public static final double Magnet_Offset_FL = -136.318 + 180 - 1.846;/*TODO Check FL offset for error because of the seen 90 degree error */
 
   public static final int Throttle_Port_BR = 3;
   public static final int Turning_Port_BR = 7;
@@ -56,7 +56,7 @@ public final class DriveConstants {
   public static final double Max_Angular_Acceleration = 2 * Math.PI;
 
   //Swerve Locations
-  public static final Translation2d Center = new Translation2d(-.15, .05);
+  public static final Translation2d Center = new Translation2d(-.15, .05); /*TODO For Nolen: Reminder to look into this tomorrow, may be causing issues*/
   public static final Translation2d Front = new Translation2d(
     Wheel_Base / 2,
     0
