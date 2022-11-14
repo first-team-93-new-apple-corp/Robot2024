@@ -114,6 +114,7 @@ public class SwerveModule extends SubsystemBase {
       state.angle.getRadians()
       //why doesn't optimize or this fix this if states aren't recorded
     );
+    turnOutput += feedForward.calculate(Math.toRadians(Can_Coder.getVelocity()));
 
     // double feedOutput = feedforward.calculate(turnOutput/12.0*6.28);
 
@@ -155,9 +156,6 @@ public class SwerveModule extends SubsystemBase {
 
   @Override
   public void periodic() {
-    DriveConstants.Turning_P = SmartDashboard.getNumber("P", 0);
-    DriveConstants.Turning_I = SmartDashboard.getNumber("I", 0);
-    DriveConstants.Turning_D = SmartDashboard.getNumber("D", 0);
     // System.out.println(MathUtil.angleModulus(100000));
     //this for example does wrap the angle
     // System.out.println(getAngle());
