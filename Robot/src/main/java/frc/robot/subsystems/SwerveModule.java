@@ -54,7 +54,7 @@ public class SwerveModule extends SubsystemBase {
     int CanCoderID,
     double magnetOffset
   ) {
-    feedForward = new SimpleMotorFeedforward(0.6099, 0.216);
+    feedForward = new SimpleMotorFeedforward(0.65, 0.216);
     Driving_Motor = new WPI_TalonFX(driveMotorID);
     Driving_Motor.setNeutralMode(NeutralMode.Brake);
     Driving_Motor.setInverted(true);
