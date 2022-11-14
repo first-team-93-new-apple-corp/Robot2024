@@ -13,27 +13,15 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 /*----------------------------------------------------------------------------*/
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.commands.StopDriveCommand;
-import java.util.List;
-import org.photonvision.*;
-import org.photonvision.targeting.PhotonPipelineResult;
 
 public class AutonSubsystem extends SubsystemBase {
-  PhotonCamera camera;
-  PhotonCamera left;
-  PhotonCamera right;
   TrajectoryConfig OnTheFlyConfig;
   Transform3d transform;
 
@@ -44,9 +32,6 @@ public class AutonSubsystem extends SubsystemBase {
     double maxVel,
     double maxAccel
   ) {
-    // This is just an example event map. It would be better to have a constant,
-    // global event map
-    // in your code that will be used by all path following commands.
 
   PathPlannerTrajectory trajectory = PathPlanner.loadPath(PathName, maxVel, maxAccel); 
     return new SequentialCommandGroup(

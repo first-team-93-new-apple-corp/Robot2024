@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class SwerveModule extends SubsystemBase {
+
   double Motor_Commands;
   double Turning_Degrees;
 
@@ -64,14 +65,11 @@ public class SwerveModule extends SubsystemBase {
     driveConfig.supplyCurrLimit.triggerThresholdCurrent = 5;
     driveConfig.supplyCurrLimit.triggerThresholdTime = .254;
 
-    Driving_Motor.configFactoryDefault(); 
+    Driving_Motor.configFactoryDefault();
     Driving_Motor.configAllSettings(driveConfig);
 
-    
     Turning_Motor = new WPI_TalonFX(turnMotorID);
     Turning_Motor.setNeutralMode(NeutralMode.Brake);
-    
-
 
     /*This is Nolen test code no touchy */
     Turning_Motor.configFactoryDefault();
@@ -85,20 +83,16 @@ public class SwerveModule extends SubsystemBase {
     SmartDashboard.putNumber("P", 0);
     SmartDashboard.putNumber("I", 0);
     SmartDashboard.putNumber("D", 0);
-  
 
     Can_Coder = new WPI_CANCoder(CanCoderID);
     Can_Coder.configMagnetOffset(magnetOffset);
     Range = AbsoluteSensorRange.valueOf(0);
     Can_Coder.configAbsoluteSensorRange(Range);
 
-
     TurningPID.setTolerance(DriveConstants.Turning_Tolerance);
     TurningPID.enableContinuousInput(-Math.PI, Math.PI);
     TurningProfiledPID.enableContinuousInput(-Math.PI, Math.PI);
   }
-
-
 
   public void setDesiredState(SwerveModuleState desiredState) {
     // if 0,0,0 is in here after auto what happens?
@@ -121,8 +115,6 @@ public class SwerveModule extends SubsystemBase {
       //why doesn't optimize or this fix this if states aren't recorded
     );
 
- 
-
     // double feedOutput = feedforward.calculate(turnOutput/12.0*6.28);
 
     Driving_Motor.setVoltage(driveOutput);
@@ -134,8 +126,8 @@ public class SwerveModule extends SubsystemBase {
     return new SwerveModuleState(getVelocity(), getAngle());
   }
 
-  public double radsToTicks(double radians){
-    // return radians / (2*Math.PI / (6.28 * 2048)); 
+  public double radsToTicks(double radians) {
+    // return radians / (2*Math.PI / (6.28 * 2048));
     return radians * 2048.;
   }
 
@@ -163,13 +155,12 @@ public class SwerveModule extends SubsystemBase {
 
   @Override
   public void periodic() {
-
-   DriveConstants.Turning_P = SmartDashboard.getNumber("P", 0);
-   DriveConstants.Turning_I = SmartDashboard.getNumber("I", 0);
-   DriveConstants.Turning_D =  SmartDashboard.getNumber("D", 0);
+    DriveConstants.Turning_P = SmartDashboard.getNumber("P", 0);
+    DriveConstants.Turning_I = SmartDashboard.getNumber("I", 0);
+    DriveConstants.Turning_D = SmartDashboard.getNumber("D", 0);
     // System.out.println(MathUtil.angleModulus(100000));
     //this for example does wrap the angle
-// System.out.println(getAngle());
+    // System.out.println(getAngle());
   }
 
   @Override
