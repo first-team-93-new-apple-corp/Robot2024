@@ -31,14 +31,15 @@ public class SwerveModule extends SubsystemBase {
   WPI_TalonFX Turning_Motor;
   WPI_CANCoder Can_Coder;
   AbsoluteSensorRange Range;
-  SimpleMotorFeedforward feedforward;
   double LastAngle;
+  SimpleMotorFeedforward feedForward;
 
   PIDController TurningPID = new PIDController(
     DriveConstants.Turning_P,
     DriveConstants.Turning_I,
     DriveConstants.Turning_D
   );
+
   ProfiledPIDController TurningProfiledPID = new ProfiledPIDController(
     DriveConstants.Turning_P,
     DriveConstants.Turning_I,
@@ -52,7 +53,7 @@ public class SwerveModule extends SubsystemBase {
     int CanCoderID,
     double magnetOffset
   ) {
-    feedforward = new SimpleMotorFeedforward(0.73644, 0.21334, 0.002268);
+    feedForward = new SimpleMotorFeedforward(0.6099, 0.216);
     Driving_Motor = new WPI_TalonFX(driveMotorID);
     Driving_Motor.setNeutralMode(NeutralMode.Brake);
     Driving_Motor.setInverted(true);
