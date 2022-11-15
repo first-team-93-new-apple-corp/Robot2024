@@ -42,10 +42,10 @@ public class SwerveModule extends SubsystemBase {
   );
 
   ProfiledPIDController TurningProfiledPID = new ProfiledPIDController(
-    DriveConstants.Turning_P,
-    DriveConstants.Turning_I,
-    DriveConstants.Turning_D,
-    new Constraints(1, 6.28)
+    0.05,
+    0,
+    0,
+    new Constraints(50, 300)
   );
 
   public SwerveModule(
@@ -109,14 +109,11 @@ public class SwerveModule extends SubsystemBase {
       DriveConstants.Max_Volts;
 
     //Turning needs a pid because it has a setpoint it need to reach
-    double turnOutput = TurningPID.calculate(
+    double turnOutput = TurningProfiledPID.calculate(
       getAngle().getRadians(),
       state.angle.getRadians()
       //why doesn't optimize or this fix this if states aren't recorded
     );
-    turnOutput += feedForward.calculate(Math.toRadians(Can_Coder.getVelocity()));
-
-    // double feedOutput = feedforward.calculate(turnOutput/12.0*6.28);
 
     Driving_Motor.setVoltage(driveOutput);
     // state.angle = new Rotation2d(2);
