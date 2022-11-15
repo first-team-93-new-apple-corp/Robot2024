@@ -42,10 +42,10 @@ public class SwerveModule extends SubsystemBase {
   );
 
   ProfiledPIDController TurningProfiledPID = new ProfiledPIDController(
-    0.05,
+    4.25,
     0,
-    0,
-    new Constraints(50, 300)
+    0.11,
+    new Constraints(220, 600)
   );
 
   public SwerveModule(
@@ -54,7 +54,7 @@ public class SwerveModule extends SubsystemBase {
     int CanCoderID,
     double magnetOffset
   ) {
-    feedForward = new SimpleMotorFeedforward(0.65, 0.216);
+    feedForward = new SimpleMotorFeedforward(0.71, 0);
     Driving_Motor = new WPI_TalonFX(driveMotorID);
     Driving_Motor.setNeutralMode(NeutralMode.Brake);
     Driving_Motor.setInverted(true);
@@ -114,7 +114,7 @@ public class SwerveModule extends SubsystemBase {
       state.angle.getRadians()
       //why doesn't optimize or this fix this if states aren't recorded
     );
-
+    turnOutput += feedForward.calculate(Can_Coder.getVelocity());
     Driving_Motor.setVoltage(driveOutput);
     // state.angle = new Rotation2d(2);
     Turning_Motor.setVoltage(turnOutput);
