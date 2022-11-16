@@ -118,9 +118,9 @@ public class DriveSubsystem extends SubsystemBase {
   public void setModuleStates(SwerveModuleState[] States) {
     SavedStates = States;
     Front_Left.setDesiredState(States[0]);
-    Front_Right.setDesiredState(States[1]);
-    Back_Left.setDesiredState(States[2]);
-    Back_Right.setDesiredState(States[3]);
+    // Front_Right.setDesiredState(States[1]);
+    // Back_Left.setDesiredState(States[2]);
+    // Back_Right.setDesiredState(States[3]);
   }
 
   // TODO: Remove this once auto is able to be used without it
@@ -322,9 +322,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    tryingAccelerometer();
+    // tryingAccelerometer();
 
-    printEncoderValues();
+    // printEncoderValues();
 
     Odometry.update(
       Rotation2d.fromDegrees(getHeading()),

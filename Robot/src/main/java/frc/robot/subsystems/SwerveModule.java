@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
@@ -33,27 +34,27 @@ public class SwerveModule extends SubsystemBase {
   WPI_CANCoder Can_Coder;
   AbsoluteSensorRange Range;
   double LastAngle;
+  double FinalAngle;
   SimpleMotorFeedforward feedForward;
 
+  double angleoffset;
+
   PIDController TurningPID = new PIDController(
-    DriveConstants.Turning_P,
-    DriveConstants.Turning_I,
-    DriveConstants.Turning_D
-  );
+      DriveConstants.Turning_P,
+      DriveConstants.Turning_I,
+      DriveConstants.Turning_D);
 
   ProfiledPIDController TurningProfiledPID = new ProfiledPIDController(
-    0.05,
-    0,
-    0,
-    new Constraints(50, 300)
-  );
+      0.05,
+      0,
+      0,
+      new Constraints(50, 300));
 
   public SwerveModule(
-    int driveMotorID,
-    int turnMotorID,
-    int CanCoderID,
-    double magnetOffset
-  ) {
+      int driveMotorID,
+      int turnMotorID,
+      int CanCoderID,
+      double magnetOffset) {
     feedForward = new SimpleMotorFeedforward(0.65, 0.216);
     Driving_Motor = new WPI_TalonFX(driveMotorID);
     Driving_Motor.setNeutralMode(NeutralMode.Brake);
@@ -71,13 +72,16 @@ public class SwerveModule extends SubsystemBase {
     Turning_Motor = new WPI_TalonFX(turnMotorID);
     Turning_Motor.setNeutralMode(NeutralMode.Brake);
 
-    /*This is Nolen test code no touchy */
+    /* This is Nolen test code no touchy */
     Turning_Motor.configFactoryDefault();
     TalonFXConfiguration turnConfig = new TalonFXConfiguration();
     turnConfig.supplyCurrLimit.enable = true;
     turnConfig.supplyCurrLimit.currentLimit = 5;
     turnConfig.supplyCurrLimit.triggerThresholdCurrent = 5;
     turnConfig.supplyCurrLimit.triggerThresholdTime = .254;
+    turnConfig.slot0.kP = DriveConstants.Turning_P;
+    turnConfig.slot0.kI = DriveConstants.Turning_I;
+    turnConfig.slot0.kD = DriveConstants.Turning_D;
     Turning_Motor.configAllSettings(turnConfig);
 
     SmartDashboard.putNumber("P", 0);
@@ -88,36 +92,49 @@ public class SwerveModule extends SubsystemBase {
     Can_Coder.configMagnetOffset(magnetOffset);
     Range = AbsoluteSensorRange.valueOf(0);
     Can_Coder.configAbsoluteSensorRange(Range);
+    Turning_Motor.setSelectedSensorPosition(0);
 
-    TurningPID.setTolerance(DriveConstants.Turning_Tolerance);
-    TurningPID.enableContinuousInput(-Math.PI, Math.PI);
-    TurningProfiledPID.enableContinuousInput(-Math.PI, Math.PI);
+    LastAngle = 0;
+
+    // TurningPID.setTolerance(DriveConstants.Turning_Tolerance);
+    // TurningPID.enableContinuousInput(-Math.PI, Math.PI);
+    // TurningProfiledPID.enableContinuousInput(-Math.PI, Math.PI);
   }
 
   public void setDesiredState(SwerveModuleState desiredState) {
-    // if 0,0,0 is in here after auto what happens?
-
-    // optimize which way to turn the wheel
+    // desiredState = state; 
+    System.out.println(desiredState);
     SwerveModuleState state = SwerveModuleState.optimize(
-      desiredState,
-      getAngle()
-    );
+        desiredState,
+        getAngle());
+        System.out.println(state);
 
-    //do not need PID on drive motors - just a simple voltage calculation
-    double driveOutput =
-      (state.speedMetersPerSecond / DriveConstants.Max_Strafe_Speed) *
-      DriveConstants.Max_Volts;
+    // do not need PID on drive motors - just a simple voltage calculation
+    double driveOutput = (state.speedMetersPerSecond / DriveConstants.Max_Strafe_Speed) *
+        DriveConstants.Max_Volts;
 
-    //Turning needs a pid because it has a setpoint it need to reach
+    // Turning needs a pid because it has a setpoint it need to reach
     double turnOutput = TurningProfiledPID.calculate(
-      getAngle().getRadians(),
-      state.angle.getRadians()
-      //why doesn't optimize or this fix this if states aren't recorded
+    getAngle().getRadians(),
+    state.angle.getRadians()
+    //why doesn't optimize or this fix this if states aren't recorded
     );
+
+    /* Nolen's Stuff */
+    // double angle = (Math.abs(desiredState.speedMetersPerSecond) <=
+    // (DriveConstants.Max_Angular_Speed * 0.01)) ? LastAngle :
+    // state.angle.getRadians();
+    // double angle = state.angle.getRadians();
+    
+    double DesiredAngle = MathUtil.angleModulus(state.angle.getRadians() - desiredState.angle.getRadians());
+    FinalAngle = DesiredAngle + state.angle.getRadians();
+
 
     Driving_Motor.setVoltage(driveOutput);
     // state.angle = new Rotation2d(2);
-    Turning_Motor.setVoltage(turnOutput);
+    // Turning_Motor.setVoltage(turnOutput);
+    Turning_Motor.set(ControlMode.Position, radsToTicks(FinalAngle));
+    // LastAngle = angle;
   }
 
   public SwerveModuleState getState() {
@@ -125,39 +142,36 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public double radsToTicks(double radians) {
-    // return radians / (2*Math.PI / (6.28 * 2048));
-    return radians * 2048.;
+    return radians / (2 * Math.PI / (12.8 * 2048));
   }
 
   // public void resetEncoders() { //need to figure out offsets
-  //   Driving_Motor.setSelectedSensorPosition(0);
-  //   Turning_Motor.setSelectedSensorPosition(0);
+  // Driving_Motor.setSelectedSensorPosition(0);
+  // Turning_Motor.setSelectedSensorPosition(0);
   // }
 
   // calculate the current velocity of the driving wheel
   public double getVelocity() {
-    double speed =
-      Driving_Motor.getSelectedSensorVelocity() *
-      10 /
-      DriveConstants.TalonFX_Encoder_Resolution /
-      DriveConstants.Driving_Gearing *
-      DriveConstants.Wheel_Circumference;
+    double speed = Driving_Motor.getSelectedSensorVelocity() *
+        10 /
+        DriveConstants.TalonFX_Encoder_Resolution /
+        DriveConstants.Driving_Gearing *
+        DriveConstants.Wheel_Circumference;
     return Units.feetToMeters(speed);
   }
 
   // get angle from can coder
-  //test to see if get absolute position is continuous
+  // test to see if get absolute position is continuous
   public Rotation2d getAngle() {
-    return Rotation2d.fromDegrees(Can_Coder.getAbsolutePosition());
+    return Rotation2d.fromDegrees((Turning_Motor.getSelectedSensorPosition() * 12.8) * 360 - (Can_Coder.getAbsolutePosition()));
   }
 
   @Override
   public void periodic() {
-    // System.out.println(MathUtil.angleModulus(100000));
-    //this for example does wrap the angle
-    // System.out.println(getAngle());
+    // angleoffset = (Turning_Motor.getSelectedSensorPosition() * 12.8) * 360 - (Can_Coder.getAbsolutePosition());
   }
 
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+  }
 }
