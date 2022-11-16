@@ -110,6 +110,10 @@ public class SwerveModule extends SubsystemBase {
     SwerveModuleState state = setTurningOptimizedState(desiredState);
         // System.out.println(state);
 
+        if (desiredState.speedMetersPerSecond < -1.0) {
+          desiredState = new SwerveModuleState(0.0, previousAngle);
+        }
+
     // do not need PID on drive motors - just a simple voltage calculation
     double driveOutput = (state.speedMetersPerSecond / DriveConstants.Max_Strafe_Speed) *
         DriveConstants.Max_Volts;
