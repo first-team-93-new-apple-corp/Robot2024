@@ -20,6 +20,7 @@
      */
     public static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle) {
       double targetAngle = placeInAppropriate0To360Scope(currentAngle.getDegrees(), desiredState.angle.getDegrees());
+      System.out.println(targetAngle);
       double targetSpeed = desiredState.speedMetersPerSecond;
       double delta = targetAngle - currentAngle.getDegrees();
       if (Math.abs(delta) > 90){
@@ -34,26 +35,32 @@
        * @param newAngle Target Angle
        * @return Closest angle within scope
        */
-      private static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {
-        double lowerBound;
-        double upperBound;
-        double lowerOffset = scopeReference % 360;
-        if (lowerOffset >= 0) {
-            lowerBound = scopeReference - lowerOffset;
-            upperBound = scopeReference + (360 - lowerOffset);
+      private static double placeInAppropriate0To360Scope(double CurrentAngle, double newAngle) {
+        double lowerBound = 0;
+        double upperBound = 0;
+        double ModulusCurrentAngle = CurrentAngle % 360;
+        System.out.println(CurrentAngle);
+        if (ModulusCurrentAngle >= 0) {
+            lowerBound = CurrentAngle - ModulusCurrentAngle;
+            upperBound = CurrentAngle + (360 - ModulusCurrentAngle);
         } else {
-            upperBound = scopeReference - lowerOffset;
-            lowerBound = scopeReference - (360 + lowerOffset);
+            upperBound = CurrentAngle - ModulusCurrentAngle;
+            lowerBound = CurrentAngle - (360 + ModulusCurrentAngle);
         }
+        System.out.println(upperBound);
+        System.out.println(lowerBound);
         while (newAngle < lowerBound) {
             newAngle += 360;
+            System.out.println("test");
         }
         while (newAngle > upperBound) {
             newAngle -= 360;
+            System.out.println(newAngle);
+
         }
-        if (newAngle - scopeReference > 180) {
+        if (newAngle - CurrentAngle > 180) {
             newAngle -= 360;
-        } else if (newAngle - scopeReference < -180) {
+        } else if (newAngle - CurrentAngle < -180) {
             newAngle += 360;
         }
         return newAngle;

@@ -9,13 +9,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.CustomRotationHelper;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveCommand extends CommandBase {
 
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
+
   private enum DriveModes {
     One_Stick_Drive,
     Two_Stick_Drive,
@@ -25,7 +25,7 @@ public class DriveCommand extends CommandBase {
   private DriveSubsystem m_DriveSubsystem;
   private CustomRotationHelper rotationHelper;
 
-  private XboxController F310;
+  private XboxController m_F310;
   private Joystick m_Joystick1;
   private Joystick m_Joystick2;
 
@@ -40,22 +40,31 @@ public class DriveCommand extends CommandBase {
   private double y = 0;
   private double z = 0;
 
-  public DriveModes CurrentDriveMode;
+  private DriveModes CurrentDriveMode;
   private DriveModes LastDriveMode = DriveModes.One_Stick_Drive;
 
   private SendableChooser<DriveModes> DriveModeChooser;
 
+  /**
+   * Teleop Drive Command
+   * @end No End Condition
+   * @param m_DriveSubsystem Drive Subsystem
+   * @param m_Joystick1 Joystick 1 (the drive joystick)
+   * @param m_Joystick2 Joystick 2 (the turning joystick)
+   * @param F310 F310 Controller
+   * 
+   */
   public DriveCommand(
       DriveSubsystem m_DriveSubsystem,
       Joystick m_Joystick1,
       Joystick m_Joystick2,
-      XboxController F310
+      XboxController m_F310
       ) {
 
     this.m_DriveSubsystem = m_DriveSubsystem;
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
-    this.F310 = F310;
+    this.m_F310 = m_F310;
   
     DriveModeChooser = new SendableChooser<DriveModes>();
     
@@ -86,12 +95,14 @@ public class DriveCommand extends CommandBase {
     // OTFAuto();
   }
 
-  //TODO: Make Button States into an arraylist to pass it cleaner? maybe?
-  //TODO: Also make x, y, z into arraylist to pass it cleaner?
 
+  /**
+   * A regular drive mode that uses the joysticks to drive the robot.
+   * 
+   */
   public void HumanDrive(){
     CurrentDriveMode = DriveModeChooser.getSelected();
-    double SpeedMult = getMaxSpeedMultiplier(m_Joystick1);
+
     if (CurrentDriveMode != LastDriveMode) {
       m_DriveSubsystem.resetDriveStateMachine();
     }
@@ -99,7 +110,8 @@ public class DriveCommand extends CommandBase {
     LastDriveMode = CurrentDriveMode;
 
     switch (CurrentDriveMode) {
-      // regular drive
+
+      // one stick driving
       case One_Stick_Drive:
         x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1));
         y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0));
@@ -112,7 +124,8 @@ public class DriveCommand extends CommandBase {
         ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
 
         break;
-      // drive with 2 sticksRegularDrive
+
+      // two stick driving
       case Two_Stick_Drive:
         x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1));
         y =checkJoystickDeadzone(m_Joystick1.getRawAxis(0));
@@ -126,24 +139,27 @@ public class DriveCommand extends CommandBase {
         ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
 
         break;
+
       // F310 Drive
       case F310_Drive:
-        x = F310.getRightY();
+        x = m_F310.getRightY();
         x = Math.pow(x, 2) * Math.signum(x) ;
 
-        y = F310.getRightX();
+        y = m_F310.getRightX();
         y = Math.pow(y, 2) * Math.signum(y);
 
-        z = F310.getLeftX();
+        z = m_F310.getLeftX();
 
-        HeldButton = F310.getLeftBumper();
-        HeldButtonReleased = F310.getLeftBumperReleased();
+        HeldButton = m_F310.getLeftBumper();
+        HeldButtonReleased = m_F310.getLeftBumperReleased();
 
-        ToggleButton = F310.getRightBumper();
-        ToggleButtonReleased = F310.getRightBumperReleased();
+        ToggleButton = m_F310.getRightBumper();
+        ToggleButtonReleased = m_F310.getRightBumperReleased();
         break;
-    }
 
+    }
+    // rotationHelper.povButton(); 
+    // getMaxSpeedMultiplier(m_Joystick1); 
     m_DriveSubsystem.DriveStateMachine(
         -(x), -(y),
         -(z),
@@ -152,15 +168,13 @@ public class DriveCommand extends CommandBase {
         ToggleButton,
         ToggleButtonReleased,
         rotationHelper.povButton(),
-        SpeedMult);
+        getMaxSpeedMultiplier(m_Joystick1));
   }
-
-  // TODO: this should eventually be removed but for now, make sure to replace return 1 with return output when someone stupid is driving
 
     /**
    * Speed multiplier based on Joystick Slider
    * 
-   * @deprecated will be removed and max speed allowed instead.  
+   * @deprecated will be removed and max speed allowed instead or a slower speed mode toggle.  
    * @param Joystick: the Joystick
    * @return the calculated speed multiplier
    */
@@ -171,12 +185,11 @@ public class DriveCommand extends CommandBase {
     return 1;
   }
 
-
   /**
    * Checks if the joystick is within the deadzone
    * 
    * @param joystickValue: the value of the joystick
-   * @return the joystick value if it is outside the deadzone, 0 if it is inside
+   * @return the joystick value if it is outside the deadzone, 0 if it is within the dead zones
    */
   public double checkJoystickDeadzone(double joystickValue) {
     if (Math.abs(joystickValue) < Joystick_Deadzone) {
