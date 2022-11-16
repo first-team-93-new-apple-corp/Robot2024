@@ -41,35 +41,34 @@ public class SwerveModule extends SubsystemBase {
 
   double angleoffset;
 
-/*PID's are Unused for now. Leaving them in code. */
+  /* PID's are Unused for now. Leaving them in code. */
   PIDController TurningPID = new PIDController(
       DriveConstants.Turning_P,
       DriveConstants.Turning_I,
       DriveConstants.Turning_D);
 
   ProfiledPIDController TurningProfiledPID = new ProfiledPIDController(
-    4.25,
-    0,
-    0.11,
-    new Constraints(220, 600)
-  );
+      4.25,
+      0,
+      0.11,
+      new Constraints(220, 600));
 
   public SwerveModule(
       int driveMotorID,
       int turnMotorID,
       int CanCoderID,
       double magnetOffset) {
-    feedForward = new SimpleMotorFeedforward(0.65, 0.216);
+    // feedForward = new SimpleMotorFeedforward(0.65, 0.216);
     feedForward = new SimpleMotorFeedforward(0.71, 0);
     Driving_Motor = new WPI_TalonFX(driveMotorID);
     Driving_Motor.setNeutralMode(NeutralMode.Brake);
     Driving_Motor.setInverted(true);
 
     TalonFXConfiguration driveConfig = new TalonFXConfiguration();
-    driveConfig.supplyCurrLimit.enable = true;
-    driveConfig.supplyCurrLimit.currentLimit = 5;
-    driveConfig.supplyCurrLimit.triggerThresholdCurrent = 5;
-    driveConfig.supplyCurrLimit.triggerThresholdTime = .254;
+    // driveConfig.supplyCurrLimit.enable = true;
+    // driveConfig.supplyCurrLimit.currentLimit = 5;
+    // driveConfig.supplyCurrLimit.triggerThresholdCurrent = 5;
+    // driveConfig.supplyCurrLimit.triggerThresholdTime = .254;
 
     Driving_Motor.configFactoryDefault();
     Driving_Motor.configAllSettings(driveConfig);
@@ -80,13 +79,16 @@ public class SwerveModule extends SubsystemBase {
     /* This is Nolen test code no touchy */
     Turning_Motor.configFactoryDefault();
     TalonFXConfiguration turnConfig = new TalonFXConfiguration();
-    turnConfig.supplyCurrLimit.enable = true;
-    turnConfig.supplyCurrLimit.currentLimit = 5;
-    turnConfig.supplyCurrLimit.triggerThresholdCurrent = 5;
-    turnConfig.supplyCurrLimit.triggerThresholdTime = .254;
+    // turnConfig.supplyCurrLimit.enable = true;
+    // turnConfig.supplyCurrLimit.currentLimit = 5;
+    // turnConfig.supplyCurrLimit.triggerThresholdCurrent = 5;
+    // turnConfig.supplyCurrLimit.triggerThresholdTime = .254;
     turnConfig.slot0.kP = DriveConstants.Turning_P;
     turnConfig.slot0.kI = DriveConstants.Turning_I;
     turnConfig.slot0.kD = DriveConstants.Turning_D;
+    turnConfig.slot0.allowableClosedloopError = DriveConstants.Turning_Tolerance; 
+    // turnConfig.slot0.
+
     Turning_Motor.configAllSettings(turnConfig);
 
     SmartDashboard.putNumber("P", 0);
@@ -97,7 +99,7 @@ public class SwerveModule extends SubsystemBase {
     Can_Coder.configMagnetOffset(magnetOffset);
     Range = AbsoluteSensorRange.valueOf(0);
     Can_Coder.configAbsoluteSensorRange(Range);
-    Turning_Motor.setSelectedSensorPosition(0);
+    Turning_Motor.setSelectedSensorPosition((Can_Coder.getAbsolutePosition() / 360.) * (2048 * 12.8));
 
     // TurningPID.setTolerance(DriveConstants.Turning_Tolerance);
     // TurningPID.enableContinuousInput(-Math.PI, Math.PI);
@@ -106,13 +108,14 @@ public class SwerveModule extends SubsystemBase {
 
   public void setDesiredState(SwerveModuleState desiredState) {
 
-    System.out.println(desiredState);
-    SwerveModuleState state = setTurningOptimizedState(desiredState);
-        // System.out.println(state);
 
-        if (desiredState.speedMetersPerSecond < -1.0) {
-          desiredState = new SwerveModuleState(0.0, previousAngle);
-        }
+    double currentPos = Turning_Motor.getSelectedSensorPosition();
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState,
+        Rotation2d.fromDegrees(Can_Coder.getAbsolutePosition()));
+
+    double errorBound = (360) / 2.0;
+    double m_positionError = MathUtil.inputModulus(state.angle.getDegrees() - ticksToDegs(currentPos), -errorBound,
+        errorBound);
 
     // do not need PID on drive motors - just a simple voltage calculation
     double driveOutput = (state.speedMetersPerSecond / DriveConstants.Max_Strafe_Speed) *
@@ -120,14 +123,8 @@ public class SwerveModule extends SubsystemBase {
 
     Driving_Motor.setVoltage(driveOutput);
 
-    // // Turning needs a pid because it has a setpoint it need to reach
-    // double turnOutput = TurningProfiledPID.calculate(
-    // getAngle().getRadians(),
-    // state.angle.getRadians()
-    // //why doesn't optimize or this fix this if states aren't recorded
-    // );
+    Turning_Motor.set(ControlMode.Position, currentPos + degsToTicks(m_positionError));
 
-    // turnOutput += feedForward.calculate(Can_Coder.getVelocity());
   }
 
   public SwerveModuleState getState() {
@@ -138,10 +135,13 @@ public class SwerveModule extends SubsystemBase {
     return radians / (2 * Math.PI / (12.8 * 2048));
   }
 
-  // public void resetEncoders() { //need to figure out offsets
-  // Driving_Motor.setSelectedSensorPosition(0);
-  // Turning_Motor.setSelectedSensorPosition(0);
-  // }
+  public static double degsToTicks(double degrees) {
+    return (degrees / 360) * (12.8 * 2048);
+  }
+
+  public static double  ticksToDegs(double ticks) {
+    return ((ticks * 360) / (12.8 * 2048)) % 360;
+  }
 
   // calculate the current velocity of the driving wheel
   public double getVelocity() {
@@ -153,32 +153,17 @@ public class SwerveModule extends SubsystemBase {
     return Units.feetToMeters(speed);
   }
 
-  private SwerveModuleState setTurningOptimizedState(SwerveModuleState desiredState) {
-  // minimize change in heading by potentially reversing the drive direction
-  Rotation2d currentAngle = getAngle();
-  SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, currentAngle);
-
-  // set the azimuth wheel position
-  double countsBefore = Turning_Motor.getSelectedSensorPosition();
-  double countsFromAngle =
-      optimizedState.angle.getRadians() / (2.0 * Math.PI) * 2048;
-  double countsDelta = Math.IEEEremainder(countsFromAngle - countsBefore, 2048);
-  Turning_Motor.set(ControlMode.Position, countsBefore + countsDelta);
-
-  // save previous angle for use if inside deadband in setDesiredState()
-  previousAngle = optimizedState.angle;
-  return optimizedState;
-  }
-
   // get angle from can coder
   // test to see if get absolute position is continuous
   public Rotation2d getAngle() {
-    return Rotation2d.fromDegrees((Turning_Motor.getSelectedSensorPosition() * 12.8) * 360 - (Can_Coder.getAbsolutePosition()));
+    return Rotation2d
+        .fromDegrees((Turning_Motor.getSelectedSensorPosition() * 12.8) * 360 - (Can_Coder.getAbsolutePosition()));
   }
 
   @Override
   public void periodic() {
-    // angleoffset = (Turning_Motor.getSelectedSensorPosition() * 12.8) * 360 - (Can_Coder.getAbsolutePosition());
+    // angleoffset = (Turning_Motor.getSelectedSensorPosition() * 12.8) * 360 -
+    // (Can_Coder.getAbsolutePosition());
   }
 
   @Override
