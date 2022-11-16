@@ -46,17 +46,6 @@ public class SwerveModule extends SubsystemBase {
       DriveConstants.Turning_D);
 
   ProfiledPIDController TurningProfiledPID = new ProfiledPIDController(
-      0.05,
-      0,
-      0,
-      new Constraints(50, 300));
-
-  public SwerveModule(
-      int driveMotorID,
-      int turnMotorID,
-      int CanCoderID,
-      double magnetOffset) {
-    feedForward = new SimpleMotorFeedforward(0.65, 0.216);
     4.25,
     0,
     0.11,
@@ -64,11 +53,11 @@ public class SwerveModule extends SubsystemBase {
   );
 
   public SwerveModule(
-    int driveMotorID,
-    int turnMotorID,
-    int CanCoderID,
-    double magnetOffset
-  ) {
+      int driveMotorID,
+      int turnMotorID,
+      int CanCoderID,
+      double magnetOffset) {
+    feedForward = new SimpleMotorFeedforward(0.65, 0.216);
     feedForward = new SimpleMotorFeedforward(0.71, 0);
     Driving_Motor = new WPI_TalonFX(driveMotorID);
     Driving_Motor.setNeutralMode(NeutralMode.Brake);
