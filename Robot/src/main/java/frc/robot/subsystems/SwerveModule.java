@@ -37,6 +37,8 @@ public class SwerveModule extends SubsystemBase {
   double FinalAngle;
   SimpleMotorFeedforward feedForward;
 
+  private Rotation2d previousAngle = new Rotation2d();
+
   double angleoffset;
 
 /*PID's are Unused for now. Leaving them in code. */
@@ -97,48 +99,31 @@ public class SwerveModule extends SubsystemBase {
     Can_Coder.configAbsoluteSensorRange(Range);
     Turning_Motor.setSelectedSensorPosition(0);
 
-    LastAngle = 0;
-
     // TurningPID.setTolerance(DriveConstants.Turning_Tolerance);
     // TurningPID.enableContinuousInput(-Math.PI, Math.PI);
     // TurningProfiledPID.enableContinuousInput(-Math.PI, Math.PI);
   }
 
   public void setDesiredState(SwerveModuleState desiredState) {
-    // desiredState = state; 
+
     System.out.println(desiredState);
-    SwerveModuleState state = SwerveModuleState.optimize(
-        desiredState,
-        getAngle());
-        System.out.println(state);
+    SwerveModuleState state = setTurningOptimizedState(desiredState);
+        // System.out.println(state);
 
     // do not need PID on drive motors - just a simple voltage calculation
     double driveOutput = (state.speedMetersPerSecond / DriveConstants.Max_Strafe_Speed) *
         DriveConstants.Max_Volts;
 
-    // Turning needs a pid because it has a setpoint it need to reach
-    double turnOutput = TurningProfiledPID.calculate(
-    getAngle().getRadians(),
-    state.angle.getRadians()
-    //why doesn't optimize or this fix this if states aren't recorded
-    );
-
-    /* Nolen's Stuff */
-    // double angle = (Math.abs(desiredState.speedMetersPerSecond) <=
-    // (DriveConstants.Max_Angular_Speed * 0.01)) ? LastAngle :
-    // state.angle.getRadians();
-    // double angle = state.angle.getRadians();
-    
-    double DesiredAngle = MathUtil.angleModulus(state.angle.getRadians() - desiredState.angle.getRadians());
-    FinalAngle = DesiredAngle + state.angle.getRadians();
-
-
-    turnOutput += feedForward.calculate(Can_Coder.getVelocity());
     Driving_Motor.setVoltage(driveOutput);
-    // state.angle = new Rotation2d(2);
-    // Turning_Motor.setVoltage(turnOutput);
-    Turning_Motor.set(ControlMode.Position, radsToTicks(FinalAngle));
-    // LastAngle = angle;
+
+    // // Turning needs a pid because it has a setpoint it need to reach
+    // double turnOutput = TurningProfiledPID.calculate(
+    // getAngle().getRadians(),
+    // state.angle.getRadians()
+    // //why doesn't optimize or this fix this if states aren't recorded
+    // );
+
+    // turnOutput += feedForward.calculate(Can_Coder.getVelocity());
   }
 
   public SwerveModuleState getState() {
@@ -162,6 +147,23 @@ public class SwerveModule extends SubsystemBase {
         DriveConstants.Driving_Gearing *
         DriveConstants.Wheel_Circumference;
     return Units.feetToMeters(speed);
+  }
+
+  private SwerveModuleState setTurningOptimizedState(SwerveModuleState desiredState) {
+  // minimize change in heading by potentially reversing the drive direction
+  Rotation2d currentAngle = getAngle();
+  SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, currentAngle);
+
+  // set the azimuth wheel position
+  double countsBefore = Turning_Motor.getSelectedSensorPosition();
+  double countsFromAngle =
+      optimizedState.angle.getRadians() / (2.0 * Math.PI) * 2048;
+  double countsDelta = Math.IEEEremainder(countsFromAngle - countsBefore, 2048);
+  Turning_Motor.set(ControlMode.Position, countsBefore + countsDelta);
+
+  // save previous angle for use if inside deadband in setDesiredState()
+  previousAngle = optimizedState.angle;
+  return optimizedState;
   }
 
   // get angle from can coder
