@@ -56,6 +56,19 @@ public class SwerveModule extends SubsystemBase {
       int CanCoderID,
       double magnetOffset) {
     feedForward = new SimpleMotorFeedforward(0.65, 0.216);
+    4.25,
+    0,
+    0.11,
+    new Constraints(220, 600)
+  );
+
+  public SwerveModule(
+    int driveMotorID,
+    int turnMotorID,
+    int CanCoderID,
+    double magnetOffset
+  ) {
+    feedForward = new SimpleMotorFeedforward(0.71, 0);
     Driving_Motor = new WPI_TalonFX(driveMotorID);
     Driving_Motor.setNeutralMode(NeutralMode.Brake);
     Driving_Motor.setInverted(true);
@@ -130,6 +143,7 @@ public class SwerveModule extends SubsystemBase {
     FinalAngle = DesiredAngle + state.angle.getRadians();
 
 
+    turnOutput += feedForward.calculate(Can_Coder.getVelocity());
     Driving_Motor.setVoltage(driveOutput);
     // state.angle = new Rotation2d(2);
     // Turning_Motor.setVoltage(turnOutput);
