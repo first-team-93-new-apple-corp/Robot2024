@@ -114,7 +114,7 @@ public class SwerveModule extends SubsystemBase {
         Rotation2d.fromDegrees(Can_Coder.getAbsolutePosition()));
 
     double errorBound = (360) / 2.0;
-    double m_positionError = MathUtil.inputModulus(state.angle.getDegrees() - ticksToDegs(currentPos), -errorBound,
+    double m_positionError = MathUtil.inputModulus(state.angle.getDegrees() - (ticksToDegs(currentPos)), -errorBound,
         errorBound);
 
     // do not need PID on drive motors - just a simple voltage calculation

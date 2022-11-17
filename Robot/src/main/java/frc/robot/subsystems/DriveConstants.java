@@ -5,7 +5,7 @@ import edu.wpi.first.math.util.Units;
 import javax.sound.midi.Track;
 
 public final class DriveConstants {
-  public static final double Turning_Tolerance = SwerveModule.degsToTicks(0.25);
+  public static final double Turning_Tolerance = SwerveModule.degsToTicks(0.5);
   public static double Turning_P = 0.275;
   public static double Turning_I = 0;
   public static double Turning_D = 0;
@@ -55,7 +55,7 @@ public final class DriveConstants {
   public static final double Max_Angular_Acceleration = 2 * Math.PI;
 
   //Swerve Locations
-  public static final Translation2d Center = new Translation2d(-.15, .05); /*TODO For Nolen: Reminder to look into this tomorrow, may be causing issues*/
+  public static final Translation2d Center = new Translation2d(-.15, .025); /*TODO For Nolen: Reminder to look into this tomorrow, may be causing issues*/
   public static final Translation2d Front = new Translation2d(
     Wheel_Base / 2,
     0
