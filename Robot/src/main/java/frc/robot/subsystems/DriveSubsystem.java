@@ -123,7 +123,6 @@ public class DriveSubsystem extends SubsystemBase {
     Back_Right.setDesiredState(States[3]);
   }
 
-  // TODO: Remove this once auto is able to be used without it
   public void stopMotors() {
     drive(0, 0, 0, false, DriveConstants.Center);
   }
