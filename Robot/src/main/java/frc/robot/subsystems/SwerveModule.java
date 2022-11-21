@@ -105,7 +105,7 @@ public class SwerveModule extends SubsystemBase {
     // TurningPID.enableContinuousInput(-Math.PI, Math.PI);
     // TurningProfiledPID.enableContinuousInput(-Math.PI, Math.PI);
   }
-
+    SwerveModuleState lastState = new SwerveModuleState(0, new Rotation2d());
   public void setDesiredState(SwerveModuleState desiredState) {
 
 
@@ -116,7 +116,7 @@ public class SwerveModule extends SubsystemBase {
     double errorBound = (360) / 2.0;
     double m_positionError = MathUtil.inputModulus(state.angle.getDegrees() - (ticksToDegs(currentPos)), -errorBound,
         errorBound);
-
+lastState = state;
     // do not need PID on drive motors - just a simple voltage calculation
     double driveOutput = (state.speedMetersPerSecond / DriveConstants.Max_Strafe_Speed) *
         DriveConstants.Max_Volts;
@@ -128,7 +128,7 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public SwerveModuleState getState() {
-    return new SwerveModuleState(getVelocity(), getAngle());
+    return lastState;
   }
 
   public double radsToTicks(double radians) {
@@ -144,7 +144,7 @@ public class SwerveModule extends SubsystemBase {
   }
 
   // calculate the current velocity of the driving wheel
-  public double getVelocity() {
+  public double getVelocity() { //sussy baka
     double speed = Driving_Motor.getSelectedSensorVelocity() *
         10 /
         DriveConstants.TalonFX_Encoder_Resolution /
