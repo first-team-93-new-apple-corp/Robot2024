@@ -278,7 +278,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose) {
     System.out.println(pose);
-    zeroHeading();
+    Pigeon.setYaw(pose.getRotation().getDegrees());
     Odometry.resetPosition(pose, pose.getRotation());
   }
 
@@ -318,14 +318,13 @@ public class DriveSubsystem extends SubsystemBase {
     double accelerationX = gsX / 9.8;
     SmartDashboard.putNumber("X Acceleration", gsX);
   }
-
+  int counter =0;
   @Override
   public void periodic() {
+    counter++;
     // tryingAccelerometer();
 
     // printEncoderValues();
-
-
 
     Odometry.update(
       Rotation2d.fromDegrees(getHeading()),
@@ -334,6 +333,9 @@ public class DriveSubsystem extends SubsystemBase {
       Back_Left.getState(),
       Back_Right.getState()
     );
+    if(counter%5==0){
+    System.out.println(Odometry.getPoseMeters());
+    }
   }
 
   @Override

@@ -1,5 +1,6 @@
 package frc.robot.commands.AutonCommands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.AutonSubsystem;
@@ -22,9 +23,9 @@ public class AutonTestPath1 {
   public static SequentialCommandGroup generatePath(AutonSubsystem m_AutonSubsystem, DriveSubsystem m_DriveSubsystem) {
 
     return new SequentialCommandGroup(
-      m_AutonSubsystem.getTrajectoryCommand(m_DriveSubsystem, "suspath1", true, 3, 4), 
-      new WaitCommand(5), 
-      m_AutonSubsystem.getTrajectoryCommand(m_DriveSubsystem, "suspath2", true, 3, 4)
+      m_AutonSubsystem.getTrajectoryCommand(m_DriveSubsystem, "suspath1", true, 4, 10), 
+      new WaitCommand(2), 
+      m_AutonSubsystem.getTrajectoryCommand(m_DriveSubsystem, "suspath2", true, 4, 10)
     
     ); 
   }

@@ -39,10 +39,12 @@ public class AutonSubsystem extends SubsystemBase {
         () -> {
           // Reset odometry for the first path you run during auto
           if (isFirstPath) {
+            System.out.println("Stuff");
             m_DriveSubsystem.resetOdometry(
               trajectory.getInitialHolonomicPose()
             );
           }
+          System.out.println(trajectory.toString());
         }
       ),
       new PPSwerveControllerCommand(
