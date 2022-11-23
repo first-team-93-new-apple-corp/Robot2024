@@ -5,7 +5,7 @@ import edu.wpi.first.math.util.Units;
 import javax.sound.midi.Track;
 
 public final class DriveConstants {
-  public static final double Turning_Tolerance = SwerveModule.degsToTicks(0.5);
+  public static final double Turning_Tolerance = SwerveModule.degsToTicks(0.75);
   public static double Turning_P = 0.275;
   public static double Turning_I = 0;
   public static double Turning_D = 0;
