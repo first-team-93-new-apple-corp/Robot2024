@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.DriveCommand;
+import frc.robot.commands.HumanDrive;
 import frc.robot.commands.AutonCommands.AutonTestPath1;
 import frc.robot.subsystems.AutonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -21,15 +21,15 @@ public class RobotContainer {
   public Joystick Driver2;
   public XboxController F310;
 
-  //Subsystem Definitions
+  // Subsystem Definitions
   DriveSubsystem m_DriveSubsystem;
   AutonSubsystem m_AutonSubsystem; 
 
-  //Command Definitions 
-  DriveCommand m_DriveCommand; 
+  // Command Definitions 
+  HumanDrive m_DriveCommand; 
   
 
-  //Other Definitions
+  // Other Definitions
   SendableChooser<Command> AutonChooser;
   
 
@@ -45,7 +45,7 @@ public class RobotContainer {
     m_AutonSubsystem = new AutonSubsystem();
 
     //Commands
-    m_DriveCommand = new DriveCommand(m_DriveSubsystem, Driver1, Driver2, F310); 
+    m_DriveCommand = new HumanDrive(m_DriveSubsystem, Driver1, Driver2, F310); 
     
 
     // Auton Path Chooser

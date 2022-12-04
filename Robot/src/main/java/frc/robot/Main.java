@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
@@ -12,22 +8,24 @@ import edu.wpi.first.wpilibj.RobotBase;
  * call.
  */
 public final class Main {
-  private Main() {
 
-    // Maybe add this in as a worst case scenario
-    //  try {
-    //   RobotBase.class.getClassLoader().wait((long) 99999999999.0);
-    // } catch (InterruptedException e) {
-    //   e.printStackTrace();
-    // }
-  }
+  private Main() {}
 
   /**
    * Main initialization function. Do not perform any initialization here.
    *
    * <p>If you change your main robot class, change the parameter type.
    */
+
   public static void main(String... args) {
+    boolean broken = false;
+
     RobotBase.startRobot(Robot::new);
+
+    if (broken) {
+      for (;;) {
+        RobotBase.startRobot(Robot::new);
+      }
+    }
   }
 }

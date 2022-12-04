@@ -12,10 +12,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.CustomRotationHelper;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class DriveCommand extends CommandBase {
+public class HumanDrive extends CommandBase {
 
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-
   private enum DriveModes {
     One_Stick_Drive,
     Two_Stick_Drive,
@@ -43,64 +42,63 @@ public class DriveCommand extends CommandBase {
   private DriveModes CurrentDriveMode;
   private DriveModes LastDriveMode = DriveModes.One_Stick_Drive;
 
-  private SendableChooser<DriveModes> DriveModeChooser;
+  private static SendableChooser<DriveModes> DriveModeChooser;
 
   /**
    * Teleop Drive Command
-   * @end No End Condition
-   * @param m_DriveSubsystem Drive Subsystem
-   * @param m_Joystick1 Joystick 1 (the drive joystick)
-   * @param m_Joystick2 Joystick 2 (the turning joystick)
-   * @param F310 F310 Controller
-   * 
+   * @param m_DriveSubsystem Auton Subsystem
+   * @param m_Joystick1 The Main Joystick
+   * @param m_Joystick2 A Secondary Joystick
+   * @param m_F310 Xbox Controller
+   *
    */
-  public DriveCommand(
-      DriveSubsystem m_DriveSubsystem,
-      Joystick m_Joystick1,
-      Joystick m_Joystick2,
-      XboxController m_F310
-      ) {
-
+  public HumanDrive(
+    DriveSubsystem m_DriveSubsystem,
+    Joystick m_Joystick1,
+    Joystick m_Joystick2,
+    XboxController m_F310
+  ) {
     this.m_DriveSubsystem = m_DriveSubsystem;
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.m_F310 = m_F310;
-  
-    DriveModeChooser = new SendableChooser<DriveModes>();
-    
+
     rotationHelper = new CustomRotationHelper(m_Joystick1);
 
-    DriveModeChooser.setDefaultOption(
+    // if the data already exists, then we don't need to add it again
+    // TODO: test this lol
+    try {
+      SmartDashboard.getData("DriveScheme");
+    } catch (Exception e) {
+      DriveModeChooser = new SendableChooser<DriveModes>();
+
+      DriveModeChooser.setDefaultOption(
         "1 Stick Drive",
-        DriveModes.One_Stick_Drive);
+        DriveModes.One_Stick_Drive
+      );
 
-    DriveModeChooser.addOption(
-        "2 Stick Drive",
-        DriveModes.Two_Stick_Drive);
+      DriveModeChooser.addOption("2 Stick Drive", DriveModes.Two_Stick_Drive);
 
-    DriveModeChooser.addOption("F310 Drive", DriveModes.F310_Drive);
+      DriveModeChooser.addOption("F310 Drive", DriveModes.F310_Drive);
 
-    SmartDashboard.putData("Drive Scheme", DriveModeChooser);
+      SmartDashboard.putData("Drive Scheme", DriveModeChooser);
+    }
 
     addRequirements(m_DriveSubsystem);
   }
 
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
-    HumanDrive();
-    // OTFAuto();
+    Drive();
   }
 
-
   /**
-   * A regular drive mode that uses the joysticks to drive the robot.
-   * 
+   * Runs the drive based on the Drive Mode and joystick values
    */
-  public void HumanDrive(){
+  public void Drive() {
     CurrentDriveMode = DriveModeChooser.getSelected();
 
     if (CurrentDriveMode != LastDriveMode) {
@@ -110,7 +108,6 @@ public class DriveCommand extends CommandBase {
     LastDriveMode = CurrentDriveMode;
 
     switch (CurrentDriveMode) {
-
       // one stick driving
       case One_Stick_Drive:
         x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1));
@@ -124,12 +121,11 @@ public class DriveCommand extends CommandBase {
         ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
 
         break;
-
       // two stick driving
       case Two_Stick_Drive:
         x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1));
-        y =checkJoystickDeadzone(m_Joystick1.getRawAxis(0));
-         
+        y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0));
+
         z = checkJoystickDeadzone(m_Joystick2.getRawAxis(0));
 
         HeldButton = m_Joystick1.getRawButton(13);
@@ -139,11 +135,10 @@ public class DriveCommand extends CommandBase {
         ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
 
         break;
-
       // F310 Drive
       case F310_Drive:
         x = m_F310.getRightY();
-        x = Math.pow(x, 2) * Math.signum(x) ;
+        x = Math.pow(x, 2) * Math.signum(x);
 
         y = m_F310.getRightX();
         y = Math.pow(y, 2) * Math.signum(y);
@@ -156,36 +151,22 @@ public class DriveCommand extends CommandBase {
         ToggleButton = m_F310.getRightBumper();
         ToggleButtonReleased = m_F310.getRightBumperReleased();
         break;
-
     }
     m_DriveSubsystem.DriveStateMachine(
-        -(x), -(y),
-        -(z),
-        HeldButton,
-        HeldButtonReleased,
-        ToggleButton,
-        ToggleButtonReleased,
-        rotationHelper.povButton(),
-        getMaxSpeedMultiplier(m_Joystick1));
-  }
-
-    /**
-   * Speed multiplier based on Joystick Slider
-   * 
-   * @deprecated will be removed and max speed allowed instead or a slower speed mode toggle.  
-   * @param Joystick: the Joystick
-   * @return the calculated speed multiplier
-   */
-  public double getMaxSpeedMultiplier(Joystick Joystick){
-    double slideAxis = -Joystick.getRawAxis(3);
-    double output = ((slideAxis+1)/8)+0.25;
-
-    return 1;
+      -(x),
+      -(y),
+      -(z),
+      HeldButton,
+      HeldButtonReleased,
+      ToggleButton,
+      ToggleButtonReleased,
+      rotationHelper.povButton()
+    );
   }
 
   /**
    * Checks if the joystick is within the deadzone
-   * 
+   *
    * @param joystickValue: the value of the joystick
    * @return the joystick value if it is outside the deadzone, 0 if it is within the dead zones
    */
@@ -198,8 +179,7 @@ public class DriveCommand extends CommandBase {
   }
 
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   @Override
   public boolean isFinished() {
