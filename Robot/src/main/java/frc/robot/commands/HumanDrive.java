@@ -180,7 +180,7 @@ public class HumanDrive extends CommandBase {
       y = checkJoystickDeadzone(m_F310.getLeftX(), Controller_Deadzone);
       y = Math.pow(y, 2) * Math.signum(y);
 
-      z = checkJoystickDeadzone(m_F310.getLeftTriggerAxis()+m_F310.getRightTriggerAxis()*-1, Controller_Deadzone);
+      z = checkJoystickDeadzone(m_F310.getLeftTriggerAxis()*-1+m_F310.getRightTriggerAxis(), 0.05);
 
       HeldButton = m_F310.getLeftBumper();
       HeldButtonReleased = m_F310.getLeftBumperReleased();
