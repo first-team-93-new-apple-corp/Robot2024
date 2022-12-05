@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -19,6 +21,7 @@ public class HumanDrive extends CommandBase {
     One_Stick_Drive,
     Two_Stick_Drive,
     F310_Drive,
+    F310_Drive_Inverted
   }
 
   private DriveSubsystem m_DriveSubsystem;
@@ -34,6 +37,7 @@ public class HumanDrive extends CommandBase {
   private boolean HeldButtonReleased = false;
 
   private double Joystick_Deadzone = 0.04;
+  private double Controller_Deadzone = 0.2; 
 
   private double x = 0;
   private double y = 0;
@@ -80,6 +84,7 @@ public class HumanDrive extends CommandBase {
       DriveModeChooser.addOption("2 Stick Drive", DriveModes.Two_Stick_Drive);
 
       DriveModeChooser.addOption("F310 Drive", DriveModes.F310_Drive);
+      DriveModeChooser.addOption("F310 Inverted", DriveModes.F310_Drive_Inverted);
 
       SmartDashboard.putData("Drive Scheme", DriveModeChooser);
     }
@@ -110,9 +115,9 @@ public class HumanDrive extends CommandBase {
     switch (CurrentDriveMode) {
       // one stick driving
       case One_Stick_Drive:
-        x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1));
-        y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0));
-        z = checkJoystickDeadzone(m_Joystick1.getRawAxis(2));
+        x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1), Joystick_Deadzone);
+        y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0), Joystick_Deadzone);
+        z = checkJoystickDeadzone(m_Joystick1.getRawAxis(2) , Joystick_Deadzone);
 
         HeldButton = m_Joystick1.getRawButton(13);
         HeldButtonReleased = m_Joystick1.getRawButtonReleased(13);
@@ -123,10 +128,10 @@ public class HumanDrive extends CommandBase {
         break;
       // two stick driving
       case Two_Stick_Drive:
-        x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1));
-        y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0));
+        x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1), Joystick_Deadzone);
+        y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0), Joystick_Deadzone);
 
-        z = checkJoystickDeadzone(m_Joystick2.getRawAxis(0));
+        z = checkJoystickDeadzone(m_Joystick2.getRawAxis(0), Joystick_Deadzone);
 
         HeldButton = m_Joystick1.getRawButton(13);
         HeldButtonReleased = m_Joystick1.getRawButtonReleased(13);
@@ -137,13 +142,28 @@ public class HumanDrive extends CommandBase {
         break;
       // F310 Drive
       case F310_Drive:
-        x = m_F310.getRightY();
+        x = checkJoystickDeadzone(m_F310.getRightY(), Controller_Deadzone);
         x = Math.pow(x, 2) * Math.signum(x);
 
-        y = m_F310.getRightX();
+        y = checkJoystickDeadzone(m_F310.getRightX(), Controller_Deadzone);
         y = Math.pow(y, 2) * Math.signum(y);
 
-        z = m_F310.getLeftX();
+        z = checkJoystickDeadzone(m_F310.getLeftX(), Controller_Deadzone);
+
+        HeldButton = m_F310.getLeftBumper();
+        HeldButtonReleased = m_F310.getLeftBumperReleased();
+
+        ToggleButton = m_F310.getRightBumper();
+        ToggleButtonReleased = m_F310.getRightBumperReleased();
+        break;
+      case F310_Drive_Inverted:
+        x = checkJoystickDeadzone(m_F310.getLeftY(), Controller_Deadzone);
+        x = Math.pow(x, 2) * Math.signum(x);
+
+        y = checkJoystickDeadzone(m_F310.getLeftX(), Controller_Deadzone);
+        y = Math.pow(y, 2) * Math.signum(y);
+
+        z = checkJoystickDeadzone(m_F310.getRightX(), Controller_Deadzone);
 
         HeldButton = m_F310.getLeftBumper();
         HeldButtonReleased = m_F310.getLeftBumperReleased();
@@ -170,8 +190,8 @@ public class HumanDrive extends CommandBase {
    * @param joystickValue: the value of the joystick
    * @return the joystick value if it is outside the deadzone, 0 if it is within the dead zones
    */
-  public double checkJoystickDeadzone(double joystickValue) {
-    if (Math.abs(joystickValue) < Joystick_Deadzone) {
+  public double checkJoystickDeadzone(double joystickValue, double deadzone) {
+    if (Math.abs(joystickValue) < deadzone) {
       return 0.0;
     } else {
       return joystickValue;
