@@ -21,7 +21,8 @@ public class HumanDrive extends CommandBase {
     One_Stick_Drive,
     Two_Stick_Drive,
     F310_Drive,
-    F310_Drive_Inverted
+    F310_Drive_Inverted,
+    F310_TurningBumpers
   }
 
   private DriveSubsystem m_DriveSubsystem;
@@ -37,7 +38,7 @@ public class HumanDrive extends CommandBase {
   private boolean HeldButtonReleased = false;
 
   private double Joystick_Deadzone = 0.04;
-  private double Controller_Deadzone = 0.2; 
+  private double Controller_Deadzone = 0.2;
 
   private double x = 0;
   private double y = 0;
@@ -50,18 +51,18 @@ public class HumanDrive extends CommandBase {
 
   /**
    * Teleop Drive Command
+   * 
    * @param m_DriveSubsystem Auton Subsystem
-   * @param m_Joystick1 The Main Joystick
-   * @param m_Joystick2 A Secondary Joystick
-   * @param m_F310 Xbox Controller
+   * @param m_Joystick1      The Main Joystick
+   * @param m_Joystick2      A Secondary Joystick
+   * @param m_F310           Xbox Controller
    *
    */
   public HumanDrive(
-    DriveSubsystem m_DriveSubsystem,
-    Joystick m_Joystick1,
-    Joystick m_Joystick2,
-    XboxController m_F310
-  ) {
+      DriveSubsystem m_DriveSubsystem,
+      Joystick m_Joystick1,
+      Joystick m_Joystick2,
+      XboxController m_F310) {
     this.m_DriveSubsystem = m_DriveSubsystem;
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
@@ -77,14 +78,14 @@ public class HumanDrive extends CommandBase {
       DriveModeChooser = new SendableChooser<DriveModes>();
 
       DriveModeChooser.setDefaultOption(
-        "1 Stick Drive",
-        DriveModes.One_Stick_Drive
-      );
+          "1 Stick Drive",
+          DriveModes.One_Stick_Drive);
 
       DriveModeChooser.addOption("2 Stick Drive", DriveModes.Two_Stick_Drive);
 
       DriveModeChooser.addOption("F310 Drive", DriveModes.F310_Drive);
       DriveModeChooser.addOption("F310 Inverted", DriveModes.F310_Drive_Inverted);
+      DriveModeChooser.addOption("F310_TurningBumpers", DriveModes.F310_TurningBumpers);
 
       SmartDashboard.putData("Drive Scheme", DriveModeChooser);
     }
@@ -93,7 +94,8 @@ public class HumanDrive extends CommandBase {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   @Override
   public void execute() {
@@ -117,7 +119,7 @@ public class HumanDrive extends CommandBase {
       case One_Stick_Drive:
         x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1), Joystick_Deadzone);
         y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0), Joystick_Deadzone);
-        z = checkJoystickDeadzone(m_Joystick1.getRawAxis(2) , Joystick_Deadzone);
+        z = checkJoystickDeadzone(m_Joystick1.getRawAxis(2), Joystick_Deadzone);
 
         HeldButton = m_Joystick1.getRawButton(13);
         HeldButtonReleased = m_Joystick1.getRawButtonReleased(13);
@@ -171,24 +173,39 @@ public class HumanDrive extends CommandBase {
         ToggleButton = m_F310.getRightBumper();
         ToggleButtonReleased = m_F310.getRightBumperReleased();
         break;
+      case F310_TurningBumpers:
+      x = checkJoystickDeadzone(m_F310.getLeftY(), Controller_Deadzone);
+      x = Math.pow(x, 2) * Math.signum(x);
+
+      y = checkJoystickDeadzone(m_F310.getLeftX(), Controller_Deadzone);
+      y = Math.pow(y, 2) * Math.signum(y);
+
+      z = checkJoystickDeadzone(m_F310.getLeftTriggerAxis()+m_F310.getRightTriggerAxis()*-1, Controller_Deadzone);
+
+      HeldButton = m_F310.getLeftBumper();
+      HeldButtonReleased = m_F310.getLeftBumperReleased();
+
+      ToggleButton = m_F310.getRightBumper();
+      ToggleButtonReleased = m_F310.getRightBumperReleased();
+        break;
     }
     m_DriveSubsystem.DriveStateMachine(
-      -(x),
-      -(y),
-      -(z),
-      HeldButton,
-      HeldButtonReleased,
-      ToggleButton,
-      ToggleButtonReleased,
-      rotationHelper.povButton()
-    );
+        -(x),
+        -(y),
+        -(z),
+        HeldButton,
+        HeldButtonReleased,
+        ToggleButton,
+        ToggleButtonReleased,
+        rotationHelper.povButton());
   }
 
   /**
    * Checks if the joystick is within the deadzone
    *
    * @param joystickValue: the value of the joystick
-   * @return the joystick value if it is outside the deadzone, 0 if it is within the dead zones
+   * @return the joystick value if it is outside the deadzone, 0 if it is within
+   *         the dead zones
    */
   public double checkJoystickDeadzone(double joystickValue, double deadzone) {
     if (Math.abs(joystickValue) < deadzone) {
@@ -199,7 +216,8 @@ public class HumanDrive extends CommandBase {
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   @Override
   public boolean isFinished() {
