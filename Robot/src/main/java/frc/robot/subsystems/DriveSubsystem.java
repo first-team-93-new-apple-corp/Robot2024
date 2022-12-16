@@ -52,7 +52,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
 
     Pigeon = new Pigeon2(0);
-    Pigeon.configMountPose(AxisDirection.PositiveY, AxisDirection.PositiveZ);
+    Pigeon.configMountPose(AxisDirection.NegativeY, AxisDirection.PositiveZ);
     Pigeon.setYaw(0);
 
     getRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
@@ -67,6 +67,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     Odometry = new SwerveDriveOdometry(Kinematics, getRotation2d);
 
+    SmartDashboard.putNumber("sus", Pigeon.getYaw());
     // Setting Up Swerve Modules
     Front_Left =
       new SwerveModule(
@@ -285,6 +286,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("sus", Pigeon.getYaw());
+
     Odometry.update(Rotation2d.fromDegrees(getHeading()), getStates());
   }
 
