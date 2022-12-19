@@ -67,7 +67,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     Odometry = new SwerveDriveOdometry(Kinematics, getRotation2d);
 
-    SmartDashboard.putNumber("sus", Pigeon.getYaw());
+    SmartDashboard.putNumber("Piegeon Angle", getHeading());
     // Setting Up Swerve Modules
     Front_Left =
       new SwerveModule(
@@ -286,7 +286,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("sus", Pigeon.getYaw());
+    SmartDashboard.putNumber("Piegeon Angle", getHeading());
 
     Odometry.update(Rotation2d.fromDegrees(getHeading()), getStates());
   }
