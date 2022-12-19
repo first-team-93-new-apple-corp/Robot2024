@@ -148,6 +148,10 @@ public class SwerveModule extends SubsystemBase {
     return Rotation2d.fromDegrees((Can_Coder.getAbsolutePosition()));
   }
 
+  public double getCancoderTicks(){
+    return Can_Coder.getAbsolutePosition(); 
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putString("State " + driveMotorID, getState().toString());

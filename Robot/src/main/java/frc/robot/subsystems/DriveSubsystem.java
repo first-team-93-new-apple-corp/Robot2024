@@ -122,6 +122,8 @@ public class DriveSubsystem extends SubsystemBase {
     boolean Field_Relative,
     Translation2d COR
   ) {
+
+  
     if (!Field_Relative) {
       Speeds =
         new ChassisSpeeds(
@@ -287,6 +289,15 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Piegeon Angle", getHeading());
+
+
+    // these values should be uncommented when zeroing encoders
+    // DO NOT use the ones that show up in shuffleboard, those are sus and not accurate 
+    // See Sameer for more info
+    SmartDashboard.putNumber("Front Right Cancoder", Front_Right.getCancoderTicks()); 
+    SmartDashboard.putNumber("Front Left Cancoder", Front_Left.getCancoderTicks()); 
+    SmartDashboard.putNumber("Back Right Cancoder", Back_Right.getCancoderTicks()); 
+    SmartDashboard.putNumber("Back Left Cancoder", Back_Left.getCancoderTicks()); 
 
     Odometry.update(Rotation2d.fromDegrees(getHeading()), getStates());
   }

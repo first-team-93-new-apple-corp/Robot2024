@@ -127,7 +127,11 @@ public class HumanDrive extends CommandBase {
         ToggleButton = m_Joystick1.getRawButton(12);
         ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
 
+        y = 0; 
+        z = 0; 
+        
         break;
+
       // two stick driving
       case Two_Stick_Drive:
         x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1), Joystick_Deadzone);
@@ -189,6 +193,7 @@ public class HumanDrive extends CommandBase {
       ToggleButtonReleased = m_F310.getRightBumperReleased();
         break;
     }
+
     m_DriveSubsystem.DriveStateMachine(
         -(x),
         -(y),

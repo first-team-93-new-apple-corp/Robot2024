@@ -7,33 +7,33 @@ public final class DriveConstants {
 
   // Turning PID
   public static final double Turning_Tolerance = SwerveModule.degreesToTicks(0.75);
-  public static double Turning_P = 0.275;
+  public static double Turning_P = 0.8;
   public static double Turning_I = 0;
-  public static double Turning_D = 0;
+  public static double Turning_D = 0.15;
 
   // Front Left Module
   public static final int Throttle_Port_FL = 1;
   public static final int Turning_Port_FL = 5;
   public static final int Encoder_Port_FL = 10;
-  public static final double Magnet_Offset_FL = -44.29875; 
+  public static final double Magnet_Offset_FL = 41.836; 
 
   // Back Right Module
   public static final int Throttle_Port_BR = 3;
   public static final int Turning_Port_BR = 7;
   public static final int Encoder_Port_BR = 12;
-  public static final double Magnet_Offset_BR = -44.82421875;
+  public static final double Magnet_Offset_BR = 124.541;
 
   // Back Left Module
   public static final int Throttle_Port_BL = 4;
   public static final int Turning_Port_BL = 8;
   public static final int Encoder_Port_BL = 13;
-  public static final double Magnet_Offset_BL = -44.736328125;
+  public static final double Magnet_Offset_BL = -94.483;
 
   // Front Right Module
   public static final int Throttle_Port_FR = 2;
   public static final int Turning_Port_FR = 6;
   public static final int Encoder_Port_FR = 11;
-  public static final double Magnet_Offset_FR = -45.439453125;
+  public static final double Magnet_Offset_FR = 151.347;
 
   // Motor Information
   public static final double TalonFX_RPM = 6380;
