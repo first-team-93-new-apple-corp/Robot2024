@@ -7,9 +7,9 @@ public final class DriveConstants {
 
   // Turning PID
   public static final double Turning_Tolerance = SwerveModule.degreesToTicks(0.75);
-  public static double Turning_P = 0.8;
+  public static double Turning_P = 0.75;
   public static double Turning_I = 0;
-  public static double Turning_D = 0.15;
+  public static double Turning_D = 0.2;
 
   // Front Left Module
   public static final int Throttle_Port_FL = 1;

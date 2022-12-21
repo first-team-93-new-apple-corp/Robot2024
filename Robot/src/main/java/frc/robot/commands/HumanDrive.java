@@ -127,8 +127,6 @@ public class HumanDrive extends CommandBase {
         ToggleButton = m_Joystick1.getRawButton(12);
         ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
 
-        y = 0; 
-        z = 0; 
         
         break;
 
