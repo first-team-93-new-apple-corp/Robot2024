@@ -8,6 +8,7 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -112,6 +113,11 @@ public class SwerveModule extends SubsystemBase {
     );
   }
 
+  public SwerveModulePosition getPosition() {
+    return new SwerveModulePosition(
+      getDistance(), getAngle());
+  }
+
   public SwerveModuleState getState() {
     return new SwerveModuleState(getVelocity(), getAngle());
   }
@@ -131,15 +137,18 @@ public class SwerveModule extends SubsystemBase {
   int counter;
 
   // calculate the current velocity of the driving wheel
-  public double getVelocity() { //sussy baka
+  public double getVelocity() {
     double VelocityInTicks = Driving_Motor.getSelectedSensorVelocity() * 10;
     double speed =
       VelocityInTicks * Units.inchesToMeters(4 * Math.PI) / (6.75 * 2048);
     counter++;
     if (counter % 50 == 0) {
-      // System.out.println(speed + " " + getAngle());
     }
     return speed;
+  }
+
+  public double getDistance() {
+    return Units.metersToInches(Driving_Motor.getSelectedSensorPosition() * 4 * Math.PI) / (DriveConstants.Driving_Gearing * 2048);
   }
 
   // get angle from can coder

@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -65,7 +66,7 @@ public class DriveSubsystem extends SubsystemBase {
         DriveConstants.Location_BR
       );
 
-    Odometry = new SwerveDriveOdometry(Kinematics, getRotation2d);
+    Odometry = new SwerveDriveOdometry(Kinematics, getRotation2d, getPositions(), getPose());
 
     SmartDashboard.putNumber("Piegeon Angle", getHeading());
     // Setting Up Swerve Modules
@@ -172,8 +173,8 @@ public class DriveSubsystem extends SubsystemBase {
     Boolean HeldButton,
     Boolean HeldButtonReleased,
     Boolean ToggleButton,
-    Boolean ToggleButtonReleased,
-    Translation2d Rotation
+    Boolean ToggleButtonReleased
+    // Translation2d Rotation
   ) {
     SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
 
@@ -232,6 +233,17 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
+  public SwerveModulePosition[] getPositions() {
+    SwerveModulePosition[] positions = {
+      Front_Left.getPosition(),
+      Front_Right.getPosition(),
+      Back_Left.getPosition(),
+      Back_Right.getPosition(),
+    };
+
+    return positions;
+  }
+
   public SwerveModuleState[] getStates() {
     SwerveModuleState[] states = {
       Front_Left.getState(),
@@ -260,7 +272,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     System.out.println(pose);
     Pigeon.setYaw(pose.getRotation().getDegrees());
-    Odometry.resetPosition(pose, pose.getRotation());
+    Odometry.resetPosition(pose.getRotation(), getPositions(), pose);
   }
 
   DecimalFormat round = new DecimalFormat("#.###");
@@ -299,7 +311,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Back Right Cancoder", Back_Right.getCancoderTicks()); 
     SmartDashboard.putNumber("Back Left Cancoder", Back_Left.getCancoderTicks()); 
 
-    Odometry.update(Rotation2d.fromDegrees(getHeading()), getStates());
+    Odometry.update(Rotation2d.fromDegrees(getHeading()), getPositions());
   }
 
   @Override
