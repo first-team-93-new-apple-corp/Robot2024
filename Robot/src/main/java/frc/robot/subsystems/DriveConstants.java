@@ -49,7 +49,6 @@ public final class DriveConstants {
   public static final double Wheel_Base = Units.inchesToMeters(29); //Front To Back
 
   // Gearing Ratios
-  // TODO: UPDATE
   public static final double Turning_Gearing = 12.8;
   public static final double Driving_Gearing = 6.75;
 
@@ -66,7 +65,7 @@ public final class DriveConstants {
   public static final Translation2d Center = new Translation2d(
     -.15,
     .025
-  );/*TODO For Nolen: Reminder to look into this tomorrow, may be causing issues*/
+  );
   public static final Translation2d Front = new Translation2d(
     Wheel_Base / 2,
     0

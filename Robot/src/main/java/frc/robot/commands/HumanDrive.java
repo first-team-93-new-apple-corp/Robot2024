@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -70,8 +69,7 @@ public class HumanDrive extends CommandBase {
 
     rotationHelper = new CustomRotationHelper(m_Joystick1);
 
-    // if the data already exists, then we don't need to add it again
-    // TODO: test this lol
+
     try {
       SmartDashboard.getData("DriveScheme");
     } catch (Exception e) {

@@ -25,14 +25,5 @@
       }
     },
   ],
-  "java.test.defaultConfig": "WPIlibUnitTests",
-  "cSpell.words": [
-    "AHRS",
-    "ctre",
-    "Deadzone",
-    "Holonomic",
-    "motorcontrol",
-    "Odometry",
-    "Trackwidth"
-  ]
+  "java.test.defaultConfig": "WPIlibUnitTests"
 }
