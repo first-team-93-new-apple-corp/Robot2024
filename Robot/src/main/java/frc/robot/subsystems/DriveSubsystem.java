@@ -30,7 +30,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   SwerveDriveKinematics Kinematics;
 
-  Rotation2d getRotation2d;
+  Rotation2d InitialRotation2d;
 
   ChassisSpeeds Speeds;
 
@@ -56,7 +56,7 @@ public class DriveSubsystem extends SubsystemBase {
     Pigeon.configMountPose(AxisDirection.NegativeY, AxisDirection.PositiveZ);
     Pigeon.setYaw(0);
 
-    getRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
+    InitialRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
 
     Kinematics =
       new SwerveDriveKinematics(
@@ -66,7 +66,6 @@ public class DriveSubsystem extends SubsystemBase {
         DriveConstants.Location_BR
       );
 
-    Odometry = new SwerveDriveOdometry(Kinematics, getRotation2d, getPositions(), getPose());
 
     SmartDashboard.putNumber("Piegeon Angle", getHeading());
     // Setting Up Swerve Modules
@@ -101,6 +100,9 @@ public class DriveSubsystem extends SubsystemBase {
         DriveConstants.Encoder_Port_BR,
         DriveConstants.Magnet_Offset_BR
       );
+
+    Odometry = new SwerveDriveOdometry(Kinematics, InitialRotation2d, getPositions());
+
 
   }
 
@@ -173,8 +175,8 @@ public class DriveSubsystem extends SubsystemBase {
     Boolean HeldButton,
     Boolean HeldButtonReleased,
     Boolean ToggleButton,
-    Boolean ToggleButtonReleased
-    // Translation2d Rotation
+    Boolean ToggleButtonReleased,
+    Translation2d Rotation
   ) {
     SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
 

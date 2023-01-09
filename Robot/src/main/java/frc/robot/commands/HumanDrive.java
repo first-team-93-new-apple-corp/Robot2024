@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-// import frc.robot.CustomRotationHelper;
+import frc.robot.CustomRotationHelper;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class HumanDrive extends CommandBase {
@@ -25,7 +25,7 @@ public class HumanDrive extends CommandBase {
   }
 
   private DriveSubsystem m_DriveSubsystem;
-  // private CustomRotationHelper rotationHelper;
+  private CustomRotationHelper rotationHelper;
 
   private XboxController m_F310;
   private Joystick m_Joystick1;
@@ -67,7 +67,7 @@ public class HumanDrive extends CommandBase {
     this.m_Joystick2 = m_Joystick2;
     this.m_F310 = m_F310;
 
-    // rotationHelper = new CustomRotationHelper(m_Joystick1);
+    rotationHelper = new CustomRotationHelper(m_Joystick1);
 
 
     try {
@@ -75,12 +75,12 @@ public class HumanDrive extends CommandBase {
     } catch (Exception e) {
       DriveModeChooser = new SendableChooser<DriveModes>();
 
-      DriveModeChooser.setDefaultOption(
+
+
+      DriveModeChooser.setDefaultOption("2 Stick Drive", DriveModes.Two_Stick_Drive);
+      DriveModeChooser.addOption(
           "1 Stick Drive",
           DriveModes.One_Stick_Drive);
-
-      DriveModeChooser.addOption("2 Stick Drive", DriveModes.Two_Stick_Drive);
-
       DriveModeChooser.addOption("F310 Drive", DriveModes.F310_Drive);
       DriveModeChooser.addOption("F310 Inverted", DriveModes.F310_Drive_Inverted);
       DriveModeChooser.addOption("F310_TurningBumpers", DriveModes.F310_TurningBumpers);
@@ -197,8 +197,8 @@ public class HumanDrive extends CommandBase {
         HeldButton,
         HeldButtonReleased,
         ToggleButton,
-        ToggleButtonReleased);
-        // rotationHelper.povButton());
+        ToggleButtonReleased,
+        rotationHelper.povButton());
   }
 
   /**
