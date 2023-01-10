@@ -80,6 +80,7 @@ public class SwerveModule extends SubsystemBase {
     Turning_Motor.setSelectedSensorPosition(
       (Can_Coder.getAbsolutePosition() / 360.) * (2048 * 12.8)
     );
+    Driving_Motor.setSelectedSensorPosition(0.0);
   }
 
   SwerveModuleState state = new SwerveModuleState(0, new Rotation2d());
@@ -154,16 +155,21 @@ public class SwerveModule extends SubsystemBase {
   // get angle from can coder
   // test to see if get absolute position is continuous
   public Rotation2d getAngle() {
-    return Rotation2d.fromDegrees((Can_Coder.getAbsolutePosition()));
+    // return Rotation2d.fromDegrees((Can_Coder.getAbsolutePosition()));
+    return Rotation2d.fromDegrees(ticksToDegrees(Turning_Motor.getSelectedSensorPosition()));
   }
 
   public double getCancoderTicks(){
     return Can_Coder.getAbsolutePosition(); 
   }
+  public double FrontRightRotations(){
+    return Driving_Motor.getSelectedSensorPosition()/(2048*DriveConstants.Driving_Gearing);
+  }
 
   @Override
   public void periodic() {
     SmartDashboard.putString("State " + driveMotorID, getState().toString());
+    SmartDashboard.putNumber("FrontRightRotations", FrontRightRotations());
   }
 
   @Override
