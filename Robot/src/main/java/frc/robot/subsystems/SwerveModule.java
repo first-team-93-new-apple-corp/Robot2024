@@ -148,7 +148,7 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public double getDistance() {
-    return Units.metersToInches(Driving_Motor.getSelectedSensorPosition() * 4 * Math.PI) / (DriveConstants.Driving_Gearing * 2048);
+    return Units.inchesToMeters(Driving_Motor.getSelectedSensorPosition() * 4 * Math.PI) / (DriveConstants.Driving_Gearing * 2048);
   }
 
   // get angle from can coder

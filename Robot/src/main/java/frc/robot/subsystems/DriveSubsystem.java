@@ -102,6 +102,7 @@ public class DriveSubsystem extends SubsystemBase {
       );
 
     Odometry = new SwerveDriveOdometry(Kinematics, InitialRotation2d, getPositions());
+    resetOdometry(new Pose2d());
 
 
   }
@@ -314,6 +315,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Back Left Cancoder", Back_Left.getCancoderTicks()); 
 
     Odometry.update(Rotation2d.fromDegrees(getHeading()), getPositions());
+    SmartDashboard.putString("Odometry", getPose().toString());
   }
 
   @Override
