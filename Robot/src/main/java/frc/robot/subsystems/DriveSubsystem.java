@@ -279,6 +279,12 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   DecimalFormat round = new DecimalFormat("#.###");
+  
+  public double GetAcceleration(){
+    short[] fill = {0,0,0};
+    Pigeon.getBiasedAccelerometer(fill);
+    return (double)fill[0]/16384.*9.8;
+  }
 
   public void printEncoderValues() {
     SmartDashboard.putString(
@@ -301,11 +307,10 @@ public class DriveSubsystem extends SubsystemBase {
 
 
 
-  @Override
-  public void periodic() {
+  @Override  public void periodic() {
     SmartDashboard.putNumber("Piegeon Angle", getHeading());
 
-
+    SmartDashboard.putNumber("AccelerationX", GetAcceleration());
     // these values should be uncommented when zeroing encoders
     // DO NOT use the ones that show up in shuffleboard, those are sus and not accurate 
     // See Sameer for more info
