@@ -36,6 +36,7 @@ public class ShoulderSubsystem extends SubsystemBase {
   ShoulderMotor1Encoder = ShoulderMotor1.getEncoder();
   ShoulderMotor2Encoder = ShoulderMotor2.getEncoder();
   ShoulderPIDController = ShoulderMotor1.getPIDController();
+  ShoulderMotor1Encoder.getVelocity();
 
   kP = 0.1; 
   kI = 1e-4;
