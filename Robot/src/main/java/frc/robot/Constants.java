@@ -31,4 +31,10 @@ public final class Constants {
   public static final int X3D_BaseMiddleRight = 10;
   public static final int X3D_BaseBackLeft = 11;
   public static final int X3D_BaseBackRight = 12;
+
+
+  public static final double DegreesToRotationsShoulder = 0.0;
+  public static final double InchesToRotationsTelescope =0.0;
+public static final double MaxAngle = 0;
+public static final double MinAngle = 0;
 }

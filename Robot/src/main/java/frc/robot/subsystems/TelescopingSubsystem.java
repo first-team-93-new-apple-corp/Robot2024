@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class TelescopingSubsystem extends SubsystemBase {
 
@@ -46,11 +47,12 @@ public class TelescopingSubsystem extends SubsystemBase {
   TelescopingPIDController.setOutputRange(kMinOutput, kMaxOutput);
 
   }
-  public void RunTelescopingMotors(){
-  double rotations = 0; //TODO
-  TelescopingPIDController.setReference(rotations, CANSparkMax.ControlType.kPosition);
+  public void RunTelescopingMotors(double SetPoint){
+  TelescopingPIDController.setReference(InchestoRotations(SetPoint), CANSparkMax.ControlType.kPosition);
   }
-
+  public double InchestoRotations(double Inches){
+    return Inches * Constants.InchesToRotationsTelescope;
+  }
  
 
   @Override public void periodic() {

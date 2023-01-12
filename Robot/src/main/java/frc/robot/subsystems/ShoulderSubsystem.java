@@ -6,6 +6,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class ShoulderSubsystem extends SubsystemBase {
 
@@ -55,12 +56,20 @@ public class ShoulderSubsystem extends SubsystemBase {
   ShoulderPIDController.setOutputRange(kMinOutput, kMaxOutput);
 
   }
-  public void RunShoulderMotors(){
-  double rotations = 0; //TODO
-  ShoulderPIDController.setReference(rotations, CANSparkMax.ControlType.kPosition);
+  public void RunShoulderMotors(double setPoint){
+  DegreesToRotations(setPoint); 
+  ShoulderPIDController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
   }
+  public double DegreesToRotations(double setPoint){
+    return setPoint * Constants.DegreesToRotationsShoulder;
 
- 
+  }
+  public double RotationsToDegrees(double Rotations){
+    return Rotations * 1/Constants.DegreesToRotationsShoulder;
+  }
+  public double getDegrees(){
+    return ShoulderMotor1Encoder.getPosition(); //TODO should use Rotations
+  }
 
   @Override public void periodic() {
 
