@@ -283,7 +283,7 @@ public class DriveSubsystem extends SubsystemBase {
   public double GetAcceleration(){
     short[] fill = {0,0,0};
     Pigeon.getBiasedAccelerometer(fill);
-    return (double)fill[0]/16384.*9.8;
+    return (double)fill[1]/16384.*9.8;
   }
 
   public void printEncoderValues() {
