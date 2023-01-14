@@ -322,7 +322,7 @@ public class DriveSubsystem extends SubsystemBase {
     Odometry.update(Rotation2d.fromDegrees(getHeading()), getPositions());
     SmartDashboard.putString("Odometry", getPose().toString());
   }
-
+  
   @Override
   public void simulationPeriodic() {}
 }

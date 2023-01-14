@@ -51,8 +51,8 @@ public class RobotContainer {
     // Auton Path Chooser
     AutonChooser = new SendableChooser<Command>();
 
-    AutonChooser.setDefaultOption("No Path", null);
-    AutonChooser.addOption("Test Path", AutonTestPath1.generatePath(m_AutonSubsystem, m_DriveSubsystem));
+    // AutonChooser.setDefaultOption("No Path", null);
+    AutonChooser.setDefaultOption("Test Path", AutonTestPath1.generatePath(m_AutonSubsystem, m_DriveSubsystem));
 
     SmartDashboard.putData("Auton Chooser", AutonChooser);
   

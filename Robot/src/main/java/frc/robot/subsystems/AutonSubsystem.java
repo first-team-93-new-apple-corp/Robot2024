@@ -40,9 +40,9 @@ public class AutonSubsystem extends SubsystemBase {
         trajectory,
         m_DriveSubsystem::getPose, // Pose supplier
         m_DriveSubsystem.Kinematics, // SwerveDriveKinematics
-        new PIDController(1, 0, 0), // if over tuned robot will never stop
-        new PIDController(1, 0, 0), // if over tuned, robot will never stop
-        new PIDController(1, 0, 0), // if under tuned, robot will not reach chassis heading
+        new PIDController(5, 0, 0), // if over tuned robot will never stop
+        new PIDController(5, 0, 0), // if over tuned, robot will never stop
+        new PIDController(5, 0, 0), // if under tuned, robot will not reach chassis heading
         m_DriveSubsystem::setModuleStates, // Module states consumer
         m_DriveSubsystem // Requires this drive subsystem
       ),

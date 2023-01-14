@@ -116,7 +116,8 @@ public class HumanDrive extends CommandBase {
       // one stick driving
       case One_Stick_Drive:
         x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1), Joystick_Deadzone);
-        y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0), Joystick_Deadzone);
+        y = 0;
+        // y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0), Joystick_Deadzone);
         z = checkJoystickDeadzone(m_Joystick1.getRawAxis(2), Joystick_Deadzone);
 
         HeldButton = m_Joystick1.getRawButton(13);
