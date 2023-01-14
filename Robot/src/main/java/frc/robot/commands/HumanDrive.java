@@ -19,9 +19,7 @@ public class HumanDrive extends CommandBase {
   private enum DriveModes {
     One_Stick_Drive,
     Two_Stick_Drive,
-    F310_Drive,
-    F310_Drive_Inverted,
-    F310_TurningBumpers
+    Testing_Drive
   }
 
   private DriveSubsystem m_DriveSubsystem;
@@ -81,9 +79,9 @@ public class HumanDrive extends CommandBase {
       DriveModeChooser.addOption(
           "1 Stick Drive",
           DriveModes.One_Stick_Drive);
-      DriveModeChooser.addOption("F310 Drive", DriveModes.F310_Drive);
-      DriveModeChooser.addOption("F310 Inverted", DriveModes.F310_Drive_Inverted);
-      DriveModeChooser.addOption("F310_TurningBumpers", DriveModes.F310_TurningBumpers);
+      DriveModeChooser.addOption("Testing", DriveModes.Testing_Drive);
+      // DriveModeChooser.addOption("F310 Inverted", DriveModes.F310_Drive_Inverted);
+      // DriveModeChooser.addOption("F310_TurningBumpers", DriveModes.F310_TurningBumpers);
 
       SmartDashboard.putData("Drive Scheme", DriveModeChooser);
     }
@@ -143,52 +141,55 @@ public class HumanDrive extends CommandBase {
         ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
 
         break;
+      case Testing_Drive:
+
+        break; 
       // F310 Drive
-      case F310_Drive:
-        x = checkJoystickDeadzone(m_F310.getRightY(), Controller_Deadzone);
-        x = Math.pow(x, 2) * Math.signum(x);
+      // case F310_Drive:
+      //   x = checkJoystickDeadzone(m_F310.getRightY(), Controller_Deadzone);
+      //   x = Math.pow(x, 2) * Math.signum(x);
 
-        y = checkJoystickDeadzone(m_F310.getRightX(), Controller_Deadzone);
-        y = Math.pow(y, 2) * Math.signum(y);
+      //   y = checkJoystickDeadzone(m_F310.getRightX(), Controller_Deadzone);
+      //   y = Math.pow(y, 2) * Math.signum(y);
 
-        z = checkJoystickDeadzone(m_F310.getLeftX(), Controller_Deadzone);
+      //   z = checkJoystickDeadzone(m_F310.getLeftX(), Controller_Deadzone);
 
-        HeldButton = m_F310.getLeftBumper();
-        HeldButtonReleased = m_F310.getLeftBumperReleased();
+      //   HeldButton = m_F310.getLeftBumper();
+      //   HeldButtonReleased = m_F310.getLeftBumperReleased();
 
-        ToggleButton = m_F310.getRightBumper();
-        ToggleButtonReleased = m_F310.getRightBumperReleased();
-        break;
-      case F310_Drive_Inverted:
-        x = checkJoystickDeadzone(m_F310.getLeftY(), Controller_Deadzone);
-        x = Math.pow(x, 2) * Math.signum(x);
+      //   ToggleButton = m_F310.getRightBumper();
+      //   ToggleButtonReleased = m_F310.getRightBumperReleased();
+      //   break;
+      // case F310_Drive_Inverted:
+      //   x = checkJoystickDeadzone(m_F310.getLeftY(), Controller_Deadzone);
+      //   x = Math.pow(x, 2) * Math.signum(x);
 
-        y = checkJoystickDeadzone(m_F310.getLeftX(), Controller_Deadzone);
-        y = Math.pow(y, 2) * Math.signum(y);
+      //   y = checkJoystickDeadzone(m_F310.getLeftX(), Controller_Deadzone);
+      //   y = Math.pow(y, 2) * Math.signum(y);
 
-        z = checkJoystickDeadzone(m_F310.getRightX(), Controller_Deadzone);
+      //   z = checkJoystickDeadzone(m_F310.getRightX(), Controller_Deadzone);
 
-        HeldButton = m_F310.getLeftBumper();
-        HeldButtonReleased = m_F310.getLeftBumperReleased();
+      //   HeldButton = m_F310.getLeftBumper();
+      //   HeldButtonReleased = m_F310.getLeftBumperReleased();
 
-        ToggleButton = m_F310.getRightBumper();
-        ToggleButtonReleased = m_F310.getRightBumperReleased();
-        break;
-      case F310_TurningBumpers:
-      x = checkJoystickDeadzone(m_F310.getLeftY(), Controller_Deadzone);
-      x = Math.pow(x, 2) * Math.signum(x);
+      //   ToggleButton = m_F310.getRightBumper();
+      //   ToggleButtonReleased = m_F310.getRightBumperReleased();
+      //   break;
+      // case F310_TurningBumpers:
+      // x = checkJoystickDeadzone(m_F310.getLeftY(), Controller_Deadzone);
+      // x = Math.pow(x, 2) * Math.signum(x);
 
-      y = checkJoystickDeadzone(m_F310.getLeftX(), Controller_Deadzone);
-      y = Math.pow(y, 2) * Math.signum(y);
+      // y = checkJoystickDeadzone(m_F310.getLeftX(), Controller_Deadzone);
+      // y = Math.pow(y, 2) * Math.signum(y);
 
-      z = checkJoystickDeadzone(m_F310.getLeftTriggerAxis()*-1+m_F310.getRightTriggerAxis(), 0.05);
+      // z = checkJoystickDeadzone(m_F310.getLeftTriggerAxis()*-1+m_F310.getRightTriggerAxis(), 0.05);
 
-      HeldButton = m_F310.getLeftBumper();
-      HeldButtonReleased = m_F310.getLeftBumperReleased();
+      // HeldButton = m_F310.getLeftBumper();
+      // HeldButtonReleased = m_F310.getLeftBumperReleased();
 
-      ToggleButton = m_F310.getRightBumper();
-      ToggleButtonReleased = m_F310.getRightBumperReleased();
-        break;
+      // ToggleButton = m_F310.getRightBumper();
+      // ToggleButtonReleased = m_F310.getRightBumperReleased();
+      //   break;
     }
 
     m_DriveSubsystem.DriveStateMachine(
