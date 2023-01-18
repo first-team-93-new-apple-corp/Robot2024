@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.CustomRotationHelper;
+// import frc.robot.CustomRotationHelper;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class HumanDrive extends CommandBase {
@@ -23,7 +23,7 @@ public class HumanDrive extends CommandBase {
   }
 
   private DriveSubsystem m_DriveSubsystem;
-  private CustomRotationHelper rotationHelper;
+  // private CustomRotationHelper rotationHelper;
 
   private XboxController m_F310;
   private Joystick m_Joystick1;
@@ -65,7 +65,7 @@ public class HumanDrive extends CommandBase {
     this.m_Joystick2 = m_Joystick2;
     this.m_F310 = m_F310;
 
-    rotationHelper = new CustomRotationHelper(m_Joystick1);
+    // rotationHelper = new CustomRotationHelper(m_Joystick1);
 
 
     try {
@@ -199,8 +199,7 @@ public class HumanDrive extends CommandBase {
         HeldButton,
         HeldButtonReleased,
         ToggleButton,
-        ToggleButtonReleased,
-        rotationHelper.povButton());
+        ToggleButtonReleased);
   }
 
   /**

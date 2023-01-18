@@ -47,7 +47,6 @@ public class DriveSubsystem extends SubsystemBase {
   private DriveState CurrentDriveState = DriveState.DEFAULT_STATE;
 
   public DriveSubsystem() {
-  
 
     SmartDashboard.putBoolean("Field Relative", false);
     SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
@@ -58,52 +57,40 @@ public class DriveSubsystem extends SubsystemBase {
 
     InitialRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
 
-    Kinematics =
-      new SwerveDriveKinematics(
+    Kinematics = new SwerveDriveKinematics(
         DriveConstants.Location_FL,
         DriveConstants.Location_FR,
         DriveConstants.Location_BL,
-        DriveConstants.Location_BR
-      );
-
+        DriveConstants.Location_BR);
 
     SmartDashboard.putNumber("Piegeon Angle", getHeading());
     // Setting Up Swerve Modules
-    Front_Left =
-      new SwerveModule(
+    Front_Left = new SwerveModule(
         DriveConstants.Throttle_Port_FL,
         DriveConstants.Turning_Port_FL,
         DriveConstants.Encoder_Port_FL,
-        DriveConstants.Magnet_Offset_FL
-      );
+        DriveConstants.Magnet_Offset_FL);
 
-    Front_Right =
-      new SwerveModule(
+    Front_Right = new SwerveModule(
         DriveConstants.Throttle_Port_FR,
         DriveConstants.Turning_Port_FR,
         DriveConstants.Encoder_Port_FR,
-        DriveConstants.Magnet_Offset_FR
-      );
+        DriveConstants.Magnet_Offset_FR);
 
-    Back_Left =
-      new SwerveModule(
+    Back_Left = new SwerveModule(
         DriveConstants.Throttle_Port_BL,
         DriveConstants.Turning_Port_BL,
         DriveConstants.Encoder_Port_BL,
-        DriveConstants.Magnet_Offset_BL
-      );
+        DriveConstants.Magnet_Offset_BL);
 
-    Back_Right =
-      new SwerveModule(
+    Back_Right = new SwerveModule(
         DriveConstants.Throttle_Port_BR,
         DriveConstants.Turning_Port_BR,
         DriveConstants.Encoder_Port_BR,
-        DriveConstants.Magnet_Offset_BR
-      );
+        DriveConstants.Magnet_Offset_BR);
 
     Odometry = new SwerveDriveOdometry(Kinematics, InitialRotation2d, getPositions());
     resetOdometry(new Pose2d());
-
 
   }
 
@@ -120,36 +107,29 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void drive(
-    double X,
-    double Y,
-    double Z,
-    boolean Field_Relative,
-    Translation2d COR
-  ) {
+      double X,
+      double Y,
+      double Z,
+      boolean Field_Relative,
+      Translation2d COR) {
 
-  
     if (!Field_Relative) {
-      Speeds =
-        new ChassisSpeeds(
+      Speeds = new ChassisSpeeds(
           X * DriveConstants.Max_Strafe_Speed,
           Y * DriveConstants.Max_Strafe_Speed,
-          Z * DriveConstants.Max_Angular_Speed
-        );
+          Z * DriveConstants.Max_Angular_Speed);
     } else {
-      Speeds =
-        ChassisSpeeds.fromFieldRelativeSpeeds(
+      Speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
           X * DriveConstants.Max_Strafe_Speed,
           Y * DriveConstants.Max_Strafe_Speed,
           Z * DriveConstants.Max_Angular_Speed,
-          Rotation2d.fromDegrees(getHeading())
-        );
+          Rotation2d.fromDegrees(getHeading()));
     }
     // Swerve module states
     SwerveModuleState[] States = Kinematics.toSwerveModuleStates(Speeds, COR);
     SwerveDriveKinematics.desaturateWheelSpeeds(
-      States,
-      DriveConstants.Max_Strafe_Speed
-    );
+        States,
+        DriveConstants.Max_Strafe_Speed);
 
     // this is so that the angle is saved and not auto set to 0 even after strafe
     if (X == 0 && Y == 0 && Z == 0) {
@@ -170,15 +150,13 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void DriveStateMachine(
-    double x,
-    double y,
-    double z,
-    Boolean HeldButton,
-    Boolean HeldButtonReleased,
-    Boolean ToggleButton,
-    Boolean ToggleButtonReleased,
-    Translation2d Rotation
-  ) {
+      double x,
+      double y,
+      double z,
+      Boolean HeldButton,
+      Boolean HeldButtonReleased,
+      Boolean ToggleButton,
+      Boolean ToggleButtonReleased) {
     SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
 
     if (CurrentDriveState == DriveState.DEFAULT_STATE) {
@@ -238,10 +216,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   public SwerveModulePosition[] getPositions() {
     SwerveModulePosition[] positions = {
-      Front_Left.getPosition(),
-      Front_Right.getPosition(),
-      Back_Left.getPosition(),
-      Back_Right.getPosition(),
+        Front_Left.getPosition(),
+        Front_Right.getPosition(),
+        Back_Left.getPosition(),
+        Back_Right.getPosition(),
     };
 
     return positions;
@@ -249,10 +227,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   public SwerveModuleState[] getStates() {
     SwerveModuleState[] states = {
-      Front_Left.getState(),
-      Front_Right.getState(),
-      Back_Left.getState(),
-      Back_Right.getState(),
+        Front_Left.getState(),
+        Front_Right.getState(),
+        Back_Left.getState(),
+        Back_Right.getState(),
     };
 
     return states;
@@ -265,8 +243,14 @@ public class DriveSubsystem extends SubsystemBase {
   public double getHeading() {
     double yaw = Pigeon.getYaw();
     yaw = yaw % 360;
+
+    if (yaw < 0) {
+      yaw = 360 + yaw;
+    }
     return yaw;
   }
+
+  
 
   public void zeroHeading() {
     Pigeon.setYaw(0);
@@ -278,51 +262,52 @@ public class DriveSubsystem extends SubsystemBase {
     Odometry.resetPosition(pose.getRotation(), getPositions(), pose);
   }
 
+  public double getLevel() {
+    return Pigeon.getPitch();
+  }
+
   DecimalFormat round = new DecimalFormat("#.###");
-  
-  public double GetAcceleration(){
-    short[] fill = {0,0,0};
+
+  public double GetAcceleration() {
+    short[] fill = { 0, 0, 0 };
     Pigeon.getBiasedAccelerometer(fill);
-    return (double)fill[1]/16384.*9.8;
+    return (double) fill[1] / 16384. * 9.8;
   }
 
   public void printEncoderValues() {
     SmartDashboard.putString(
-      "Front Right Encoder",
-      round.format(Front_Right.getAngle().getDegrees())
-    );
+        "Front Right Encoder",
+        round.format(Front_Right.getAngle().getDegrees()));
     SmartDashboard.putString(
-      "Front Left Encoder",
-      round.format(Front_Left.getAngle().getDegrees())
-    );
+        "Front Left Encoder",
+        round.format(Front_Left.getAngle().getDegrees()));
     SmartDashboard.putString(
-      "Back Right Encoder",
-      round.format(Back_Right.getAngle().getDegrees())
-    );
+        "Back Right Encoder",
+        round.format(Back_Right.getAngle().getDegrees()));
     SmartDashboard.putString(
-      "Back Left Encoder",
-      round.format(Back_Left.getAngle().getDegrees())
-    );
+        "Back Left Encoder",
+        round.format(Back_Left.getAngle().getDegrees()));
   }
 
-
-
-  @Override  public void periodic() {
+  @Override
+  public void periodic() {
     SmartDashboard.putNumber("Piegeon Angle", getHeading());
 
     SmartDashboard.putNumber("AccelerationX", GetAcceleration());
     // these values should be uncommented when zeroing encoders
-    // DO NOT use the ones that show up in shuffleboard, those are sus and not accurate 
+    // DO NOT use the ones that show up in shuffleboard, those are sus and not
+    // accurate
     // See Sameer for more info
-    SmartDashboard.putNumber("Front Right Cancoder", Front_Right.getCancoderTicks()); 
-    SmartDashboard.putNumber("Front Left Cancoder", Front_Left.getCancoderTicks()); 
-    SmartDashboard.putNumber("Back Right Cancoder", Back_Right.getCancoderTicks()); 
-    SmartDashboard.putNumber("Back Left Cancoder", Back_Left.getCancoderTicks()); 
+    SmartDashboard.putNumber("Front Right Cancoder", Front_Right.getCancoderTicks());
+    SmartDashboard.putNumber("Front Left Cancoder", Front_Left.getCancoderTicks());
+    SmartDashboard.putNumber("Back Right Cancoder", Back_Right.getCancoderTicks());
+    SmartDashboard.putNumber("Back Left Cancoder", Back_Left.getCancoderTicks());
 
     Odometry.update(Rotation2d.fromDegrees(getHeading()), getPositions());
     SmartDashboard.putString("Odometry", getPose().toString());
   }
-  
+
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+  }
 }

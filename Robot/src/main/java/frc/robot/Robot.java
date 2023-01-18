@@ -15,7 +15,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    setNetworkTablesFlushEnabled(true);
+    // setNetworkTablesFlushEnabled(true); 
 
     m_robotContainer = new RobotContainer();
 
@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     SmartDashboard.putBoolean("Enabled?", isEnabled());
-    SmartDashboard.putNumber("Current draw", examplePD.getTotalCurrent());
+    // SmartDashboard.putNumber("Current draw", examplePD.getTotalCurrent());
   }
 
   @Override
