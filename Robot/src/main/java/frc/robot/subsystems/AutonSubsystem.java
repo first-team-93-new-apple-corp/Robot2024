@@ -33,7 +33,7 @@ public class AutonSubsystem extends SubsystemBase {
       new InstantCommand(() -> {
         // Reset odometry for the first path you run during auto
         if (isFirstPath) {
-          m_DriveSubsystem.resetOdometry(trajectory.getInitialHolonomicPose());
+          m_DriveSubsystem.resetOdometry(trajectory.getInitialPose());
         }
       }),
       new PPSwerveControllerCommand(

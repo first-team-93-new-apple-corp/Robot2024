@@ -46,6 +46,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   private DriveState CurrentDriveState = DriveState.DEFAULT_STATE;
 
+  public double Starting_Level; 
+
   public DriveSubsystem() {
 
     SmartDashboard.putBoolean("Field Relative", false);
@@ -54,6 +56,10 @@ public class DriveSubsystem extends SubsystemBase {
     Pigeon = new Pigeon2(0);
     Pigeon.configMountPose(AxisDirection.NegativeY, AxisDirection.PositiveZ);
     Pigeon.setYaw(0);
+    // Pigeon.configMountPosePitch(1);
+    // Pigeon.setPitch(0); 
+    Starting_Level = Pigeon.getPitch(); 
+    
 
     InitialRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
 
@@ -305,6 +311,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     Odometry.update(Rotation2d.fromDegrees(getHeading()), getPositions());
     SmartDashboard.putString("Odometry", getPose().toString());
+    SmartDashboard.putNumber("Level", getLevel()); 
   }
 
   @Override

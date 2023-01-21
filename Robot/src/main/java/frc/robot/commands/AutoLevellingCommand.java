@@ -2,8 +2,11 @@ package frc.robot.commands;
 
 import java.util.logging.Level;
 
+import javax.swing.text.StyleContext.SmallAttributeSet;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class AutoLevellingCommand extends CommandBase {
@@ -16,7 +19,7 @@ public class AutoLevellingCommand extends CommandBase {
 
         this.m_DriveSubsystem = m_DriveSubsystem;
 
-        LevellingPID = new PIDController(0, 0, 0);
+        LevellingPID = new PIDController(0.01, 0.001, 0);
         LevellingPID.setTolerance(1);
 
 
@@ -27,7 +30,7 @@ public class AutoLevellingCommand extends CommandBase {
     @Override
     public void initialize() {
 
-        LevellingPID.setSetpoint(0);
+        LevellingPID.setSetpoint(m_DriveSubsystem.Starting_Level);
     }
 
     double MotorCommand;
@@ -36,7 +39,8 @@ public class AutoLevellingCommand extends CommandBase {
     public void execute() {
         MotorCommand = LevellingPID.calculate(m_DriveSubsystem.getLevel());
 
-        System.out.println(MotorCommand);
+        m_DriveSubsystem.drive(MotorCommand, 0, 0, false, DriveConstants.Center);
+        // System.out.println(MotorCommand);
     }
 
     @Override
@@ -45,6 +49,9 @@ public class AutoLevellingCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return true;
+     
+        // return LevellingPID.atSetpoint();
+
+        return false; 
     }
 }
