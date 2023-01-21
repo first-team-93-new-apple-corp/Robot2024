@@ -5,6 +5,8 @@ import java.util.logging.Level;
 import javax.swing.text.StyleContext.SmallAttributeSet;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
@@ -14,14 +16,18 @@ public class AutoLevellingCommand extends CommandBase {
     DriveSubsystem m_DriveSubsystem;
 
     PIDController LevellingPID;
+    Timer eliasTimer;
+
+    final double TimeAtLevel = 0.5; 
 
     public AutoLevellingCommand(DriveSubsystem m_DriveSubsystem) {
 
         this.m_DriveSubsystem = m_DriveSubsystem;
 
-        LevellingPID = new PIDController(0.01, 0.001, 0);
+        LevellingPID = new PIDController(0.01, 0.007, 0.002);
         LevellingPID.setTolerance(1);
 
+        eliasTimer = new Timer();
 
         addRequirements(m_DriveSubsystem);
 
@@ -30,7 +36,7 @@ public class AutoLevellingCommand extends CommandBase {
     @Override
     public void initialize() {
 
-        LevellingPID.setSetpoint(m_DriveSubsystem.Starting_Level);
+        LevellingPID.setSetpoint(0);
     }
 
     double MotorCommand;
@@ -39,19 +45,33 @@ public class AutoLevellingCommand extends CommandBase {
     public void execute() {
         MotorCommand = LevellingPID.calculate(m_DriveSubsystem.getLevel());
 
+        if (MotorCommand > 0.3) {
+            MotorCommand = 0.3;
+            System.out.println("TOO FAST lol ");
+        }
         m_DriveSubsystem.drive(MotorCommand, 0, 0, false, DriveConstants.Center);
-        // System.out.println(MotorCommand);
+
     }
 
     @Override
     public void end(boolean interrupted) {
+        m_DriveSubsystem.drive(0, 0, 0, false, DriveConstants.Center);
+
     }
 
     @Override
     public boolean isFinished() {
-     
-        // return LevellingPID.atSetpoint();
+        if (LevellingPID.atSetpoint()) {
 
-        return false; 
+
+            eliasTimer.start();
+        } else { 
+            eliasTimer.stop();
+            eliasTimer.reset();
+        }
+
+
+        return eliasTimer.advanceIfElapsed(TimeAtLevel);
+
     }
 }

@@ -45,8 +45,7 @@ public class AutonSubsystem extends SubsystemBase {
         new PIDController(5, 0, 0), // if under tuned, robot will not reach chassis heading
         m_DriveSubsystem::setModuleStates, // Module states consumer
         m_DriveSubsystem // Requires this drive subsystem
-      ),
-      new StopDriveCommand(m_DriveSubsystem)
+      )
     );
   }
 

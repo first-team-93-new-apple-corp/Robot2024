@@ -10,7 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.HumanDrive;
-import frc.robot.commands.AutonCommands.AutonTestPath1;
+import frc.robot.commands.AutonCommands.CableBumpBlue1Pickup;
+import frc.robot.commands.AutonCommands.DriveAndLevel;
 import frc.robot.subsystems.AutonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -52,7 +53,8 @@ public class RobotContainer {
     AutonChooser = new SendableChooser<Command>();
 
     // AutonChooser.setDefaultOption("No Path", null);
-    AutonChooser.setDefaultOption("Test Path", AutonTestPath1.generatePath(m_AutonSubsystem, m_DriveSubsystem));
+    AutonChooser.addOption("Test Path", DriveAndLevel.generatePath(m_AutonSubsystem, m_DriveSubsystem));
+    AutonChooser.setDefaultOption("CableBumpBlue1Pickup", CableBumpBlue1Pickup.generatePath(m_AutonSubsystem, m_DriveSubsystem));
 
     SmartDashboard.putData("Auton Chooser", AutonChooser);
   

@@ -39,6 +39,7 @@ public class StopDriveCommand extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
+    System.out.println("DONE WITH AUTO!!!");
   }
 
   @Override

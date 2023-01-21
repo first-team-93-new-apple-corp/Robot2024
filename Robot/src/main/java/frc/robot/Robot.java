@@ -15,7 +15,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    // setNetworkTablesFlushEnabled(true); 
+    setNetworkTablesFlushEnabled(true); 
 
     m_robotContainer = new RobotContainer();
 

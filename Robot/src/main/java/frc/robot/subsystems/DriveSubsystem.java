@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.text.DecimalFormat;
+import java.util.concurrent.locks.Lock;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -46,6 +47,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   private DriveState CurrentDriveState = DriveState.DEFAULT_STATE;
 
+  private SwerveModuleState[] LockWheelState; 
+
   public double Starting_Level; 
 
   public DriveSubsystem() {
@@ -59,6 +62,17 @@ public class DriveSubsystem extends SubsystemBase {
     // Pigeon.configMountPosePitch(1);
     // Pigeon.setPitch(0); 
     Starting_Level = Pigeon.getPitch(); 
+
+    LockWheelState = new SwerveModuleState[4]; 
+
+    // Front Left
+    LockWheelState[0] = new SwerveModuleState(0 , Rotation2d.fromDegrees(45)); 
+    //Front Right
+    LockWheelState[1] = new SwerveModuleState(0 , Rotation2d.fromDegrees(-45));
+    //Back Left 
+    LockWheelState[2] = new SwerveModuleState(0 , Rotation2d.fromDegrees(-45)); 
+    //Back Right
+    LockWheelState[3] = new SwerveModuleState(0 , Rotation2d.fromDegrees(45)); 
     
 
     InitialRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
@@ -98,6 +112,14 @@ public class DriveSubsystem extends SubsystemBase {
     Odometry = new SwerveDriveOdometry(Kinematics, InitialRotation2d, getPositions());
     resetOdometry(new Pose2d());
 
+  }
+
+  public void lockWheels(){
+    SavedStates = LockWheelState;
+    Front_Left.setDesiredState(LockWheelState[0]);
+    Front_Right.setDesiredState(LockWheelState[1]);
+    Back_Left.setDesiredState(LockWheelState[2]);
+    Back_Right.setDesiredState(LockWheelState[3]);
   }
 
   public void setModuleStates(SwerveModuleState[] States) {
@@ -263,7 +285,9 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void resetOdometry(Pose2d pose) {
-    System.out.println(pose);
+    System.out.println("INTIAL POSE");
+    System.out.println(pose + "\n");
+
     Pigeon.setYaw(pose.getRotation().getDegrees());
     Odometry.resetPosition(pose.getRotation(), getPositions(), pose);
   }
