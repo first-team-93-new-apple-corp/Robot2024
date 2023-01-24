@@ -57,7 +57,7 @@ public final class DriveConstants {
     (TalonFX_RPS / Driving_Gearing) * Wheel_Circumference; // m/s
   public static final double Max_Angular_Speed = 2 * Math.PI; // m/s
   public static final double Max_Angular_Acceleration = 2 * Math.PI;
-  public static final double Max_Acceleration = 4;
+  public static final double Max_Acceleration = 2;
   public static final double Max_Volts = 12.0;
 
 
