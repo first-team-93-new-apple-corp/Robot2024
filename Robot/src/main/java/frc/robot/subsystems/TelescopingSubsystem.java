@@ -23,33 +23,40 @@ public class TelescopingSubsystem extends SubsystemBase {
     DEFAULT_STATE,
     GROUND_LOAD,
     PLAYER_LOAD,
+    LOW_HYBRID,
     MID_CONE,
     MID_CUBE,
     HIGH_CUBE,
-    HIGH_CONE,
-    LOW_HYBRID
+    HIGH_CONE
   }
 
-  public WPI_TalonSRX TelescopingMotor1;
+  WPI_TalonSRX TelescopingMotor1;
   TalonSRXConfiguration TelescopeConfig;
+
+
   DigitalInput limitSwitch;
 
-  public double Setpoint = 0;
-  public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
+  double Setpoint = 0;
+  double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
   public TelescopingSubsystem() {
     TelescopingMotor1 = new WPI_TalonSRX(16);
     TelescopeConfig = new TalonSRXConfiguration();
-    kP = 0.025;
+    kP = 0.1;
     kI = 0;
     kD = 0;
 
     TelescopeConfig.slot0.kP = kP;
     TelescopeConfig.slot0.kI = kI;
     TelescopeConfig.slot0.kD = kD;
+
+
+
     limitSwitch = new DigitalInput(0);
     TelescopeConfig.slot0.closedLoopPeakOutput = 0.15;
     TelescopingMotor1.configAllSettings(TelescopeConfig);
+    
+    
     SmartDashboard.putNumber("Setpoint", Setpoint);
     SmartDashboard.putNumber("CurrentPose", TicksToInchesTelescope(TelescopingMotor1.getSelectedSensorPosition()));
     SmartDashboard.putNumber("kP", kP);
@@ -85,6 +92,7 @@ public class TelescopingSubsystem extends SubsystemBase {
     TelescopeConfig.slot0.kP = SmartDashboard.getNumber("kI", 0);
     TelescopeConfig.slot0.kD = SmartDashboard.getNumber("kI", 0);
     TelescopingMotor1.configAllSettings(TelescopeConfig);
+
 
   }
 
