@@ -10,16 +10,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShoulderSubsystem;
 import frc.robot.subsystems.TelescopingSubsystem;
 
-public class TestingArmCommand extends CommandBase {
+public class TelescopingManualCommand extends CommandBase {
 
 
     TelescopingSubsystem m_TelescopingSubsystem; 
-
+    double speed;
 
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-    public TestingArmCommand(TelescopingSubsystem m_TelescopingSubsystem) {
+    public TelescopingManualCommand(TelescopingSubsystem m_TelescopingSubsystem,double speed) {
         this.m_TelescopingSubsystem = m_TelescopingSubsystem; 
-
+        this.speed = speed;
         addRequirements(m_TelescopingSubsystem);
 
     }
@@ -31,9 +31,7 @@ public class TestingArmCommand extends CommandBase {
 
     @Override
     public void execute() {
-        // m_TelescopingSubsystem.OscilateArm();
-        // m_TelescopingSubsystem.directMotorCommand(0.1);
-        m_TelescopingSubsystem.toSetpoint(5000);
+        m_TelescopingSubsystem.directMotorCommand(speed);
     }
 
     @Override

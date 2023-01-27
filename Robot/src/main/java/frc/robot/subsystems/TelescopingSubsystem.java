@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import javax.naming.LimitExceededException;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -42,9 +43,10 @@ public class TelescopingSubsystem extends SubsystemBase {
   public TelescopingSubsystem() {
     TelescopingMotor1 = new WPI_TalonSRX(16);
     TelescopeConfig = new TalonSRXConfiguration();
-    kP = 0.025;
+    TelescopingMotor1.setNeutralMode(NeutralMode.Brake);
+    kP = 0.7;
     kI = 0;
-    kD = 0;
+    kD = 0.5;
 
     TelescopeConfig.slot0.kP = kP;
     TelescopeConfig.slot0.kI = kI;
@@ -53,12 +55,14 @@ public class TelescopingSubsystem extends SubsystemBase {
     ExtendedLimitSwitch = new DigitalInput(0);
     ClosedLimitSwitch = new DigitalInput(9);
 
-    TelescopeConfig.slot0.closedLoopPeakOutput = 0.15;
+    TelescopeConfig.slot0.closedLoopPeakOutput = 1;
+
     TelescopingMotor1.configAllSettings(TelescopeConfig);
+    TelescopingMotor1.setSensorPhase(true);
     SmartDashboard.putNumber("Setpoint", Setpoint);
     SmartDashboard.putNumber("CurrentPose", TicksToInchesTelescope(TelescopingMotor1.getSelectedSensorPosition()));
     SmartDashboard.putNumber("kP", kP);
-    SmartDashboard.putNumber("kI", kI);
+    // SmartDashboard.putNumber("kI", kI);
     SmartDashboard.putNumber("kD", kD);
 
   }
@@ -68,8 +72,14 @@ public class TelescopingSubsystem extends SubsystemBase {
     Stop_Backwards,
     Stop_Forwards,
     Backwards
-
   }
+
+
+  public void toSetpoint(int Setpoint){
+
+    TelescopingMotor1.set(ControlMode.Position, Setpoint);
+  }
+
 
   public void stopMotor(){
     TelescopingMotor1.set(0); 
@@ -131,6 +141,9 @@ public class TelescopingSubsystem extends SubsystemBase {
     this.Setpoint = SetPoint;
     TelescopingMotor1.set(ControlMode.Position, InchesToTicksTelescope(SetPoint));
   }
+  public void directMotorCommand(double speed){
+    TelescopingMotor1.set(speed);
+  }
 
   public double InchesToTicksTelescope(double Inches) {
     return Inches * Constants.InchesToTicksTelescope;
@@ -140,27 +153,38 @@ public class TelescopingSubsystem extends SubsystemBase {
     return Ticks / Constants.InchesToTicksTelescope;
   }
 
-  // public void zeroEncoder() {
-  //   if (ClosedLimitSwitch.get()) {
-  //     TelescopingMotor1.setSelectedSensorPosition(0);
-  //   } else if (ExtendedLimitSwitch.get()) {
-  //     // Set Extended Ticks Here
-  //     // TelescopingMotor1.setSelectedSensorPosition()
+  // TODO: Set value only on rising edge and set closed to 406 and extend to 13172
+  public void SetEncoder() {
+    if (!ClosedLimitSwitch.get()) {
+      TelescopingMotor1.setSelectedSensorPosition(0);
+    } else if (!ExtendedLimitSwitch.get()) {
+      // Set Extended Ticks Here
+      TelescopingMotor1.setSelectedSensorPosition(13537); 
 
-  //   }
-  // }
+    }
+  }
 
   @Override
   public void periodic() {
     // zeroEncoder();
     SmartDashboard.putNumber("Setpoint", Setpoint);
-    SmartDashboard.putNumber("CurrentPose", TelescopingMotor1.getSelectedSensorPosition());
-    TelescopeConfig.slot0.kP = SmartDashboard.getNumber("kP", 0);
-    TelescopeConfig.slot0.kP = SmartDashboard.getNumber("kI", 0);
-    TelescopeConfig.slot0.kD = SmartDashboard.getNumber("kI", 0);
-    TelescopingMotor1.configAllSettings(TelescopeConfig);
+    double position = TelescopingMotor1.getSelectedSensorPosition(); 
+
+    // if(position < 0){
+    //   position *= -1; 
+    // }
+    SmartDashboard.putNumber("CurrentPose", position);
+    TelescopingMotor1.config_kP(0, SmartDashboard.getNumber("kP", kP));
+    TelescopingMotor1.config_kD(0, SmartDashboard.getNumber("kD", kD));
+
+    // TelescopeConfig.slot0.kD = SmartDashboard.getNumber("kD", 0);
+    // TelescopingMotor1.configAllSettings(TelescopeConfig);
+    // TelescopingMotor1.setSensorPhase(true);
+    
+    SetEncoder();
 
   }
+
 
   @Override
   public void simulationPeriodic() {
