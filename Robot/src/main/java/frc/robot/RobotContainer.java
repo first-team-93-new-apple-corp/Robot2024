@@ -9,10 +9,15 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.TestingArmCommand;
 import frc.robot.subsystems.TelescopingSubsystem;
 
 public class RobotContainer {
   TelescopingSubsystem m_telescopingSubsystem;
+  XboxController m_F310; 
+
+  JoystickButton arm_Button; 
 
   // Joysticks
 
@@ -22,9 +27,12 @@ public class RobotContainer {
   public RobotContainer() {
 
     //Controllers
+    m_F310 = new XboxController(0); 
+    arm_Button = new JoystickButton(m_F310, 1);
 
     //Subsystems
     m_telescopingSubsystem = new TelescopingSubsystem();
+
     //Commands
 
     configureButtonBindings();
@@ -32,6 +40,9 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
+    arm_Button.whileTrue(new TestingArmCommand(m_telescopingSubsystem));
+
+    
   }
 
   public Command getTeleopCommand() {

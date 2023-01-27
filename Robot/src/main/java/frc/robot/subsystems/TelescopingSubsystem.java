@@ -13,6 +13,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -32,7 +33,8 @@ public class TelescopingSubsystem extends SubsystemBase {
 
   public WPI_TalonSRX TelescopingMotor1;
   TalonSRXConfiguration TelescopeConfig;
-  DigitalInput limitSwitch;
+  DigitalInput ExtendedLimitSwitch;
+  DigitalInput ClosedLimitSwitch;
 
   public double Setpoint = 0;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
@@ -47,7 +49,10 @@ public class TelescopingSubsystem extends SubsystemBase {
     TelescopeConfig.slot0.kP = kP;
     TelescopeConfig.slot0.kI = kI;
     TelescopeConfig.slot0.kD = kD;
-    limitSwitch = new DigitalInput(0);
+
+    ExtendedLimitSwitch = new DigitalInput(0);
+    ClosedLimitSwitch = new DigitalInput(9);
+
     TelescopeConfig.slot0.closedLoopPeakOutput = 0.15;
     TelescopingMotor1.configAllSettings(TelescopeConfig);
     SmartDashboard.putNumber("Setpoint", Setpoint);
@@ -56,6 +61,70 @@ public class TelescopingSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("kI", kI);
     SmartDashboard.putNumber("kD", kD);
 
+  }
+
+  enum test {
+    Forward,
+    Stop_Backwards,
+    Stop_Forwards,
+    Backwards
+
+  }
+
+  public void stopMotor(){
+    TelescopingMotor1.set(0); 
+  }
+  test current_state = test.Backwards;
+  Timer testing = new Timer();
+  double speed = 0.2; 
+
+  public void OscilateArm() {
+
+    switch (current_state) {
+      case Forward:
+        if (!ExtendedLimitSwitch.get()) {
+          current_state = test.Stop_Backwards;
+          TelescopingMotor1.set(0);
+          testing.reset();
+          testing.start();
+
+        } else {
+          TelescopingMotor1.set(speed);
+
+        }
+        break;
+      case Backwards:
+        if (!ClosedLimitSwitch.get()) {
+          TelescopingMotor1.setSelectedSensorPosition(0); 
+
+          current_state = test.Stop_Forwards;
+          TelescopingMotor1.set(0);
+          testing.reset();
+          testing.start();
+        } else {
+          TelescopingMotor1.set(-speed);
+
+        }
+        break;
+
+      case Stop_Backwards:
+        if (testing.advanceIfElapsed(2)) {
+          testing.stop();
+          current_state = test.Backwards;
+        }
+        break;
+      case Stop_Forwards:
+        if (testing.advanceIfElapsed(2)) {
+          testing.stop();
+          current_state = test.Forward;
+        }
+        break;
+      default:
+        break;
+
+    }
+
+    System.out.println(TelescopingMotor1.getSelectedSensorPosition());
   }
 
   public void RunTelescopingMotors(double SetPoint) {
@@ -70,15 +139,20 @@ public class TelescopingSubsystem extends SubsystemBase {
   public double TicksToInchesTelescope(double Ticks) {
     return Ticks / Constants.InchesToTicksTelescope;
   }
-  public void zeroEncoder() {
-    if(limitSwitch.get()){
-      TelescopingMotor1.setSelectedSensorPosition(0);
-    }
-  }
+
+  // public void zeroEncoder() {
+  //   if (ClosedLimitSwitch.get()) {
+  //     TelescopingMotor1.setSelectedSensorPosition(0);
+  //   } else if (ExtendedLimitSwitch.get()) {
+  //     // Set Extended Ticks Here
+  //     // TelescopingMotor1.setSelectedSensorPosition()
+
+  //   }
+  // }
 
   @Override
   public void periodic() {
-    zeroEncoder();
+    // zeroEncoder();
     SmartDashboard.putNumber("Setpoint", Setpoint);
     SmartDashboard.putNumber("CurrentPose", TelescopingMotor1.getSelectedSensorPosition());
     TelescopeConfig.slot0.kP = SmartDashboard.getNumber("kP", 0);

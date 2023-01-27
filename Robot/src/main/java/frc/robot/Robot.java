@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    m_robotContainer.getTeleopCommand().schedule();
+    // m_robotContainer.getTeleopCommand().schedule();
   }
 
   @Override
