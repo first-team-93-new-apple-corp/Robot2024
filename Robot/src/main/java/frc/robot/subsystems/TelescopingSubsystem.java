@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import javax.naming.LimitExceededException;
+import javax.print.attribute.SetOfIntegerSyntax;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -33,6 +34,9 @@ public class TelescopingSubsystem extends SubsystemBase {
   }
 
   public WPI_TalonSRX TelescopingMotor1;
+
+  final int MinTicks = 181; 
+  final int MaxTicks = 13363;
   TalonSRXConfiguration TelescopeConfig;
   DigitalInput ExtendedLimitSwitch;
   DigitalInput ClosedLimitSwitch;
@@ -58,12 +62,19 @@ public class TelescopingSubsystem extends SubsystemBase {
     TelescopeConfig.slot0.closedLoopPeakOutput = 1;
 
     TelescopingMotor1.configAllSettings(TelescopeConfig);
+    TelescopingMotor1.setSelectedSensorPosition(-MaxTicks);
+
     TelescopingMotor1.setSensorPhase(true);
-    SmartDashboard.putNumber("Setpoint", Setpoint);
+
+
+    // SmartDashboard.putNumber("Arm Setpoint", 0);
     SmartDashboard.putNumber("CurrentPose", TicksToInchesTelescope(TelescopingMotor1.getSelectedSensorPosition()));
     SmartDashboard.putNumber("kP", kP);
     // SmartDashboard.putNumber("kI", kI);
     SmartDashboard.putNumber("kD", kD);
+
+
+
 
   }
 
@@ -74,19 +85,48 @@ public class TelescopingSubsystem extends SubsystemBase {
     Backwards
   }
 
+  double limit = 2000; 
 
-  public void toSetpoint(int Setpoint){
+  public void toSetpoint(double Setpoint) {
 
-    TelescopingMotor1.set(ControlMode.Position, Setpoint);
+    // if we arent extending and we are within 500 ticks of our limit switch, then
+    // stop
+    if ((Setpoint < getTicks()) && (getTicks() - limit) < MinTicks) {
+      TelescopingMotor1.set(0);
+
+    }
+    // if we are extending and we are within 500 of our extended limit switch, then
+    // stop
+    else if ((Setpoint > getTicks()) && ((getTicks() + limit) > MaxTicks)) {
+
+      TelescopingMotor1.set(0);
+
+    }
+
+    // if our zero limit switch is triggered and we aren't extending
+    else if (ClosedSwitchTriggered() && (Setpoint < getTicks())) {
+      TelescopingMotor1.set(0);
+
+    }
+    // if our extended limit switch is triggered and we aren't retracting
+    else if (ExtendedSwitchTriggered() && (Setpoint > getTicks())) {
+      TelescopingMotor1.set(0);
+
+    }
+    // if all of those are somehow false, then we can actually run the arm lmao...%
+    else {
+      TelescopingMotor1.set(ControlMode.Position, Setpoint);
+
+    }
   }
 
-
-  public void stopMotor(){
-    TelescopingMotor1.set(0); 
+  public void stopMotor() {
+    TelescopingMotor1.set(0);
   }
+
   test current_state = test.Backwards;
   Timer testing = new Timer();
-  double speed = 0.2; 
+  double speed = 0.2;
 
   public void OscilateArm() {
 
@@ -105,7 +145,7 @@ public class TelescopingSubsystem extends SubsystemBase {
         break;
       case Backwards:
         if (!ClosedLimitSwitch.get()) {
-          TelescopingMotor1.setSelectedSensorPosition(0); 
+          TelescopingMotor1.setSelectedSensorPosition(0);
 
           current_state = test.Stop_Forwards;
           TelescopingMotor1.set(0);
@@ -141,8 +181,66 @@ public class TelescopingSubsystem extends SubsystemBase {
     this.Setpoint = SetPoint;
     TelescopingMotor1.set(ControlMode.Position, InchesToTicksTelescope(SetPoint));
   }
-  public void directMotorCommand(double speed){
+
+  public void directMotorCommand(double speed) {
     TelescopingMotor1.set(speed);
+  }
+
+  // only returns true on rising edge
+
+  boolean LastExtendedLimitSwitchState = false;
+  boolean LastClosedLimitSwitchState = false;
+
+  public boolean getRisingEdgeClosedSwitch() {
+
+    // if we are triggered and weren't last control cycle, then we should return
+    // true
+    boolean currentStatus = ClosedSwitchTriggered();
+
+    // if these are both true, then we return false
+    boolean return_value = (currentStatus && !LastClosedLimitSwitchState);
+
+    // setting
+    LastClosedLimitSwitchState = currentStatus;
+
+
+    if(return_value){
+      System.out.println("IT WORKS");
+    }
+
+
+    return return_value;
+
+  }
+
+  public boolean getRisingEdgeExtendedSwitch() {
+
+    // if we are triggered and weren't last control cycle, then we should return
+    // true
+    boolean currentStatus = ExtendedSwitchTriggered();
+
+    // if these are both true, then we return false
+    boolean return_value = (currentStatus && !LastExtendedLimitSwitchState);
+
+    // setting
+    LastExtendedLimitSwitchState = currentStatus;
+
+    if(return_value){
+      System.out.println("IT WORKS");
+    }
+
+    return return_value;
+
+  }
+
+  public boolean ClosedSwitchTriggered() {
+    return !ClosedLimitSwitch.get();
+  }
+
+  // only returns true on rising edge
+
+  public boolean ExtendedSwitchTriggered() {
+    return !ExtendedLimitSwitch.get();
   }
 
   public double InchesToTicksTelescope(double Inches) {
@@ -153,38 +251,40 @@ public class TelescopingSubsystem extends SubsystemBase {
     return Ticks / Constants.InchesToTicksTelescope;
   }
 
-  // TODO: Set value only on rising edge and set closed to 406 and extend to 13172
   public void SetEncoder() {
-    if (!ClosedLimitSwitch.get()) {
-      TelescopingMotor1.setSelectedSensorPosition(0);
-    } else if (!ExtendedLimitSwitch.get()) {
-      // Set Extended Ticks Here
-      TelescopingMotor1.setSelectedSensorPosition(13537); 
+    if (getRisingEdgeClosedSwitch()) {
+      TelescopingMotor1.setSelectedSensorPosition(MinTicks);
+    } else if (getRisingEdgeExtendedSwitch()) {
+      TelescopingMotor1.setSelectedSensorPosition(MaxTicks);
 
     }
   }
 
+  public double getTicks() {
+    return TelescopingMotor1.getSelectedSensorPosition();
+  }
+
   @Override
   public void periodic() {
-    // zeroEncoder();
-    SmartDashboard.putNumber("Setpoint", Setpoint);
-    double position = TelescopingMotor1.getSelectedSensorPosition(); 
+    // SmartDashboard.putNumber("Arm Setpoint", Setpoint);
+    double position = TelescopingMotor1.getSelectedSensorPosition();
 
-    // if(position < 0){
-    //   position *= -1; 
-    // }
-    SmartDashboard.putNumber("CurrentPose", position);
-    TelescopingMotor1.config_kP(0, SmartDashboard.getNumber("kP", kP));
-    TelescopingMotor1.config_kD(0, SmartDashboard.getNumber("kD", kD));
+    SmartDashboard.putNumber("Arm Current Position", position);
+
+    // SmartDashboard.putBoolean("Closed Triggered", getRisingEdgeClosedSwitch());
+    // SmartDashboard.putBoolean("Extended Triggered", getRisingEdgeExtendedSwitch());
+
+
+    // TelescopingMotor1.config_kP(0, SmartDashboard.getNumber("kP", kP));
+    // TelescopingMotor1.config_kD(0, SmartDashboard.getNumber("kD", kD));
 
     // TelescopeConfig.slot0.kD = SmartDashboard.getNumber("kD", 0);
     // TelescopingMotor1.configAllSettings(TelescopeConfig);
     // TelescopingMotor1.setSensorPhase(true);
-    
+
     SetEncoder();
 
   }
-
 
   @Override
   public void simulationPeriodic() {
