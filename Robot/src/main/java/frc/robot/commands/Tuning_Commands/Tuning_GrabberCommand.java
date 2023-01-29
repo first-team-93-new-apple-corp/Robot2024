@@ -25,12 +25,12 @@ public class Tuning_GrabberCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_GrabberSubsystem.toSetpoint();//TODO impliment logic
+        m_GrabberSubsystem.toSetpoint(0);//TODO impliment logic
     }
 
     @Override
     public void end(boolean interrupted) {
-        m_GrabberSubsystem.stopMotor();
+        m_GrabberSubsystem.stopMotors();
     }
 
     @Override

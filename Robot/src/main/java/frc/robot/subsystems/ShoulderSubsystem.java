@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class ShoulderSubsystem extends SubsystemBase {
+public class ShoulderSubsystem extends SubsystemBase implements ArmInterface{
 
 
   WPI_TalonFX ShoulderMotor1;
@@ -43,7 +43,7 @@ public class ShoulderSubsystem extends SubsystemBase {
 
   }
 
-  public void stopMotor() {
+  public void stopMotors() {
   }
 
   public double DegreesToRotations(double degrees){

@@ -30,7 +30,7 @@ public class Tuning_ShoulderCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        m_ShoulderSubsystem.stopMotor();
+        m_ShoulderSubsystem.stopMotors();
     }
 
     @Override

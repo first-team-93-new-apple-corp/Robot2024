@@ -64,7 +64,7 @@ public class ArmCommand extends CommandBase {
     //wrist subsystem should only move once the arm is outside of the robot frame/won't clip with the robot.
 
 
-    m_GrabberSubsystem.directMotorCommand();
+    m_GrabberSubsystem.directMotorCommand(0);
     //grabber needs to have logic for when a game piece is aquired, how should it actuate, how should the wheels run, etc.
   }
 
