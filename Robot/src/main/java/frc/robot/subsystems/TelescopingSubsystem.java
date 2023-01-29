@@ -1,19 +1,10 @@
 package frc.robot.subsystems;
 
-import javax.naming.LimitExceededException;
-import javax.print.attribute.SetOfIntegerSyntax;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -175,11 +166,6 @@ public class TelescopingSubsystem extends SubsystemBase {
     }
 
     System.out.println(TelescopingMotor1.getSelectedSensorPosition());
-  }
-
-  public void RunTelescopingMotors(double SetPoint) {
-    this.Setpoint = SetPoint;
-    TelescopingMotor1.set(ControlMode.Position, InchesToTicksTelescope(SetPoint));
   }
 
   public void directMotorCommand(double speed) {
