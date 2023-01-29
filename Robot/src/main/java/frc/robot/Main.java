@@ -18,10 +18,6 @@ public final class Main {
    */
 
   public static void main(String... args) {
-
-    throw new NullPointerException(); 
-
-    
     boolean broken = false;
 
     RobotBase.startRobot(Robot::new);
