@@ -18,6 +18,9 @@ public class GrabberSubsystem extends SubsystemBase {
     public void toSetpoint(){ //for actuation
 
     }
+    public void stopMotor(){
+        
+    }
   @Override public void periodic() {
 
   }

@@ -1,24 +1,18 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+package frc.robot.commands.Tuning_Commands;
 
-package frc.robot.commands;
-
-import java.util.HashMap;
-
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShoulderSubsystem;
 import frc.robot.subsystems.TelescopingSubsystem;
 
-public class ManualTelescopeCommand extends CommandBase {
+public class Tuning_TelescopeCommand extends CommandBase {
 
 
     TelescopingSubsystem m_TelescopingSubsystem; 
     double speed;
 
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-    public ManualTelescopeCommand(TelescopingSubsystem m_TelescopingSubsystem,double speed) {
-        this.m_TelescopingSubsystem = m_TelescopingSubsystem; 
+    public Tuning_TelescopeCommand(TelescopingSubsystem m_TelescopingSubsystem,double speed, XboxController f310) {
+        this.m_TelescopingSubsystem = m_TelescopingSubsystem;
         this.speed = speed;
         addRequirements(m_TelescopingSubsystem);
 
@@ -31,7 +25,7 @@ public class ManualTelescopeCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_TelescopingSubsystem.directMotorCommand(speed);
+        m_TelescopingSubsystem.toSetpoint(speed);//TODO impliment logic
     }
 
     @Override

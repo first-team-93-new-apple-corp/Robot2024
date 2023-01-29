@@ -3,12 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -38,25 +32,28 @@ public class ShoulderSubsystem extends SubsystemBase {
 
 
     shoulderCanCoder = new CANCoder(0); //verify ids
-    
-
-    
 
 
   }
   public void toSetpoint(double setpointDegrees){ //TODO parameter should specify units.
   DegreesToRotations(setpointDegrees); 
   }
+
   public void directMotorCommand(double speed){
 
   }
+
+  public void stopMotor() {
+  }
+
   public double DegreesToRotations(double degrees){
     return degrees * Constants.DegreesToTicksShoulder;
-
   }
+
   public double TicksToDegrees(double Ticks){
     return Ticks * 1/Constants.DegreesToTicksShoulder;
   }
+
   public double getDegrees(){
     return TicksToDegrees(ShoulderMotor1.getSelectedSensorPosition() + ShoulderMotor2.getSelectedSensorPosition() + ShoulderMotor3.getSelectedSensorPosition() + ShoulderMotor4.getSelectedSensorPosition())/4;
   }
@@ -66,5 +63,7 @@ public class ShoulderSubsystem extends SubsystemBase {
   }
 
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+
+  }
 }
