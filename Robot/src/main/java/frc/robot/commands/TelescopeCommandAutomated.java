@@ -11,7 +11,7 @@ import frc.robot.subsystems.ShoulderSubsystem;
 import frc.robot.subsystems.TelescopingSubsystem;
 
 
-public class ArmCommandAutomated extends CommandBase {
+public class TelescopeCommandAutomated extends CommandBase {
 
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
  public ShoulderSubsystem m_ShoulderSubsystem;
@@ -27,8 +27,8 @@ public class ArmCommandAutomated extends CommandBase {
   HIGH_CONE,
   LOW_HYBRID
 }
-  HashMap<ArmCommandAutomated.ArmState, double[]> Positions = new HashMap<ArmCommandAutomated.ArmState, double[]>();
-  public ArmCommandAutomated(ArmState state,
+  HashMap<TelescopeCommandAutomated.ArmState, double[]> Positions = new HashMap<TelescopeCommandAutomated.ArmState, double[]>();
+  public TelescopeCommandAutomated(ArmState state,
       TelescopingSubsystem m_TelescopingSubsystem, ShoulderSubsystem m_ShoulderSubsystem) {
         this.m_ShoulderSubsystem = m_ShoulderSubsystem;
         this.m_TelescopingSubsystem = m_TelescopingSubsystem;

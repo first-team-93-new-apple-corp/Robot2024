@@ -1,18 +1,9 @@
 package frc.robot.subsystems;
 
-import javax.naming.LimitExceededException;
-import javax.print.attribute.SetOfIntegerSyntax;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
@@ -56,12 +47,17 @@ public class TelescopingSubsystem extends SubsystemBase {
     TelescopeConfig.slot0.kI = kI;
     TelescopeConfig.slot0.kD = kD;
 
+
     ExtendedLimitSwitch = new DigitalInput(0);
     ClosedLimitSwitch = new DigitalInput(9);
 
-    TelescopeConfig.slot0.closedLoopPeakOutput = 1;
+    TelescopeConfig.slot0.closedLoopPeakOutput = 0.2;
+    TelescopingMotor1.set(ControlMode.MotionMagic);
+    TelescopingMotor1.configClosedloopRamp(2); 
+
 
     TelescopingMotor1.configAllSettings(TelescopeConfig);
+    SmartDashboard.getNumber("MaxOutput", 0);
     TelescopingMotor1.setSelectedSensorPosition(-MaxTicks);
 
     TelescopingMotor1.setSensorPhase(true);
@@ -70,7 +66,6 @@ public class TelescopingSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Arm Setpoint", 0);
     SmartDashboard.putNumber("CurrentPose", TicksToInchesTelescope(TelescopingMotor1.getSelectedSensorPosition()));
     SmartDashboard.putNumber("kP", kP);
-    // SmartDashboard.putNumber("kI", kI);
     SmartDashboard.putNumber("kD", kD);
 
 
@@ -275,11 +270,12 @@ public class TelescopingSubsystem extends SubsystemBase {
     // SmartDashboard.putBoolean("Extended Triggered", getRisingEdgeExtendedSwitch());
 
 
-    // TelescopingMotor1.config_kP(0, SmartDashboard.getNumber("kP", kP));
-    // TelescopingMotor1.config_kD(0, SmartDashboard.getNumber("kD", kD));
+    TelescopingMotor1.config_kP(0, SmartDashboard.getNumber("kP", kP));
+    TelescopingMotor1.config_kD(0, SmartDashboard.getNumber("kD", kD));
+    TelescopingMotor1.configClosedLoopPeakOutput(0, SmartDashboard.getNumber("MaxOutput", 0));
+
 
     // TelescopeConfig.slot0.kD = SmartDashboard.getNumber("kD", 0);
-    // TelescopingMotor1.configAllSettings(TelescopeConfig);
     // TelescopingMotor1.setSensorPhase(true);
 
     SetEncoder();
