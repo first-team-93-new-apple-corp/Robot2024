@@ -40,6 +40,7 @@ public static final double MinAngle = 0;
   public static final double totalTicks = 13943;
   public static final double MAXActuation = 16;
 public static final double InchesToTicksTelescope = totalTicks/MAXActuation;
+public static final double DegreesToTicksShoulder = 0;
 
   
 }

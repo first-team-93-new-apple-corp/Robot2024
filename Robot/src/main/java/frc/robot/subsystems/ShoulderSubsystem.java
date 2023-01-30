@@ -1,74 +1,61 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class ShoulderSubsystem extends SubsystemBase {
+public class ShoulderSubsystem extends SubsystemBase implements ArmInterface{
 
 
-
-  enum ArmState {
-    DEFAULT_STATE,
-    GROUND_LOAD,
-    PLAYER_LOAD,
-    MID_CONE,
-    MID_CUBE,
-    HIGH_CUBE,
-    HIGH_CONE,
-    LOW_HYBRID
-  }
-
-  public CANSparkMax ShoulderMotor1; 
-  public CANSparkMax ShoulderMotor2;
-  RelativeEncoder ShoulderMotor1Encoder;
-  RelativeEncoder ShoulderMotor2Encoder;
-
-  SparkMaxPIDController ShoulderPIDController;
-  public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
-
+  WPI_TalonFX ShoulderMotor1;
+  WPI_TalonFX ShoulderMotor2;
+  WPI_TalonFX ShoulderMotor3;
+  WPI_TalonFX ShoulderMotor4;
+  TalonFXConfiguration ShoulderMotorConfig;
+  MotorControllerGroup ShoulderMotors;
+  CANCoder shoulderCanCoder;
   public ShoulderSubsystem() {
-  ShoulderMotor1 = new CANSparkMax(0, MotorType.kBrushless);
-  ShoulderMotor2 = new CANSparkMax(0, MotorType.kBrushless);
-  ShoulderMotor1Encoder = ShoulderMotor1.getEncoder();
-  ShoulderMotor2Encoder = ShoulderMotor2.getEncoder();
-  ShoulderPIDController = ShoulderMotor1.getPIDController();
-  ShoulderMotor1Encoder.getVelocity();
+    ShoulderMotor1 = new WPI_TalonFX(0); //verify ids
+    ShoulderMotor2 = new WPI_TalonFX(0);
+    ShoulderMotor3 = new WPI_TalonFX(0);
+    ShoulderMotor4 = new WPI_TalonFX(0);
+    //Use Motor Controller group once all motors spin the same direction
+    ShoulderMotors = new MotorControllerGroup(ShoulderMotor1, ShoulderMotor2,ShoulderMotor3, ShoulderMotor4);
+    ShoulderMotorConfig = new TalonFXConfiguration(); 
+    ShoulderMotorConfig.motionAcceleration = 1;
+    ShoulderMotorConfig.motionCurveStrength= 1;
+    ShoulderMotorConfig.motionCruiseVelocity = 1;
+    ShoulderMotorConfig.motionProfileTrajectoryPeriod = 1; //TODO tune these values, does this add a pid on top? do we need to tune that as well? investigate motion magic
 
-  kP = 0.1; 
-  kI = 1e-4;
-  kD = 1; 
-  kIz = 0; 
-  kFF = 0; 
-  kMaxOutput = 1; 
-  kMinOutput = -1;
 
-  // set PID coefficients
-  ShoulderPIDController.setP(kP);
-  ShoulderPIDController.setI(kI);
-  ShoulderPIDController.setD(kD);
-  ShoulderPIDController.setIZone(kIz);
-  ShoulderPIDController.setFF(kFF);
-  ShoulderPIDController.setOutputRange(kMinOutput, kMaxOutput);
+    shoulderCanCoder = new CANCoder(0); //verify ids
+
 
   }
-  public void RunShoulderMotors(double setPoint){
-  DegreesToRotations(setPoint); 
-  ShoulderPIDController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
+  public void toSetpoint(double setpointDegrees){ //TODO parameter should specify units.
+  DegreesToRotations(setpointDegrees); 
   }
-  public double DegreesToRotations(double setPoint){
-    return setPoint * Constants.DegreesToRotationsShoulder;
+
+  public void directMotorCommand(double speed){
 
   }
-  public double RotationsToDegrees(double Rotations){
-    return Rotations * 1/Constants.DegreesToRotationsShoulder;
+
+  public void stopMotors() {
   }
+
+  public double DegreesToRotations(double degrees){
+    return degrees * Constants.DegreesToTicksShoulder;
+  }
+
+  public double TicksToDegrees(double Ticks){
+    return Ticks * 1/Constants.DegreesToTicksShoulder;
+  }
+
   public double getDegrees(){
-    return ShoulderMotor1Encoder.getPosition(); //TODO should use Rotations
+    return TicksToDegrees(ShoulderMotor1.getSelectedSensorPosition() + ShoulderMotor2.getSelectedSensorPosition() + ShoulderMotor3.getSelectedSensorPosition() + ShoulderMotor4.getSelectedSensorPosition())/4;
   }
 
   @Override public void periodic() {
@@ -76,5 +63,7 @@ public class ShoulderSubsystem extends SubsystemBase {
   }
 
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+
+  }
 }
