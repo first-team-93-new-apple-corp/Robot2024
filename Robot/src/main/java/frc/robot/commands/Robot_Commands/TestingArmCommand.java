@@ -3,7 +3,7 @@ package frc.robot.commands.Robot_Commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.TelescopingSubsystem;
-
+@Deprecated
 public class TestingArmCommand extends CommandBase {
 
     TelescopingSubsystem m_TelescopingSubsystem;
@@ -63,7 +63,7 @@ public class TestingArmCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        m_TelescopingSubsystem.stopMotor();
+        m_TelescopingSubsystem.stopMotors();
     }
 
     @Override

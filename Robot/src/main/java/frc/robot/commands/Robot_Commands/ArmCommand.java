@@ -54,6 +54,8 @@ public class ArmCommand extends CommandBase {
   public void execute() {
     m_ShoulderSubsystem.toSetpoint(0);
     //should go brr fr.
+    if(m_ShoulderSubsystem.getDegrees()> 60.0){ //guarantee that we won't clip anything
+
 
 
     m_TelescopingSubsystem.toSetpoint(0);
@@ -66,6 +68,7 @@ public class ArmCommand extends CommandBase {
 
     m_GrabberSubsystem.directMotorCommand(0);
     //grabber needs to have logic for when a game piece is aquired, how should it actuate, how should the wheels run, etc.
+  }
   }
 
   @Override

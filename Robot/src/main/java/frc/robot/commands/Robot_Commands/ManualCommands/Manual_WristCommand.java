@@ -1,17 +1,16 @@
-package frc.robot.commands.Tuning_Commands;
+package frc.robot.commands.Robot_Commands.ManualCommands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.WristSubsystem;
 
-public class Tuning_WristCommand extends CommandBase {
+public class Manual_WristCommand extends CommandBase {
 
 
     WristSubsystem m_WristSubsystem; 
     double speed;
 
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-    public Tuning_WristCommand(WristSubsystem m_WristSubsystem,double speed, XboxController f310) {
+    public Manual_WristCommand(WristSubsystem m_WristSubsystem,double speed) {
         this.m_WristSubsystem = m_WristSubsystem; 
         this.speed = speed;
         addRequirements(m_WristSubsystem);
@@ -22,9 +21,10 @@ public class Tuning_WristCommand extends CommandBase {
     public void initialize() {
 
     }
+
     @Override
     public void execute() {
-        m_WristSubsystem.toSetpoint(speed);//TODO impliment logic
+        m_WristSubsystem.directMotorCommand(speed);
     }
 
     @Override

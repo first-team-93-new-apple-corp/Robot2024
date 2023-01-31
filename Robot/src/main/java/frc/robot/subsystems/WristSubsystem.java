@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 //uses a neo for actuation
 
-public class WristSubsystem extends SubsystemBase {
+public class WristSubsystem extends SubsystemBase implements ArmInterface{
     CANSparkMax WristMotor;
     RelativeEncoder WristEncoder;
     SparkMaxPIDController WristPID;
@@ -28,10 +28,10 @@ public class WristSubsystem extends SubsystemBase {
         WristPID.setReference(setpointDegrees, CANSparkMax.ControlType.kSmartMotion);
     }
 
-    public void directMotorCommand() {
+    public void directMotorCommand(double speed) {
 
     }
-    public void stopMotor() {
+    public void stopMotors() {
     }
 
     @Override

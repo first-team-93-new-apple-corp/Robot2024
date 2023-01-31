@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class TelescopingSubsystem extends SubsystemBase {
+public class TelescopingSubsystem extends SubsystemBase implements ArmInterface{
 
   enum TelescopeState {
     DEFAULT_STATE,
@@ -122,7 +122,7 @@ public class TelescopingSubsystem extends SubsystemBase {
     }
   // }
 
-  public void stopMotor() {
+  public void stopMotors() {
     TelescopingMotor1.set(0);
   }
 
