@@ -25,7 +25,7 @@ public class Tuning_ShoulderCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_ShoulderSubsystem.toSetpoint(speed);//TODO impliment logic
+        m_ShoulderSubsystem.toSetpoint(speed);
     }
 
     @Override

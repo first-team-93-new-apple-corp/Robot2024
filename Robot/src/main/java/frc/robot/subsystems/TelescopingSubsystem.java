@@ -63,7 +63,7 @@ public class TelescopingSubsystem extends SubsystemBase {
 
     TelescopingMotor1.configAllSettings(TelescopeConfig);
     SmartDashboard.getNumber("MaxOutput", 0);
-    TelescopingMotor1.setSelectedSensorPosition(-MaxTicks);
+    TelescopingMotor1.setSelectedSensorPosition(0);
 
     TelescopingMotor1.setSensorPhase(true);
 

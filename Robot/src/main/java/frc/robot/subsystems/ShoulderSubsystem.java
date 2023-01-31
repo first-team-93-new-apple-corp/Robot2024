@@ -3,7 +3,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -17,6 +20,12 @@ public class ShoulderSubsystem extends SubsystemBase implements ArmInterface{
   TalonFXConfiguration ShoulderMotorConfig;
   MotorControllerGroup ShoulderMotors;
   CANCoder shoulderCanCoder;
+  DigitalInput ExtendedLimitSwitch;
+  DigitalInput ClosedLimitSwitch;
+  public double Setpoint = 0;
+  public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
+  public double MAXVELO, MAXACCEL;
+
   public ShoulderSubsystem() {
     ShoulderMotor1 = new WPI_TalonFX(0); //verify ids
     ShoulderMotor2 = new WPI_TalonFX(0);
@@ -25,18 +34,40 @@ public class ShoulderSubsystem extends SubsystemBase implements ArmInterface{
     //Use Motor Controller group once all motors spin the same direction
     ShoulderMotors = new MotorControllerGroup(ShoulderMotor1, ShoulderMotor2,ShoulderMotor3, ShoulderMotor4);
     ShoulderMotorConfig = new TalonFXConfiguration(); 
-    ShoulderMotorConfig.motionAcceleration = 1;
-    ShoulderMotorConfig.motionCurveStrength= 1;
-    ShoulderMotorConfig.motionCruiseVelocity = 1;
-    ShoulderMotorConfig.motionProfileTrajectoryPeriod = 1; //TODO tune these values, does this add a pid on top? do we need to tune that as well? investigate motion magic
 
 
     shoulderCanCoder = new CANCoder(0); //verify ids
+    kP = 1.2;
+    kI = 0;
+    kD = 0.5;
+
+    MAXVELO = 2000;
+    MAXACCEL = 4000;
+
+    ShoulderMotorConfig.slot0.kP = kP;
+    ShoulderMotorConfig.slot0.kI = kI;
+    ShoulderMotorConfig.slot0.kD = kD;
+    ShoulderMotorConfig.motionAcceleration = MAXACCEL;
+    ShoulderMotorConfig.motionCurveStrength = 4;
+    ShoulderMotorConfig.motionCruiseVelocity = MAXVELO; //max 1600
+    ShoulderMotor1.configAllSettings(ShoulderMotorConfig);
+    ShoulderMotor2.configAllSettings(ShoulderMotorConfig);
+    ShoulderMotor3.configAllSettings(ShoulderMotorConfig);
+    ShoulderMotor4.configAllSettings(ShoulderMotorConfig);
+    SmartDashboard.getNumber("MaxOutput", 0);
+
+    // SmartDashboard.putNumber("Arm Setpoint", 0);
+    SmartDashboard.putNumber("CurrentPose", TicksToInchesTelescope(ShoulderMotor1.getSelectedSensorPosition()));
+    SmartDashboard.putNumber("kP", kP);
+    SmartDashboard.putNumber("kD", kD);
+    SmartDashboard.putNumber("Velocity", MAXVELO);
+    SmartDashboard.putNumber("Acceleration", MAXACCEL);
 
 
   }
   public void toSetpoint(double setpointDegrees){ //TODO parameter should specify units.
   DegreesToRotations(setpointDegrees); 
+
   }
 
   public void directMotorCommand(double speed){

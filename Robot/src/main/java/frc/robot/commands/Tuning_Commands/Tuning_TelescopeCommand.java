@@ -1,21 +1,20 @@
 package frc.robot.commands.Tuning_Commands;
 
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.TelescopingSubsystem;
 
 public class Tuning_TelescopeCommand extends CommandBase {
 
-
-    TelescopingSubsystem m_TelescopingSubsystem; 
-    double speed;
+    TelescopingSubsystem m_TelescopingSubsystem;
 
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-    public Tuning_TelescopeCommand(TelescopingSubsystem m_TelescopingSubsystem,double speed, XboxController f310) {
+    public Tuning_TelescopeCommand(TelescopingSubsystem m_TelescopingSubsystem) {
         this.m_TelescopingSubsystem = m_TelescopingSubsystem;
-        this.speed = speed;
+
         addRequirements(m_TelescopingSubsystem);
 
+        SmartDashboard.putNumber("Arm Setpoint", 0);
     }
 
     @Override
@@ -23,9 +22,43 @@ public class Tuning_TelescopeCommand extends CommandBase {
 
     }
 
+    enum ArmState {
+        ZEROING,
+        STANBY,
+        SETPOINT
+
+    }
+
+    ArmState currentArmState = ArmState.STANBY;
+
     @Override
     public void execute() {
-        m_TelescopingSubsystem.toSetpoint(speed);//TODO impliment logic
+        // m_TelescopingSubsystem.OscilateArm();
+        // m_TelescopingSubsystem.directMotorCommand(0.1);
+        m_TelescopingSubsystem.toSetpoint(SmartDashboard.getNumber("Arm Setpoint", 0));
+        // switch (currentArmState) {
+        //     case STANBY:
+        //         if (SmartDashboard.getNumber("Arm Setpoint", -1) != 0) {
+        //             currentArmState = ArmState.SETPOINT;
+        //         }
+        //         break;
+        //     case SETPOINT:
+        //         m_TelescopingSubsystem.toSetpoint(SmartDashboard.getNumber("Arm Setpoint", 0));
+
+        //         break;
+        //     case ZEROING:
+        //         if (!(m_TelescopingSubsystem.getTicks() <= 140)) {
+        //             m_TelescopingSubsystem.directMotorCommand(-0.1);
+        //         } else {
+        //             m_TelescopingSubsystem.directMotorCommand(0);
+        //             currentArmState = ArmState.STANBY;
+        //         }
+        //         break;
+        //     default:
+        //         break;
+
+        // }
+
     }
 
     @Override
