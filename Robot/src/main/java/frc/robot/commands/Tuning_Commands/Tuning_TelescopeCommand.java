@@ -14,7 +14,7 @@ public class Tuning_TelescopeCommand extends CommandBase {
 
         addRequirements(m_TelescopingSubsystem);
 
-        SmartDashboard.putNumber("Telescope Setpoint", 0);
+        SmartDashboard.putNumber("Telescope Setpoint", 181);
     }
 
     @Override
@@ -33,31 +33,28 @@ public class Tuning_TelescopeCommand extends CommandBase {
 
     @Override
     public void execute() {
-        // m_TelescopingSubsystem.OscilateArm();
-        // m_TelescopingSubsystem.directMotorCommand(0.1);
-        m_TelescopingSubsystem.toSetpoint(SmartDashboard.getNumber("Telescope Setpoint", 0));
-        // switch (currentArmState) {
-        //     case STANBY:
-        //         if (SmartDashboard.getNumber("Arm Setpoint", -1) != 0) {
-        //             currentArmState = ArmState.SETPOINT;
-        //         }
-        //         break;
-        //     case SETPOINT:
-        //         m_TelescopingSubsystem.toSetpoint(SmartDashboard.getNumber("Arm Setpoint", 0));
+        switch (currentArmState) {
+            case STANBY:
+                if (SmartDashboard.getNumber("Telescope Setpoint", 181) != 0) {
+                    currentArmState = ArmState.SETPOINT;
+                }
+                break;
+            case SETPOINT:
+            m_TelescopingSubsystem.toSetpoint(SmartDashboard.getNumber("Telescope Setpoint", 181));
 
-        //         break;
-        //     case ZEROING:
-        //         if (!(m_TelescopingSubsystem.getTicks() <= 140)) {
-        //             m_TelescopingSubsystem.directMotorCommand(-0.1);
-        //         } else {
-        //             m_TelescopingSubsystem.directMotorCommand(0);
-        //             currentArmState = ArmState.STANBY;
-        //         }
-        //         break;
-        //     default:
-        //         break;
+                break;
+            case ZEROING:
+                if (!(m_TelescopingSubsystem.getTicks() <= 140)) {
+                    m_TelescopingSubsystem.directMotorCommand(-0.1);
+                } else {
+                    m_TelescopingSubsystem.directMotorCommand(0);
+                    currentArmState = ArmState.STANBY;
+                }
+                break;
+            default:
+                break;
 
-        // }
+        }
 
     }
 

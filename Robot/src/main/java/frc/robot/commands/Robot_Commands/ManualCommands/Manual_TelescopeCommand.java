@@ -24,7 +24,7 @@ public class Manual_TelescopeCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_TelescopingSubsystem.directMotorCommand(speed);
+    
     }
 
     @Override

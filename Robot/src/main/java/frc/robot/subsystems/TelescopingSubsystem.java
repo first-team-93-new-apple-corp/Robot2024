@@ -91,36 +91,36 @@ public class TelescopingSubsystem extends SubsystemBase implements ArmInterface{
 
   public void toSetpoint(double Setpoint) {
 
-    // // if we arent extending and we are within 500 ticks of our limit switch, then
-    // // stop
-    // if ((Setpoint < getTicks()) && (getTicks() - limit) < MinTicks) {
-    //   TelescopingMotor1.set(0);
+    // if we arent extending and we are within 500 ticks of our limit switch, then
+    // stop
+    if ((Setpoint < getTicks()) && (getTicks() - limit) < MinTicks) {
+      TelescopingMotor1.set(0);
 
-    // }
-    // // if we are extending and we are within 500 of our extended limit switch, then
-    // // stop
-    // else if ((Setpoint > getTicks()) && ((getTicks() + limit) > MaxTicks)) {
+    }
+    // if we are extending and we are within 500 of our extended limit switch, then
+    // stop
+    else if ((Setpoint > getTicks()) && ((getTicks() + limit) > MaxTicks)) {
 
-    //   TelescopingMotor1.set(0);
+      TelescopingMotor1.set(0);
 
-    // }
+    }
 
-    // // if our zero limit switch is triggered and we aren't extending
-    // else if (ClosedSwitchTriggered() && (Setpoint < getTicks())) {
-    //   TelescopingMotor1.set(0);
+    // if our zero limit switch is triggered and we aren't extending
+    else if (ClosedSwitchTriggered() && (Setpoint < getTicks())) {
+      TelescopingMotor1.set(0);
 
-    // }
-    // // if our extended limit switch is triggered and we aren't retracting
-    // else if (ExtendedSwitchTriggered() && (Setpoint > getTicks())) {
-    //   TelescopingMotor1.set(0);
+    }
+    // if our extended limit switch is triggered and we aren't retracting
+    else if (ExtendedSwitchTriggered() && (Setpoint > getTicks())) {
+      TelescopingMotor1.set(0);
 
-    // }
-    // // if all of those are somehow false, then we can actually run the arm lmao...%
-    // else {
+    }
+    // if all of those are somehow false, then we can actually run the arm lmao...%
+    else {
       TelescopingMotor1.set(ControlMode.MotionMagic, Setpoint);
 
     }
-  // }
+  }
 
   public void stopMotors() {
     TelescopingMotor1.set(0);
