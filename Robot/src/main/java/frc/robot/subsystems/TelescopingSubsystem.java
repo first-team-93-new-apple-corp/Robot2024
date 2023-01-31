@@ -34,27 +34,31 @@ public class TelescopingSubsystem extends SubsystemBase {
 
   public double Setpoint = 0;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
+  public double MAXVELO, MAXACCEL;
 
   public TelescopingSubsystem() {
     TelescopingMotor1 = new WPI_TalonSRX(16);
     TelescopeConfig = new TalonSRXConfiguration();
     TelescopingMotor1.setNeutralMode(NeutralMode.Brake);
-    kP = 0.7;
+    kP = 1.2;
     kI = 0;
     kD = 0.5;
+
+    MAXVELO = 2000;
+    MAXACCEL = 4000;
 
     TelescopeConfig.slot0.kP = kP;
     TelescopeConfig.slot0.kI = kI;
     TelescopeConfig.slot0.kD = kD;
-    TelescopeConfig.motionAcceleration = 10;
-    TelescopeConfig.motionCruiseVelocity = 100;
+    TelescopeConfig.motionAcceleration = MAXACCEL;
+    TelescopeConfig.motionCurveStrength = 4;
+    TelescopeConfig.motionCruiseVelocity = MAXVELO; //max 1600
 
 
     ExtendedLimitSwitch = new DigitalInput(0);
     ClosedLimitSwitch = new DigitalInput(9);
 
-    TelescopeConfig.slot0.closedLoopPeakOutput = 0.2;
-    TelescopingMotor1.configClosedloopRamp(2); 
+
 
 
     TelescopingMotor1.configAllSettings(TelescopeConfig);
@@ -68,6 +72,8 @@ public class TelescopingSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("CurrentPose", TicksToInchesTelescope(TelescopingMotor1.getSelectedSensorPosition()));
     SmartDashboard.putNumber("kP", kP);
     SmartDashboard.putNumber("kD", kD);
+    SmartDashboard.putNumber("Velocity", MAXVELO);
+    SmartDashboard.putNumber("Acceleration", MAXACCEL);
 
 
 
@@ -85,36 +91,36 @@ public class TelescopingSubsystem extends SubsystemBase {
 
   public void toSetpoint(double Setpoint) {
 
-    // if we arent extending and we are within 500 ticks of our limit switch, then
-    // stop
-    if ((Setpoint < getTicks()) && (getTicks() - limit) < MinTicks) {
-      TelescopingMotor1.set(0);
+    // // if we arent extending and we are within 500 ticks of our limit switch, then
+    // // stop
+    // if ((Setpoint < getTicks()) && (getTicks() - limit) < MinTicks) {
+    //   TelescopingMotor1.set(0);
 
-    }
-    // if we are extending and we are within 500 of our extended limit switch, then
-    // stop
-    else if ((Setpoint > getTicks()) && ((getTicks() + limit) > MaxTicks)) {
+    // }
+    // // if we are extending and we are within 500 of our extended limit switch, then
+    // // stop
+    // else if ((Setpoint > getTicks()) && ((getTicks() + limit) > MaxTicks)) {
 
-      TelescopingMotor1.set(0);
+    //   TelescopingMotor1.set(0);
 
-    }
+    // }
 
-    // if our zero limit switch is triggered and we aren't extending
-    else if (ClosedSwitchTriggered() && (Setpoint < getTicks())) {
-      TelescopingMotor1.set(0);
+    // // if our zero limit switch is triggered and we aren't extending
+    // else if (ClosedSwitchTriggered() && (Setpoint < getTicks())) {
+    //   TelescopingMotor1.set(0);
 
-    }
-    // if our extended limit switch is triggered and we aren't retracting
-    else if (ExtendedSwitchTriggered() && (Setpoint > getTicks())) {
-      TelescopingMotor1.set(0);
+    // }
+    // // if our extended limit switch is triggered and we aren't retracting
+    // else if (ExtendedSwitchTriggered() && (Setpoint > getTicks())) {
+    //   TelescopingMotor1.set(0);
 
-    }
-    // if all of those are somehow false, then we can actually run the arm lmao...%
-    else {
+    // }
+    // // if all of those are somehow false, then we can actually run the arm lmao...%
+    // else {
       TelescopingMotor1.set(ControlMode.MotionMagic, Setpoint);
 
     }
-  }
+  // }
 
   public void stopMotor() {
     TelescopingMotor1.set(0);
@@ -268,7 +274,10 @@ public class TelescopingSubsystem extends SubsystemBase {
 
     TelescopingMotor1.config_kP(0, SmartDashboard.getNumber("kP", kP));
     TelescopingMotor1.config_kD(0, SmartDashboard.getNumber("kD", kD));
-    TelescopingMotor1.configClosedLoopPeakOutput(0, SmartDashboard.getNumber("MaxOutput", 0));
+    TelescopeConfig.motionCruiseVelocity = SmartDashboard.getNumber("Velocity", MAXVELO);
+    TelescopeConfig.motionAcceleration = SmartDashboard.getNumber("Acceleration", MAXACCEL);
+
+    // TelescopingMotor1.configClosedLoopPeakOutput(0, SmartDashboard.getNumber("MaxOutput", 0));
 
 
     // TelescopeConfig.slot0.kD = SmartDashboard.getNumber("kD", 0);

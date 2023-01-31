@@ -29,35 +29,35 @@ public class TestingTelescopingCommand extends CommandBase {
 
     }
 
-    ArmState currentArmState = ArmState.ZEROING;
+    ArmState currentArmState = ArmState.STANBY;
 
     @Override
     public void execute() {
         // m_TelescopingSubsystem.OscilateArm();
         // m_TelescopingSubsystem.directMotorCommand(0.1);
+        m_TelescopingSubsystem.toSetpoint(SmartDashboard.getNumber("Arm Setpoint", 0));
+        // switch (currentArmState) {
+        //     case STANBY:
+        //         if (SmartDashboard.getNumber("Arm Setpoint", -1) != 0) {
+        //             currentArmState = ArmState.SETPOINT;
+        //         }
+        //         break;
+        //     case SETPOINT:
+        //         m_TelescopingSubsystem.toSetpoint(SmartDashboard.getNumber("Arm Setpoint", 0));
 
-        switch (currentArmState) {
-            case STANBY:
-                if (SmartDashboard.getNumber("Arm Setpoint", -1) != 0) {
-                    currentArmState = ArmState.SETPOINT;
-                }
-                break;
-            case SETPOINT:
-                m_TelescopingSubsystem.toSetpoint(SmartDashboard.getNumber("Arm Setpoint", 0));
+        //         break;
+        //     case ZEROING:
+        //         if (!(m_TelescopingSubsystem.getTicks() <= 140)) {
+        //             m_TelescopingSubsystem.directMotorCommand(-0.1);
+        //         } else {
+        //             m_TelescopingSubsystem.directMotorCommand(0);
+        //             currentArmState = ArmState.STANBY;
+        //         }
+        //         break;
+        //     default:
+        //         break;
 
-                break;
-            case ZEROING:
-                if (!(m_TelescopingSubsystem.getTicks() <= 140)) {
-                    m_TelescopingSubsystem.directMotorCommand(-0.1);
-                } else {
-                    m_TelescopingSubsystem.directMotorCommand(0);
-                    currentArmState = ArmState.STANBY;
-                }
-                break;
-            default:
-                break;
-
-        }
+        // }
 
     }
 
