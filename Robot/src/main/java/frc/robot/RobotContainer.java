@@ -12,6 +12,7 @@ import frc.robot.subsystems.TelescopingSubsystem;
 
 public class RobotContainer {
   TelescopingSubsystem m_telescopingSubsystem;
+  TestingTelescopingCommand m_TelescopingCommand;
   XboxController m_F310; 
 
   JoystickButton arm_Button; 
@@ -32,7 +33,8 @@ public class RobotContainer {
     arm_Out = new JoystickButton(m_F310, 6);
     //Subsystems
     m_telescopingSubsystem = new TelescopingSubsystem();
-
+    m_TelescopingCommand = new TestingTelescopingCommand(m_telescopingSubsystem);
+  
     //Commands
 
     configureButtonBindings();
@@ -48,7 +50,7 @@ public class RobotContainer {
   }
 
   public Command getTeleopCommand() {
-    return null;
+    return m_TelescopingCommand;
   }
 
   public Command getAutonomousCommand() {

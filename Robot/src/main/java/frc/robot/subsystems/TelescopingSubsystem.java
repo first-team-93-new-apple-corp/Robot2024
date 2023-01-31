@@ -46,13 +46,14 @@ public class TelescopingSubsystem extends SubsystemBase {
     TelescopeConfig.slot0.kP = kP;
     TelescopeConfig.slot0.kI = kI;
     TelescopeConfig.slot0.kD = kD;
+    TelescopeConfig.motionAcceleration = 10;
+    TelescopeConfig.motionCruiseVelocity = 100;
 
 
     ExtendedLimitSwitch = new DigitalInput(0);
     ClosedLimitSwitch = new DigitalInput(9);
 
     TelescopeConfig.slot0.closedLoopPeakOutput = 0.2;
-    TelescopingMotor1.set(ControlMode.MotionMagic);
     TelescopingMotor1.configClosedloopRamp(2); 
 
 
@@ -110,7 +111,7 @@ public class TelescopingSubsystem extends SubsystemBase {
     }
     // if all of those are somehow false, then we can actually run the arm lmao...%
     else {
-      TelescopingMotor1.set(ControlMode.Position, Setpoint);
+      TelescopingMotor1.set(ControlMode.MotionMagic, Setpoint);
 
     }
   }

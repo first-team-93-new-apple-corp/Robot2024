@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.TelescopingSubsystem;
 
-public class TestingTelescopingCommand extends CommandBase {
+public class TestingArmCommand extends CommandBase {
 
     TelescopingSubsystem m_TelescopingSubsystem;
 
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-    public TestingTelescopingCommand(TelescopingSubsystem m_TelescopingSubsystem) {
+    public TestingArmCommand(TelescopingSubsystem m_TelescopingSubsystem) {
         this.m_TelescopingSubsystem = m_TelescopingSubsystem;
 
         addRequirements(m_TelescopingSubsystem);
