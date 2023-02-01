@@ -25,5 +25,12 @@
       "/SmartDashboard/Auton Chooser": "String Chooser",
       "/SmartDashboard/Drive Scheme": "String Chooser"
     }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "SmartDashboard": {
+        "open": true
+      }
+    }
   }
 }

@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Robot_Commands.OperatorInterfaceCommand;
 import frc.robot.commands.Tuning_Commands.Tuning_TelescopeCommand;
 import frc.robot.subsystems.TelescopingSubsystem;
 
@@ -22,7 +23,7 @@ public class RobotContainer {
   // Joysticks
 
   // Other Definitions
-  
+  OperatorInterfaceCommand op = new OperatorInterfaceCommand(false);
 
   public RobotContainer() {
 
