@@ -24,7 +24,11 @@ public final class Main {
 
     if (broken) {
       for (;;) {
-        RobotBase.startRobot(Robot::new);
+        try {
+          RobotBase.startRobot(Robot::new);
+          
+        } catch (Exception e) {
+        }
       }
     }
   }
