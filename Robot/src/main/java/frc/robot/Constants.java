@@ -41,6 +41,7 @@ public static final double MinAngle = 0;
   public static final double MAXActuation = 16;
 public static final double InchesToTicksTelescope = totalTicks/MAXActuation;
 public static final double DegreesToTicksShoulder = 0;
+public static final double ShoulderGearRatio = 0; //TODO GET ACTUAL VALUE
 
   
 }

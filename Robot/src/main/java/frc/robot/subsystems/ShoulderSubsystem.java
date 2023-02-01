@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -27,7 +28,7 @@ public class ShoulderSubsystem extends SubsystemBase implements ArmInterface{
   public double MAXVELO, MAXACCEL;
 
   public ShoulderSubsystem() {
-    ShoulderMotorMain = new WPI_TalonFX(0); //verify ids
+    ShoulderMotorMain = new WPI_TalonFX(0); //TODO verify ids
     ShoulderMotor2 = new WPI_TalonFX(0);
     ShoulderMotor3 = new WPI_TalonFX(0);
     ShoulderMotor4 = new WPI_TalonFX(0);
@@ -37,12 +38,12 @@ public class ShoulderSubsystem extends SubsystemBase implements ArmInterface{
 
 
     shoulderCanCoder = new CANCoder(0); //verify ids
-    kP = 0;
+    kP = 0.7;
     kI = 0;
     kD = 0;
 
-    MAXVELO = 0;
-    MAXACCEL = 0;
+    MAXVELO = 200;
+    MAXACCEL = 200;
 
     ShoulderMotorConfig.slot0.kP = kP;
     ShoulderMotorConfig.slot0.kI = kI;
@@ -75,8 +76,8 @@ public class ShoulderSubsystem extends SubsystemBase implements ArmInterface{
 
 
   }
-  public void toSetpoint(double setpointDegrees){ //TODO parameter should specify units.
-  DegreesToRotations(setpointDegrees); 
+  public void toSetpoint(double TicksetPoint){ //TODO parameter should specify units.
+  ShoulderMotorMain.set(ControlMode.MotionMagic, TicksetPoint);
 
   }
 
@@ -85,6 +86,7 @@ public class ShoulderSubsystem extends SubsystemBase implements ArmInterface{
   }
 
   public void stopMotors() {
+    ShoulderMotorMain.set(0);
   }
 
   public double DegreesToRotations(double degrees){
@@ -99,6 +101,9 @@ public class ShoulderSubsystem extends SubsystemBase implements ArmInterface{
     return TicksToDegrees(ShoulderMotorMain.getSelectedSensorPosition());
   }
 
+  public void AbsoluteZero(){
+  ShoulderMotorMain.setSelectedSensorPosition((shoulderCanCoder.getAbsolutePosition() / 360) * (2048 * Constants.ShoulderGearRatio));
+  }
   @Override public void periodic() {
 
   }
