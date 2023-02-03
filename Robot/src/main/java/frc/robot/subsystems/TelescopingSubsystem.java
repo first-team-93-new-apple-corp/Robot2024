@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
@@ -11,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class TelescopingSubsystem extends SubsystemBase implements GenericMotorSubsystem{
+public class TelescopingSubsystem extends SubsystemBase implements GenericMotorSubsystem {
 
   enum TelescopeState {
     DEFAULT_STATE,
@@ -26,7 +25,7 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
 
   public WPI_TalonSRX TelescopingMotor1;
 
-  final int MinTicks = 181; 
+  final int MinTicks = 181;
   final int MaxTicks = 13363;
   TalonSRXConfiguration TelescopeConfig;
   DigitalInput ExtendedLimitSwitch;
@@ -37,7 +36,7 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
   public double MAXVELO, MAXACCEL;
 
   public TelescopingSubsystem() {
-    TelescopingMotor1 = new WPI_TalonSRX(16);
+    TelescopingMotor1 = new WPI_TalonSRX(Constants.CanID_CTRE.TelescopingMotor);
     TelescopeConfig = new TalonSRXConfiguration();
     TelescopingMotor1.setNeutralMode(NeutralMode.Brake);
     kP = 1.2;
@@ -52,22 +51,16 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
     TelescopeConfig.slot0.kD = kD;
     TelescopeConfig.motionAcceleration = MAXACCEL;
     TelescopeConfig.motionCurveStrength = 4;
-    TelescopeConfig.motionCruiseVelocity = MAXVELO; //max 1600
-
+    TelescopeConfig.motionCruiseVelocity = MAXVELO; // max 1600
 
     ExtendedLimitSwitch = new DigitalInput(0);
     ClosedLimitSwitch = new DigitalInput(9);
 
-
-
-
-    
     TelescopingMotor1.configAllSettings(TelescopeConfig);
     SmartDashboard.getNumber("MaxOutput", 0);
     TelescopingMotor1.setSelectedSensorPosition(0);
 
     TelescopingMotor1.setSensorPhase(true);
-
 
     // SmartDashboard.putNumber("Arm Setpoint", 0);
     SmartDashboard.putNumber("CurrentPose", TicksToInchesTelescope(TelescopingMotor1.getSelectedSensorPosition()));
@@ -75,9 +68,6 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
     SmartDashboard.putNumber("kD", kD);
     SmartDashboard.putNumber("Velocity", MAXVELO);
     SmartDashboard.putNumber("Acceleration", MAXACCEL);
-
-
-
 
   }
 
@@ -88,9 +78,9 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
     Backwards
   }
 
-  //TODO: Update this value so we don't hit limit switches
+  // TODO: Update this value so we don't hit limit switches
 
-  double limit = 2000; 
+  double limit = 2000;
 
   public void toSetpoint(double Setpoint) {
 
@@ -203,11 +193,9 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
     // setting
     LastClosedLimitSwitchState = currentStatus;
 
-
-    if(return_value){
+    if (return_value) {
       System.out.println("IT WORKS");
     }
-
 
     return return_value;
 
@@ -225,7 +213,7 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
     // setting
     LastExtendedLimitSwitchState = currentStatus;
 
-    if(return_value){
+    if (return_value) {
       System.out.println("IT WORKS");
     }
 
@@ -272,22 +260,21 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
     SmartDashboard.putNumber("Arm Current Position", position);
 
     // SmartDashboard.putBoolean("Closed Triggered", getRisingEdgeClosedSwitch());
-    // SmartDashboard.putBoolean("Extended Triggered", getRisingEdgeExtendedSwitch());
-
+    // SmartDashboard.putBoolean("Extended Triggered",
+    // getRisingEdgeExtendedSwitch());
 
     TelescopingMotor1.config_kP(0, SmartDashboard.getNumber("kP", kP));
     TelescopingMotor1.config_kD(0, SmartDashboard.getNumber("kD", kD));
     TelescopeConfig.motionCruiseVelocity = SmartDashboard.getNumber("Velocity", MAXVELO);
     TelescopeConfig.motionAcceleration = SmartDashboard.getNumber("Acceleration", MAXACCEL);
 
-    // TelescopingMotor1.configClosedLoopPeakOutput(0, SmartDashboard.getNumber("MaxOutput", 0));
-
+    // TelescopingMotor1.configClosedLoopPeakOutput(0,
+    // SmartDashboard.getNumber("MaxOutput", 0));
 
     // TelescopeConfig.slot0.kD = SmartDashboard.getNumber("kD", 0);
     // TelescopingMotor1.setSensorPhase(true);
 
     SetEncoder();
-
 
   }
 
@@ -295,7 +282,7 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
   public void simulationPeriodic() {
   }
 
-  //TODO: Test this and see if it works
+  // TODO: Test this and see if it works
   @Override
   public boolean atSetpoint() {
     return (Math.abs(TelescopingMotor1.getSelectedSensorPosition() - Setpoint) < 0.2);

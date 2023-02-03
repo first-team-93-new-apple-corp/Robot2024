@@ -10,6 +10,10 @@ public final class Constants {
   }
 
   public class CanID_Rev {
+    public static final int PDH = 1; 
+    public static final int GrabberMotor = 2; 
+
+    public static final int WristMotor = 3; 
 
   }
 
@@ -38,6 +42,9 @@ public final class Constants {
     public static final int FrontRightShoulder = 15;
     public static final int BackRightShoulder = 16;
     public static final int BackLeftShoulder = 17;
+
+    // Telescoping
+    public static final int TelescopingMotor = 18; 
 
   }
 

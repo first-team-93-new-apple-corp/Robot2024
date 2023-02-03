@@ -4,10 +4,8 @@
 
 package frc.robot.subsystems;
 
-import java.util.HashMap;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class OperatorInterfaceSubsystem extends SubsystemBase {

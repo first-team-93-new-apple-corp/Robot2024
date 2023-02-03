@@ -28,10 +28,11 @@ public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubs
   public double MAXVELO, MAXACCEL;
 
   public ShoulderSubsystem() {
-    Shoulder_FL = new WPI_TalonFX(Constants.CanID_CTRE.FrontLeftShoulder); //TODO verify ids
+    Shoulder_FL = new WPI_TalonFX(Constants.CanID_CTRE.FrontLeftShoulder);
     Shoulder_FR = new WPI_TalonFX(Constants.CanID_CTRE.FrontRightShoulder);
     Shoulder_BL = new WPI_TalonFX(Constants.CanID_CTRE.BackLeftShoulder);
     Shoulder_BR = new WPI_TalonFX(Constants.CanID_CTRE.BackRightShoulder);
+    
     //Use Motor Controller group once all motors spin the same direction
     ShoulderMotors = new MotorControllerGroup(Shoulder_FL, Shoulder_FR, Shoulder_BL, Shoulder_BR);
     ShoulderMotorConfig = new TalonFXConfiguration(); 
