@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class TelescopingSubsystem extends SubsystemBase implements ArmInterface{
+public class TelescopingSubsystem extends SubsystemBase implements GenericMotorSubsystem{
 
   enum TelescopeState {
     DEFAULT_STATE,
@@ -61,6 +61,7 @@ public class TelescopingSubsystem extends SubsystemBase implements ArmInterface{
 
 
 
+    
     TelescopingMotor1.configAllSettings(TelescopeConfig);
     SmartDashboard.getNumber("MaxOutput", 0);
     TelescopingMotor1.setSelectedSensorPosition(0);
@@ -86,6 +87,8 @@ public class TelescopingSubsystem extends SubsystemBase implements ArmInterface{
     Stop_Forwards,
     Backwards
   }
+
+  //TODO: Update this value so we don't hit limit switches
 
   double limit = 2000; 
 
@@ -115,7 +118,7 @@ public class TelescopingSubsystem extends SubsystemBase implements ArmInterface{
       TelescopingMotor1.set(0);
 
     }
-    // if all of those are somehow false, then we can actually run the arm lmao...%
+    // if all of those are somehow false, then we can actually run the arm lmao...
     else {
       TelescopingMotor1.set(ControlMode.MotionMagic, Setpoint);
 
@@ -290,5 +293,11 @@ public class TelescopingSubsystem extends SubsystemBase implements ArmInterface{
 
   @Override
   public void simulationPeriodic() {
+  }
+
+  //TODO: Test this and see if it works
+  @Override
+  public boolean atSetpoint() {
+    return (Math.abs(TelescopingMotor1.getSelectedSensorPosition() - Setpoint) < 0.2);
   }
 }
