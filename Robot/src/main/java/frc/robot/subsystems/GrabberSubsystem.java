@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -12,13 +13,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // uses a neo 550 for running the intaking wheels 
 public class GrabberSubsystem extends SubsystemBase implements GenericMotorSubsystem {
 
-  CANSparkMax GrabberMotor;
+  CANSparkMax m_GrabberMotor;
+  RelativeEncoder m_GrabberEncoder;
   double CurrentCurrentOutput; 
   final double MaxAllowedCurrent = 20; 
 
   public GrabberSubsystem() {
-    GrabberMotor = new CANSparkMax(0, MotorType.kBrushless);
-    GrabberMotor.setIdleMode(IdleMode.kBrake); 
+    m_GrabberMotor = new CANSparkMax(2, MotorType.kBrushless);
+    m_GrabberMotor.setIdleMode(IdleMode.kBrake); 
+
+    m_GrabberEncoder = m_GrabberMotor.getEncoder(); 
+
+    m_GrabberEncoder.setPosition(0); 
 
 
 
@@ -26,19 +32,21 @@ public class GrabberSubsystem extends SubsystemBase implements GenericMotorSubsy
     
     SmartDashboard.putNumber("Grabber Motor Amp", CurrentCurrentOutput); 
     SmartDashboard.putBoolean("Grabber Motor Locked", false); 
+    SmartDashboard.putNumber("Current Grabber Position", m_GrabberEncoder.getPosition()); 
+
 
   }
 
   public void directMotorCommand(double speed) { 
 
     
-    if(CurrentCurrentOutput > MaxAllowedCurrent){
-      GrabberMotor.set(0); 
-    }
-    else{
-      GrabberMotor.set(speed);
+    // if(CurrentCurrentOutput > MaxAllowedCurrent){
+      // GrabberMotor.set(0); 
+    // }
+    // else{
+      m_GrabberMotor.set(speed);
 
-    }
+    // }
 
     
 
@@ -50,7 +58,7 @@ public class GrabberSubsystem extends SubsystemBase implements GenericMotorSubsy
   }
 
   public void stopMotors() {
-    GrabberMotor.set(0);
+    m_GrabberMotor.set(0);
     
 
   }
@@ -58,10 +66,10 @@ public class GrabberSubsystem extends SubsystemBase implements GenericMotorSubsy
   @Override
   public void periodic() {
 
-    CurrentCurrentOutput = GrabberMotor.getOutputCurrent(); 
+    CurrentCurrentOutput = m_GrabberMotor.getOutputCurrent(); 
 
     SmartDashboard.putNumber("Grabber Motor Amp", CurrentCurrentOutput); 
-
+    SmartDashboard.putNumber("Current Grabber Position", m_GrabberEncoder.getPosition()); 
 
   }
 

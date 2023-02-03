@@ -18,18 +18,8 @@ public final class Main {
    */
 
   public static void main(String... args) {
-    boolean broken = false;
 
     RobotBase.startRobot(Robot::new);
 
-    if (broken) {
-      for (;;) {
-        try {
-          RobotBase.startRobot(Robot::new);
-          
-        } catch (Exception e) {
-        }
-      }
-    }
   }
 }
