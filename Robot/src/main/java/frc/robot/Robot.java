@@ -26,8 +26,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    SmartDashboard.putBoolean("Enabled?", isEnabled());
-    SmartDashboard.putNumber("Current draw", examplePD.getTotalCurrent());
+    // SmartDashboard.putBoolean("Enabled?", isEnabled());
+    // SmartDashboard.putNumber("Current draw", examplePD.getTotalCurrent());
   }
 
   @Override
