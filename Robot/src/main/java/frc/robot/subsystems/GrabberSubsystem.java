@@ -50,7 +50,6 @@ public class GrabberSubsystem extends SubsystemBase implements GenericMotorSubsy
   public void toSetpoint(double setpoint) { // for actuation
 
   }
-
   public void stopMotors() {
     m_GrabberMotor.set(0);
 

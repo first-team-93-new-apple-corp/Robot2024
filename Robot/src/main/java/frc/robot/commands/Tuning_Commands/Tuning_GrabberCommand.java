@@ -32,6 +32,7 @@ public class Tuning_GrabberCommand extends CommandBase {
 
     @Override
     public void execute() {
+        System.out.println("Sus");
         m_GrabberSubsystem.directMotorCommand(speed);
 
     }
