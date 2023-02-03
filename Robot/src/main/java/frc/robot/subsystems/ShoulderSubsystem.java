@@ -67,6 +67,7 @@ public class ShoulderSubsystem extends SubsystemBase implements ArmInterface{
     // SmartDashboard.putNumber("Arm Setpoint", 0);
     SmartDashboard.putNumber("CurrentPoseShoulder", ShoulderMotorMain.getSelectedSensorPosition());
     SmartDashboard.putNumber("kPShoulder", kP);
+    SmartDashboard.putNumber("kIShoulder", kI);
     SmartDashboard.putNumber("kDShoulder", kD);
     SmartDashboard.putNumber("VelocityShoulder", MAXVELO);
     SmartDashboard.putNumber("AccelerationShoulder", MAXACCEL);
@@ -105,6 +106,11 @@ public class ShoulderSubsystem extends SubsystemBase implements ArmInterface{
   ShoulderMotorMain.setSelectedSensorPosition((shoulderCanCoder.getAbsolutePosition() / 360) * (2048 * Constants.ShoulderGearRatio));
   }
   @Override public void periodic() {
+    kP = SmartDashboard.getNumber("kPShoulder", kP);
+    kI = SmartDashboard.getNumber("kIShoulder", kI);
+    kD = SmartDashboard.getNumber("kDShoulder", kD);
+    MAXVELO = SmartDashboard.getNumber("VelocityShoulder", MAXVELO);
+    MAXACCEL = SmartDashboard.getNumber("AccelerationShoulder", MAXACCEL);
 
   }
 
