@@ -12,9 +12,10 @@ public class Tuning_ShoulderCommand extends CommandBase {
     double speed;
 
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-    public Tuning_ShoulderCommand(ShoulderSubsystem m_ShoulderSubsystem, XboxController f310) {
+    public Tuning_ShoulderCommand(ShoulderSubsystem m_ShoulderSubsystem, Double speed) {
         this.m_ShoulderSubsystem = m_ShoulderSubsystem; 
-        SmartDashboard.putNumber("Shoulder Setpoint", 0);
+        this.speed = speed;
+        // SmartDashboard.putNumber("Shoulder Setpoint", 0);
 
         addRequirements(m_ShoulderSubsystem);
 
@@ -27,7 +28,8 @@ public class Tuning_ShoulderCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_ShoulderSubsystem.toSetpoint(SmartDashboard.getNumber("Shoulder Setpoint", 0));
+        m_ShoulderSubsystem.directMotorCommand(speed);
+        // m_ShoulderSubsystem.toSetpoint(SmartDashboard.getNumber("Shoulder Setpoint", 0));
     }
 
     @Override

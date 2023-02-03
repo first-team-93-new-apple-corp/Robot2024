@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.OperatorSelectorCommand;
+import frc.robot.commands.Robot_Commands.ManualCommands.Manual_TelescopeCommand;
 import frc.robot.commands.Tuning_Commands.Tuning_GrabberCommand;
 import frc.robot.commands.Tuning_Commands.Tuning_TelescopeCommand;
 import frc.robot.commands.Tuning_Commands.Tuning_ShoulderCommand;
@@ -53,10 +54,10 @@ public class RobotContainer {
     arm_Out = new JoystickButton(m_F310, Constants.F310.Y);
 
     // Subsystems
-    // m_telescopingSubsystem = new TelescopingSubsystem();
+    m_telescopingSubsystem = new TelescopingSubsystem();
     m_grabberSubsystem = new GrabberSubsystem();
     m_OperatorInterfaceSubsystem = new OperatorInterfaceSubsystem();
-    // m_ShoulderSubsystem = new ShoulderSubsystem();
+    m_ShoulderSubsystem = new ShoulderSubsystem();
 
     // Commands
     // m_TelescopingCommand = new Tuning_TelescopeCommand(m_telescopingSubsystem);
@@ -66,7 +67,9 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Commands requiring buttons
-    m_OperatorSelectorCommand = new OperatorSelectorCommand(OperatorSelectorBackward, OperatorSelectorForward, m_OperatorInterfaceSubsystem);
+    // m_OperatorSelectorCommand = new
+    // OperatorSelectorCommand(OperatorSelectorBackward, OperatorSelectorForward,
+    // m_OperatorInterfaceSubsystem);
   }
 
   public JoystickButton OperatorSelectorForward;
@@ -76,11 +79,16 @@ public class RobotContainer {
     OperatorSelectorForward = new JoystickButton(m_F310, 2);
     OperatorSelectorBackward = new JoystickButton(m_F310, 3);
     // modifying to be handled by the command while we tune the mechanisms...
-    grabber_in_Button.whileTrue(new Tuning_GrabberCommand(m_grabberSubsystem, .2, m_F310));
-    grabber_out_Button.whileTrue(new Tuning_GrabberCommand(m_grabberSubsystem, -0.2, m_F310));
+    // grabber_in_Button.whileTrue(new Tuning_GrabberCommand(m_grabberSubsystem, .2,
+    // m_F310));
+    // grabber_out_Button.whileTrue(new Tuning_GrabberCommand(m_grabberSubsystem,
+    // -0.2, m_F310));
+    //
+    new JoystickButton(m_F310, Constants.F310.Y).whileTrue(new Tuning_ShoulderCommand(m_ShoulderSubsystem, 0.05));
+    new JoystickButton(m_F310, Constants.F310.A).whileTrue(new Tuning_ShoulderCommand(m_ShoulderSubsystem, -0.05));
     // arm_Button.whileTrue(new TestingArmCommand(m_telescopingSubsystem));
-    // arm_In.whileTrue(new ManualTelescopeCommand(m_telescopingSubsystem, -0.1));
-    // arm_Out.whileTrue(new ManualTelescopeCommand(m_telescopingSubsystem, 0.1));
+    new JoystickButton(m_F310, Constants.F310.X).whileTrue(new Manual_TelescopeCommand(m_telescopingSubsystem, 0.2));
+    new JoystickButton(m_F310, Constants.F310.B).whileTrue(new Manual_TelescopeCommand(m_telescopingSubsystem, -0.2));
     // OperatorSelectorForward.onTrue(new OperatorSelectorCommand(true, op));
     // OperatorSelectorBackward.onTrue(new OperatorSelectorCommand(false, op));
 

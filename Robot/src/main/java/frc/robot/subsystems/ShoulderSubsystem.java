@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -11,11 +12,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubsystem{
-
+public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubsystem {
 
   WPI_TalonFX Shoulder_FL, Shoulder_FR, Shoulder_BL, Shoulder_BR;
-
 
   TalonFXConfiguration ShoulderMotorConfig;
   MotorControllerGroup ShoulderMotors;
@@ -29,16 +28,22 @@ public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubs
 
   public ShoulderSubsystem() {
     Shoulder_FL = new WPI_TalonFX(Constants.CanID_CTRE.FrontLeftShoulder);
-    Shoulder_FR = new WPI_TalonFX(Constants.CanID_CTRE.FrontRightShoulder);
     Shoulder_BL = new WPI_TalonFX(Constants.CanID_CTRE.BackLeftShoulder);
+
+    Shoulder_FR = new WPI_TalonFX(Constants.CanID_CTRE.FrontRightShoulder);
     Shoulder_BR = new WPI_TalonFX(Constants.CanID_CTRE.BackRightShoulder);
-    
-    //Use Motor Controller group once all motors spin the same direction
+
+    Shoulder_FR.setInverted(TalonFXInvertType.Clockwise);
+    Shoulder_BR.setInverted(TalonFXInvertType.Clockwise);
+
+    Shoulder_FL.setInverted(TalonFXInvertType.CounterClockwise);
+    Shoulder_BL.setInverted(TalonFXInvertType.CounterClockwise);
+
+    // Use Motor Controller group once all motors spin the same direction
     ShoulderMotors = new MotorControllerGroup(Shoulder_FL, Shoulder_FR, Shoulder_BL, Shoulder_BR);
-    ShoulderMotorConfig = new TalonFXConfiguration(); 
+    ShoulderMotorConfig = new TalonFXConfiguration();
 
-
-    shoulderCanCoder = new CANCoder(0); //verify ids
+    shoulderCanCoder = new CANCoder(0); // verify ids
     kP = 0.7;
     kI = 0;
     kD = 0;
@@ -51,7 +56,7 @@ public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubs
     ShoulderMotorConfig.slot0.kD = kD;
     ShoulderMotorConfig.motionAcceleration = MAXACCEL;
     ShoulderMotorConfig.motionCurveStrength = 4;
-    ShoulderMotorConfig.motionCruiseVelocity = MAXVELO; //max 1600
+    ShoulderMotorConfig.motionCruiseVelocity = MAXVELO; // max 1600
     ShoulderMotorConfig.voltageCompSaturation = 12; // check
 
     Shoulder_FL.enableVoltageCompensation(true);
@@ -73,41 +78,44 @@ public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubs
     SmartDashboard.putNumber("VelocityShoulder", MAXVELO);
     SmartDashboard.putNumber("AccelerationShoulder", MAXACCEL);
 
-    Shoulder_FR.follow(Shoulder_FL);
-    Shoulder_BL.follow(Shoulder_FL);
-    Shoulder_BR.follow(Shoulder_FL);
-
-
-  }
-  public void toSetpoint(double TicksetPoint){ //TODO parameter should specify units.
-  Shoulder_FL.set(ControlMode.MotionMagic, TicksetPoint);
+    // Shoulder_FR.follow(Shoulder_FL);
+    // Shoulder_BL.follow(Shoulder_FL);
+    // Shoulder_BR.follow(Shoulder_FL);
 
   }
 
-  public void directMotorCommand(double speed){
-    Shoulder_FL.set(speed);
+  public void toSetpoint(double TicksetPoint) { // TODO parameter should specify units.
+    Shoulder_FL.set(ControlMode.MotionMagic, TicksetPoint);
+
+  }
+
+  public void directMotorCommand(double speed) {
+    ShoulderMotors.set(speed);
   }
 
   public void stopMotors() {
-    Shoulder_FL.set(0);
+    ShoulderMotors.set(0);
   }
 
-  public double DegreesToRotations(double degrees){
+  public double DegreesToRotations(double degrees) {
     return degrees * Constants.DegreesToTicksShoulder;
   }
 
-  public double TicksToDegrees(double Ticks){
-    return Ticks * 1/Constants.DegreesToTicksShoulder;
+  public double TicksToDegrees(double Ticks) {
+    return Ticks * 1 / Constants.DegreesToTicksShoulder;
   }
 
-  public double getDegrees(){
+  public double getDegrees() {
     return TicksToDegrees(Shoulder_FL.getSelectedSensorPosition());
   }
 
-  public void AbsoluteZero(){
-    Shoulder_FL.setSelectedSensorPosition((shoulderCanCoder.getAbsolutePosition() / 360) * (2048 * Constants.ShoulderGearRatio));
+  public void AbsoluteZero() {
+    Shoulder_FL.setSelectedSensorPosition(
+        (shoulderCanCoder.getAbsolutePosition() / 360) * (2048 * Constants.ShoulderGearRatio));
   }
-  @Override public void periodic() {
+
+  @Override
+  public void periodic() {
     kP = SmartDashboard.getNumber("kPShoulder", kP);
     kI = SmartDashboard.getNumber("kIShoulder", kI);
     kD = SmartDashboard.getNumber("kDShoulder", kD);
