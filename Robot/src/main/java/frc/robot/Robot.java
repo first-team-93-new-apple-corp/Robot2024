@@ -60,6 +60,7 @@ public class Robot extends TimedRobot {
     // }
 
     m_robotContainer.m_ShoulderCommand.schedule();
+    m_robotContainer.m_OperatorSelectorCommand.schedule();
   }
 
   @Override
