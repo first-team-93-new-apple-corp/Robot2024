@@ -4,18 +4,16 @@
 
 package frc.robot.subsystems;
 
-import java.util.HashMap;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class OperatorInterfaceSub extends SubsystemBase {
+public class OperatorInterfaceSubsystem extends SubsystemBase {
   boolean forward;
   int StationNum = 1;
 
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-  public OperatorInterfaceSub() {
+  public OperatorInterfaceSubsystem() {
     SmartDashboard.putBoolean("Station1", true);
     SmartDashboard.putBoolean("Station2", false);
     SmartDashboard.putBoolean("Station3", false);

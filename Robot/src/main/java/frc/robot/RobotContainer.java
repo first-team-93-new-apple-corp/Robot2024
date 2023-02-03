@@ -12,56 +12,61 @@ import frc.robot.commands.Tuning_Commands.Tuning_GrabberCommand;
 import frc.robot.commands.Tuning_Commands.Tuning_TelescopeCommand;
 import frc.robot.commands.Tuning_Commands.Tuning_ShoulderCommand;
 import frc.robot.subsystems.GrabberSubsystem;
-import frc.robot.subsystems.OperatorInterfaceSub;
+import frc.robot.subsystems.OperatorInterfaceSubsystem;
 import frc.robot.subsystems.TelescopingSubsystem;
 import frc.robot.subsystems.ShoulderSubsystem;
 
 public class RobotContainer {
+
+  // Subsystems
   TelescopingSubsystem m_telescopingSubsystem;
   GrabberSubsystem m_grabberSubsystem;
   ShoulderSubsystem m_ShoulderSubsystem;
+  OperatorInterfaceSubsystem m_OperatorInterfaceSubsystem;
 
+  // Commands
   Tuning_TelescopeCommand m_TelescopingCommand;
-  Tuning_GrabberCommand m_GrabberCommand;
+  // Tuning_GrabberCommand m_GrabberCommand;
   Tuning_ShoulderCommand m_ShoulderCommand;
   OperatorSelectorCommand m_OperatorSelectorCommand;
 
+  // Controllers
   XboxController m_F310;
 
+  // Buttons
   JoystickButton grabber_in_Button;
   JoystickButton grabber_out_Button;
   JoystickButton arm_Button;
   JoystickButton arm_In;
   JoystickButton arm_Out;
 
-  // Joysticks
-
   // Other Definitions
-  OperatorInterfaceSub op = new OperatorInterfaceSub();
 
   public RobotContainer() {
 
     // Controllers
-    m_F310 = new XboxController(0);
-    grabber_in_Button = new JoystickButton(m_F310, Constants.F310_A);
-    grabber_out_Button = new JoystickButton(m_F310, Constants.F310_B);
-    arm_Button = new JoystickButton(m_F310, Constants.F310_Start);
-    arm_In = new JoystickButton(m_F310, Constants.F310_X);
-    arm_Out = new JoystickButton(m_F310, Constants.F310_Y);
+    m_F310 = new XboxController(Constants.Joystick_Port.F310Port);
+    grabber_in_Button = new JoystickButton(m_F310, Constants.F310.A);
+    grabber_out_Button = new JoystickButton(m_F310, Constants.F310.B);
+    arm_Button = new JoystickButton(m_F310, Constants.F310.Start);
+    arm_In = new JoystickButton(m_F310, Constants.F310.X);
+    arm_Out = new JoystickButton(m_F310, Constants.F310.Y);
 
     // Subsystems
-    m_telescopingSubsystem = new TelescopingSubsystem();
+    // m_telescopingSubsystem = new TelescopingSubsystem();
     m_grabberSubsystem = new GrabberSubsystem();
-    m_ShoulderSubsystem = new ShoulderSubsystem();
+    m_OperatorInterfaceSubsystem = new OperatorInterfaceSubsystem();
+    // m_ShoulderSubsystem = new ShoulderSubsystem();
 
     // Commands
-    m_TelescopingCommand = new Tuning_TelescopeCommand(m_telescopingSubsystem);
-    m_GrabberCommand = new Tuning_GrabberCommand(m_grabberSubsystem, 0, m_F310);
-    m_ShoulderCommand = new Tuning_ShoulderCommand(m_ShoulderSubsystem, m_F310);
+    // m_TelescopingCommand = new Tuning_TelescopeCommand(m_telescopingSubsystem);
+    // m_GrabberCommand = new Tuning_GrabberCommand(m_grabberSubsystem, 0, m_F310);
+    // m_ShoulderCommand = new Tuning_ShoulderCommand(m_ShoulderSubsystem, m_F310);
 
     configureButtonBindings();
+
     // Commands requiring buttons
-    m_OperatorSelectorCommand = new OperatorSelectorCommand( OperatorSelectorBackward, OperatorSelectorForward, op);
+    m_OperatorSelectorCommand = new OperatorSelectorCommand(OperatorSelectorBackward, OperatorSelectorForward, m_OperatorInterfaceSubsystem);
   }
 
   public JoystickButton OperatorSelectorForward;

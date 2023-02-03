@@ -4,19 +4,19 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.OperatorInterfaceSub;
+import frc.robot.subsystems.OperatorInterfaceSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
 public class OperatorSelectorCommand extends CommandBase {
 
 
     boolean forward;
-    OperatorInterfaceSub op;
+    OperatorInterfaceSubsystem op;
 
     JoystickButton left, right; 
 
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-    public OperatorSelectorCommand(JoystickButton left, JoystickButton right,  OperatorInterfaceSub op) {
+    public OperatorSelectorCommand(JoystickButton left, JoystickButton right,  OperatorInterfaceSubsystem op) {
         this.left = left;
         this.right = right; 
         this.op = op;

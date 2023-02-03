@@ -14,26 +14,27 @@ import frc.robot.Constants;
 public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubsystem{
 
 
-  WPI_TalonFX ShoulderMotorMain;
-  WPI_TalonFX ShoulderMotor2;
-  WPI_TalonFX ShoulderMotor3;
-  WPI_TalonFX ShoulderMotor4;
+  WPI_TalonFX Shoulder_FL, Shoulder_FR, Shoulder_BL, Shoulder_BR;
+
+
   TalonFXConfiguration ShoulderMotorConfig;
   MotorControllerGroup ShoulderMotors;
   CANCoder shoulderCanCoder;
   DigitalInput ExtendedLimitSwitch;
   DigitalInput ClosedLimitSwitch;
+
   public double Setpoint = 0;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
   public double MAXVELO, MAXACCEL;
 
   public ShoulderSubsystem() {
-    ShoulderMotorMain = new WPI_TalonFX(0); //TODO verify ids
-    ShoulderMotor2 = new WPI_TalonFX(0);
-    ShoulderMotor3 = new WPI_TalonFX(0);
-    ShoulderMotor4 = new WPI_TalonFX(0);
+    Shoulder_FL = new WPI_TalonFX(Constants.CanID_CTRE.FrontLeftShoulder);
+    Shoulder_FR = new WPI_TalonFX(Constants.CanID_CTRE.FrontRightShoulder);
+    Shoulder_BL = new WPI_TalonFX(Constants.CanID_CTRE.BackLeftShoulder);
+    Shoulder_BR = new WPI_TalonFX(Constants.CanID_CTRE.BackRightShoulder);
+    
     //Use Motor Controller group once all motors spin the same direction
-    ShoulderMotors = new MotorControllerGroup(ShoulderMotorMain, ShoulderMotor2,ShoulderMotor3, ShoulderMotor4);
+    ShoulderMotors = new MotorControllerGroup(Shoulder_FL, Shoulder_FR, Shoulder_BL, Shoulder_BR);
     ShoulderMotorConfig = new TalonFXConfiguration(); 
 
 
@@ -53,40 +54,42 @@ public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubs
     ShoulderMotorConfig.motionCruiseVelocity = MAXVELO; //max 1600
     ShoulderMotorConfig.voltageCompSaturation = 12; // check
 
-    ShoulderMotorMain.enableVoltageCompensation(true);
-    ShoulderMotor2.enableVoltageCompensation(true);
-    ShoulderMotor3.enableVoltageCompensation(true);
-    ShoulderMotor4.enableVoltageCompensation(true);
+    Shoulder_FL.enableVoltageCompensation(true);
+    Shoulder_FR.enableVoltageCompensation(true);
+    Shoulder_BL.enableVoltageCompensation(true);
+    Shoulder_BR.enableVoltageCompensation(true);
 
-    ShoulderMotorMain.configAllSettings(ShoulderMotorConfig);
-    ShoulderMotor2.configAllSettings(ShoulderMotorConfig);
-    ShoulderMotor3.configAllSettings(ShoulderMotorConfig);
-    ShoulderMotor4.configAllSettings(ShoulderMotorConfig);
+    Shoulder_FL.configAllSettings(ShoulderMotorConfig);
+    Shoulder_FR.configAllSettings(ShoulderMotorConfig);
+    Shoulder_BL.configAllSettings(ShoulderMotorConfig);
+    Shoulder_BR.configAllSettings(ShoulderMotorConfig);
     SmartDashboard.putNumber("MaxOutputShoulder", 0);
 
     // SmartDashboard.putNumber("Arm Setpoint", 0);
-    SmartDashboard.putNumber("CurrentPoseShoulder", ShoulderMotorMain.getSelectedSensorPosition());
+    SmartDashboard.putNumber("CurrentPoseShoulder", Shoulder_FL.getSelectedSensorPosition());
     SmartDashboard.putNumber("kPShoulder", kP);
+    SmartDashboard.putNumber("kIShoulder", kI);
     SmartDashboard.putNumber("kDShoulder", kD);
     SmartDashboard.putNumber("VelocityShoulder", MAXVELO);
     SmartDashboard.putNumber("AccelerationShoulder", MAXACCEL);
-    ShoulderMotor2.follow(ShoulderMotorMain);
-    ShoulderMotor3.follow(ShoulderMotorMain);
-    ShoulderMotor4.follow(ShoulderMotorMain);
+
+    Shoulder_FR.follow(Shoulder_FL);
+    Shoulder_BL.follow(Shoulder_FL);
+    Shoulder_BR.follow(Shoulder_FL);
 
 
   }
   public void toSetpoint(double TicksetPoint){ //TODO parameter should specify units.
-  ShoulderMotorMain.set(ControlMode.MotionMagic, TicksetPoint);
+  Shoulder_FL.set(ControlMode.MotionMagic, TicksetPoint);
 
   }
 
   public void directMotorCommand(double speed){
-    ShoulderMotorMain.set(speed);
+    Shoulder_FL.set(speed);
   }
 
   public void stopMotors() {
-    ShoulderMotorMain.set(0);
+    Shoulder_FL.set(0);
   }
 
   public double DegreesToRotations(double degrees){
@@ -98,13 +101,18 @@ public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubs
   }
 
   public double getDegrees(){
-    return TicksToDegrees(ShoulderMotorMain.getSelectedSensorPosition());
+    return TicksToDegrees(Shoulder_FL.getSelectedSensorPosition());
   }
 
   public void AbsoluteZero(){
-  ShoulderMotorMain.setSelectedSensorPosition((shoulderCanCoder.getAbsolutePosition() / 360) * (2048 * Constants.ShoulderGearRatio));
+    Shoulder_FL.setSelectedSensorPosition((shoulderCanCoder.getAbsolutePosition() / 360) * (2048 * Constants.ShoulderGearRatio));
   }
   @Override public void periodic() {
+    kP = SmartDashboard.getNumber("kPShoulder", kP);
+    kI = SmartDashboard.getNumber("kIShoulder", kI);
+    kD = SmartDashboard.getNumber("kDShoulder", kD);
+    MAXVELO = SmartDashboard.getNumber("VelocityShoulder", MAXVELO);
+    MAXACCEL = SmartDashboard.getNumber("AccelerationShoulder", MAXACCEL);
 
   }
 

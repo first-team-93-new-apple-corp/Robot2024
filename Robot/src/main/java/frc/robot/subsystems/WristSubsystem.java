@@ -7,6 +7,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 //uses a neo for actuation
 
@@ -17,7 +18,7 @@ public class WristSubsystem extends SubsystemBase implements GenericMotorSubsyst
     CANCoder wristCanCoder;
 
     public WristSubsystem() {
-        WristMotor = new CANSparkMax(0, MotorType.kBrushless);
+        WristMotor = new CANSparkMax(Constants.CanID_Rev.WristMotor, MotorType.kBrushless);
         WristEncoder = WristMotor.getEncoder();
         wristCanCoder = new CANCoder(0); // TODO Change ID
         WristPID = WristMotor.getPIDController();
