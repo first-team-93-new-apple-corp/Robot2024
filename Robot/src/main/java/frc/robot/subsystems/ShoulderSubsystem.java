@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class ShoulderSubsystem extends SubsystemBase implements ArmInterface{
+public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubsystem{
 
 
   WPI_TalonFX ShoulderMotorMain;
@@ -117,5 +117,11 @@ public class ShoulderSubsystem extends SubsystemBase implements ArmInterface{
   @Override
   public void simulationPeriodic() {
 
+  }
+
+  @Override
+  public boolean atSetpoint() {
+    // TODO Auto-generated method stub
+    return false;
   }
 }

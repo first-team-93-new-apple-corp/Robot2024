@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 //uses a neo for actuation
 
-public class WristSubsystem extends SubsystemBase implements ArmInterface{
+public class WristSubsystem extends SubsystemBase implements GenericMotorSubsystem{
     CANSparkMax WristMotor;
     RelativeEncoder WristEncoder;
     SparkMaxPIDController WristPID;
@@ -41,6 +41,12 @@ public class WristSubsystem extends SubsystemBase implements ArmInterface{
 
     @Override
     public void simulationPeriodic() {
+    }
+
+    @Override
+    public boolean atSetpoint() {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }
