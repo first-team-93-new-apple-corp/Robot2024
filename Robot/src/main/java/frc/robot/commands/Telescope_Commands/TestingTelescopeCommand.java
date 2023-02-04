@@ -1,20 +1,20 @@
-package frc.robot.commands.Tuning_Commands;
+package frc.robot.commands.Telescope_Commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.TelescopingSubsystem;
-
-public class Tuning_TelescopeCommand extends CommandBase {
+@Deprecated
+public class TestingTelescopeCommand extends CommandBase {
 
     TelescopingSubsystem m_TelescopingSubsystem;
 
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-    public Tuning_TelescopeCommand(TelescopingSubsystem m_TelescopingSubsystem) {
+    public TestingTelescopeCommand(TelescopingSubsystem m_TelescopingSubsystem) {
         this.m_TelescopingSubsystem = m_TelescopingSubsystem;
 
         addRequirements(m_TelescopingSubsystem);
 
-        SmartDashboard.putNumber("Telescope Setpoint", 181);
+        SmartDashboard.putNumber("Arm Setpoint", 0);
     }
 
     @Override
@@ -29,18 +29,21 @@ public class Tuning_TelescopeCommand extends CommandBase {
 
     }
 
-    ArmState currentArmState = ArmState.STANBY;
+    ArmState currentArmState = ArmState.ZEROING;
 
     @Override
     public void execute() {
+        // m_TelescopingSubsystem.OscilateArm();
+        // m_TelescopingSubsystem.directMotorCommand(0.1);
+
         switch (currentArmState) {
             case STANBY:
-                if (SmartDashboard.getNumber("Telescope Setpoint", 181) != 0) {
+                if (SmartDashboard.getNumber("Arm Setpoint", -1) != 0) {
                     currentArmState = ArmState.SETPOINT;
                 }
                 break;
             case SETPOINT:
-            m_TelescopingSubsystem.toSetpoint(SmartDashboard.getNumber("Telescope Setpoint", 181));
+                m_TelescopingSubsystem.toSetpoint(SmartDashboard.getNumber("Arm Setpoint", 0));
 
                 break;
             case ZEROING:

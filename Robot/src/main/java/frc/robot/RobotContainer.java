@@ -8,10 +8,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.OperatorSelectorCommand;
-import frc.robot.commands.Robot_Commands.ManualCommands.Manual_TelescopeCommand;
-import frc.robot.commands.Tuning_Commands.Tuning_GrabberCommand;
-import frc.robot.commands.Tuning_Commands.Tuning_TelescopeCommand;
-import frc.robot.commands.Tuning_Commands.Tuning_ShoulderCommand;
+import frc.robot.commands.Grabber_Commands.Tuning_GrabberCommand;
+import frc.robot.commands.Shoulder_Commands.Manual_ShoulderCommand;
+import frc.robot.commands.Shoulder_Commands.Tuning_ShoulderCommand;
+import frc.robot.commands.Telescope_Commands.Manual_TelescopeCommand;
+import frc.robot.commands.Telescope_Commands.Tuning_TelescopeCommand;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.OperatorInterfaceSubsystem;
 import frc.robot.subsystems.TelescopingSubsystem;
@@ -84,11 +85,14 @@ public class RobotContainer {
     // grabber_out_Button.whileTrue(new Tuning_GrabberCommand(m_grabberSubsystem,
     // -0.2, m_F310));
     //
-    new JoystickButton(m_F310, Constants.F310.Y).whileTrue(new Tuning_ShoulderCommand(m_ShoulderSubsystem, 0.2));
-    new JoystickButton(m_F310, Constants.F310.A).whileTrue(new Tuning_ShoulderCommand(m_ShoulderSubsystem, -0.2));
+    new JoystickButton(m_F310, Constants.F310.Y).whileTrue(new Manual_ShoulderCommand(m_ShoulderSubsystem, 0.2));
+    new JoystickButton(m_F310, Constants.F310.A).whileTrue(new Manual_ShoulderCommand(m_ShoulderSubsystem, -0.2));
     // arm_Button.whileTrue(new TestingArmCommand(m_telescopingSubsystem));
     new JoystickButton(m_F310, Constants.F310.X).whileTrue(new Manual_TelescopeCommand(m_telescopingSubsystem, 0.2));
     new JoystickButton(m_F310, Constants.F310.B).whileTrue(new Manual_TelescopeCommand(m_telescopingSubsystem, -0.2));
+
+
+    new JoystickButton(m_F310, Constants.F310.RightShoulderButton).whileTrue(new Tuning_ShoulderCommand(m_ShoulderSubsystem));
     // OperatorSelectorForward.onTrue(new OperatorSelectorCommand(true, op));
     // OperatorSelectorBackward.onTrue(new OperatorSelectorCommand(false, op));
 

@@ -1,17 +1,16 @@
-package frc.robot.commands.Robot_Commands.HoldingCommands;
+package frc.robot.commands.Shoulder_Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShoulderSubsystem;
 
-public class Holding_ShoulderCommand extends CommandBase {
+public class Manual_ShoulderCommand extends CommandBase {
 
-
-    ShoulderSubsystem m_ShoulderSubsystem; 
+    ShoulderSubsystem m_ShoulderSubsystem;
     double speed;
 
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-    public Holding_ShoulderCommand(ShoulderSubsystem m_ShoulderSubsystem,double speed) {
-        this.m_ShoulderSubsystem = m_ShoulderSubsystem; 
+    public Manual_ShoulderCommand(ShoulderSubsystem m_ShoulderSubsystem, double speed) {
+        this.m_ShoulderSubsystem = m_ShoulderSubsystem;
         this.speed = speed;
         addRequirements(m_ShoulderSubsystem);
 

@@ -41,11 +41,13 @@ public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubs
 
     // Use Motor Controller group once all motors spin the same direction
     ShoulderMotors = new MotorControllerGroup(Shoulder_FL, Shoulder_FR, Shoulder_BL, Shoulder_BR);
+
+
     ShoulderMotorConfig = new TalonFXConfiguration();
 
     shoulderCanCoder = new CANCoder(Constants.CanID_CTRE.ShoulderCancoder); // verify ids
-    shoulderCanCoder.configSensorDirection(true); 
-    shoulderCanCoder.configMagnetOffset(-219.462890625); 
+    shoulderCanCoder.configSensorDirection(true);
+    shoulderCanCoder.configMagnetOffset(-219.462890625);
 
     kP = 0.7;
     kI = 0;
@@ -54,15 +56,13 @@ public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubs
     MAXVELO = 200;
     MAXACCEL = 200;
 
-    double currentAngle = shoulderCanCoder.getAbsolutePosition(); 
+    double currentAngle = getAbsoluteDegrees();
+    currentAngle = DegreesToTicks(currentAngle);
 
-    currentAngle = DegreesToTicks(currentAngle); 
-
-    Shoulder_FL.setSelectedSensorPosition(currentAngle); 
-    Shoulder_FR.setSelectedSensorPosition(currentAngle); 
-    Shoulder_BL.setSelectedSensorPosition(currentAngle); 
-    Shoulder_BR.setSelectedSensorPosition(currentAngle); 
-    
+    Shoulder_FL.setSelectedSensorPosition(currentAngle);
+    Shoulder_FR.setSelectedSensorPosition(currentAngle);
+    Shoulder_BL.setSelectedSensorPosition(currentAngle);
+    Shoulder_BR.setSelectedSensorPosition(currentAngle);
 
     ShoulderMotorConfig.slot0.kP = kP;
     ShoulderMotorConfig.slot0.kI = kI;
@@ -71,7 +71,7 @@ public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubs
     ShoulderMotorConfig.motionCurveStrength = 4;
     ShoulderMotorConfig.motionCruiseVelocity = MAXVELO; // max 1600
     ShoulderMotorConfig.voltageCompSaturation = 12; // check
-    // ShoulderMotorConfig.slot0.closedLoopPeakOutput = 0.3; 
+    ShoulderMotorConfig.slot0.closedLoopPeakOutput = 0.3;
 
     Shoulder_FL.enableVoltageCompensation(true);
     Shoulder_FR.enableVoltageCompensation(true);
@@ -82,23 +82,27 @@ public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubs
     Shoulder_FR.configAllSettings(ShoulderMotorConfig);
     Shoulder_BL.configAllSettings(ShoulderMotorConfig);
     Shoulder_BR.configAllSettings(ShoulderMotorConfig);
-    SmartDashboard.putNumber("MaxOutputShoulder", 0);
 
-    // SmartDashboard.putNumber("Arm Setpoint", 0);
-    SmartDashboard.putNumber("kPShoulder", kP);
-    SmartDashboard.putNumber("kIShoulder", kI);
-    SmartDashboard.putNumber("kDShoulder", kD);
-    SmartDashboard.putNumber("VelocityShoulder", MAXVELO);
-    SmartDashboard.putNumber("AccelerationShoulder", MAXACCEL);
 
-    // Shoulder_FR.follow(Shoulder_FL);
-    // Shoulder_BL.follow(Shoulder_FL);
-    // Shoulder_BR.follow(Shoulder_FL);
 
+    SmartDashboard.putNumber("Shoulder kI", kI);
+    SmartDashboard.putNumber("Shoulder kP", kP);
+    SmartDashboard.putNumber("Shoulder kD", kD);
+    SmartDashboard.putNumber("Shoulder Velocity", MAXVELO);
+    SmartDashboard.putNumber("Shoulder Acceleration", MAXACCEL);
+    SmartDashboard.putNumber("Shoulder Max Output", 0);
+    
+    
   }
 
-  public void toSetpoint(double TicksetPoint) { // TODO parameter should specify units.
-    Shoulder_FL.set(ControlMode.MotionMagic, TicksetPoint);
+  public void toSetpoint(double angleInDegrees) { // TODO parameter should specify units.
+
+    double angleInTicks = DegreesToTicks(angleInDegrees);
+
+    Shoulder_FL.set(ControlMode.MotionMagic, angleInTicks);
+    Shoulder_FR.set(ControlMode.MotionMagic, angleInTicks);
+    Shoulder_BL.set(ControlMode.MotionMagic, angleInTicks);
+    Shoulder_BR.set(ControlMode.MotionMagic, angleInTicks);
 
   }
 
@@ -110,42 +114,52 @@ public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubs
     ShoulderMotors.set(0);
   }
 
+  // degrees of the shoulder
   public double DegreesToTicks(double degrees) {
-    return (degrees / 2) * Constants.DegreesToTicksShoulder;
+    return (degrees) * Constants.DegreesToTicksShoulder;
   }
 
+  // returns degrees of the shoulder
   public double TicksToDegrees(double Ticks) {
-    return Ticks * 1 / Constants.DegreesToTicksShoulder;
+    return Ticks / (Constants.DegreesToTicksShoulder);
   }
 
-  public double getDegrees() {
-    return TicksToDegrees(Shoulder_FL.getSelectedSensorPosition());
-  }
+  // public double getDegrees() {
+  // return TicksToDegrees(Shoulder_FL.getSelectedSensorPosition());
+  // }
 
-  public void AbsoluteZero() {
-    Shoulder_FL.setSelectedSensorPosition(
-        (shoulderCanCoder.getAbsolutePosition() / 360) * (2048 * Constants.ShoulderGearRatio));
+  public double getAbsoluteDegrees() {
+    return shoulderCanCoder.getAbsolutePosition() / 2;
   }
+  // public void AbsoluteZero() {
+  // Shoulder_FL.setSelectedSensorPosition(
+  // (shoulderCanCoder.getAbsolutePosition() / 360) * (2048 *
+  // Constants.ShoulderGearRatio));
+  // }
 
   @Override
   public void periodic() {
-    kP = SmartDashboard.getNumber("kPShoulder", kP);
-    kI = SmartDashboard.getNumber("kIShoulder", kI);
-    kD = SmartDashboard.getNumber("kDShoulder", kD);
-    MAXVELO = SmartDashboard.getNumber("VelocityShoulder", MAXVELO);
-    MAXACCEL = SmartDashboard.getNumber("AccelerationShoulder", MAXACCEL);
 
+    ShoulderMotorConfig.slot0.kP = SmartDashboard.getNumber("Shoulder kP", kP);
+    ShoulderMotorConfig.slot0.kI = SmartDashboard.getNumber("Shoulder kI", kI);
+    ShoulderMotorConfig.slot0.kD = SmartDashboard.getNumber("Shoulder kD", kD);
+    ShoulderMotorConfig.motionCruiseVelocity = SmartDashboard.getNumber("Shoulder Velocity", MAXVELO);
+    ShoulderMotorConfig.motionAcceleration  = SmartDashboard.getNumber("Shoulder Acceleration", MAXACCEL);
+    ShoulderMotorConfig.slot0.closedLoopPeakOutput = SmartDashboard.getNumber("Shoulder Max Output", 0); 
 
-    SmartDashboard.putNumber("Shoulder Angle", shoulderCanCoder.getAbsolutePosition());
+    ShoulderMotorConfig.motionCurveStrength = 4;
+    ShoulderMotorConfig.voltageCompSaturation = 12; // check
 
-    SmartDashboard.putNumber("Sus Shoulder Angle", Shoulder_FL.getSelectedSensorPosition()); 
+    Shoulder_FL.configAllSettings(ShoulderMotorConfig);
+    Shoulder_FR.configAllSettings(ShoulderMotorConfig);
+    Shoulder_BL.configAllSettings(ShoulderMotorConfig);
+    Shoulder_BR.configAllSettings(ShoulderMotorConfig);
 
+    SmartDashboard.putNumber("Shoulder Angle Degrees", shoulderCanCoder.getAbsolutePosition() / 2);
 
+    SmartDashboard.putNumber("Sus Shoulder Angle in Ticks", Shoulder_FL.getSelectedSensorPosition());
 
-    
-
-
-    
+    SmartDashboard.putNumber("Sus Shoulder Angle in Degrees", TicksToDegrees(Shoulder_FL.getSelectedSensorPosition()));
 
   }
 

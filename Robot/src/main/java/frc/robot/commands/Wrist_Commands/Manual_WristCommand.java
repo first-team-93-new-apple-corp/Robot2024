@@ -1,4 +1,4 @@
-package frc.robot.commands.Robot_Commands.ManualCommands;
+package frc.robot.commands.Wrist_Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.WristSubsystem;

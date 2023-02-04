@@ -1,4 +1,4 @@
-package frc.robot.commands.Tuning_Commands;
+package frc.robot.commands.Wrist_Commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;

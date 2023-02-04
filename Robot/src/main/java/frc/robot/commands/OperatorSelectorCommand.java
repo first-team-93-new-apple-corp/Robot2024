@@ -4,45 +4,40 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants;
 import frc.robot.subsystems.OperatorInterfaceSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
 public class OperatorSelectorCommand extends CommandBase {
 
-
     boolean forward;
     OperatorInterfaceSubsystem op;
 
-    JoystickButton left, right; 
+    JoystickButton left, right;
+    int max_loops = (int) Units.secondsToMilliseconds(Constants.OperatorSettings.TimeBetweenSelectorPresses) / 20;
+    int loopsBetweenLastPressed = 0;
 
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-    public OperatorSelectorCommand(JoystickButton left, JoystickButton right,  OperatorInterfaceSubsystem op) {
+    public OperatorSelectorCommand(JoystickButton left, JoystickButton right, OperatorInterfaceSubsystem op) {
         this.left = left;
-        this.right = right; 
+        this.right = right;
         this.op = op;
     }
 
     @Override
     public void initialize() {
-
-
-
     }
 
-    int loop_counter = 0; 
-    int max_loops = (int) Units.secondsToMilliseconds(0.25) / 20; 
     @Override
     public void execute() {
-       if(left.getAsBoolean() && loop_counter >= max_loops ){
+        if (left.getAsBoolean() && loopsBetweenLastPressed >= max_loops) {
             op.changeState(false);
-            loop_counter = 0; 
-        }
-        else if(right.getAsBoolean() && loop_counter >= max_loops){
+            loopsBetweenLastPressed = 0;
+        } else if (right.getAsBoolean() && loopsBetweenLastPressed >= max_loops) {
             op.changeState(true);
-            loop_counter = 0; 
-        }
-        else{
-            loop_counter++; 
+            loopsBetweenLastPressed = 0;
+        } else {
+            loopsBetweenLastPressed++;
         }
     }
 

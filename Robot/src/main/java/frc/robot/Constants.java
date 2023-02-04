@@ -9,6 +9,11 @@ public final class Constants {
 
   }
 
+
+  public class OperatorSettings{
+    public static final double TimeBetweenSelectorPresses = 0.25;
+  }
+
   public class CanID_Rev {
     public static final int PDH = 1; 
     public static final int GrabberMotor = 2; 
@@ -96,7 +101,9 @@ public final class Constants {
   public static final double MAXActuation = 16;
   public static final double InchesToTicksTelescope = totalTicks / MAXActuation;
   public static final double ShoulderGearRatio = 240; // TODO GET ACTUAL VALUE
-  public static final double DegreesToTicksShoulder = (120 * 2048);
+
+  // 2048 ticks per revolution * 120 gear ratio * 2:1 ratio between motor and arm angle
+  public static final double DegreesToTicksShoulder =  (2048 * 120 * 2);
 
 
 }

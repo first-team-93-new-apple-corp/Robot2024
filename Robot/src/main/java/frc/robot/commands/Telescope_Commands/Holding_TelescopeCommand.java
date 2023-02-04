@@ -1,4 +1,4 @@
-package frc.robot.commands.Robot_Commands.HoldingCommands;
+package frc.robot.commands.Telescope_Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShoulderSubsystem;

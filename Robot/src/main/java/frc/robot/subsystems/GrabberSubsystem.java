@@ -4,14 +4,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.Encoder.IndexingType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 // uses a neo 550 for actuating
 // uses a neo 550 for running the intaking wheels 
+
 public class GrabberSubsystem extends SubsystemBase implements GenericMotorSubsystem {
 
   CANSparkMax m_GrabberMotor;
@@ -35,6 +34,14 @@ public class GrabberSubsystem extends SubsystemBase implements GenericMotorSubsy
 
   }
 
+
+  /**
+   * Grabber Direct Motor Command
+   * 
+   * @param speed The Speed to set the motor to
+   * @apiNote No safety checks are done here, so be careful
+   *
+   */
   public void directMotorCommand(double speed) {
 
     // if(CurrentCurrentOutput > MaxAllowedCurrent){
@@ -44,12 +51,26 @@ public class GrabberSubsystem extends SubsystemBase implements GenericMotorSubsy
     m_GrabberMotor.set(speed);
 
     // }
-
   }
 
+  /**
+   * Drive the Grabber to Setpoint
+   * 
+   * @deprecated needs to be updated
+   * @apiNote TODO: fill out
+   * @param setpoint The Setpoint in ______ to drive the Grabber to
+   *
+   */
+  @Deprecated
   public void toSetpoint(double setpoint) { // for actuation
 
   }
+
+  /**
+   * Stops the Grabber motor
+   *
+   */
+  @Deprecated
   public void stopMotors() {
     m_GrabberMotor.set(0);
 
@@ -65,7 +86,6 @@ public class GrabberSubsystem extends SubsystemBase implements GenericMotorSubsy
 
   }
 
-
   @Override
   public boolean atSetpoint() {
     return false;
@@ -74,6 +94,5 @@ public class GrabberSubsystem extends SubsystemBase implements GenericMotorSubsy
   @Override
   public void simulationPeriodic() {
   }
-
 
 }
