@@ -84,8 +84,8 @@ public class RobotContainer {
     // grabber_out_Button.whileTrue(new Tuning_GrabberCommand(m_grabberSubsystem,
     // -0.2, m_F310));
     //
-    new JoystickButton(m_F310, Constants.F310.Y).whileTrue(new Tuning_ShoulderCommand(m_ShoulderSubsystem, 0.05));
-    new JoystickButton(m_F310, Constants.F310.A).whileTrue(new Tuning_ShoulderCommand(m_ShoulderSubsystem, -0.05));
+    new JoystickButton(m_F310, Constants.F310.Y).whileTrue(new Tuning_ShoulderCommand(m_ShoulderSubsystem, 0.2));
+    new JoystickButton(m_F310, Constants.F310.A).whileTrue(new Tuning_ShoulderCommand(m_ShoulderSubsystem, -0.2));
     // arm_Button.whileTrue(new TestingArmCommand(m_telescopingSubsystem));
     new JoystickButton(m_F310, Constants.F310.X).whileTrue(new Manual_TelescopeCommand(m_telescopingSubsystem, 0.2));
     new JoystickButton(m_F310, Constants.F310.B).whileTrue(new Manual_TelescopeCommand(m_telescopingSubsystem, -0.2));

@@ -43,8 +43,14 @@ public final class Constants {
     public static final int BackRightShoulder = 16;
     public static final int BackLeftShoulder = 17;
 
+    public static final int ShoulderCancoder = 19; 
+
     // Telescoping
     public static final int TelescopingMotor = 18; 
+
+    // 20 
+
+
 
   }
 
@@ -89,7 +95,8 @@ public final class Constants {
   public static final double totalTicks = 13943;
   public static final double MAXActuation = 16;
   public static final double InchesToTicksTelescope = totalTicks / MAXActuation;
-  public static final double DegreesToTicksShoulder = 0;
   public static final double ShoulderGearRatio = 240; // TODO GET ACTUAL VALUE
+  public static final double DegreesToTicksShoulder = (122880);
+
 
 }
