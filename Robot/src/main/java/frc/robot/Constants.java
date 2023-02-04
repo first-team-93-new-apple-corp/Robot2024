@@ -96,7 +96,7 @@ public final class Constants {
   public static final double MAXActuation = 16;
   public static final double InchesToTicksTelescope = totalTicks / MAXActuation;
   public static final double ShoulderGearRatio = 240; // TODO GET ACTUAL VALUE
-  public static final double DegreesToTicksShoulder = (122880);
+  public static final double DegreesToTicksShoulder = (120 * 2048);
 
 
 }
