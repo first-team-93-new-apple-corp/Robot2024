@@ -14,13 +14,16 @@ import frc.robot.Constants;
 public class GrabberSubsystem extends SubsystemBase implements GenericMotorSubsystem {
 
   CANSparkMax m_GrabberMotor;
+  CANSparkMax m_GrabberMotor2;
   RelativeEncoder m_GrabberEncoder;
   double CurrentCurrentOutput;
   final double MaxAllowedCurrent = 20;
 
   public GrabberSubsystem() {
-    m_GrabberMotor = new CANSparkMax(Constants.CanID_Rev.GrabberMotor, MotorType.kBrushless);
+    m_GrabberMotor = new CANSparkMax(Constants.CanID_Rev.GrabberMotor1, MotorType.kBrushless);
+    m_GrabberMotor2 = new CANSparkMax(Constants.CanID_Rev.GrabberMotor2, MotorType.kBrushless);
     m_GrabberMotor.setIdleMode(IdleMode.kBrake);
+    m_GrabberMotor2.setIdleMode(IdleMode.kBrake); 
 
     m_GrabberEncoder = m_GrabberMotor.getEncoder();
 
@@ -48,7 +51,8 @@ public class GrabberSubsystem extends SubsystemBase implements GenericMotorSubsy
     // GrabberMotor.set(0);
     // }
     // else{
-    m_GrabberMotor.set(speed);
+    m_GrabberMotor.set(-speed);
+    m_GrabberMotor2.set(speed);
 
     // }
   }
@@ -70,9 +74,9 @@ public class GrabberSubsystem extends SubsystemBase implements GenericMotorSubsy
    * Stops the Grabber motor
    *
    */
-  @Deprecated
   public void stopMotors() {
     m_GrabberMotor.set(0);
+    m_GrabberMotor2.set(0);
 
   }
 

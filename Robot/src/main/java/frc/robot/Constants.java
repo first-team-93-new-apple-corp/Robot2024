@@ -16,9 +16,11 @@ public final class Constants {
 
   public class CanID_Rev {
     public static final int PDH = 1; 
-    public static final int GrabberMotor = 2; 
+    public static final int WristMotor = 4; 
 
-    public static final int WristMotor = 3; 
+    public static final int GrabberMotor1 = 2; 
+    public static final int GrabberMotor2 = 5; 
+    
 
   }
 
@@ -53,9 +55,12 @@ public final class Constants {
     // Telescoping
     public static final int TelescopingMotor = 18; 
 
-    // 20 
+    // Wrist 
+    // CONFIRM
+    public static final int WristCancoder = 20;
 
 
+    // 21
 
   }
 
@@ -92,6 +97,12 @@ public final class Constants {
 
   }
 
+  public class Telescoping {
+    public static final int ExtendedLimitSwitchPort = 0; 
+    public static final int RetractedLimitSwitchPort = 1;
+  }
+
+
   // TODO: Organize these
   public static final double DegreesToRotationsShoulder = 0.0;
   public static final double InchesToRotationsTelescope = 0.0;
@@ -105,5 +116,13 @@ public final class Constants {
   // 2048 ticks per revolution * 120 gear ratio * 2:1 ratio between motor and arm angle
   public static final double DegreesToTicksShoulder =  (2048 * 120 * 2);
 
+
+  public static final double checkJoystickDeadband(double joystickValue, double deadband) {
+    if (Math.abs(joystickValue) < deadband) {
+      joystickValue = 0;
+    }
+
+    return joystickValue;
+  }
 
 }

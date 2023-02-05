@@ -29,7 +29,7 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
   final int MaxTicks = 13363;
   TalonSRXConfiguration TelescopeConfig;
   DigitalInput ExtendedLimitSwitch;
-  DigitalInput ClosedLimitSwitch;
+  DigitalInput RetractedLimitSwitch;
 
   public double Setpoint = 0;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
@@ -54,7 +54,7 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
     TelescopeConfig.motionCruiseVelocity = MAXVELO; // max 1600
 
     ExtendedLimitSwitch = new DigitalInput(0);
-    ClosedLimitSwitch = new DigitalInput(9);
+    RetractedLimitSwitch = new DigitalInput(9);
 
     TelescopingMotor1.configAllSettings(TelescopeConfig);
     SmartDashboard.getNumber("MaxOutput", 0);
@@ -99,7 +99,7 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
     }
 
     // if our zero limit switch is triggered and we aren't extending
-    else if (ClosedSwitchTriggered() && (Setpoint < getTicks())) {
+    else if (RetractedSwitchTriggered() && (Setpoint < getTicks())) {
       TelescopingMotor1.set(0);
 
     }
@@ -139,7 +139,7 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
         }
         break;
       case Backwards:
-        if (!ClosedLimitSwitch.get()) {
+        if (RetractedSwitchTriggered()) {
           TelescopingMotor1.setSelectedSensorPosition(0);
 
           current_state = test.Stop_Forwards;
@@ -185,7 +185,7 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
 
     // if we are triggered and weren't last control cycle, then we should return
     // true
-    boolean currentStatus = ClosedSwitchTriggered();
+    boolean currentStatus = RetractedSwitchTriggered();
 
     // if these are both true, then we return false
     boolean return_value = (currentStatus && !LastClosedLimitSwitchState);
@@ -221,8 +221,8 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
 
   }
 
-  public boolean ClosedSwitchTriggered() {
-    return !ClosedLimitSwitch.get();
+  public boolean RetractedSwitchTriggered() {
+    return !RetractedLimitSwitch.get();
   }
 
   // only returns true on rising edge
@@ -274,7 +274,7 @@ public class TelescopingSubsystem extends SubsystemBase implements GenericMotorS
     // TelescopeConfig.slot0.kD = SmartDashboard.getNumber("kD", 0);
     // TelescopingMotor1.setSensorPhase(true);
 
-    SetEncoder();
+    // SetEncoder();
 
   }
 
