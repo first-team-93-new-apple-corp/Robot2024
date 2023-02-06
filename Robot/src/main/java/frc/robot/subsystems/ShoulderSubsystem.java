@@ -183,44 +183,44 @@ public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubs
   @Override
   public void periodic() {
 
-    double Shoulder_kP = SmartDashboard.getNumber("Shoulder kP", 0);
-    double Shoulder_kI = SmartDashboard.getNumber("Shoulder kP", 0);
-    double Shoulder_kD = SmartDashboard.getNumber("Shoulder kP", 0);
-    double Shoulder_MAXVELO = SmartDashboard.getNumber("Shoulder Velocity", 0);
-    double Shoulder_MAXACCEL = SmartDashboard.getNumber("Shoulder Acceleration", 0);
-    double Shoulder_MAXOUTPUT = SmartDashboard.getNumber("Shoulder Max Output", 0);
-    double Shoulder_MAXRAMP = SmartDashboard.getNumber("Shoulder Ramp", 0);
+    // double Shoulder_kP = SmartDashboard.getNumber("Shoulder kP", 0);
+    // double Shoulder_kI = SmartDashboard.getNumber("Shoulder kP", 0);
+    // double Shoulder_kD = SmartDashboard.getNumber("Shoulder kP", 0);
+    // double Shoulder_MAXVELO = SmartDashboard.getNumber("Shoulder Velocity", 0);
+    // double Shoulder_MAXACCEL = SmartDashboard.getNumber("Shoulder Acceleration", 0);
+    // double Shoulder_MAXOUTPUT = SmartDashboard.getNumber("Shoulder Max Output", 0);
+    // double Shoulder_MAXRAMP = SmartDashboard.getNumber("Shoulder Ramp", 0);
 
-    Shoulder_FL.config_kP(0, Shoulder_kP);
-    Shoulder_FR.config_kP(0, Shoulder_kP);
-    Shoulder_BL.config_kP(0, Shoulder_kP);
-    Shoulder_BR.config_kP(0, Shoulder_kP);
+    // Shoulder_FL.config_kP(0, Shoulder_kP);
+    // Shoulder_FR.config_kP(0, Shoulder_kP);
+    // Shoulder_BL.config_kP(0, Shoulder_kP);
+    // Shoulder_BR.config_kP(0, Shoulder_kP);
 
-    Shoulder_FL.config_kI(0, Shoulder_kI);
-    Shoulder_FR.config_kI(0, Shoulder_kI);
-    Shoulder_BL.config_kI(0, Shoulder_kI);
-    Shoulder_BR.config_kI(0, Shoulder_kI);
+    // Shoulder_FL.config_kI(0, Shoulder_kI);
+    // Shoulder_FR.config_kI(0, Shoulder_kI);
+    // Shoulder_BL.config_kI(0, Shoulder_kI);
+    // Shoulder_BR.config_kI(0, Shoulder_kI);
 
-    Shoulder_FL.config_kD(0, Shoulder_kD);
-    Shoulder_FR.config_kD(0, Shoulder_kD);
-    Shoulder_BL.config_kD(0, Shoulder_kD);
-    Shoulder_BR.config_kD(0, Shoulder_kD);
+    // Shoulder_FL.config_kD(0, Shoulder_kD);
+    // Shoulder_FR.config_kD(0, Shoulder_kD);
+    // Shoulder_BL.config_kD(0, Shoulder_kD);
+    // Shoulder_BR.config_kD(0, Shoulder_kD);
 
 
-    Shoulder_FL.configMotionCruiseVelocity(Shoulder_MAXVELO);
-    Shoulder_FR.configMotionCruiseVelocity(Shoulder_MAXVELO);
-    Shoulder_BL.configMotionCruiseVelocity(Shoulder_MAXVELO);
-    Shoulder_BR.configMotionCruiseVelocity(Shoulder_MAXVELO);
+    // Shoulder_FL.configMotionCruiseVelocity(Shoulder_MAXVELO);
+    // Shoulder_FR.configMotionCruiseVelocity(Shoulder_MAXVELO);
+    // Shoulder_BL.configMotionCruiseVelocity(Shoulder_MAXVELO);
+    // Shoulder_BR.configMotionCruiseVelocity(Shoulder_MAXVELO);
 
-    Shoulder_FL.configMotionAcceleration(Shoulder_MAXACCEL);
-    Shoulder_FR.configMotionAcceleration(Shoulder_MAXACCEL);
-    Shoulder_BL.configMotionAcceleration(Shoulder_MAXACCEL);
-    Shoulder_BR.configMotionAcceleration(Shoulder_MAXACCEL); 
+    // Shoulder_FL.configMotionAcceleration(Shoulder_MAXACCEL);
+    // Shoulder_FR.configMotionAcceleration(Shoulder_MAXACCEL);
+    // Shoulder_BL.configMotionAcceleration(Shoulder_MAXACCEL);
+    // Shoulder_BR.configMotionAcceleration(Shoulder_MAXACCEL); 
 
-    Shoulder_FL.configClosedLoopPeakOutput(0, Shoulder_MAXOUTPUT);
-    Shoulder_FR.configClosedLoopPeakOutput(0, Shoulder_MAXOUTPUT);
-    Shoulder_BL.configClosedLoopPeakOutput(0, Shoulder_MAXOUTPUT);
-    Shoulder_BR.configClosedLoopPeakOutput(0, Shoulder_MAXOUTPUT);
+    // Shoulder_FL.configClosedLoopPeakOutput(0, Shoulder_MAXOUTPUT);
+    // Shoulder_FR.configClosedLoopPeakOutput(0, Shoulder_MAXOUTPUT);
+    // Shoulder_BL.configClosedLoopPeakOutput(0, Shoulder_MAXOUTPUT);
+    // Shoulder_BR.configClosedLoopPeakOutput(0, Shoulder_MAXOUTPUT);
     
     // Shoulder_FL.configClosedloopRamp(Shoulder_MAXRAMP);
     // Shoulder_FR.configClosedloopRamp(Shoulder_MAXRAMP);

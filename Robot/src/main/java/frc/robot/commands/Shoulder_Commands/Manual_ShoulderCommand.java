@@ -12,7 +12,8 @@ public class Manual_ShoulderCommand extends CommandBase {
     XboxController controller; 
 
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-    public Manual_ShoulderCommand(ShoulderSubsystem m_ShoulderSubsystem, double speed, XboxController controller) {
+    public 
+    Manual_ShoulderCommand(ShoulderSubsystem m_ShoulderSubsystem, double speed, XboxController controller) {
         this.m_ShoulderSubsystem = m_ShoulderSubsystem;
         this.speed = speed;
         this.controller = controller;

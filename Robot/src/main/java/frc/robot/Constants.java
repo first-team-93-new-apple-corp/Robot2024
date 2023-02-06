@@ -102,6 +102,12 @@ public final class Constants {
     public static final int RetractedLimitSwitchPort = 1;
   }
 
+  public class Wrist{
+    public static final int GearRatio = 120;
+    public static final double configMagnetOffset = -47.5;
+
+  }
+
 
   // TODO: Organize these
   public static final double DegreesToRotationsShoulder = 0.0;

@@ -109,8 +109,8 @@ public class RobotContainer {
 
     // Shoulder
 
-    // new JoystickButton(m_F310, Constants.F310.Y).whileTrue(new Manual_ShoulderCommand(m_ShoulderSubsystem, 0.1));
-    // new JoystickButton(m_F310, Constants.F310.A).whileTrue(new Manual_ShoulderCommand(m_ShoulderSubsystem, -0.1));
+    new JoystickButton(m_F310, Constants.F310.Y).whileTrue(new Manual_ShoulderCommand(m_ShoulderSubsystem, 0.1, m_F310));
+    new JoystickButton(m_F310, Constants.F310.A).whileTrue(new Manual_ShoulderCommand(m_ShoulderSubsystem, -0.1, m_F310));
     // new JoystickButton(m_F310, Constants.F310.RightShoulderButton)
         // .whileTrue(new Tuning_ShoulderCommand(m_ShoulderSubsystem));
 
