@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -15,6 +16,7 @@ import frc.robot.commands.Shoulder_Commands.Tuning_ShoulderCommand;
 import frc.robot.commands.Telescope_Commands.Manual_TelescopeCommand;
 import frc.robot.commands.Telescope_Commands.Tuning_TelescopeCommand;
 import frc.robot.commands.Wrist_Commands.Manual_WristCommand;
+import frc.robot.commands.Wrist_Commands.Tuning_WristCommand;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.OperatorInterfaceSubsystem;
 import frc.robot.subsystems.TelescopingSubsystem;
@@ -74,9 +76,9 @@ public class RobotContainer {
     m_WristSubsystem = new WristSubsystem(); 
 
     // Commands
-    m_Manual_ShoulderCommand = new Manual_ShoulderCommand(m_ShoulderSubsystem, 0.1, m_F310);
-    m_Manual_GrabberCommand = new Manual_GrabberCommand(m_grabberSubsystem, 0.1, m_F310);
-    m_Manual_WristCommand = new Manual_WristCommand(m_WristSubsystem, 0.1, m_F310);
+    // m_Manual_ShoulderCommand = new Manual_ShoulderCommand(m_ShoulderSubsystem, 0.1, m_F310);
+    // m_Manual_GrabberCommand = new Manual_GrabberCommand(m_grabberSubsystem, 0.1, m_F310);
+    // m_Manual_WristCommand = new Manual_WristCommand(m_WristSubsystem, 0.1, m_F310);
     
 
     // m_TelescopingCommand = new Tuning_TelescopeCommand(m_telescopingSubsystem);
@@ -93,8 +95,11 @@ public class RobotContainer {
 
   // public JoystickButton OperatorSelectorForward;
   // public JoystickButton OperatorSelectorBackward;
+  public JoystickButton TuningWrist;
 
   private void configureButtonBindings() {
+    TuningWrist = new JoystickButton(m_F310, Constants.F310.Start);
+    TuningWrist.whileTrue(new Tuning_WristCommand(m_WristSubsystem));
     // OperatorSelectorForward = new JoystickButton(m_F310, 2);
     // OperatorSelectorBackward = new JoystickButton(m_F310, 3);
     // modifying to be handled by the command while we tune the mechanisms...
@@ -109,14 +114,14 @@ public class RobotContainer {
 
     // Shoulder
 
-    new JoystickButton(m_F310, Constants.F310.Y).whileTrue(new Manual_ShoulderCommand(m_ShoulderSubsystem, 0.1, m_F310));
-    new JoystickButton(m_F310, Constants.F310.A).whileTrue(new Manual_ShoulderCommand(m_ShoulderSubsystem, -0.1, m_F310));
+    // new JoystickButton(m_F310, Constants.F310.Y).whileTrue(new Manual_ShoulderCommand(m_ShoulderSubsystem, 0.1, m_F310));
+    // new JoystickButton(m_F310, Constants.F310.A).whileTrue(new Manual_ShoulderCommand(m_ShoulderSubsystem, -0.1, m_F310));
     // new JoystickButton(m_F310, Constants.F310.RightShoulderButton)
         // .whileTrue(new Tuning_ShoulderCommand(m_ShoulderSubsystem));
 
     // Telescope
-    new JoystickButton(m_F310, Constants.F310.RightShoulderButton).whileTrue(new Manual_TelescopeCommand(m_telescopingSubsystem, 0.2));
-    new JoystickButton(m_F310, Constants.F310.LeftShoulderButton).whileTrue(new Manual_TelescopeCommand(m_telescopingSubsystem, -0.2));
+    // new JoystickButton(m_F310, Constants.F310.RightShoulderButton).whileTrue(new Manual_TelescopeCommand(m_telescopingSubsystem, 0.2));
+    // new JoystickButton(m_F310, Constants.F310.LeftShoulderButton).whileTrue(new Manual_TelescopeCommand(m_telescopingSubsystem, -0.2));
 
     // Wrist
     // new JoystickButton(m_F310, Constants.F310.X).whileTrue(new Manual_WristCommand(m_WristSubsystem, 0.15));

@@ -14,7 +14,7 @@ public class Tuning_WristCommand extends CommandBase {
     public Tuning_WristCommand(WristSubsystem m_WristSubsystem) {
         this.m_WristSubsystem = m_WristSubsystem; 
         addRequirements(m_WristSubsystem);
-        SmartDashboard.putNumber("Wrist Setpoint", 0); 
+        SmartDashboard.putNumber("Wrist Setpoint In Degrees", 0); 
     }
 
     @Override
@@ -23,7 +23,7 @@ public class Tuning_WristCommand extends CommandBase {
     }
     @Override
     public void execute() {
-        m_WristSubsystem.toSetpoint(SmartDashboard.getNumber("Wrist Setpoint", 0));
+        m_WristSubsystem.toSetpoint(SmartDashboard.getNumber("Wrist Setpoint In Degrees", 0));
     }
 
     @Override

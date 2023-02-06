@@ -55,9 +55,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
 
-    m_robotContainer.m_Manual_ShoulderCommand.schedule();
-    m_robotContainer.m_Manual_GrabberCommand.schedule();
-    m_robotContainer.m_Manual_WristCommand.schedule();
+    // m_robotContainer.m_Manual_ShoulderCommand.schedule();
+    // m_robotContainer.m_Manual_GrabberCommand.schedule();
+    // m_robotContainer.m_Manual_WristCommand.schedule();
 
     // if (m_autonomousCommand != null) {
     // m_autonomousCommand.cancel();

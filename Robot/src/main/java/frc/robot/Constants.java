@@ -105,6 +105,10 @@ public final class Constants {
   public class Wrist{
     public static final int GearRatio = 120;
     public static final double configMagnetOffset = -47.5;
+    public static final double kP = 0.0004;
+    public static final double MaxAccel = 5000;
+    public static final double MaxVelo = 5000;
+    public static final double MaxError = 0.1;
 
   }
 
