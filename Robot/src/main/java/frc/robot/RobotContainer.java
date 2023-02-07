@@ -7,42 +7,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutonCommands.CableBumpBlue1Pickup;
 import frc.robot.commands.AutonCommands.DriveAndLevel;
-import frc.robot.commands.Grabber_Commands.Manual_GrabberCommand;
 import frc.robot.commands.OperatorSelectorCommand;
-import frc.robot.commands.Shoulder_Commands.Manual_ShoulderCommand;
-import frc.robot.commands.Shoulder_Commands.Tuning_ShoulderCommand;
-import frc.robot.commands.Telescope_Commands.Manual_TelescopeCommand;
-import frc.robot.commands.Telescope_Commands.Tuning_TelescopeCommand;
-import frc.robot.commands.Wrist_Commands.Manual_WristCommand;
 import frc.robot.subsystems.AutonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.OperatorInterfaceSubsystem;
-import frc.robot.subsystems.ShoulderSubsystem;
-import frc.robot.subsystems.TelescopingSubsystem;
-import frc.robot.subsystems.WristSubsystem;
 
 public class RobotContainer {
 
   // Subsystems
-  TelescopingSubsystem m_TelescopingSubsystem;
-  GrabberSubsystem m_GrabberSubsystem;
-  ShoulderSubsystem m_ShoulderSubsystem;
-  WristSubsystem m_WristSubsystem;
   OperatorInterfaceSubsystem m_OperatorInterfaceSubsystem;
   DriveSubsystem m_DriveSubsystem;
   AutonSubsystem m_AutonSubsystem;
 
   // Commands
-  Tuning_TelescopeCommand m_TelescopingCommand;
-  Tuning_ShoulderCommand m_ShoulderCommand;
-  OperatorSelectorCommand m_OperatorSelectorCommand;
-  // Tuning_GrabberCommand m_GrabberCommand;
-
-  Manual_ShoulderCommand m_Manual_ShoulderCommand;
-  Manual_TelescopeCommand m_Manual_TelescopeCommand;
-  Manual_GrabberCommand m_Manual_GrabberCommand;
-  Manual_WristCommand m_Manual_WristCommand;
 
   // Controllers
   // XboxController m_F310;
@@ -81,10 +58,6 @@ public class RobotContainer {
     // arm_Out = new JoystickButton(m_F310, Constants.F310.Y);
 
     // Subsystems
-    m_TelescopingSubsystem = new TelescopingSubsystem();
-    m_GrabberSubsystem = new GrabberSubsystem();
-    m_ShoulderSubsystem = new ShoulderSubsystem();
-    m_WristSubsystem = new WristSubsystem();
     m_DriveSubsystem = new DriveSubsystem();
     m_AutonSubsystem = new AutonSubsystem();
     // m_OperatorInterfaceSubsystem = new OperatorInterfaceSubsystem();

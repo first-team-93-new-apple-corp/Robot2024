@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
 import frc.robot.subsystems.OperatorInterfaceSubsystem;
-import frc.robot.subsystems.WristSubsystem;
 
 public class OperatorSelectorCommand extends CommandBase {
 
