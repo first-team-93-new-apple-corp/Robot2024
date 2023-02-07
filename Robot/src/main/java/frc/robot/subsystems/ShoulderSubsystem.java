@@ -148,7 +148,7 @@ public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubs
     Shoulder_BR.set(ControlMode.Follower, Constants.CanID_CTRE.FrontRightShoulder);
   }
 
-  public void stopMotors() {
+  public void stopMotors() { 
     // ShoulderMotors.set(0);
 
     Shoulder_FR.set(0);
