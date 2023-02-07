@@ -11,7 +11,7 @@ public class Robot extends TimedRobot {
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  PowerDistribution examplePD;
+  // PowerDistribution examplePD;
 
   @Override
   public void robotInit() {
@@ -20,7 +20,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    examplePD = new PowerDistribution(2, ModuleType.kRev);
+    // examplePD = new PowerDistribution(2, ModuleType.kRev);
   }
 
   @Override
@@ -45,6 +45,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+
   }
 
   @Override
@@ -53,11 +54,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
 
-    m_robotContainer.getTeleopCommand().schedule();
+    // m_robotContainer.m_Manual_ShoulderCommand.schedule();
+    // m_robotContainer.m_Manual_GrabberCommand.schedule();
+    // m_robotContainer.m_Manual_WristCommand.schedule();
+
+    // if (m_autonomousCommand != null) {
+    // m_autonomousCommand.cancel();
+    // }
+
+    // m_robotContainer.m_ShoulderCommand.schedule();
+    // m_robotContainer.m_OperatorSelectorCommand.schedule();
   }
 
   @Override
