@@ -8,13 +8,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-<<<<<<< HEAD
 import frc.robot.commands.HumanDrive;
 import frc.robot.commands.AutonCommands.CableBumpBlue1Pickup;
 import frc.robot.commands.AutonCommands.DriveAndLevel;
 import frc.robot.subsystems.AutonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-=======
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.OperatorSelectorCommand;
 import frc.robot.commands.Grabber_Commands.Manual_GrabberCommand;
@@ -29,7 +27,6 @@ import frc.robot.subsystems.OperatorInterfaceSubsystem;
 import frc.robot.subsystems.TelescopingSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.ShoulderSubsystem;
->>>>>>> origin/Robot_Shoulder
 
 public class RobotContainer {
 
@@ -93,7 +90,6 @@ public class RobotContainer {
     // m_Manual_WristCommand = new Manual_WristCommand(m_WristSubsystem, 0.1,
     // m_F310);
 
-<<<<<<< HEAD
     // Auton Path Chooser
     AutonChooser = new SendableChooser<Command>();
 
@@ -103,11 +99,9 @@ public class RobotContainer {
 
     SmartDashboard.putData("Auton Chooser", AutonChooser);
   
-=======
     // m_TelescopingCommand = new Tuning_TelescopeCommand(m_telescopingSubsystem);
     // m_GrabberCommand = new Tuning_GrabberCommand(m_grabberSubsystem, 0, m_F310);
     // m_ShoulderCommand = new Tuning_ShoulderCommand(m_ShoulderSubsystem, m_F310);
->>>>>>> origin/Robot_Shoulder
 
     configureButtonBindings();
 
