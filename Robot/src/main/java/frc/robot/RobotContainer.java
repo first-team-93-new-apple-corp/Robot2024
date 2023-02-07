@@ -6,9 +6,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.HumanDrive;
 import frc.robot.commands.AutonCommands.CableBumpBlue1Pickup;
 import frc.robot.commands.AutonCommands.DriveAndLevel;
 import frc.robot.subsystems.AutonSubsystem;
@@ -21,7 +21,6 @@ import frc.robot.commands.Shoulder_Commands.Tuning_ShoulderCommand;
 import frc.robot.commands.Telescope_Commands.Manual_TelescopeCommand;
 import frc.robot.commands.Telescope_Commands.Tuning_TelescopeCommand;
 import frc.robot.commands.Wrist_Commands.Manual_WristCommand;
-import frc.robot.commands.Wrist_Commands.Tuning_WristCommand;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.OperatorInterfaceSubsystem;
 import frc.robot.subsystems.TelescopingSubsystem;
@@ -31,17 +30,20 @@ import frc.robot.subsystems.ShoulderSubsystem;
 public class RobotContainer {
 
   // Subsystems
-  TelescopingSubsystem m_telescopingSubsystem;
-  GrabberSubsystem m_grabberSubsystem;
+  TelescopingSubsystem m_TelescopingSubsystem;
+  GrabberSubsystem m_GrabberSubsystem;
   ShoulderSubsystem m_ShoulderSubsystem;
   WristSubsystem m_WristSubsystem;
   OperatorInterfaceSubsystem m_OperatorInterfaceSubsystem;
+  DriveSubsystem m_DriveSubsystem;
+  AutonSubsystem m_AutonSubsystem; 
+  
 
   // Commands
   Tuning_TelescopeCommand m_TelescopingCommand;
-  // Tuning_GrabberCommand m_GrabberCommand;
   Tuning_ShoulderCommand m_ShoulderCommand;
   OperatorSelectorCommand m_OperatorSelectorCommand;
+  // Tuning_GrabberCommand m_GrabberCommand;
 
   Manual_ShoulderCommand m_Manual_ShoulderCommand;
   Manual_TelescopeCommand m_Manual_TelescopeCommand;
@@ -50,6 +52,8 @@ public class RobotContainer {
 
   // Controllers
   // XboxController m_F310;
+  Joystick Driver1; 
+  Joystick Driver2; 
   Joystick Operator1;
   Joystick Operator2;
 
@@ -59,11 +63,13 @@ public class RobotContainer {
   JoystickButton arm_Button;
   JoystickButton arm_In;
   JoystickButton arm_Out;
-  // public JoystickButton OperatorSelectorForward;
-  // public JoystickButton OperatorSelectorBackward;
-  public JoystickButton TuningWrist;
+  JoystickButton TuningWrist;
+
+  // JoystickButton OperatorSelectorForward;
+  // JoystickButton OperatorSelectorBackward;
 
   // Other Definitions
+  SendableChooser<Command> AutonChooser;
 
   public RobotContainer() {
 
@@ -76,11 +82,13 @@ public class RobotContainer {
     // arm_Out = new JoystickButton(m_F310, Constants.F310.Y);
 
     // Subsystems
-    m_telescopingSubsystem = new TelescopingSubsystem();
-    m_grabberSubsystem = new GrabberSubsystem();
+    m_TelescopingSubsystem = new TelescopingSubsystem();
+    m_GrabberSubsystem = new GrabberSubsystem();
     // m_OperatorInterfaceSubsystem = new OperatorInterfaceSubsystem();
     m_ShoulderSubsystem = new ShoulderSubsystem();
     m_WristSubsystem = new WristSubsystem();
+    m_DriveSubsystem = new DriveSubsystem(); 
+    m_AutonSubsystem = new AutonSubsystem();
 
     // Commands
     // m_Manual_ShoulderCommand = new Manual_ShoulderCommand(m_ShoulderSubsystem,
