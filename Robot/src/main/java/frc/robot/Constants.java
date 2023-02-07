@@ -5,7 +5,8 @@ public final class Constants {
   public class Joystick_Port {
     public static final int Driver1Port = 0;
     public static final int Driver2Port = 1;
-    public static final int F310Port = 2;
+    public static final int Operator1Port = 2;
+    public static final int Operator2Port = 3;
 
   }
 

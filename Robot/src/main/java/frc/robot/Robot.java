@@ -11,7 +11,6 @@ public class Robot extends TimedRobot {
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  // PowerDistribution examplePD;
 
   @Override
   public void robotInit() {
@@ -20,14 +19,12 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    // examplePD = new PowerDistribution(2, ModuleType.kRev);
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     SmartDashboard.putBoolean("Enabled?", isEnabled());
-    // SmartDashboard.putNumber("Current draw", examplePD.getTotalCurrent());
   }
 
   @Override
@@ -55,13 +52,17 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
 
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }
+
+    // Teleop Commands
+
     // m_robotContainer.m_Manual_ShoulderCommand.schedule();
     // m_robotContainer.m_Manual_GrabberCommand.schedule();
     // m_robotContainer.m_Manual_WristCommand.schedule();
 
-    // if (m_autonomousCommand != null) {
-    // m_autonomousCommand.cancel();
-    // }
+
 
     // m_robotContainer.m_ShoulderCommand.schedule();
     // m_robotContainer.m_OperatorSelectorCommand.schedule();

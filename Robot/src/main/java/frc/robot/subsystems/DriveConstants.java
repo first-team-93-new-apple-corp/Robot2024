@@ -7,15 +7,21 @@ public final class DriveConstants {
 
   // Turning PID
   public static final double Turning_Tolerance = SwerveModule.degreesToTicks(0.75);
-  public static double Turning_P = 0.75;
+  public static double Turning_P = 0.3;
   public static double Turning_I = 0;
-  public static double Turning_D = 0.2;
+  public static double Turning_D = 0; // 0.05;
 
   // Front Left Module
   public static final int Throttle_Port_FL = 1;
   public static final int Turning_Port_FL = 5;
   public static final int Encoder_Port_FL = 10;
   public static final double Magnet_Offset_FL = 41.836; 
+
+  // Front Right Module
+  public static final int Throttle_Port_FR = 2;
+  public static final int Turning_Port_FR = 6;
+  public static final int Encoder_Port_FR = 11;
+  public static final double Magnet_Offset_FR = 151.347;
 
   // Back Right Module
   public static final int Throttle_Port_BR = 3;
@@ -29,11 +35,7 @@ public final class DriveConstants {
   public static final int Encoder_Port_BL = 13;
   public static final double Magnet_Offset_BL = -94.483;
 
-  // Front Right Module
-  public static final int Throttle_Port_FR = 2;
-  public static final int Turning_Port_FR = 6;
-  public static final int Encoder_Port_FR = 11;
-  public static final double Magnet_Offset_FR = 151.347;
+
 
   // Motor Information
   public static final double TalonFX_RPM = 6380;
@@ -56,14 +58,8 @@ public final class DriveConstants {
   public static final double Max_Strafe_Speed =
     (TalonFX_RPS / Driving_Gearing) * Wheel_Circumference; // m/s
   public static final double Max_Angular_Speed = 2 * Math.PI; // m/s
-
-
-  // public static final double Max_Angular_Acceleration = 2 * Math.PI;
-
-  // whoever keeps changing this it isnt actually being used
-  // public static final double Max_Acceleration = 4;
-  
-  
+  public static final double Max_Angular_Acceleration = 2 * Math.PI;
+  public static final double Max_Acceleration = 2;
   public static final double Max_Volts = 12.0;
 
 
