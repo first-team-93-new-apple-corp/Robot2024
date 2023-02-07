@@ -29,7 +29,8 @@ public class Manual_ShoulderCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_ShoulderSubsystem.directMotorCommand(Constants.checkJoystickDeadband(-controller.getRawAxis(1), 0.04) * speed);
+        // m_ShoulderSubsystem.directMotorCommand(Constants.checkJoystickDeadband(-controller.getRawAxis(1), 0.04) * speed);
+        m_ShoulderSubsystem.directMotorCommand(speed);
     }
 
     @Override
