@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class SwerveModule extends SubsystemBase {
 
@@ -61,11 +62,11 @@ public class SwerveModule extends SubsystemBase {
     // turnConfig.supplyCurrLimit.currentLimit = 5;
     // turnConfig.supplyCurrLimit.triggerThresholdCurrent = 5;
     // turnConfig.supplyCurrLimit.triggerThresholdTime = .254;
-    turnConfig.slot0.kP = DriveConstants.Turning_P;
-    turnConfig.slot0.kI = DriveConstants.Turning_I;
-    turnConfig.slot0.kD = DriveConstants.Turning_D;
+    turnConfig.slot0.kP = Constants.Drive.Turning_P;
+    turnConfig.slot0.kI = Constants.Drive.Turning_I;
+    turnConfig.slot0.kD = Constants.Drive.Turning_D;
     turnConfig.slot0.allowableClosedloopError =
-      DriveConstants.Turning_Tolerance;
+    Constants.Drive.Turning_Tolerance;
 
     Turning_Motor.configAllSettings(turnConfig);
 
@@ -103,8 +104,8 @@ public class SwerveModule extends SubsystemBase {
 
     // do not need PID on drive motors - just a simple voltage calculation
     double driveOutput =
-      (state.speedMetersPerSecond / DriveConstants.Max_Strafe_Speed) *
-      DriveConstants.Max_Volts;
+      (state.speedMetersPerSecond / Constants.Drive.Max_Strafe_Speed) *
+      Constants.Drive.Max_Volts;
 
     Driving_Motor.setVoltage(driveOutput);
 
@@ -149,7 +150,7 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public double getDistance() {
-    return Units.inchesToMeters(Driving_Motor.getSelectedSensorPosition() * 4 * Math.PI) / (DriveConstants.Driving_Gearing * 2048);
+    return Units.inchesToMeters(Driving_Motor.getSelectedSensorPosition() * 4 * Math.PI) / (Constants.Drive.Driving_Gearing * 2048);
   }
 
   // get angle from can coder
@@ -163,7 +164,7 @@ public class SwerveModule extends SubsystemBase {
     return Can_Coder.getAbsolutePosition(); 
   }
   public double FrontRightRotations(){
-    return Driving_Motor.getSelectedSensorPosition()/(2048*DriveConstants.Driving_Gearing);
+    return Driving_Motor.getSelectedSensorPosition()/(2048*Constants.Drive.Driving_Gearing);
   }
 
   @Override

@@ -28,7 +28,7 @@ public class Manual_GrabberCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_GrabberSubsystem.directMotorCommand(Constants.checkJoystickDeadband(-controller.getRawAxis(0), 0.04) * speed);
+        m_GrabberSubsystem.directMotorCommand(Constants.checkJoystickDeadzone(-controller.getRawAxis(0), 0.04) * speed);
     }
 
     @Override

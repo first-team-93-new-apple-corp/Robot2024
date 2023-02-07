@@ -28,7 +28,7 @@ public class Manual_WristCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_WristSubsystem.directMotorCommand(Constants.checkJoystickDeadband(-controller.getRawAxis(5), 0.04) * speed);
+        m_WristSubsystem.directMotorCommand(Constants.checkJoystickDeadzone(-controller.getRawAxis(5), 0.04) * speed);
     }
 
     @Override

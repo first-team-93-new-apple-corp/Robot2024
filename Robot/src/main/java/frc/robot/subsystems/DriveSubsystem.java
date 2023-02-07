@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import java.text.DecimalFormat;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -46,12 +47,11 @@ public class DriveSubsystem extends SubsystemBase {
 
   private DriveState CurrentDriveState = DriveState.DEFAULT_STATE;
 
-  private SwerveModuleState[] LockWheelState; 
+  private SwerveModuleState[] LockWheelState;
 
-  public double Starting_Level; 
+  public double Starting_Level;
 
   public DriveSubsystem() {
-
     SmartDashboard.putBoolean("Field Relative", false);
     SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
 
@@ -59,61 +59,70 @@ public class DriveSubsystem extends SubsystemBase {
     Pigeon.configMountPose(AxisDirection.NegativeY, AxisDirection.PositiveZ);
     Pigeon.setYaw(0);
     // Pigeon.configMountPosePitch(1);
-    // Pigeon.setPitch(0); 
-    Starting_Level = Pigeon.getPitch(); 
+    // Pigeon.setPitch(0);
+    Starting_Level = Pigeon.getPitch();
 
-    LockWheelState = new SwerveModuleState[4]; 
+    LockWheelState = new SwerveModuleState[4];
 
     // Front Left
-    LockWheelState[0] = new SwerveModuleState(0 , Rotation2d.fromDegrees(45)); 
+    LockWheelState[0] = new SwerveModuleState(0, Rotation2d.fromDegrees(45));
     //Front Right
-    LockWheelState[1] = new SwerveModuleState(0 , Rotation2d.fromDegrees(-45));
-    //Back Left 
-    LockWheelState[2] = new SwerveModuleState(0 , Rotation2d.fromDegrees(-45)); 
+    LockWheelState[1] = new SwerveModuleState(0, Rotation2d.fromDegrees(-45));
+    //Back Left
+    LockWheelState[2] = new SwerveModuleState(0, Rotation2d.fromDegrees(-45));
     //Back Right
-    LockWheelState[3] = new SwerveModuleState(0 , Rotation2d.fromDegrees(45)); 
-    
+    LockWheelState[3] = new SwerveModuleState(0, Rotation2d.fromDegrees(45));
 
     InitialRotation2d = Rotation2d.fromDegrees(Pigeon.getYaw());
 
-    Kinematics = new SwerveDriveKinematics(
-        DriveConstants.Location_FL,
-        DriveConstants.Location_FR,
-        DriveConstants.Location_BL,
-        DriveConstants.Location_BR);
+    Kinematics =
+      new SwerveDriveKinematics(
+        Constants.Drive.Location_FL,
+        Constants.Drive.Location_FR,
+        Constants.Drive.Location_BL,
+        Constants.Drive.Location_BR
+      );
 
     SmartDashboard.putNumber("Piegeon Angle", getHeading());
     // Setting Up Swerve Modules
-    Front_Left = new SwerveModule(
-        DriveConstants.Throttle_Port_FL,
-        DriveConstants.Turning_Port_FL,
-        DriveConstants.Encoder_Port_FL,
-        DriveConstants.Magnet_Offset_FL);
+    Front_Left =
+      new SwerveModule(
+        Constants.Drive.Throttle_Port_FL,
+        Constants.Drive.Turning_Port_FL,
+        Constants.Drive.Encoder_Port_FL,
+        Constants.Drive.Magnet_Offset_FL
+      );
 
-    Front_Right = new SwerveModule(
-        DriveConstants.Throttle_Port_FR,
-        DriveConstants.Turning_Port_FR,
-        DriveConstants.Encoder_Port_FR,
-        DriveConstants.Magnet_Offset_FR);
+    Front_Right =
+      new SwerveModule(
+        Constants.Drive.Throttle_Port_FR,
+        Constants.Drive.Turning_Port_FR,
+        Constants.Drive.Encoder_Port_FR,
+        Constants.Drive.Magnet_Offset_FR
+      );
 
-    Back_Left = new SwerveModule(
-        DriveConstants.Throttle_Port_BL,
-        DriveConstants.Turning_Port_BL,
-        DriveConstants.Encoder_Port_BL,
-        DriveConstants.Magnet_Offset_BL);
+    Back_Left =
+      new SwerveModule(
+        Constants.Drive.Throttle_Port_BL,
+        Constants.Drive.Turning_Port_BL,
+        Constants.Drive.Encoder_Port_BL,
+        Constants.Drive.Magnet_Offset_BL
+      );
 
-    Back_Right = new SwerveModule(
-        DriveConstants.Throttle_Port_BR,
-        DriveConstants.Turning_Port_BR,
-        DriveConstants.Encoder_Port_BR,
-        DriveConstants.Magnet_Offset_BR);
+    Back_Right =
+      new SwerveModule(
+        Constants.Drive.Throttle_Port_BR,
+        Constants.Drive.Turning_Port_BR,
+        Constants.Drive.Encoder_Port_BR,
+        Constants.Drive.Magnet_Offset_BR
+      );
 
-    Odometry = new SwerveDriveOdometry(Kinematics, InitialRotation2d, getPositions());
+    Odometry =
+      new SwerveDriveOdometry(Kinematics, InitialRotation2d, getPositions());
     resetOdometry(new Pose2d());
-
   }
 
-  public void lockWheels(){
+  public void lockWheels() {
     SavedStates = LockWheelState;
     Front_Left.setDesiredState(LockWheelState[0]);
     Front_Right.setDesiredState(LockWheelState[1]);
@@ -130,33 +139,38 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void stopMotors() {
-    drive(0, 0, 0, false, DriveConstants.Center);
+    drive(0, 0, 0, false, Constants.Drive.Center);
   }
 
   public void drive(
-      double X,
-      double Y,
-      double Z,
-      boolean Field_Relative,
-      Translation2d COR) {
-
+    double X,
+    double Y,
+    double Z,
+    boolean Field_Relative,
+    Translation2d COR
+  ) {
     if (!Field_Relative) {
-      Speeds = new ChassisSpeeds(
-          X * DriveConstants.Max_Strafe_Speed,
-          Y * DriveConstants.Max_Strafe_Speed,
-          Z * DriveConstants.Max_Angular_Speed);
+      Speeds =
+        new ChassisSpeeds(
+          X * Constants.Drive.Max_Strafe_Speed,
+          Y * Constants.Drive.Max_Strafe_Speed,
+          Z * Constants.Drive.Max_Angular_Speed
+        );
     } else {
-      Speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-          X * DriveConstants.Max_Strafe_Speed,
-          Y * DriveConstants.Max_Strafe_Speed,
-          Z * DriveConstants.Max_Angular_Speed,
-          Rotation2d.fromDegrees(getHeading()));
+      Speeds =
+        ChassisSpeeds.fromFieldRelativeSpeeds(
+          X * Constants.Drive.Max_Strafe_Speed,
+          Y * Constants.Drive.Max_Strafe_Speed,
+          Z * Constants.Drive.Max_Angular_Speed,
+          Rotation2d.fromDegrees(getHeading())
+        );
     }
     // Swerve module states
     SwerveModuleState[] States = Kinematics.toSwerveModuleStates(Speeds, COR);
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        States,
-        DriveConstants.Max_Strafe_Speed);
+      States,
+      Constants.Drive.Max_Strafe_Speed
+    );
 
     // this is so that the angle is saved and not auto set to 0 even after strafe
     if (X == 0 && Y == 0 && Z == 0) {
@@ -177,13 +191,14 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void DriveStateMachine(
-      double x,
-      double y,
-      double z,
-      Boolean HeldButton,
-      Boolean HeldButtonReleased,
-      Boolean ToggleButton,
-      Boolean ToggleButtonReleased) {
+    double x,
+    double y,
+    double z,
+    Boolean HeldButton,
+    Boolean HeldButtonReleased,
+    Boolean ToggleButton,
+    Boolean ToggleButtonReleased
+  ) {
     SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
 
     if (CurrentDriveState == DriveState.DEFAULT_STATE) {
@@ -200,7 +215,7 @@ public class DriveSubsystem extends SubsystemBase {
         CurrentDriveState = DriveState.HELD_FIELD_RELATIVE;
       } else {
         SmartDashboard.putBoolean("Field Relative", false);
-        drive(x, y, z, false, DriveConstants.Center);
+        drive(x, y, z, false, Constants.Drive.Center);
       }
     }
 
@@ -208,21 +223,21 @@ public class DriveSubsystem extends SubsystemBase {
     switch (CurrentDriveState) {
       // keep field relative drive until button is released
       case HELD_FIELD_RELATIVE:
-        drive(x, y, z, true, DriveConstants.Center);
+        drive(x, y, z, true, Constants.Drive.Center);
         if (HeldButtonReleased) {
           CurrentDriveState = DriveState.DEFAULT_STATE;
         }
         break;
       // waiting for button to be released
       case TOGGLE_FIELD_RELATIVE_STAGE_1:
-        drive(x, y, z, true, DriveConstants.Center);
+        drive(x, y, z, true, Constants.Drive.Center);
         if (ToggleButtonReleased) {
           CurrentDriveState = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
         }
         break;
       // waiting for button to be pressed again
       case TOGGLE_FIELD_RELATIVE_STAGE_2:
-        drive(x, y, z, true, DriveConstants.Center);
+        drive(x, y, z, true, Constants.Drive.Center);
         if (ToggleButton) {
           CurrentDriveState = DriveState.TOGGLE_HOLD_STATE;
         }
@@ -231,7 +246,7 @@ public class DriveSubsystem extends SubsystemBase {
       // released, but run non-field relative drive in the meantime
       case TOGGLE_HOLD_STATE:
         SmartDashboard.putBoolean("Field Relative", false);
-        drive(x, y, z, false, DriveConstants.Center);
+        drive(x, y, z, false, Constants.Drive.Center);
         if (ToggleButtonReleased) {
           CurrentDriveState = DriveState.DEFAULT_STATE;
         }
@@ -243,10 +258,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   public SwerveModulePosition[] getPositions() {
     SwerveModulePosition[] positions = {
-        Front_Left.getPosition(),
-        Front_Right.getPosition(),
-        Back_Left.getPosition(),
-        Back_Right.getPosition(),
+      Front_Left.getPosition(),
+      Front_Right.getPosition(),
+      Back_Left.getPosition(),
+      Back_Right.getPosition(),
     };
 
     return positions;
@@ -254,10 +269,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   public SwerveModuleState[] getStates() {
     SwerveModuleState[] states = {
-        Front_Left.getState(),
-        Front_Right.getState(),
-        Back_Left.getState(),
-        Back_Right.getState(),
+      Front_Left.getState(),
+      Front_Right.getState(),
+      Back_Left.getState(),
+      Back_Right.getState(),
     };
 
     return states;
@@ -276,8 +291,6 @@ public class DriveSubsystem extends SubsystemBase {
     }
     return yaw;
   }
-
-  
 
   public void zeroHeading() {
     Pigeon.setYaw(0);
@@ -305,17 +318,21 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void printEncoderValues() {
     SmartDashboard.putString(
-        "Front Right Encoder",
-        round.format(Front_Right.getAngle().getDegrees()));
+      "Front Right Encoder",
+      round.format(Front_Right.getAngle().getDegrees())
+    );
     SmartDashboard.putString(
-        "Front Left Encoder",
-        round.format(Front_Left.getAngle().getDegrees()));
+      "Front Left Encoder",
+      round.format(Front_Left.getAngle().getDegrees())
+    );
     SmartDashboard.putString(
-        "Back Right Encoder",
-        round.format(Back_Right.getAngle().getDegrees()));
+      "Back Right Encoder",
+      round.format(Back_Right.getAngle().getDegrees())
+    );
     SmartDashboard.putString(
-        "Back Left Encoder",
-        round.format(Back_Left.getAngle().getDegrees()));
+      "Back Left Encoder",
+      round.format(Back_Left.getAngle().getDegrees())
+    );
   }
 
   @Override
@@ -327,17 +344,28 @@ public class DriveSubsystem extends SubsystemBase {
     // DO NOT use the ones that show up in shuffleboard, those are sus and not
     // accurate
     // See Sameer for more info
-    SmartDashboard.putNumber("Front Right Cancoder", Front_Right.getCancoderTicks());
-    SmartDashboard.putNumber("Front Left Cancoder", Front_Left.getCancoderTicks());
-    SmartDashboard.putNumber("Back Right Cancoder", Back_Right.getCancoderTicks());
-    SmartDashboard.putNumber("Back Left Cancoder", Back_Left.getCancoderTicks());
+    SmartDashboard.putNumber(
+      "Front Right Cancoder",
+      Front_Right.getCancoderTicks()
+    );
+    SmartDashboard.putNumber(
+      "Front Left Cancoder",
+      Front_Left.getCancoderTicks()
+    );
+    SmartDashboard.putNumber(
+      "Back Right Cancoder",
+      Back_Right.getCancoderTicks()
+    );
+    SmartDashboard.putNumber(
+      "Back Left Cancoder",
+      Back_Left.getCancoderTicks()
+    );
 
     Odometry.update(Rotation2d.fromDegrees(getHeading()), getPositions());
     SmartDashboard.putString("Odometry", getPose().toString());
-    SmartDashboard.putNumber("Level", getLevel()); 
+    SmartDashboard.putNumber("Level", getLevel());
   }
 
   @Override
-  public void simulationPeriodic() {
-  }
+  public void simulationPeriodic() {}
 }

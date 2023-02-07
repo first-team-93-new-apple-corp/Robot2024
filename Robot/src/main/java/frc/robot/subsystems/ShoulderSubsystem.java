@@ -159,12 +159,12 @@ public class ShoulderSubsystem extends SubsystemBase implements GenericMotorSubs
 
   // degrees of the shoulder
   public double DegreesToTicks(double degrees) {
-    return (((degrees / 360) * Constants.DegreesToTicksShoulder) );
+    return (((degrees / 360) * Constants.Shoulder.DegreesToTicksShoulder) );
   }
 
   // returns degrees of the shoulder
   public double TicksToDegrees(double Ticks) {
-    return ((Ticks / (Constants.DegreesToTicksShoulder)) * 360);
+    return ((Ticks / (Constants.Shoulder.DegreesToTicksShoulder)) * 360);
   }
 
   // public double getDegrees() {
