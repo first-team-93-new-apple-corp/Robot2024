@@ -4,45 +4,73 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.HumanDrive;
+import frc.robot.commands.AutonCommands.CableBumpBlue1Pickup;
+import frc.robot.commands.AutonCommands.DriveAndLevel;
+import frc.robot.subsystems.AutonSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and button mappings) should be declared here.
- */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  // Joysticks
+  public Joystick Driver1;
+  public Joystick Driver2;
+  public XboxController F310;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  // Subsystem Definitions
+  DriveSubsystem m_DriveSubsystem;
+  AutonSubsystem m_AutonSubsystem; 
+
+  // Command Definitions 
+  HumanDrive m_DriveCommand; 
+  
+
+  // Other Definitions
+  SendableChooser<Command> AutonChooser;
+  
+
   public RobotContainer() {
-    // Configure the button bindings
+
+    //Controllers
+    Driver1 = new Joystick(0);
+    Driver2 = new Joystick(1);
+    F310 = new XboxController(2);
+
+    //Subsystems
+    m_DriveSubsystem = new DriveSubsystem(); 
+    m_AutonSubsystem = new AutonSubsystem();
+
+    //Commands
+    m_DriveCommand = new HumanDrive(m_DriveSubsystem, Driver1, Driver2, F310); 
+    
+
+    // Auton Path Chooser
+    AutonChooser = new SendableChooser<Command>();
+
+    // AutonChooser.setDefaultOption("No Path", null);
+    AutonChooser.addOption("Test Path", DriveAndLevel.generatePath(m_AutonSubsystem, m_DriveSubsystem));
+    AutonChooser.setDefaultOption("CableBumpBlue1Pickup", CableBumpBlue1Pickup.generatePath(m_AutonSubsystem, m_DriveSubsystem));
+
+    SmartDashboard.putData("Auton Chooser", AutonChooser);
+  
+
     configureButtonBindings();
   }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+  }
+
+  public Command getTeleopCommand() {
+    return m_DriveCommand;
+  }
+
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+     return AutonChooser.getSelected();
   }
 }
