@@ -4,7 +4,7 @@ package frc.robot.commands.AutonCommands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveConstants;
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class AutoLevellingCommand extends CommandBase {
@@ -44,13 +44,13 @@ public class AutoLevellingCommand extends CommandBase {
         if (MotorCommand > 0.3) {
             MotorCommand = 0.3;
         }
-        m_DriveSubsystem.drive(MotorCommand, 0, 0, false, DriveConstants.Center);
+        m_DriveSubsystem.drive(MotorCommand, 0, 0, false, Constants.Drive.Center);
 
     }
 
     @Override
     public void end(boolean interrupted) {
-        m_DriveSubsystem.drive(0, 0, 0, false, DriveConstants.Center);
+        m_DriveSubsystem.drive(0, 0, 0, false, Constants.Drive.Center);
 
     }
 
