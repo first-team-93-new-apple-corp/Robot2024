@@ -163,11 +163,14 @@ public final class Constants {
     public static final double Wheel_Circumference = Wheel_Radius * 2 * Math.PI;
 
     // Drivetrain Information
-    public static final double Track_Width = Units.inchesToMeters(18.5); // right wheel to left wheel
-    public static final double Wheel_Base = Units.inchesToMeters(18.5); //Front To Back
+    // public static final double Track_Width = Units.inchesToMeters(22.5); // right wheel to left wheel
+    // public static final double Wheel_Base = Units.inchesToMeters(22.5); //Front To Back
+    public static final double Track_Width = Units.inchesToMeters(18.5); //23 bot
+    public static final double Wheel_Base = Units.inchesToMeters(18.5); //23 bot
 
     // Gearing Ratios
     public static final double Turning_Gearing = 12.8;
+    // public static final double Driving_Gearing = 6.12;
     public static final double Driving_Gearing = 6.75;
 
     // Speed Limiters
@@ -179,7 +182,9 @@ public final class Constants {
     public static final double Max_Volts = 12.0;
 
     //Swerve Locations
-    public static final Translation2d Center = new Translation2d(0, 0);
+    // public static Translation2d Center = new Translation2d(0, 0);
+    public static Translation2d Center = new Translation2d(1, 0);
+
     public static final Translation2d Front = new Translation2d(
       Wheel_Base / 2,
       0

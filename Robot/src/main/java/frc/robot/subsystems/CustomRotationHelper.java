@@ -1,9 +1,9 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Constants;
 //7777777777777777
 public class CustomRotationHelper extends SubsystemBase {
     POVButton pov0;
@@ -38,49 +38,37 @@ public class CustomRotationHelper extends SubsystemBase {
         pov315 = new POVButton(joystick, 315); // fl wheel
 
         CurrentDirection = Direction.NONE;
+
+        if(pov0.getAsBoolean()){
+            Constants.Drive.Center = DriveConstants.Front;
+        } else if(pov45.getAsBoolean()){
+            Constants.Drive.Center = DriveConstants.Location_FR;
+        } else if(pov90.getAsBoolean()){
+            Constants.Drive.Center = DriveConstants.Right;
+        } else if(pov135.getAsBoolean()){
+            Constants.Drive.Center = DriveConstants.Location_BR;
+        } else if(pov180.getAsBoolean()){
+            Constants.Drive.Center = DriveConstants.Back;
+        } else if(pov225.getAsBoolean()){
+            Constants.Drive.Center = DriveConstants.Location_BL;
+        } else if(pov270.getAsBoolean()){
+            Constants.Drive.Center = DriveConstants.Left;
+        } else if(pov315.getAsBoolean()){
+            Constants.Drive.Center = DriveConstants.Location_FL;
+        } else{
+            Constants.Drive.Center = DriveConstants.dCenter;
+        }
     }
 
     public Direction getDirection() {
-
         return CurrentDirection;
-    }
-
-    public Translation2d povButton(){
-    if(pov0.getAsBoolean()){
-    return DriveConstants.Front;
-    }
-    else if(pov45.getAsBoolean()){
-    return DriveConstants.Location_FR;
-    }
-    else if(pov90.getAsBoolean()){
-    return DriveConstants.Right;
-    }
-    else if(pov135.getAsBoolean()){
-    return DriveConstants.Location_BR;
-    }
-    else if(pov180.getAsBoolean()){
-    return DriveConstants.Back;
-    }
-    else if(pov225.getAsBoolean()){
-    return DriveConstants.Location_BL;
-    }
-    else if(pov270.getAsBoolean()){
-    return DriveConstants.Left;
-    }
-    else if(pov315.getAsBoolean()){
-    return DriveConstants.Location_FL;
-    }
-    else{
-    return DriveConstants.Center;
-    }
     }
 
     private void updateDirection() {
         
         int POV_Angle = m_Joystick.getPOV(); 
-        if(POV_Angle == 0 ||POV_Angle == 45 || POV_Angle == 315){
+        if(POV_Angle == 0 || POV_Angle == 45 || POV_Angle == 315){
             CurrentDirection = Direction.FORWARDS;
-
         }
         else if(POV_Angle == 180 || POV_Angle == 135 || POV_Angle == 225){
             CurrentDirection = Direction.BACKWARDS;
