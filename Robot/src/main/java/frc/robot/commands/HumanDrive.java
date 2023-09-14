@@ -4,11 +4,13 @@
 
 package frc.robot.commands;
 
-
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.subsystems.DriveConstants;
 // import frc.robot.CustomRotationHelper;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -119,7 +121,6 @@ public class HumanDrive extends CommandBase {
         ToggleButton = m_Joystick1.getRawButton(12);
         ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
 
-        
         break;
 
       // two stick driving
@@ -133,11 +134,14 @@ public class HumanDrive extends CommandBase {
         HeldButtonReleased = m_Joystick1.getRawButtonReleased(13);
 
         ToggleButton = m_Joystick1.getRawButton(12);
-        ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
+        ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12); 
+
+        if (m_Joystick1.getRawButton(16)){
+          
+        }
 
         break;
       case Testing_Drive:
-
         break; 
     }
 

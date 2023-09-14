@@ -9,7 +9,9 @@ import frc.robot.commands.AutonCommands.CableBumpBlue1Pickup;
 import frc.robot.commands.AutonCommands.DriveAndLevel;
 import frc.robot.subsystems.AutonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.CustomRotationHelper;
 import frc.robot.subsystems.OperatorInterfaceSubsystem;
+import frc.robot.commands.HumanDrive;
 
 public class RobotContainer {
 
@@ -17,13 +19,14 @@ public class RobotContainer {
   OperatorInterfaceSubsystem m_OperatorInterfaceSubsystem;
   DriveSubsystem m_DriveSubsystem;
   AutonSubsystem m_AutonSubsystem;
-
+  Joystick Driver2;
   // Commands
+  CustomRotationHelper m_CustomRotationHelper;
+  HumanDrive m_TeleopDriveCommand;
 
   // Controllers
   // XboxController m_F310;
   Joystick Driver1;
-  Joystick Driver2;
   Joystick Operator1;
   Joystick Operator2;
 
@@ -51,6 +54,11 @@ public class RobotContainer {
     // Subsystems
     m_DriveSubsystem = new DriveSubsystem();
     m_AutonSubsystem = new AutonSubsystem();
+    m_CustomRotationHelper = new CustomRotationHelper(Driver2);
+
+    // Commands
+    m_TeleopDriveCommand = new HumanDrive(m_DriveSubsystem, Driver1, Driver2);
+
     // m_OperatorInterfaceSubsystem = new OperatorInterfaceSubsystem();
 
     // Auton Path Chooser
@@ -65,10 +73,17 @@ public class RobotContainer {
       "CableBumpBlue1Pickup",
       CableBumpBlue1Pickup.generatePath(m_AutonSubsystem, m_DriveSubsystem)
     );
+
     SmartDashboard.putData("Auton Chooser", AutonChooser);
 
     configureButtonBindings();
   }
+
+  public void setTeleopBindings() {
+    m_DriveSubsystem.setDefaultCommand(m_TeleopDriveCommand);
+  }
+
+  public void scheduleTeleopCommands() {}
 
   private void configureButtonBindings() {
   }

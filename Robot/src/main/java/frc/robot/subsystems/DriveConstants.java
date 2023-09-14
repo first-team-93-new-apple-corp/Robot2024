@@ -67,7 +67,7 @@ public final class DriveConstants {
 
 
   //Swerve Locations
-  public static final Translation2d dCenter = new Translation2d(
+  public static Translation2d dCenter = new Translation2d(
     0,
     0   
   );

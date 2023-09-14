@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.SwerveModule;
 
 public final class Constants {
@@ -163,10 +164,10 @@ public final class Constants {
     public static final double Wheel_Circumference = Wheel_Radius * 2 * Math.PI;
 
     // Drivetrain Information
-    // public static final double Track_Width = Units.inchesToMeters(22.5); // right wheel to left wheel
-    // public static final double Wheel_Base = Units.inchesToMeters(22.5); //Front To Back
-    public static final double Track_Width = Units.inchesToMeters(18.5); //23 bot
-    public static final double Wheel_Base = Units.inchesToMeters(18.5); //23 bot
+    // public static final double Track_Width = Units.inchesToMeters(29); // right wheel to left wheel
+    // public static final double Wheel_Base = Units.inchesToMeters(29); //Front To Back
+    public static final double Track_Width = Units.inchesToMeters(25); //23 bot
+    public static final double Wheel_Base = Units.inchesToMeters(25); //23 bot
 
     // Gearing Ratios
     public static final double Turning_Gearing = 12.8;
@@ -183,7 +184,7 @@ public final class Constants {
 
     //Swerve Locations
     // public static Translation2d Center = new Translation2d(0, 0);
-    public static Translation2d Center = new Translation2d(1, 0);
+    public static final Translation2d Center = new Translation2d(0, 0);
 
     public static final Translation2d Front = new Translation2d(
       Wheel_Base / 2,

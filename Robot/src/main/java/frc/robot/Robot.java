@@ -54,6 +54,9 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
+    m_robotContainer.scheduleTeleopCommands();
+    m_robotContainer.setTeleopBindings();
+
     // Teleop Commands
 
     // m_robotContainer.m_Manual_ShoulderCommand.schedule();

@@ -55,7 +55,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Field Relative", false);
     SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
 
-    Pigeon = new Pigeon2(0);
+    Pigeon = new Pigeon2(0, "Platform");
     Pigeon.configMountPose(AxisDirection.NegativeY, AxisDirection.PositiveZ);
     Pigeon.setYaw(0);
     // Pigeon.configMountPosePitch(1);
@@ -139,7 +139,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void stopMotors() {
-    drive(0, 0, 0, false, Constants.Drive.Center);
+    drive(0, 0, 0, false, DriveConstants.dCenter);
   }
 
   public void drive(
@@ -215,7 +215,7 @@ public class DriveSubsystem extends SubsystemBase {
         CurrentDriveState = DriveState.HELD_FIELD_RELATIVE;
       } else {
         SmartDashboard.putBoolean("Field Relative", false);
-        drive(x, y, z, false, Constants.Drive.Center);
+        drive(x, y, z, false, DriveConstants.dCenter);
       }
     }
 
@@ -223,21 +223,21 @@ public class DriveSubsystem extends SubsystemBase {
     switch (CurrentDriveState) {
       // keep field relative drive until button is released
       case HELD_FIELD_RELATIVE:
-        drive(x, y, z, true, Constants.Drive.Center);
+        drive(x, y, z, true, DriveConstants.dCenter);
         if (HeldButtonReleased) {
           CurrentDriveState = DriveState.DEFAULT_STATE;
         }
         break;
       // waiting for button to be released
       case TOGGLE_FIELD_RELATIVE_STAGE_1:
-        drive(x, y, z, true, Constants.Drive.Center);
+        drive(x, y, z, true, DriveConstants.dCenter);
         if (ToggleButtonReleased) {
           CurrentDriveState = DriveState.TOGGLE_FIELD_RELATIVE_STAGE_2;
         }
         break;
       // waiting for button to be pressed again
       case TOGGLE_FIELD_RELATIVE_STAGE_2:
-        drive(x, y, z, true, Constants.Drive.Center);
+        drive(x, y, z, true, DriveConstants.dCenter);
         if (ToggleButton) {
           CurrentDriveState = DriveState.TOGGLE_HOLD_STATE;
         }
@@ -246,7 +246,7 @@ public class DriveSubsystem extends SubsystemBase {
       // released, but run non-field relative drive in the meantime
       case TOGGLE_HOLD_STATE:
         SmartDashboard.putBoolean("Field Relative", false);
-        drive(x, y, z, false, Constants.Drive.Center);
+        drive(x, y, z, false, DriveConstants.dCenter);
         if (ToggleButtonReleased) {
           CurrentDriveState = DriveState.DEFAULT_STATE;
         }
