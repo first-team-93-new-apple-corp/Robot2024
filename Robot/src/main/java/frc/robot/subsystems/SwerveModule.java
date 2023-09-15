@@ -37,7 +37,7 @@ public class SwerveModule extends SubsystemBase {
 
     this.driveMotorID = driveMotorID;
 
-    Driving_Motor = new WPI_TalonFX(driveMotorID, "Platform");
+    Driving_Motor = new WPI_TalonFX(driveMotorID);
     Driving_Motor.setNeutralMode(NeutralMode.Brake);
     Driving_Motor.setInverted(true);
     SmartDashboard.putString("State " + driveMotorID, "test");
@@ -52,7 +52,7 @@ public class SwerveModule extends SubsystemBase {
     Driving_Motor.configFactoryDefault();
     Driving_Motor.configAllSettings(driveConfig);
 
-    Turning_Motor = new WPI_TalonFX(turnMotorID, "Platform");
+    Turning_Motor = new WPI_TalonFX(turnMotorID);
     Turning_Motor.setNeutralMode(NeutralMode.Brake);
 
 
@@ -74,7 +74,7 @@ public class SwerveModule extends SubsystemBase {
     SmartDashboard.putNumber("I", 0);
     SmartDashboard.putNumber("D", 0);
 
-    Can_Coder = new WPI_CANCoder(CanCoderID, "Platform");
+    Can_Coder = new WPI_CANCoder(CanCoderID);
     Can_Coder.configMagnetOffset(magnetOffset);
     Range = AbsoluteSensorRange.valueOf(0);
     Can_Coder.configAbsoluteSensorRange(Range);

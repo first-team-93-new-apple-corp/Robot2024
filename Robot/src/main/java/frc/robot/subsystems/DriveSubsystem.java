@@ -55,7 +55,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Field Relative", false);
     SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
 
-    Pigeon = new Pigeon2(0, "Platform");
+    Pigeon = new Pigeon2(0);
     Pigeon.configMountPose(AxisDirection.NegativeY, AxisDirection.PositiveZ);
     Pigeon.setYaw(0);
     // Pigeon.configMountPosePitch(1);
