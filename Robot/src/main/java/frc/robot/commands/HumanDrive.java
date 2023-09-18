@@ -34,7 +34,7 @@ public class HumanDrive extends CommandBase {
   private boolean ToggleButtonReleased = false;
   private boolean HeldButtonReleased = false;
 
-  private double Joystick_Deadzone = 0.04;
+  private double Joystick_Deadzone = 0.07;
 
   private double x = 0;
   private double y = 0;
@@ -136,8 +136,33 @@ public class HumanDrive extends CommandBase {
         ToggleButton = m_Joystick1.getRawButton(12);
         ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12); 
 
-        if (m_Joystick1.getRawButton(16)){
-          
+        POVButton pov0 = new POVButton(m_Joystick2, 0); // front
+        POVButton pov45 = new POVButton(m_Joystick2, 45); // fr wheel
+        POVButton pov90 = new POVButton(m_Joystick2, 90); // right
+        POVButton pov135 = new POVButton(m_Joystick2, 135); // bl wheel
+        POVButton pov180 = new POVButton(m_Joystick2, 180); // back
+        POVButton pov225 = new POVButton(m_Joystick2, 225);// bl wheel
+        POVButton pov270 = new POVButton(m_Joystick2, 270);// left
+        POVButton pov315 = new POVButton(m_Joystick2, 315); // fl wheel
+        
+        if(pov0.getAsBoolean()){
+            DriveConstants.dCenter = DriveConstants.Front;
+        } else if(pov45.getAsBoolean()){
+            DriveConstants.dCenter = DriveConstants.Location_FR;
+        } else if(pov90.getAsBoolean()){
+            DriveConstants.dCenter = DriveConstants.Right;
+        } else if(pov135.getAsBoolean()){
+            DriveConstants.dCenter = DriveConstants.Location_BR;
+        } else if(pov180.getAsBoolean()){
+            DriveConstants.dCenter = DriveConstants.Back;
+        } else if(pov225.getAsBoolean()){
+            DriveConstants.dCenter = DriveConstants.Location_BL;
+        } else if(pov270.getAsBoolean()){
+            DriveConstants.dCenter = DriveConstants.Left;
+        } else if(pov315.getAsBoolean()){
+            DriveConstants.dCenter = DriveConstants.Location_FL;
+        } else{
+            DriveConstants.dCenter = new Translation2d(0,0);
         }
 
         break;

@@ -21,7 +21,6 @@ public class RobotContainer {
   AutonSubsystem m_AutonSubsystem;
   Joystick Driver2;
   // Commands
-  CustomRotationHelper m_CustomRotationHelper;
   HumanDrive m_TeleopDriveCommand;
 
   // Controllers
@@ -31,13 +30,7 @@ public class RobotContainer {
   Joystick Operator2;
 
   // Buttons
-  JoystickButton grabber_in_Button;
-  JoystickButton grabber_out_Button;
-  JoystickButton arm_Button;
-  JoystickButton arm_In;
-  JoystickButton arm_Out;
-  JoystickButton TuningWrist;
-
+  JoystickButton LockWheels;
   // JoystickButton OperatorSelectorForward;
   // JoystickButton OperatorSelectorBackward;
 
@@ -54,10 +47,12 @@ public class RobotContainer {
     // Subsystems
     m_DriveSubsystem = new DriveSubsystem();
     m_AutonSubsystem = new AutonSubsystem();
-    m_CustomRotationHelper = new CustomRotationHelper(Driver2);
 
     // Commands
     m_TeleopDriveCommand = new HumanDrive(m_DriveSubsystem, Driver1, Driver2);
+
+    // Buttons
+    LockWheels = new JoystickButton(Driver2, 3);
 
     // m_OperatorInterfaceSubsystem = new OperatorInterfaceSubsystem();
 

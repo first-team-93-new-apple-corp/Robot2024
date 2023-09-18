@@ -164,10 +164,8 @@ public final class Constants {
     public static final double Wheel_Circumference = Wheel_Radius * 2 * Math.PI;
 
     // Drivetrain Information
-    // public static final double Track_Width = Units.inchesToMeters(29); // right wheel to left wheel
-    // public static final double Wheel_Base = Units.inchesToMeters(29); //Front To Back
-    public static final double Track_Width = Units.inchesToMeters(25); //23 bot
-    public static final double Wheel_Base = Units.inchesToMeters(25); //23 bot
+    public static final double Track_Width = Units.inchesToMeters(29); //23 bot
+    public static final double Wheel_Base = Units.inchesToMeters(29); //23 bot
 
     // Gearing Ratios
     public static final double Turning_Gearing = 12.8;
