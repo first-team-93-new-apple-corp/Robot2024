@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.ctre.phoenix.sensors.Pigeon2;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -11,15 +13,16 @@ import frc.robot.subsystems.AutonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.CustomRotationHelper;
 import frc.robot.subsystems.OperatorInterfaceSubsystem;
+import frc.robot.commands.AutonCommands.LockWheels;
 import frc.robot.commands.HumanDrive;
 
 public class RobotContainer {
-
   // Subsystems
   OperatorInterfaceSubsystem m_OperatorInterfaceSubsystem;
   DriveSubsystem m_DriveSubsystem;
   AutonSubsystem m_AutonSubsystem;
   Joystick Driver2;
+
   // Commands
   HumanDrive m_TeleopDriveCommand;
 
@@ -36,6 +39,7 @@ public class RobotContainer {
 
   // Other Definitions
   SendableChooser<Command> AutonChooser;
+  Pigeon2 Pigeon;
 
   public RobotContainer() {
     // Controllers
@@ -53,6 +57,9 @@ public class RobotContainer {
 
     // Buttons
     LockWheels = new JoystickButton(Driver2, 3);
+
+    // PidgeonAngle
+    SmartDashboard.putNumber("Current Pigeon Angle", DriveSubsystem.getHeading());
 
     // m_OperatorInterfaceSubsystem = new OperatorInterfaceSubsystem();
 
@@ -76,6 +83,7 @@ public class RobotContainer {
 
   public void setTeleopBindings() {
     m_DriveSubsystem.setDefaultCommand(m_TeleopDriveCommand);
+    LockWheels.whileTrue(new LockWheels(m_DriveSubsystem));
   }
 
   public void scheduleTeleopCommands() {}

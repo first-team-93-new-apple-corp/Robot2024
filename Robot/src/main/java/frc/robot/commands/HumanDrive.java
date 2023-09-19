@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -145,23 +146,23 @@ public class HumanDrive extends CommandBase {
         POVButton pov270 = new POVButton(m_Joystick2, 270);// left
         POVButton pov315 = new POVButton(m_Joystick2, 315); // fl wheel
         
-        if(pov0.getAsBoolean()){
+        if(pov0.getAsBoolean()) {
             DriveConstants.dCenter = DriveConstants.Front;
-        } else if(pov45.getAsBoolean()){
+        } else if(pov45.getAsBoolean()) {
             DriveConstants.dCenter = DriveConstants.Location_FR;
-        } else if(pov90.getAsBoolean()){
+        } else if(pov90.getAsBoolean()) {
             DriveConstants.dCenter = DriveConstants.Right;
-        } else if(pov135.getAsBoolean()){
+        } else if(pov135.getAsBoolean()) {
             DriveConstants.dCenter = DriveConstants.Location_BR;
-        } else if(pov180.getAsBoolean()){
+        } else if(pov180.getAsBoolean()) {
             DriveConstants.dCenter = DriveConstants.Back;
-        } else if(pov225.getAsBoolean()){
+        } else if(pov225.getAsBoolean()) {
             DriveConstants.dCenter = DriveConstants.Location_BL;
-        } else if(pov270.getAsBoolean()){
+        } else if(pov270.getAsBoolean()) {
             DriveConstants.dCenter = DriveConstants.Left;
-        } else if(pov315.getAsBoolean()){
+        } else if(pov315.getAsBoolean()) {
             DriveConstants.dCenter = DriveConstants.Location_FL;
-        } else{
+        } else {
             DriveConstants.dCenter = new Translation2d(0,0);
         }
 

@@ -18,16 +18,16 @@ import java.text.DecimalFormat;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  Pigeon2 Pigeon;
+  public static Pigeon2 Pigeon;
 
-  SwerveModule Front_Left;
-  SwerveModule Front_Right;
-  SwerveModule Back_Left;
-  SwerveModule Back_Right;
+  public static SwerveModule Front_Left;
+  public static SwerveModule Front_Right;
+  public static SwerveModule Back_Left;
+  public static SwerveModule Back_Right;
 
   SwerveModuleState SavedStates[];
 
-  SwerveDriveOdometry Odometry;
+  public static SwerveDriveOdometry Odometry;
 
   SwerveDriveKinematics Kinematics;
 
@@ -52,6 +52,7 @@ public class DriveSubsystem extends SubsystemBase {
   public double Starting_Level;
 
   public DriveSubsystem() {
+
     SmartDashboard.putBoolean("Field Relative", false);
     SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
 
@@ -83,7 +84,7 @@ public class DriveSubsystem extends SubsystemBase {
         Constants.Drive.Location_BR
       );
 
-    SmartDashboard.putNumber("Piegeon Angle", getHeading());
+    SmartDashboard.putNumber("Pigeon Angle", getHeading());
     // Setting Up Swerve Modules
     Front_Left =
       new SwerveModule(
@@ -256,7 +257,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
-  public SwerveModulePosition[] getPositions() {
+  public static SwerveModulePosition[] getPositions() {
     SwerveModulePosition[] positions = {
       Front_Left.getPosition(),
       Front_Right.getPosition(),
@@ -282,17 +283,16 @@ public class DriveSubsystem extends SubsystemBase {
     return Odometry.getPoseMeters();
   }
 
-  public double getHeading() {
+  public static double getHeading() {
     double yaw = Pigeon.getYaw();
     yaw = yaw % 360;
-
     if (yaw < 0) {
       yaw = 360 + yaw;
     }
     return yaw;
   }
 
-  public void zeroHeading() {
+  public static void zeroHeading() {
     Pigeon.setYaw(0);
   }
 
@@ -337,7 +337,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Piegeon Angle", getHeading());
+    SmartDashboard.putNumber("Pigeon Angle", getHeading());
 
     SmartDashboard.putNumber("AccelerationX", GetAcceleration());
     // these values should be uncommented when zeroing encoders
