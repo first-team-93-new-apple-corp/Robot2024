@@ -158,14 +158,14 @@ public class HumanDrive extends CommandBase {
         int angle = (int) DriveSubsystem.getHeading();
         roundAngle(angle);
       //  System.out.println(angle);
-        POVButton pov0 = new POVButton(m_Joystick2, 0); // front
-        POVButton pov45 = new POVButton(m_Joystick2, 45); // fr wheel
-        POVButton pov90 = new POVButton(m_Joystick2, 90); // right
-        POVButton pov135 = new POVButton(m_Joystick2, 135); // bl wheel
-        POVButton pov180 = new POVButton(m_Joystick2, 180); // back
-        POVButton pov225 = new POVButton(m_Joystick2, 225);// bl wheel
-        POVButton pov270 = new POVButton(m_Joystick2, 270);// left
-        POVButton pov315 = new POVButton(m_Joystick2, 315); // fl wheel
+        POVButton pov0 = new POVButton(m_Joystick2, -angle); // front
+        POVButton pov45 = new POVButton(m_Joystick2, -angle); // fr wheel
+        POVButton pov90 = new POVButton(m_Joystick2, -angle); // right
+        POVButton pov135 = new POVButton(m_Joystick2, -angle); // bl wheel
+        POVButton pov180 = new POVButton(m_Joystick2, -angle); // back
+        POVButton pov225 = new POVButton(m_Joystick2, -angle);// bl wheel
+        POVButton pov270 = new POVButton(m_Joystick2, -angle);// left
+        POVButton pov315 = new POVButton(m_Joystick2, -angle); // fl wheel
 
         if (pov0.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Front;
