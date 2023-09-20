@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
@@ -103,5 +105,6 @@ public final class DriveConstants {
     -Wheel_Base / 2,
     -Track_Width / 2
   );
+  public static Pose2d TestPose = new Pose2d(dCenter, Rotation2d.fromDegrees(DriveSubsystem.getHeading()));
 
 }
