@@ -65,13 +65,10 @@ public class HumanDrive extends CommandBase {
 
     // rotationHelper = new CustomRotationHelper(m_Joystick1);
 
-
     try {
       SmartDashboard.getData("DriveScheme");
     } catch (Exception e) {
       DriveModeChooser = new SendableChooser<DriveModes>();
-
-
 
       DriveModeChooser.setDefaultOption("2 Stick Drive", DriveModes.Two_Stick_Drive);
       DriveModeChooser.addOption(
@@ -79,7 +76,8 @@ public class HumanDrive extends CommandBase {
           DriveModes.One_Stick_Drive);
       DriveModeChooser.addOption("Testing", DriveModes.Testing_Drive);
       // DriveModeChooser.addOption("F310 Inverted", DriveModes.F310_Drive_Inverted);
-      // DriveModeChooser.addOption("F310_TurningBumpers", DriveModes.F310_TurningBumpers);
+      // DriveModeChooser.addOption("F310_TurningBumpers",
+      // DriveModes.F310_TurningBumpers);
 
       SmartDashboard.putData("Drive Scheme", DriveModeChooser);
     }
@@ -94,6 +92,26 @@ public class HumanDrive extends CommandBase {
   @Override
   public void execute() {
     Drive();
+  }
+
+  public void roundAngle(int angle) {
+    if (angle >= 337.5 || angle < 22.5) {
+      angle = 0;
+    } else if (angle >= 22.5 && angle < 67.5) {
+      angle = 45;
+    } else if (angle >= 67.5 && angle < 112.5) {
+      angle = 90;
+    } else if (angle >= 112.5 && angle < 157.5) {
+      angle = 135;
+    } else if (angle >= 157.5 && angle < 202.5) {
+      angle = 180;
+    } else if (angle >= 202.5 && angle < 247.5) {
+      angle = 225;
+    } else if (angle >= 247.5 && angle < 292.5) {
+      angle = 270;
+    } else if (angle >= 292.5 && angle < 337.5) {
+      angle = 315;
+    }
   }
 
   /**
@@ -135,8 +153,11 @@ public class HumanDrive extends CommandBase {
         HeldButtonReleased = m_Joystick1.getRawButtonReleased(13);
 
         ToggleButton = m_Joystick1.getRawButton(12);
-        ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12); 
+        ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
 
+        int angle = (int) DriveSubsystem.getHeading();
+        roundAngle(angle);
+      //  System.out.println(angle);
         POVButton pov0 = new POVButton(m_Joystick2, 0); // front
         POVButton pov45 = new POVButton(m_Joystick2, 45); // fr wheel
         POVButton pov90 = new POVButton(m_Joystick2, 90); // right
@@ -145,30 +166,30 @@ public class HumanDrive extends CommandBase {
         POVButton pov225 = new POVButton(m_Joystick2, 225);// bl wheel
         POVButton pov270 = new POVButton(m_Joystick2, 270);// left
         POVButton pov315 = new POVButton(m_Joystick2, 315); // fl wheel
-        
-        if(pov0.getAsBoolean()) {
-            DriveConstants.dCenter = DriveConstants.Front;
-        } else if(pov45.getAsBoolean()) {
-            DriveConstants.dCenter = DriveConstants.Location_FR;
-        } else if(pov90.getAsBoolean()) {
-            DriveConstants.dCenter = DriveConstants.Right;
-        } else if(pov135.getAsBoolean()) {
-            DriveConstants.dCenter = DriveConstants.Location_BR;
-        } else if(pov180.getAsBoolean()) {
-            DriveConstants.dCenter = DriveConstants.Back;
-        } else if(pov225.getAsBoolean()) {
-            DriveConstants.dCenter = DriveConstants.Location_BL;
-        } else if(pov270.getAsBoolean()) {
-            DriveConstants.dCenter = DriveConstants.Left;
-        } else if(pov315.getAsBoolean()) {
-            DriveConstants.dCenter = DriveConstants.Location_FL;
+
+        if (pov0.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Front;
+        } else if (pov45.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Location_FR;
+        } else if (pov90.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Right;
+        } else if (pov135.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Location_BR;
+        } else if (pov180.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Back;
+        } else if (pov225.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Location_BL;
+        } else if (pov270.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Left;
+        } else if (pov315.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Location_FL;
         } else {
-            DriveConstants.dCenter = new Translation2d(0,0);
+          DriveConstants.dCenter = new Translation2d(0, 0);
         }
 
         break;
       case Testing_Drive:
-        break; 
+        break;
     }
 
     m_DriveSubsystem.DriveStateMachine(
@@ -204,4 +225,5 @@ public class HumanDrive extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+
 }
