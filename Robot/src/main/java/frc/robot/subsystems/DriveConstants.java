@@ -88,7 +88,6 @@ public final class DriveConstants {
     0,
     Track_Width / 2
   );
-
   public static final Translation2d Location_FL = new Translation2d(
     Wheel_Base / 2,
     Track_Width / 2
@@ -105,6 +104,7 @@ public final class DriveConstants {
     -Wheel_Base / 2,
     -Track_Width / 2
   );
-  public static Pose2d TestPose = new Pose2d(dCenter, Rotation2d.fromDegrees(DriveSubsystem.getHeading()));
+
+
 
 }
