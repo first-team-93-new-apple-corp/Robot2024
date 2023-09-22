@@ -37,6 +37,8 @@ public class HumanDrive extends CommandBase {
 
   private double Joystick_Deadzone = 0.07;
 
+  boolean Limit = true;
+
   private double x = 0;
   private double y = 0;
   private double z = 0;
@@ -157,7 +159,7 @@ public class HumanDrive extends CommandBase {
 
         int angle = (int) DriveSubsystem.getHeading();
         roundAngle(angle);
-      //  System.out.println(angle);
+        // System.out.println(angle);
 
         RotationPoints(m_Joystick2);
 
@@ -176,7 +178,7 @@ public class HumanDrive extends CommandBase {
         ToggleButtonReleased);
   }
 
-  public void RotationPoints(Joystick m_Joystick2){
+  public void RotationPoints(Joystick m_Joystick2) {
     POVButton pov0 = new POVButton(m_Joystick2, 0); // front
     POVButton pov45 = new POVButton(m_Joystick2, 45); // fr wheel
     POVButton pov90 = new POVButton(m_Joystick2, 90); // right
@@ -186,34 +188,47 @@ public class HumanDrive extends CommandBase {
     POVButton pov270 = new POVButton(m_Joystick2, 270);// left
     POVButton pov315 = new POVButton(m_Joystick2, 315); // fl wheel
 
-    for(int Limit = 0; Limit < 1;){
-      if (Limit < 1) {
-        Limit = 1;
+    // SmartDashboard.putNumber("Limit", Limit);
+    if (!(m_Joystick2.getRawAxis(0) <= 0.1 && m_Joystick2.getRawAxis(0) >= -0.1)) {
+      if (Limit) {
+        Limit = false;
+        // SmartDashboard.putNumber("Limit", Limit);
         if (pov0.getAsBoolean()) {
-        DriveConstants.dCenter = DriveConstants.Front.rotateBy(Rotation2d.fromDegrees(-1*DriveSubsystem.getHeading()));
+          DriveConstants.dCenter = DriveConstants.Front
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
         } else if (pov45.getAsBoolean()) {
-        DriveConstants.dCenter = DriveConstants.Location_FR.rotateBy(Rotation2d.fromDegrees(-1*DriveSubsystem.getHeading()));
+          DriveConstants.dCenter = DriveConstants.Location_FR
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
         } else if (pov90.getAsBoolean()) {
-        DriveConstants.dCenter = DriveConstants.Right.rotateBy(Rotation2d.fromDegrees(-1*DriveSubsystem.getHeading()));
+          DriveConstants.dCenter = DriveConstants.Right
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
         } else if (pov135.getAsBoolean()) {
-        DriveConstants.dCenter = DriveConstants.Location_BR.rotateBy(Rotation2d.fromDegrees(-1*DriveSubsystem.getHeading()));
+          DriveConstants.dCenter = DriveConstants.Location_BR
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
         } else if (pov180.getAsBoolean()) {
-        DriveConstants.dCenter = DriveConstants.Back.rotateBy(Rotation2d.fromDegrees(-1*DriveSubsystem.getHeading()));
+          DriveConstants.dCenter = DriveConstants.Back
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
         } else if (pov225.getAsBoolean()) {
-        DriveConstants.dCenter = DriveConstants.Location_BL.rotateBy(Rotation2d.fromDegrees(-1*DriveSubsystem.getHeading()));
+          DriveConstants.dCenter = DriveConstants.Location_BL
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
         } else if (pov270.getAsBoolean()) {
-        DriveConstants.dCenter = DriveConstants.Left.rotateBy(Rotation2d.fromDegrees(-1*DriveSubsystem.getHeading()));
+          DriveConstants.dCenter = DriveConstants.Left
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
         } else if (pov315.getAsBoolean()) {
-        DriveConstants.dCenter = DriveConstants.Location_FL.rotateBy(Rotation2d.fromDegrees(-1*DriveSubsystem.getHeading()));
+          DriveConstants.dCenter = DriveConstants.Location_FL
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
         } else {
-        DriveConstants.dCenter = new Translation2d(0,0);
+          DriveConstants.dCenter = new Translation2d(0, 0);
         }
       } else {
-        Limit = 0;
+        Limit = false;
       }
-      
+    } else {
+      Limit = true;
     }
   }
+
+  
 
   /**
    * Checks if the joystick is within the deadzone
