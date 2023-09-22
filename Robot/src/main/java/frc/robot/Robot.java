@@ -10,15 +10,15 @@ public class Robot extends TimedRobot {
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  
+  int i = 0;
   public static SwerveModule Front_Left;
   public static SwerveModule Front_Right;
   public static SwerveModule Back_Left;
   public static SwerveModule Back_Right;
-  
+
   @Override
   public void robotInit() {
-    setNetworkTablesFlushEnabled(true); 
+    setNetworkTablesFlushEnabled(true);
 
     m_robotContainer = new RobotContainer();
 
@@ -27,9 +27,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    i = 1;
     CommandScheduler.getInstance().run();
     SmartDashboard.putBoolean("Enabled?", isEnabled());
-    
+
     SmartDashboard.putNumber("Front Left Turning Motor Temp", Front_Left.TurningTemp());
     SmartDashboard.putNumber("Front Left Driving Motor Temp", Front_Left.DriveTemp());
     SmartDashboard.putNumber("Front Right Turning Motor Temp", Front_Right.TurningTemp());
@@ -46,14 +47,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    SmartDashboard.putNumber("Front Left Turning Motor Temp", Front_Left.TurningTemp());
-    SmartDashboard.putNumber("Front Left Driving Motor Temp", Front_Left.DriveTemp());
-    SmartDashboard.putNumber("Front Right Turning Motor Temp", Front_Right.TurningTemp());
-    SmartDashboard.putNumber("Front Right Driving Motor Temp", Front_Right.DriveTemp());
-    SmartDashboard.putNumber("Back Left Turning Motor Temp", Back_Left.TurningTemp());
-    SmartDashboard.putNumber("Back Left Driving Motor Temp", Back_Left.DriveTemp());
-    SmartDashboard.putNumber("Back Right Turning Motor Temp", Back_Right.TurningTemp());
-    SmartDashboard.putNumber("Back Right Driving Motor Temp", Back_Right.DriveTemp());
+    if (i == 1) {
+      SmartDashboard.putNumber("Front Left Turning Motor Temp", Front_Left.TurningTemp());
+      SmartDashboard.putNumber("Front Left Driving Motor Temp", Front_Left.DriveTemp());
+      SmartDashboard.putNumber("Front Right Turning Motor Temp", Front_Right.TurningTemp());
+      SmartDashboard.putNumber("Front Right Driving Motor Temp", Front_Right.DriveTemp());
+      SmartDashboard.putNumber("Back Left Turning Motor Temp", Back_Left.TurningTemp());
+      SmartDashboard.putNumber("Back Left Driving Motor Temp", Back_Left.DriveTemp());
+      SmartDashboard.putNumber("Back Right Turning Motor Temp", Back_Right.TurningTemp());
+      SmartDashboard.putNumber("Back Right Driving Motor Temp", Back_Right.DriveTemp());
+    }
   }
 
   @Override
@@ -85,8 +88,6 @@ public class Robot extends TimedRobot {
     // m_robotContainer.m_Manual_ShoulderCommand.schedule();
     // m_robotContainer.m_Manual_GrabberCommand.schedule();
     // m_robotContainer.m_Manual_WristCommand.schedule();
-
-
 
     // m_robotContainer.m_ShoulderCommand.schedule();
     // m_robotContainer.m_OperatorSelectorCommand.schedule();
