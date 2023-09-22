@@ -166,6 +166,12 @@ public class SwerveModule extends SubsystemBase {
   public double FrontRightRotations(){
     return Driving_Motor.getSelectedSensorPosition()/(2048*Constants.Drive.Driving_Gearing);
   }
+  public double TurningTemp() {
+    return Turning_Motor.getTemperature();
+  }
+  public double DriveTemp() {
+    return Driving_Motor.getTemperature();
+  }
 
   @Override
   public void periodic() {
