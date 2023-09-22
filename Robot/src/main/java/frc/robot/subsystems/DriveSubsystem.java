@@ -56,15 +56,6 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Field Relative", false);
     SmartDashboard.putString("Current Drive State", CurrentDriveState.name());
 
-    SmartDashboard.putNumber("Front Left Turning Motor Temp", Front_Left.TurningTemp());
-    SmartDashboard.putNumber("Front Left Driving Motor Temp", Front_Left.DriveTemp());
-    SmartDashboard.putNumber("Front Right Turning Motor Temp", Front_Right.TurningTemp());
-    SmartDashboard.putNumber("Front Right Driving Motor Temp", Front_Right.DriveTemp());
-    SmartDashboard.putNumber("Back Left Turning Motor Temp", Back_Left.TurningTemp());
-    SmartDashboard.putNumber("Back Left Driving Motor Temp", Back_Left.DriveTemp());
-    SmartDashboard.putNumber("Back Right Turning Motor Temp", Back_Right.TurningTemp());
-    SmartDashboard.putNumber("Back Right Driving Motor Temp", Back_Right.DriveTemp());
-
     Pigeon = new Pigeon2(0);
     Pigeon.configMountPose(AxisDirection.NegativeY, AxisDirection.PositiveZ);
     Pigeon.setYaw(0);
