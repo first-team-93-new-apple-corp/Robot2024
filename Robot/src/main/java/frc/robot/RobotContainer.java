@@ -11,7 +11,6 @@ import frc.robot.commands.AutonCommands.CableBumpBlue1Pickup;
 import frc.robot.commands.AutonCommands.DriveAndLevel;
 import frc.robot.subsystems.AutonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.CustomRotationHelper;
 import frc.robot.subsystems.OperatorInterfaceSubsystem;
 import frc.robot.commands.AutonCommands.LockWheels;
 import frc.robot.commands.HumanDrive;

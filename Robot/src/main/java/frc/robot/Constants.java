@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.SwerveModule;
 
 public final class Constants {
@@ -219,7 +218,7 @@ public final class Constants {
     );
   }
 
-  // TODO: Organize these
+  // 
   public static final double DegreesToRotationsShoulder = 0.0;
   public static final double InchesToRotationsTelescope = 0.0;
   public static final double MaxAngle = 0;
@@ -227,7 +226,7 @@ public final class Constants {
   public static final double totalTicks = 13943;
   public static final double MAXActuation = 16;
   public static final double InchesToTicksTelescope = totalTicks / MAXActuation;
-  public static final double ShoulderGearRatio = 240; // TODO GET ACTUAL VALUE
+  public static final double ShoulderGearRatio = 240; 
 
   public static final double checkJoystickDeadzone(
     double joystickValue,
