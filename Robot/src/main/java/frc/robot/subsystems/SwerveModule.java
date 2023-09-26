@@ -38,6 +38,7 @@ public class SwerveModule extends SubsystemBase {
     this.driveMotorID = driveMotorID;
 
     Driving_Motor = new WPI_TalonFX(driveMotorID);
+    
     Driving_Motor.setNeutralMode(NeutralMode.Brake);
     Driving_Motor.setInverted(true);
     SmartDashboard.putString("State " + driveMotorID, "test");
@@ -45,9 +46,13 @@ public class SwerveModule extends SubsystemBase {
 
     TalonFXConfiguration driveConfig = new TalonFXConfiguration();
     // driveConfig.supplyCurrLimit.enable = true;
-    // driveConfig.supplyCurrLimit.currentLimit = 5;
-    // driveConfig.supplyCurrLimit.triggerThresholdCurrent = 5;
-    // driveConfig.supplyCurrLimit.triggerThresholdTime = .254;
+    // driveConfig.supplyCurrLimit.currentLimit = 15;
+    // driveConfig.supplyCurrLimit.triggerThresholdCurrent = 20;
+    // driveConfig.supplyCurrLimit.triggerThresholdTime = .05;
+    driveConfig.statorCurrLimit.enable = true;
+    driveConfig.statorCurrLimit.currentLimit = .15;
+    driveConfig.statorCurrLimit.triggerThresholdCurrent = 20;
+    driveConfig.statorCurrLimit.triggerThresholdTime = .05;
 
     Driving_Motor.configFactoryDefault();
     Driving_Motor.configAllSettings(driveConfig);
