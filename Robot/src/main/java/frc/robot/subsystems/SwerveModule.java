@@ -50,8 +50,8 @@ public class SwerveModule extends SubsystemBase {
     // driveConfig.supplyCurrLimit.triggerThresholdCurrent = 20;
     // driveConfig.supplyCurrLimit.triggerThresholdTime = .05;
     driveConfig.statorCurrLimit.enable = true;
-    driveConfig.statorCurrLimit.currentLimit = .15;
-    driveConfig.statorCurrLimit.triggerThresholdCurrent = 20;
+    driveConfig.statorCurrLimit.currentLimit = 40;
+    driveConfig.statorCurrLimit.triggerThresholdCurrent = 80;
     driveConfig.statorCurrLimit.triggerThresholdTime = .05;
 
     Driving_Motor.configFactoryDefault();
