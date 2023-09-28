@@ -42,17 +42,16 @@ public class SwerveModule extends SubsystemBase {
     Driving_Motor.setNeutralMode(NeutralMode.Brake);
     Driving_Motor.setInverted(true);
     SmartDashboard.putString("State " + driveMotorID, "test");
-    
 
     TalonFXConfiguration driveConfig = new TalonFXConfiguration();
     // driveConfig.supplyCurrLimit.enable = true;
     // driveConfig.supplyCurrLimit.currentLimit = 15;
     // driveConfig.supplyCurrLimit.triggerThresholdCurrent = 20;
     // driveConfig.supplyCurrLimit.triggerThresholdTime = .05;
-    driveConfig.statorCurrLimit.enable = true;
-    driveConfig.statorCurrLimit.currentLimit = 40;
-    driveConfig.statorCurrLimit.triggerThresholdCurrent = 80;
-    driveConfig.statorCurrLimit.triggerThresholdTime = .05;
+    driveConfig.statorCurrLimit.enable = false;
+    // driveConfig.statorCurrLimit.currentLimit = 40;
+    // driveConfig.statorCurrLimit.triggerThresholdCurrent = 80;
+    // driveConfig.statorCurrLimit.triggerThresholdTime = .05;
 
     Driving_Motor.configFactoryDefault();
     Driving_Motor.configAllSettings(driveConfig);
@@ -63,10 +62,8 @@ public class SwerveModule extends SubsystemBase {
 
     Turning_Motor.configFactoryDefault();
     TalonFXConfiguration turnConfig = new TalonFXConfiguration();
-    // turnConfig.supplyCurrLimit.enable = true;
-    // turnConfig.supplyCurrLimit.currentLimit = 5;
-    // turnConfig.supplyCurrLimit.triggerThresholdCurrent = 5;
-    // turnConfig.supplyCurrLimit.triggerThresholdTime = .254;
+
+    
     turnConfig.slot0.kP = Constants.Drive.Turning_P;
     turnConfig.slot0.kI = Constants.Drive.Turning_I;
     turnConfig.slot0.kD = Constants.Drive.Turning_D;

@@ -187,6 +187,7 @@ public class HumanDrive extends CommandBase {
     POVButton pov225 = new POVButton(m_Joystick2, 225);// bl wheel
     POVButton pov270 = new POVButton(m_Joystick2, 270);// left
     POVButton pov315 = new POVButton(m_Joystick2, 315); // fl wheel
+    POVButton povCenter = new POVButton(m_Joystick2, -1);
 
     // SmartDashboard.putNumber("Limit", Limit);
     if (!(m_Joystick2.getRawAxis(0) <= 0.1 && m_Joystick2.getRawAxis(0) >= -0.1)) {
@@ -222,13 +223,14 @@ public class HumanDrive extends CommandBase {
         }
       } else {
         Limit = false;
+        if (povCenter.getAsBoolean()) {
+          DriveConstants.dCenter = new Translation2d(0, 0);
+        }
       }
     } else {
       Limit = true;
     }
   }
-
-  
 
   /**
    * Checks if the joystick is within the deadzone
