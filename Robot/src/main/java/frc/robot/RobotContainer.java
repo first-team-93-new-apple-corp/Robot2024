@@ -12,7 +12,8 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.OperatorInterfaceSubsystem;
 // import frc.robot.commands.AutonCommands.DriveAndLevel;
 import frc.robot.commands.AutonCommands.LockWheels;
-import frc.robot.commands.AutonCommands.TestPath;
+import frc.robot.commands.AutonCommands.Circle;
+import frc.robot.commands.AutonCommands.AroundLevel;
 import frc.robot.commands.HumanDrive;
 
 public class RobotContainer {
@@ -75,8 +76,11 @@ public class RobotContainer {
     // CableBumpBlue1Pickup.generatePath(m_AutonSubsystem, m_DriveSubsystem)
     // );
     AutonChooser.addOption(
-        "Test Path",
-        TestPath.generatePath(m_AutonSubsystem, m_DriveSubsystem));
+        "Around and Level",
+        AroundLevel.generatePath(m_AutonSubsystem, m_DriveSubsystem));
+    AutonChooser.addOption(
+        "Circle",
+        Circle.generatePath(m_AutonSubsystem, m_DriveSubsystem));
 
     SmartDashboard.putData("Auton Chooser", AutonChooser);
 

@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.AutonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class TestPath {
+public class AroundLevel {
     /**
      * Generates the Auton Path 1 Command
      * 
@@ -17,7 +17,7 @@ public class TestPath {
             DriveSubsystem m_DriveSubsystem) {
 
         return new SequentialCommandGroup(
-                m_AutonSubsystem.getTrajectoryCommand(m_DriveSubsystem, "TestPath", true, 4, 3),
+                m_AutonSubsystem.getTrajectoryCommand(m_DriveSubsystem, "AroundLevel", true, 4, 3),
                 new AutoLevellingCommand(m_DriveSubsystem),
                 new LockWheels(m_DriveSubsystem));
     }
