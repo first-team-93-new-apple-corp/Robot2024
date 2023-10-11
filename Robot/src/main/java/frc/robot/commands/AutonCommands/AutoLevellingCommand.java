@@ -14,13 +14,13 @@ public class AutoLevellingCommand extends CommandBase {
     PIDController LevellingPID;
     Timer eliasTimer;
 
-    final double TimeAtLevel = 0.5; 
+    final double TimeAtLevel = 0.25; 
 
     public AutoLevellingCommand(DriveSubsystem m_DriveSubsystem) {
 
         this.m_DriveSubsystem = m_DriveSubsystem;
 
-        LevellingPID = new PIDController(0.01, 0.007, 0.002);
+        LevellingPID = new PIDController(0.0085, 0.001, 0.002);
         LevellingPID.setTolerance(1);
 
         eliasTimer = new Timer();
@@ -44,7 +44,7 @@ public class AutoLevellingCommand extends CommandBase {
         if (MotorCommand > 0.3) {
             MotorCommand = 0.3;
         }
-        m_DriveSubsystem.drive(MotorCommand, 0, 0, false, Constants.Drive.Center);
+        m_DriveSubsystem.drive(-MotorCommand, 0, 0, false, Constants.Drive.Center);
 
     }
 

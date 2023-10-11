@@ -14,7 +14,6 @@ public class Robot extends TimedRobot {
   public static SwerveModule Front_Right;
   public static SwerveModule Back_Left;
   public static SwerveModule Back_Right;
-
   @Override
   public void robotInit() {
     setNetworkTablesFlushEnabled(true);
@@ -44,7 +43,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }

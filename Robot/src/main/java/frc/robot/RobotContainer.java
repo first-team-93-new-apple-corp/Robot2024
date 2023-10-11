@@ -7,12 +7,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.AutonCommands.CableBumpBlue1Pickup;
-import frc.robot.commands.AutonCommands.DriveAndLevel;
 import frc.robot.subsystems.AutonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.OperatorInterfaceSubsystem;
+import frc.robot.commands.AutonCommands.DriveAndLevel;
 import frc.robot.commands.AutonCommands.LockWheels;
+import frc.robot.commands.AutonCommands.TestPath;
 import frc.robot.commands.HumanDrive;
 
 public class RobotContainer {
@@ -67,13 +67,16 @@ public class RobotContainer {
 
     AutonChooser.setDefaultOption("No Path", null);
     AutonChooser.addOption(
-      "Test Path",
-      DriveAndLevel.generatePath(m_AutonSubsystem, m_DriveSubsystem)
+    "Test_Path",
+    DriveAndLevel.generatePath(m_AutonSubsystem, m_DriveSubsystem)
     );
+    // AutonChooser.addOption(
+    // "CableBumpBlue1Pickup",
+    // CableBumpBlue1Pickup.generatePath(m_AutonSubsystem, m_DriveSubsystem)
+    // );
     AutonChooser.addOption(
-      "CableBumpBlue1Pickup",
-      CableBumpBlue1Pickup.generatePath(m_AutonSubsystem, m_DriveSubsystem)
-    );
+        "Test Path",
+        TestPath.generatePath(m_AutonSubsystem, m_DriveSubsystem));
 
     SmartDashboard.putData("Auton Chooser", AutonChooser);
 
@@ -85,13 +88,15 @@ public class RobotContainer {
     LockWheels.whileTrue(new LockWheels(m_DriveSubsystem));
   }
 
-  public void scheduleTeleopCommands() {}
+  public void scheduleTeleopCommands() {
+  }
 
   private void configureButtonBindings() {
   }
 
   public Command getAutonomousCommand() {
-    return null;
+    System.out.println(AutonChooser.getSelected());
+    return AutonChooser.getSelected();
   }
 
 }
