@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.AutonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.OperatorInterfaceSubsystem;
-import frc.robot.commands.AutonCommands.DriveAndLevel;
+// import frc.robot.commands.AutonCommands.DriveAndLevel;
 import frc.robot.commands.AutonCommands.LockWheels;
 import frc.robot.commands.AutonCommands.TestPath;
 import frc.robot.commands.HumanDrive;
@@ -66,10 +66,10 @@ public class RobotContainer {
     AutonChooser = new SendableChooser<Command>();
 
     AutonChooser.setDefaultOption("No Path", null);
-    AutonChooser.addOption(
-    "Test_Path",
-    DriveAndLevel.generatePath(m_AutonSubsystem, m_DriveSubsystem)
-    );
+    // AutonChooser.addOption(
+    // "Test_Path",
+    // DriveAndLevel.generatePath(m_AutonSubsystem, m_DriveSubsystem)
+    // );
     // AutonChooser.addOption(
     // "CableBumpBlue1Pickup",
     // CableBumpBlue1Pickup.generatePath(m_AutonSubsystem, m_DriveSubsystem)

@@ -14,7 +14,7 @@ public class AutoLevellingCommand extends CommandBase {
     PIDController LevellingPID;
     Timer eliasTimer;
 
-    final double TimeAtLevel = 0.25; 
+    final double TimeAtLevel = 0.125; 
 
     public AutoLevellingCommand(DriveSubsystem m_DriveSubsystem) {
 

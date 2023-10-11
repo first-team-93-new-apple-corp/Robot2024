@@ -17,9 +17,8 @@ public class TestPath {
             DriveSubsystem m_DriveSubsystem) {
 
         return new SequentialCommandGroup(
-                m_AutonSubsystem.getTrajectoryCommand(m_DriveSubsystem, "TestPath", true, 2, 1),
+                m_AutonSubsystem.getTrajectoryCommand(m_DriveSubsystem, "TestPath", true, 4, 3),
                 new AutoLevellingCommand(m_DriveSubsystem),
-                new AutoStopDriveCommand(m_DriveSubsystem),
                 new LockWheels(m_DriveSubsystem));
     }
 }
