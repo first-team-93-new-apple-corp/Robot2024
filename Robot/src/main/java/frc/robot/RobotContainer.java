@@ -13,6 +13,7 @@ import frc.robot.subsystems.OperatorInterfaceSubsystem;
 // import frc.robot.commands.AutonCommands.DriveAndLevel;
 import frc.robot.commands.AutonCommands.LockWheels;
 import frc.robot.commands.AutonCommands.Circle;
+import frc.robot.commands.AutonCommands.Cones;
 import frc.robot.commands.AutonCommands.AroundLevel;
 import frc.robot.commands.HumanDrive;
 
@@ -67,14 +68,10 @@ public class RobotContainer {
     AutonChooser = new SendableChooser<Command>();
 
     AutonChooser.setDefaultOption("No Path", null);
-    // AutonChooser.addOption(
-    // "Test_Path",
-    // DriveAndLevel.generatePath(m_AutonSubsystem, m_DriveSubsystem)
-    // );
-    // AutonChooser.addOption(
-    // "CableBumpBlue1Pickup",
-    // CableBumpBlue1Pickup.generatePath(m_AutonSubsystem, m_DriveSubsystem)
-    // );
+    AutonChooser.addOption(
+    "Cones",
+    Cones.generatePath(m_AutonSubsystem, m_DriveSubsystem)
+    );
     AutonChooser.addOption(
         "Around and Level",
         AroundLevel.generatePath(m_AutonSubsystem, m_DriveSubsystem));
