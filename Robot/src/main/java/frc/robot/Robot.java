@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.SwerveModule;
 
 public class Robot extends TimedRobot {
@@ -15,7 +14,6 @@ public class Robot extends TimedRobot {
   public static SwerveModule Front_Right;
   public static SwerveModule Back_Left;
   public static SwerveModule Back_Right;
-
   @Override
   public void robotInit() {
     setNetworkTablesFlushEnabled(true);
@@ -66,14 +64,6 @@ public class Robot extends TimedRobot {
     m_robotContainer.scheduleTeleopCommands();
     m_robotContainer.setTeleopBindings();
 
-    // Teleop Commands
-
-    // m_robotContainer.m_Manual_ShoulderCommand.schedule();
-    // m_robotContainer.m_Manual_GrabberCommand.schedule();
-    // m_robotContainer.m_Manual_WristCommand.schedule();
-
-    // m_robotContainer.m_ShoulderCommand.schedule();
-    // m_robotContainer.m_OperatorSelectorCommand.schedule();
   }
 
   @Override
@@ -82,15 +72,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    CommandScheduler.getInstance().cancelAll();
 
   }
 
   @Override
   public void testPeriodic() {
-    // m_VisionCommand = new VisionCommand();
-    // m_VisionCommand.schedule();
-    m_robotContainer.scheduleTestCommands().schedule();
+
 
   }
 }
