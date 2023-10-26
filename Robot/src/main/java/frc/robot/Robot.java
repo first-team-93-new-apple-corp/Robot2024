@@ -15,7 +15,6 @@ public class Robot extends TimedRobot {
   public static SwerveModule Front_Right;
   public static SwerveModule Back_Left;
   public static SwerveModule Back_Right;
-  private VisionCommand m_VisionCommand;
 
   @Override
   public void robotInit() {
@@ -28,8 +27,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    
+
     CommandScheduler.getInstance().run();
+
     SmartDashboard.putBoolean("Enabled?", isEnabled());
 
   }
@@ -83,12 +83,14 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
-    m_VisionCommand = new VisionCommand();
-    m_VisionCommand.schedule();
-    
+
   }
 
   @Override
   public void testPeriodic() {
+    // m_VisionCommand = new VisionCommand();
+    // m_VisionCommand.schedule();
+    m_robotContainer.scheduleTestCommands().schedule();
+
   }
 }

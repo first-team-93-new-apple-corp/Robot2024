@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.AutonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.OperatorInterfaceSubsystem;
-import frc.robot.subsystems.VisionSubsytem;
+import frc.robot.subsystems.VisionSubsystem;
 // import frc.robot.commands.AutonCommands.DriveAndLevel;
 import frc.robot.commands.AutonCommands.LockWheels;
 import frc.robot.commands.AutonCommands.Circle;
@@ -24,6 +24,8 @@ public class RobotContainer {
   OperatorInterfaceSubsystem m_OperatorInterfaceSubsystem;
   DriveSubsystem m_DriveSubsystem;
   AutonSubsystem m_AutonSubsystem;
+  VisionCommand m_VisionCommand;
+  VisionSubsystem m_VisionSubsystem;
   Joystick Driver2;
 
   // Commands
@@ -53,9 +55,11 @@ public class RobotContainer {
     // Subsystems
     m_DriveSubsystem = new DriveSubsystem();
     m_AutonSubsystem = new AutonSubsystem();
+    m_VisionSubsystem = new VisionSubsystem("limelight-front");
 
     // Commands
     m_TeleopDriveCommand = new HumanDrive(m_DriveSubsystem, Driver1, Driver2);
+    m_VisionCommand = new VisionCommand(m_VisionSubsystem);
 
     // Buttons
     LockWheels = new JoystickButton(Driver2, 3);
@@ -100,5 +104,7 @@ public class RobotContainer {
     System.out.println(AutonChooser.getSelected());
     return AutonChooser.getSelected();
   }
-
+  public Command scheduleTestCommands() {
+    return m_VisionCommand;
+  }
 }

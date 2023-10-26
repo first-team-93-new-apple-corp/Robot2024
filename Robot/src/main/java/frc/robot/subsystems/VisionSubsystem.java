@@ -7,19 +7,19 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-public class VisionSubsytem extends SubsystemBase {
+public class VisionSubsystem extends SubsystemBase {
     String limelightName;
     NetworkTable limelight;
     DriveSubsystem m_DriveSubsystem;
     double x, y, z, size = 0;
     boolean fieldRel = false;
     Translation2d COR = DriveConstants.dCenter;
-    PIDController turnPID = new PIDController(0.0005, 0, 0);
-    PIDController drivePID = new PIDController(0.0005, 0, 0);
+    PIDController turnPID = new PIDController(0.005, 0, 0);
+    PIDController drivePID = new PIDController(0.005, 0, 0);
 
-    public VisionSubsytem(String limelightName) {
+    public VisionSubsystem(String limelightName) {
         limelightName = this.limelightName;
-        limelight = NetworkTableInstance.getDefault().getTable(limelightName);
+        limelight = NetworkTableInstance.getDefault().getTable("limelight-front");
         m_DriveSubsystem = new DriveSubsystem();
     }
     public void updateValues() {
@@ -36,15 +36,18 @@ public class VisionSubsytem extends SubsystemBase {
         SmartDashboard.putNumber("LimelightX", x);
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", size);
+        SmartDashboard.putBoolean("has target", hasTargets());
+        System.out.println("updating values");
     }
 
     public boolean hasTargets() {
-        return false;
+        return size > 0;
     }
     public void followTape() {
         x = drivePID.calculate(size, 1);
-        z = turnPID.calculate(y, 0);
+        z = -turnPID.calculate(y, 0);
         m_DriveSubsystem.drive(x, y, z, fieldRel, COR);
+        System.out.println("following tape");
     }
     @Override
     public void periodic() {

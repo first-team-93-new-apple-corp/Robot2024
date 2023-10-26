@@ -1,27 +1,27 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.VisionSubsytem;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class VisionCommand extends CommandBase {
-    VisionSubsytem m_VisionSubsytem;
+    VisionSubsystem m_VisionSubsystem;
+
+    public VisionCommand(VisionSubsystem m_VisionSubsystem) {
+        m_VisionSubsystem = this.m_VisionSubsystem;
+    }
 
     @Override
     public void initialize() {
-        m_VisionSubsytem = new VisionSubsytem("limelight-front");
     }
 
     @Override
     public void execute() {
-        m_VisionSubsytem.updateValues();
+        m_VisionSubsystem.updateValues();
+        m_VisionSubsystem.followTape();
     }
 
-    @Override
-    public void end(boolean interrupted) {
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+    // @Override
+    // public boolean isFinished() {
+    //     return false;
+    // }
 }
