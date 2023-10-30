@@ -101,6 +101,10 @@ public class VisionSubsystem extends SubsystemBase {
         // System.out.println("following tape");
     }
 
+    public void resetLimits() {
+        drive.reset(0);
+        turn.reset(0);
+    }
     @Override
     public void periodic() {
         // updateValues();

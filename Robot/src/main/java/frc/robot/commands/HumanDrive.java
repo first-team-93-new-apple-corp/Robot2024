@@ -168,6 +168,7 @@ public class HumanDrive extends CommandBase {
         HeldButton = m_Joystick1.getRawButton(13);
         HeldButtonReleased = m_Joystick1.getRawButtonReleased(13);
         if (m_Joystick1.getRawButtonPressed(4)) {
+          m_VisionSubsystem.resetLimits();
           CurrentDriveMode = DriveModes.Follow_Tape;
           chooserToggle = true;
         }
