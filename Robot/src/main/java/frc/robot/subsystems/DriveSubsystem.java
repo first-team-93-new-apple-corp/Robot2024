@@ -338,14 +338,14 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Pigeon Angle", getHeading());
-    SmartDashboard.putNumber("Front Left Turning Motor Temp", Front_Left.TurningTemp());
-    SmartDashboard.putNumber("Front Left Driving Motor Temp", Front_Left.DriveTemp());
-    SmartDashboard.putNumber("Front Right Turning Motor Temp", Front_Right.TurningTemp());
-    SmartDashboard.putNumber("Front Right Driving Motor Temp", Front_Right.DriveTemp());
-    SmartDashboard.putNumber("Back Left Turning Motor Temp", Back_Left.TurningTemp());
-    SmartDashboard.putNumber("Back Left Driving Motor Temp", Back_Left.DriveTemp());
-    SmartDashboard.putNumber("Back Right Turning Motor Temp", Back_Right.TurningTemp());
-    SmartDashboard.putNumber("Back Right Driving Motor Temp", Back_Right.DriveTemp());
+    // SmartDashboard.putNumber("Front Left Turning Motor Temp", Front_Left.TurningTemp());
+    // SmartDashboard.putNumber("Front Left Driving Motor Temp", Front_Left.DriveTemp());
+    // SmartDashboard.putNumber("Front Right Turning Motor Temp", Front_Right.TurningTemp());
+    // SmartDashboard.putNumber("Front Right Driving Motor Temp", Front_Right.DriveTemp());
+    // SmartDashboard.putNumber("Back Left Turning Motor Temp", Back_Left.TurningTemp());
+    // SmartDashboard.putNumber("Back Left Driving Motor Temp", Back_Left.DriveTemp());
+    // SmartDashboard.putNumber("Back Right Turning Motor Temp", Back_Right.TurningTemp());
+    // SmartDashboard.putNumber("Back Right Driving Motor Temp", Back_Right.DriveTemp());
     SmartDashboard.putNumber("AccelerationX", GetAcceleration());
     // these values should be uncommented when zeroing encoders
     // DO NOT use the ones that show up in shuffleboard, those are sus and not
