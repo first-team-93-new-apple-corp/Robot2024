@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -21,6 +22,8 @@ public class VisionSubsystem extends SubsystemBase {
     PIDController drivePID = new PIDController(0.5, 0, 0);
     double rotate;
     Timer m_Timer;
+    SlewRateLimiter turn;
+    SlewRateLimiter drive;
 
     public VisionSubsystem(String limelightName) {
         limelightName = this.limelightName;
@@ -28,6 +31,8 @@ public class VisionSubsystem extends SubsystemBase {
         m_DriveSubsystem = new DriveSubsystem();
         m_Timer = new Timer();
         m_Timer.reset();
+        turn = new SlewRateLimiter(0.3);
+        drive = new SlewRateLimiter(0.2);
     }
 
     public void updateValues() {
@@ -56,20 +61,22 @@ public class VisionSubsystem extends SubsystemBase {
             // if it has been less that a half second since we lost target return true
             if (m_Timer.get() < 0.25 && m_Timer.get() != 0.0) {
                 return true;
-            } else { // we lost target for more than a half second, stopping timer and returning false
+            } else { // we lost target for more than a half second, stopping timer and returning
+                     // false
                 m_Timer.stop();
                 m_Timer.reset();
                 recent = false;
                 return false;
             }
         } else {
-            // Target found, stop timer and allow the timer to start again if the limelight loses target
+            // Target found, stop timer and allow the timer to start again if the limelight
+            // loses target
             m_Timer.stop();
             m_Timer.reset();
             recent = true;
             return true;
         }
-        
+
     }
 
     public void followTape() {
@@ -77,11 +84,18 @@ public class VisionSubsystem extends SubsystemBase {
         if (hasTargets()) {
             rotate = turnPID.calculate(x, 0);
             forward = drivePID.calculate(size, 0.5);
-            MathUtil.clamp(forward, -0.15, 0.5);
+            rotate = turn.calculate(rotate);
+            forward = drive.calculate(forward);
+            MathUtil.clamp(forward, -0.05, 0.5);
             m_DriveSubsystem.drive(forward, 0, rotate, false, DriveConstants.dCenter);
         } else {
-            m_DriveSubsystem.drive(0, 0, 0, false, DriveConstants.dCenter);
-
+            forward = drive.calculate(0);
+            if (forward < 0.05) {
+                drive.reset(0);
+                forward = 0;
+            }
+            m_DriveSubsystem.drive(forward, 0, 0, false, DriveConstants.dCenter);
+            turn.reset(0);
         }
 
         // System.out.println("following tape");
