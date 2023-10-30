@@ -7,7 +7,7 @@ public class VisionCommand extends CommandBase {
     VisionSubsystem m_VisionSubsystem;
 
     public VisionCommand(VisionSubsystem m_VisionSubsystem) {
-        m_VisionSubsystem = this.m_VisionSubsystem;
+        m_VisionSubsystem = new VisionSubsystem("limelight-front");
     }
 
     @Override
@@ -16,12 +16,16 @@ public class VisionCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_VisionSubsystem.updateValues();
-        m_VisionSubsystem.followTape();
+        m_VisionSubsystem = new VisionSubsystem("limelight-front");
+
+
+            m_VisionSubsystem.updateValues();
+            m_VisionSubsystem.followTape();
+    
     }
 
     // @Override
     // public boolean isFinished() {
-    //     return false;
+    // return false;
     // }
 }
