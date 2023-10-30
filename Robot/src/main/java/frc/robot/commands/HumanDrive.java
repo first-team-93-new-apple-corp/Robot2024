@@ -31,7 +31,6 @@ public class HumanDrive extends CommandBase {
 
   private Joystick m_Joystick1;
   private Joystick m_Joystick2;
-  private boolean followTape = false;
   private boolean ToggleButton;
   private boolean HeldButton;
   private boolean ToggleButtonReleased = false;
@@ -40,6 +39,7 @@ public class HumanDrive extends CommandBase {
   private double Joystick_Deadzone = 0.07;
 
   boolean Limit = true;
+  boolean chooserToggle = false;
 
   private double x = 0;
   private double y = 0;
@@ -123,12 +123,11 @@ public class HumanDrive extends CommandBase {
    * Runs the drive based on the Drive Mode and joystick values
    */
   public void Drive() {
+    if(!chooserToggle) {
     CurrentDriveMode = DriveModeChooser.getSelected();
+    }
 
-    // if(!followTape) {
-    // } else {
-    //   CurrentDriveMode = DriveModes.Follow_Tape;
-    // }
+
     
     if (CurrentDriveMode != LastDriveMode) {
       m_DriveSubsystem.resetDriveStateMachine();
@@ -169,11 +168,8 @@ public class HumanDrive extends CommandBase {
         HeldButton = m_Joystick1.getRawButton(13);
         HeldButtonReleased = m_Joystick1.getRawButtonReleased(13);
         if (m_Joystick1.getRawButtonPressed(4)) {
-          if (followTape) {
-            followTape = false;
-          } else {
-            followTape = true;
-          }
+          CurrentDriveMode = DriveModes.Follow_Tape;
+          chooserToggle = true;
         }
         ToggleButton = m_Joystick1.getRawButton(12);
         ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
@@ -193,6 +189,10 @@ public class HumanDrive extends CommandBase {
           ToggleButtonReleased);
         break;
       case Follow_Tape:
+      if (m_Joystick1.getRawButtonPressed(4)) {
+        CurrentDriveMode = DriveModes.Two_Stick_Drive;
+        chooserToggle = false;
+      }
         m_VisionSubsystem.updateValues();
         m_VisionSubsystem.followTape();
         break;
