@@ -17,7 +17,6 @@ import frc.robot.commands.AutonCommands.Circle;
 import frc.robot.commands.AutonCommands.Cones;
 import frc.robot.commands.AutonCommands.AroundLevel;
 import frc.robot.commands.HumanDrive;
-import frc.robot.commands.VisionCommand;
 
 public class RobotContainer {
   // Subsystems
@@ -25,7 +24,6 @@ public class RobotContainer {
   DriveSubsystem m_DriveSubsystem;
   AutonSubsystem m_AutonSubsystem;
   VisionSubsystem m_VisionSubsystem;
-  VisionCommand m_VisionCommand;
   Joystick Driver2;
 
   // Commands
@@ -58,7 +56,6 @@ public class RobotContainer {
     m_VisionSubsystem = new VisionSubsystem("limelight-front");
     // Commands
     m_TeleopDriveCommand = new HumanDrive(m_DriveSubsystem, Driver1, Driver2);
-    m_VisionCommand = new VisionCommand(m_VisionSubsystem);
     // Buttons
     LockWheels = new JoystickButton(Driver2, 3);
 

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.subsystems.DriveConstants;
 // import frc.robot.CustomRotationHelper;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class HumanDrive extends CommandBase {
 
@@ -21,15 +22,16 @@ public class HumanDrive extends CommandBase {
   private enum DriveModes {
     One_Stick_Drive,
     Two_Stick_Drive,
-    Testing_Drive
+    Follow_Tape
   }
 
   private DriveSubsystem m_DriveSubsystem;
+  private VisionSubsystem m_VisionSubsystem;
   // private CustomRotationHelper rotationHelper;
 
   private Joystick m_Joystick1;
   private Joystick m_Joystick2;
-
+  private boolean followTape = false;
   private boolean ToggleButton;
   private boolean HeldButton;
   private boolean ToggleButtonReleased = false;
@@ -66,6 +68,7 @@ public class HumanDrive extends CommandBase {
     this.m_Joystick2 = m_Joystick2;
 
     // rotationHelper = new CustomRotationHelper(m_Joystick1);
+    m_VisionSubsystem = new VisionSubsystem("limelight-front");
 
     try {
       SmartDashboard.getData("DriveScheme");
@@ -76,7 +79,7 @@ public class HumanDrive extends CommandBase {
       DriveModeChooser.addOption(
           "1 Stick Drive",
           DriveModes.One_Stick_Drive);
-      DriveModeChooser.addOption("Testing", DriveModes.Testing_Drive);
+      DriveModeChooser.addOption("Testing", DriveModes.Follow_Tape);
       // DriveModeChooser.addOption("F310 Inverted", DriveModes.F310_Drive_Inverted);
       // DriveModeChooser.addOption("F310_TurningBumpers",
       // DriveModes.F310_TurningBumpers);
@@ -153,7 +156,13 @@ public class HumanDrive extends CommandBase {
 
         HeldButton = m_Joystick1.getRawButton(13);
         HeldButtonReleased = m_Joystick1.getRawButtonReleased(13);
-
+        if (m_Joystick1.getRawButtonPressed(4)) {
+          if (followTape) {
+            followTape = false;
+          } else {
+            followTape = true;
+          }
+        }
         ToggleButton = m_Joystick1.getRawButton(12);
         ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
 
@@ -164,7 +173,9 @@ public class HumanDrive extends CommandBase {
         RotationPoints(m_Joystick2);
 
         break;
-      case Testing_Drive:
+      case Follow_Tape:
+        m_VisionSubsystem.updateValues();
+        m_VisionSubsystem.followTape();
         break;
     }
 
