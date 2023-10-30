@@ -125,6 +125,11 @@ public class HumanDrive extends CommandBase {
   public void Drive() {
     CurrentDriveMode = DriveModeChooser.getSelected();
 
+    // if(!followTape) {
+    // } else {
+    //   CurrentDriveMode = DriveModes.Follow_Tape;
+    // }
+    
     if (CurrentDriveMode != LastDriveMode) {
       m_DriveSubsystem.resetDriveStateMachine();
     }
@@ -144,7 +149,14 @@ public class HumanDrive extends CommandBase {
 
         ToggleButton = m_Joystick1.getRawButton(12);
         ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
-
+        m_DriveSubsystem.DriveStateMachine(
+          -(x),
+          -(y),
+          -(z),
+          HeldButton,
+          HeldButtonReleased,
+          ToggleButton,
+          ToggleButtonReleased);
         break;
 
       // two stick driving
@@ -171,7 +183,14 @@ public class HumanDrive extends CommandBase {
         // System.out.println(angle);
 
         RotationPoints(m_Joystick2);
-
+        m_DriveSubsystem.DriveStateMachine(
+          -(x),
+          -(y),
+          -(z),
+          HeldButton,
+          HeldButtonReleased,
+          ToggleButton,
+          ToggleButtonReleased);
         break;
       case Follow_Tape:
         m_VisionSubsystem.updateValues();
@@ -179,14 +198,7 @@ public class HumanDrive extends CommandBase {
         break;
     }
 
-    m_DriveSubsystem.DriveStateMachine(
-        -(x),
-        -(y),
-        -(z),
-        HeldButton,
-        HeldButtonReleased,
-        ToggleButton,
-        ToggleButtonReleased);
+    
   }
 
   public void RotationPoints(Joystick m_Joystick2) {
