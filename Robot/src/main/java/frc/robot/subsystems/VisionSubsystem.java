@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,8 +26,19 @@ public class VisionSubsystem extends SubsystemBase {
     Timer m_Timer;
     SlewRateLimiter turn;
     SlewRateLimiter drive;
+    Joystick m_Joystick1;
 
     public VisionSubsystem(String limelightName) {
+        limelightName = this.limelightName;
+        limelight = NetworkTableInstance.getDefault().getTable("limelight-front");
+        m_DriveSubsystem = new DriveSubsystem();
+        m_Timer = new Timer();
+        m_Timer.reset();
+        turn = new SlewRateLimiter(0.3);
+        drive = new SlewRateLimiter(0.2);
+    }
+    public VisionSubsystem(String limelightName, Joystick m_Joystick1) {
+        m_Joystick1 = this.m_Joystick1;
         limelightName = this.limelightName;
         limelight = NetworkTableInstance.getDefault().getTable("limelight-front");
         m_DriveSubsystem = new DriveSubsystem();
@@ -39,7 +51,6 @@ public class VisionSubsystem extends SubsystemBase {
     public void updateValues() {
         NetworkTableEntry tx = limelight.getEntry("tx");
         NetworkTableEntry ta = limelight.getEntry("ta");
-        limelight.getEntry("stream").setNumber(2);
 
         // read values periodically
         x = tx.getDouble(0.0);
@@ -120,8 +131,19 @@ public class VisionSubsystem extends SubsystemBase {
         turn.reset(0);
     }
 
+    public void switchCamera(Joystick m_tempJoystick) {
+        if (m_tempJoystick.getRawButtonPressed(3)) {
+            if (limelight.getEntry("stream").getDouble(0) == 2) {
+                limelight.getEntry("stream").setNumber(1);
+            } else {
+                limelight.getEntry("stream").setNumber(2);
+            }
+        }
+    }
+
     @Override
     public void periodic() {
+        // switchCamera();
         // updateValues();
         // followTape();
     }

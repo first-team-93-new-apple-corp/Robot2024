@@ -68,7 +68,7 @@ public class HumanDrive extends CommandBase {
     this.m_Joystick2 = m_Joystick2;
 
     // rotationHelper = new CustomRotationHelper(m_Joystick1);
-    m_VisionSubsystem = new VisionSubsystem("limelight-front");
+    m_VisionSubsystem = new VisionSubsystem("limelight-front", m_Joystick1);
 
     try {
       SmartDashboard.getData("DriveScheme");
@@ -196,8 +196,10 @@ public class HumanDrive extends CommandBase {
         chooserToggle = false;
         m_VisionSubsystem.setLights(1);
       }
+        m_VisionSubsystem.switchCamera(m_Joystick1);
         m_VisionSubsystem.updateValues();
         m_VisionSubsystem.followTape();
+        
         break;
     }
 
