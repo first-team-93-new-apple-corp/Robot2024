@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -23,7 +24,8 @@ public class HumanDrive extends CommandBase {
   private enum DriveModes {
     One_Stick_Drive,
     Two_Stick_Drive,
-    Follow_Tape
+    Follow_Tape,
+    JoyCon
   }
 
   private DriveSubsystem m_DriveSubsystem;
@@ -32,6 +34,7 @@ public class HumanDrive extends CommandBase {
 
   private Joystick m_Joystick1;
   private Joystick m_Joystick2;
+  // private XboxController m_JoyCons = new XboxController(0);
   private boolean ToggleButton;
   private boolean HeldButton;
   private boolean ToggleButtonReleased = false;
@@ -44,7 +47,7 @@ public class HumanDrive extends CommandBase {
   private double x = 0;
   private double y = 0;
   private double z = 0;
-
+  private int angle;
   private DriveModes CurrentDriveMode;
   private DriveModes LastDriveMode = DriveModes.One_Stick_Drive;
 
@@ -56,7 +59,8 @@ public class HumanDrive extends CommandBase {
    * @param m_DriveSubsystem Auton Subsystem
    * @param m_Joystick1      The Main Joystick
    * @param m_Joystick2      A Secondary Joystick
-   * @param m_F310           Xbox Controller
+   * @param m_JoyCons        Joy Con controller mapped to an xbox controller
+   *                         (scuffed)
    *
    */
   public HumanDrive(
@@ -80,6 +84,7 @@ public class HumanDrive extends CommandBase {
           "1 Stick Drive",
           DriveModes.One_Stick_Drive);
       DriveModeChooser.addOption("Testing", DriveModes.Follow_Tape);
+      DriveModeChooser.addOption("JoyCon", DriveModes.JoyCon);
       // DriveModeChooser.addOption("F310 Inverted", DriveModes.F310_Drive_Inverted);
       // DriveModeChooser.addOption("F310_TurningBumpers",
       // DriveModes.F310_TurningBumpers);
@@ -123,12 +128,10 @@ public class HumanDrive extends CommandBase {
    * Runs the drive based on the Drive Mode and joystick values
    */
   public void Drive() {
-    if(!chooserToggle) {
-    CurrentDriveMode = DriveModeChooser.getSelected();
+    if (!chooserToggle) {
+      CurrentDriveMode = DriveModeChooser.getSelected();
     }
 
-
-    
     if (CurrentDriveMode != LastDriveMode) {
       m_DriveSubsystem.resetDriveStateMachine();
     }
@@ -149,20 +152,19 @@ public class HumanDrive extends CommandBase {
         ToggleButton = m_Joystick1.getRawButton(12);
         ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
         m_DriveSubsystem.DriveStateMachine(
-          -(x),
-          -(y),
-          -(z),
-          HeldButton,
-          HeldButtonReleased,
-          ToggleButton,
-          ToggleButtonReleased);
+            -(x),
+            -(y),
+            -(z),
+            HeldButton,
+            HeldButtonReleased,
+            ToggleButton,
+            ToggleButtonReleased);
         break;
 
       // two stick driving
       case Two_Stick_Drive:
         x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1), Joystick_Deadzone);
         y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0), Joystick_Deadzone);
-
         z = checkJoystickDeadzone(m_Joystick2.getRawAxis(0), Joystick_Deadzone);
 
         HeldButton = m_Joystick1.getRawButton(13);
@@ -176,35 +178,108 @@ public class HumanDrive extends CommandBase {
         ToggleButton = m_Joystick1.getRawButton(12);
         ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
 
-        int angle = (int) DriveSubsystem.getHeading();
+        angle = (int) DriveSubsystem.getHeading();
         roundAngle(angle);
         // System.out.println(angle);
 
         RotationPoints(m_Joystick2);
         m_DriveSubsystem.DriveStateMachine(
-          -(x),
-          -(y),
-          -(z),
-          HeldButton,
-          HeldButtonReleased,
-          ToggleButton,
-          ToggleButtonReleased);
+            -(x),
+            -(y),
+            -(z),
+            HeldButton,
+            HeldButtonReleased,
+            ToggleButton,
+            ToggleButtonReleased);
         break;
       case Follow_Tape:
-      if (m_Joystick1.getRawButtonPressed(4)) {
-        CurrentDriveMode = DriveModes.Two_Stick_Drive;
-        chooserToggle = false;
-        m_VisionSubsystem.setLights(1);
-      }
+        if (m_Joystick1.getRawButtonPressed(4)) {
+          CurrentDriveMode = DriveModes.Two_Stick_Drive;
+          chooserToggle = false;
+          m_VisionSubsystem.setLights(1);
+        }
         m_VisionSubsystem.updateValues();
         m_VisionSubsystem.followTape();
         break;
+      case JoyCon:
+        // x = checkJoystickDeadzone(m_JoyCons.getRawAxis(1), Joystick_Deadzone);
+        // y = checkJoystickDeadzone(m_JoyCons.getRawAxis(0), Joystick_Deadzone);
+        // z = checkJoystickDeadzone(m_JoyCons.getRawAxis(4), Joystick_Deadzone);
+        // HeldButton = m_JoyCons.getRawButton(13);
+        // HeldButtonReleased = m_JoyCons.getRawButtonReleased(13);
+        // ToggleButton = m_JoyCons.getRawButton(12);
+        // ToggleButtonReleased = m_JoyCons.getRawButtonReleased(12);
+        // angle = (int) DriveSubsystem.getHeading();
+        // roundAngle(angle);
+        // RotationPoints(m_JoyCons);
+        // m_DriveSubsystem.DriveStateMachine(
+        //     -(x),
+        //     -(y),
+        //     -(z),
+        //     HeldButton,
+        //     HeldButtonReleased,
+        //     ToggleButton,
+        //     ToggleButtonReleased);
+        break;
     }
 
-    
   }
 
   public void RotationPoints(Joystick m_Joystick2) {
+    POVButton pov0 = new POVButton(m_Joystick2, 0); // front
+    POVButton pov45 = new POVButton(m_Joystick2, 45); // fr wheel
+    POVButton pov90 = new POVButton(m_Joystick2, 90); // right
+    POVButton pov135 = new POVButton(m_Joystick2, 135); // br wheel
+    POVButton pov180 = new POVButton(m_Joystick2, 180); // back
+    POVButton pov225 = new POVButton(m_Joystick2, 225);// bl wheel
+    POVButton pov270 = new POVButton(m_Joystick2, 270);// left
+    POVButton pov315 = new POVButton(m_Joystick2, 315); // fl wheel
+    POVButton povCenter = new POVButton(m_Joystick2, -1);
+
+    // SmartDashboard.putNumber("Limit", Limit);
+    if (!(m_Joystick2.getRawAxis(0) <= 0.1 && m_Joystick2.getRawAxis(0) >= -0.1)) {
+      if (Limit) {
+        Limit = false;
+        // SmartDashboard.putNumber("Limit", Limit);
+        if (pov0.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Front
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
+        } else if (pov45.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Location_FR
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
+        } else if (pov90.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Right
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
+        } else if (pov135.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Location_BR
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
+        } else if (pov180.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Back
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
+        } else if (pov225.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Location_BL
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
+        } else if (pov270.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Left
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
+        } else if (pov315.getAsBoolean()) {
+          DriveConstants.dCenter = DriveConstants.Location_FL
+              .rotateBy(Rotation2d.fromDegrees(-1 * DriveSubsystem.getHeading()));
+        } else {
+          DriveConstants.dCenter = new Translation2d(0, 0);
+        }
+      } else {
+        Limit = false;
+        if (povCenter.getAsBoolean()) {
+          DriveConstants.dCenter = new Translation2d(0, 0);
+        }
+      }
+    } else {
+      Limit = true;
+    }
+  }
+
+  public void RotationPoints(XboxController m_Joystick2) {
     POVButton pov0 = new POVButton(m_Joystick2, 0); // front
     POVButton pov45 = new POVButton(m_Joystick2, 45); // fr wheel
     POVButton pov90 = new POVButton(m_Joystick2, 90); // right
@@ -272,12 +347,15 @@ public class HumanDrive extends CommandBase {
       return joystickValue;
     }
   }
+
   public void disableLights() {
     m_VisionSubsystem.setLights(1);
   }
+
   public DriveModes getDriveState() {
     return CurrentDriveMode;
   }
+
   @Override
   public void end(boolean interrupted) {
   }
