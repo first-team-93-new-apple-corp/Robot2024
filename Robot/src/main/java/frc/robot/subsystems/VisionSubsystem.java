@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class VisionSubsystem extends SubsystemBase {
     String limelightName;
     NetworkTable limelight;
+
     DriveSubsystem m_DriveSubsystem;
     double x, forward, size = 0;
     boolean fieldRel, recent = false;
@@ -38,6 +39,7 @@ public class VisionSubsystem extends SubsystemBase {
     public void updateValues() {
         NetworkTableEntry tx = limelight.getEntry("tx");
         NetworkTableEntry ta = limelight.getEntry("ta");
+        limelight.getEntry("stream").setNumber(2);
 
         // read values periodically
         x = tx.getDouble(0.0);
@@ -79,8 +81,20 @@ public class VisionSubsystem extends SubsystemBase {
 
     }
 
+    public void setLights(int mode) {
+        /*
+         * [0] use the LED Mode set in the current pipeline
+         * [1] force off
+         * [2] force blink
+         * [3] force on
+         */
+        limelight.getEntry("ledMode").setNumber(mode);
+        SmartDashboard.putNumber("Lights", limelight.getEntry("ledMode").getDouble(0));
+    }
+
     public void followTape() {
         // fov = 60 limelight returns -30 to 30
+        setLights(3);
         if (hasTargets()) {
             rotate = turnPID.calculate(x, 0);
             forward = drivePID.calculate(size, 0.5);
@@ -105,6 +119,7 @@ public class VisionSubsystem extends SubsystemBase {
         drive.reset(0);
         turn.reset(0);
     }
+
     @Override
     public void periodic() {
         // updateValues();

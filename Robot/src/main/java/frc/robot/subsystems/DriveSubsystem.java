@@ -37,7 +37,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   static SwerveDrivePoseEstimator poseEstimator;
 
-  enum DriveState {
+  public enum DriveState {
     DEFAULT_STATE,
     HELD_FIELD_RELATIVE,
     TOGGLE_FIELD_RELATIVE_STAGE_1,
@@ -45,7 +45,7 @@ public class DriveSubsystem extends SubsystemBase {
     TOGGLE_HOLD_STATE,
   }
 
-  private DriveState CurrentDriveState = DriveState.DEFAULT_STATE;
+  public DriveState CurrentDriveState = DriveState.DEFAULT_STATE;
 
   private SwerveModuleState[] LockWheelState;
 

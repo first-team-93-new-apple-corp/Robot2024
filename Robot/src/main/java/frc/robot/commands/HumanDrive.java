@@ -15,6 +15,7 @@ import frc.robot.subsystems.DriveConstants;
 // import frc.robot.CustomRotationHelper;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.DriveSubsystem.DriveState;
 
 public class HumanDrive extends CommandBase {
 
@@ -37,7 +38,6 @@ public class HumanDrive extends CommandBase {
   private boolean HeldButtonReleased = false;
 
   private double Joystick_Deadzone = 0.07;
-
   boolean Limit = true;
   boolean chooserToggle = false;
 
@@ -168,6 +168,7 @@ public class HumanDrive extends CommandBase {
         HeldButton = m_Joystick1.getRawButton(13);
         HeldButtonReleased = m_Joystick1.getRawButtonReleased(13);
         if (m_Joystick1.getRawButtonPressed(4)) {
+          m_VisionSubsystem.setLights(3);
           m_VisionSubsystem.resetLimits();
           CurrentDriveMode = DriveModes.Follow_Tape;
           chooserToggle = true;
@@ -193,6 +194,7 @@ public class HumanDrive extends CommandBase {
       if (m_Joystick1.getRawButtonPressed(4)) {
         CurrentDriveMode = DriveModes.Two_Stick_Drive;
         chooserToggle = false;
+        m_VisionSubsystem.setLights(1);
       }
         m_VisionSubsystem.updateValues();
         m_VisionSubsystem.followTape();
@@ -270,7 +272,12 @@ public class HumanDrive extends CommandBase {
       return joystickValue;
     }
   }
-
+  public void disableLights() {
+    m_VisionSubsystem.setLights(1);
+  }
+  public DriveModes getDriveState() {
+    return CurrentDriveMode;
+  }
   @Override
   public void end(boolean interrupted) {
   }
