@@ -20,7 +20,7 @@ public class VisionSubsystem extends SubsystemBase {
     double x, forward, size = 0;
     boolean fieldRel, recent = false;
     Translation2d COR = DriveConstants.dCenter;
-    PIDController turnPID = new PIDController(0.0085, 0, 0);
+    PIDController turnPID = new PIDController(0.0065, 0, 0);
     PIDController drivePID = new PIDController(0.5, 0, 0);
     double rotate;
     Timer m_Timer;
@@ -34,7 +34,7 @@ public class VisionSubsystem extends SubsystemBase {
         m_DriveSubsystem = new DriveSubsystem();
         m_Timer = new Timer();
         m_Timer.reset();
-        turn = new SlewRateLimiter(0.3);
+        turn = new SlewRateLimiter(0.2);
         drive = new SlewRateLimiter(0.2);
     }
     public VisionSubsystem(String limelightName, Joystick m_Joystick1) {

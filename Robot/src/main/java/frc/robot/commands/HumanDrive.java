@@ -169,6 +169,7 @@ public class HumanDrive extends CommandBase {
 
         HeldButton = m_Joystick1.getRawButton(13);
         HeldButtonReleased = m_Joystick1.getRawButtonReleased(13);
+        m_VisionSubsystem.setLights(1);
         if (m_Joystick1.getRawButtonPressed(4)) {
           m_VisionSubsystem.setLights(3);
           m_VisionSubsystem.resetLimits();
@@ -208,26 +209,26 @@ public class HumanDrive extends CommandBase {
         m_VisionSubsystem.followTape();
         
         break;
-      case JoyCon:
-        // x = checkJoystickDeadzone(m_JoyCons.getRawAxis(1), Joystick_Deadzone);
-        // y = checkJoystickDeadzone(m_JoyCons.getRawAxis(0), Joystick_Deadzone);
-        // z = checkJoystickDeadzone(m_JoyCons.getRawAxis(4), Joystick_Deadzone);
-        // HeldButton = m_JoyCons.getRawButton(13);
-        // HeldButtonReleased = m_JoyCons.getRawButtonReleased(13);
-        // ToggleButton = m_JoyCons.getRawButton(12);
-        // ToggleButtonReleased = m_JoyCons.getRawButtonReleased(12);
-        // angle = (int) DriveSubsystem.getHeading();
-        // roundAngle(angle);
-        // RotationPoints(m_JoyCons);
-        // m_DriveSubsystem.DriveStateMachine(
-        //     -(x),
-        //     -(y),
-        //     -(z),
-        //     HeldButton,
-        //     HeldButtonReleased,
-        //     ToggleButton,
-        //     ToggleButtonReleased);
-        break;
+      // case JoyCon:
+      //   // x = checkJoystickDeadzone(m_JoyCons.getRawAxis(1), Joystick_Deadzone);
+      //   // y = checkJoystickDeadzone(m_JoyCons.getRawAxis(0), Joystick_Deadzone);
+      //   // z = checkJoystickDeadzone(m_JoyCons.getRawAxis(4), Joystick_Deadzone);
+      //   // HeldButton = m_JoyCons.getRawButton(13);
+      //   // HeldButtonReleased = m_JoyCons.getRawButtonReleased(13);
+      //   // ToggleButton = m_JoyCons.getRawButton(12);
+      //   // ToggleButtonReleased = m_JoyCons.getRawButtonReleased(12);
+      //   // angle = (int) DriveSubsystem.getHeading();
+      //   // roundAngle(angle);
+      //   // RotationPoints(m_JoyCons);
+      //   // m_DriveSubsystem.DriveStateMachine(
+      //   //     -(x),
+      //   //     -(y),
+      //   //     -(z),
+      //   //     HeldButton,
+      //   //     HeldButtonReleased,
+      //   //     ToggleButton,
+      //   //     ToggleButtonReleased);
+      //   break;
     }
 
   }
