@@ -13,6 +13,7 @@ import frc.robot.subsystems.OperatorInterfaceSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 // import frc.robot.commands.AutonCommands.DriveAndLevel;
 import frc.robot.commands.AutonCommands.LockWheels;
+import frc.robot.commands.AutonCommands.Test;
 import frc.robot.commands.AutonCommands.Circle;
 import frc.robot.commands.AutonCommands.Cones;
 import frc.robot.commands.AutonCommands.AroundLevel;
@@ -77,7 +78,10 @@ public class RobotContainer {
     AutonChooser.addOption(
         "Circle",
         Circle.generatePath(m_AutonSubsystem, m_DriveSubsystem));
-
+    AutonChooser.addOption(
+        "Test",
+        Test.generatePath(m_AutonSubsystem, m_DriveSubsystem));
+        
     SmartDashboard.putData("Auton Chooser", AutonChooser);
 
     configureButtonBindings();
