@@ -75,10 +75,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     if (((ElevMotor.getSelectedSensorPosition() > maxHeight) && (ElevJoystick.getY() > 0))
         || ((ElevMotor.getSelectedSensorPosition() < minHeight) && (ElevJoystick.getY() < 0))) {
       return;
+    } else if (limitSwitch.get() && ElevJoystick.getY() < 0) {
+      ElevMotor.set(0);
     } else {
       ElevMotor.set((ElevJoystick.getY()) * (ElevJoystick.getY()));
     }
-    if (toplimitSwitch.get())
+    
   }
 
   /**
