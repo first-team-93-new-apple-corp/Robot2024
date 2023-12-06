@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.AutonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.OperatorInterfaceSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 // import frc.robot.commands.AutonCommands.DriveAndLevel;
@@ -17,6 +18,7 @@ import frc.robot.commands.AutonCommands.Test;
 import frc.robot.commands.AutonCommands.Circle;
 import frc.robot.commands.AutonCommands.Cones;
 import frc.robot.commands.AutonCommands.AroundLevel;
+import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.HumanDrive;
 
 public class RobotContainer {
@@ -26,6 +28,8 @@ public class RobotContainer {
   AutonSubsystem m_AutonSubsystem;
   VisionSubsystem m_VisionSubsystem;
   Joystick Driver2;
+  private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+  private final ElevatorCommand m_ElevatorCommand = new ElevatorCommand(m_ElevatorSubsystem);
 
   // Commands
   HumanDrive m_TeleopDriveCommand;
@@ -101,5 +105,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     System.out.println(AutonChooser.getSelected());
     return AutonChooser.getSelected();
+  }
+  public Command getTeleCommand(){
+    return m_ElevatorCommand;
   }
 }
