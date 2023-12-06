@@ -26,7 +26,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   boolean run = true;
   WPI_TalonFX ElevMotor = new WPI_TalonFX(01);
   Joystick ElevJoystick = new Joystick(0);
-  ElevatorFeedforward ElevFeedforward = new ElevatorFeedforward(maxHeight, mass, currentsetpoint, currentHeight);
+  ElevatorFeedforward ElevFeedforward = new ElevatorFeedforward(maxHeight, 0.21, 24.47, 0.03);
 
   public ElevatorSubsystem() {
   }
