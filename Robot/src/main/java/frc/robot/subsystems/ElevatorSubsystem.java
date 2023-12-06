@@ -12,12 +12,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class ElevatorSubsystem extends SubsystemBase {
   PIDController elevatorPID = new PIDController(0, 0, 0);
-  int[] setpoint = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+  int[] setpoint = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
   int mass;
-  
+  DigitalInput limitSwitch = new DigitalInput(0);
   int currentsetpoint;
   int currentHeight;
   int maxHeight;
@@ -51,19 +52,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   // }
   // }
 
-  public void JoystickControl() {
-    if (((ElevMotor.getSelectedSensorPosition() > maxHeight) && (ElevJoystick.getY() > 0))
-        || ((ElevMotor.getSelectedSensorPosition() < minHeight) && (ElevJoystick.getY() < 0))) {
-      return;
-    } else {
-      ElevMotor.set((ElevJoystick.getY()) * (ElevJoystick.getY()));
-    }
-  }
-
-  public void goToSetpoint() {
-    ElevMotor.set(elevatorPID.calculate(ElevMotor.getSelectedSensorPosition(), currentsetpoint));
-  }
-
   public void ButtonControl() {
     // Change buttons later
     for (int i = 5; i < 17; i++) {
@@ -72,9 +60,25 @@ public class ElevatorSubsystem extends SubsystemBase {
         goToSetpoint();
         return;
       }
-    // Making it how nagle wants it so that when a button is not pressed we can drive stick (if a button is pressed it returns to run it again if not we get to drive)
+      // Making it how nagle wants it so that when a button is not pressed we can
+      // drive stick (if a button is pressed it returns to run it again if not we get
+      // to drive)
       JoystickControl();
     }
+  }
+
+  public void goToSetpoint() {
+    ElevMotor.set(elevatorPID.calculate(ElevMotor.getSelectedSensorPosition(), currentsetpoint));
+  }
+
+  public void JoystickControl() {
+    if (((ElevMotor.getSelectedSensorPosition() > maxHeight) && (ElevJoystick.getY() > 0))
+        || ((ElevMotor.getSelectedSensorPosition() < minHeight) && (ElevJoystick.getY() < 0))) {
+      return;
+    } else {
+      ElevMotor.set((ElevJoystick.getY()) * (ElevJoystick.getY()));
+    }
+    if (toplimitSwitch.get())
   }
 
   /**
