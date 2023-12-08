@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class ElevatorSubsystem extends SubsystemBase {
-  PIDController elevatorPID = new PIDController(0, 0, 0);
+  PIDController elevatorPID = new PIDController(0.001, 0 , 0.0005);
   int[] setpoint = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
   int mass;
   DigitalInput limitSwitch = new DigitalInput(0);
