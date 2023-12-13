@@ -40,7 +40,9 @@ public class HumanDrive extends CommandBase {
   private boolean ToggleButtonReleased = false;
   private boolean HeldButtonReleased = false;
 
-  private double Joystick_Deadzone = 0.07;
+  // private double Joystick_Deadzone = 0.07;
+  // LogitechX3D Deadzones
+  private double Joystick_Deadzone = .15;
   boolean Limit = true;
   boolean chooserToggle = false;
 
@@ -165,7 +167,9 @@ public class HumanDrive extends CommandBase {
       case Two_Stick_Drive:
         x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1), Joystick_Deadzone);
         y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0), Joystick_Deadzone);
-        z = checkJoystickDeadzone(m_Joystick2.getRawAxis(0), Joystick_Deadzone);
+        // z = checkJoystickDeadzone(m_Joystick1.getRawAxis(0), Joystick_Deadzone);
+        // LogitechX3D Deadzone
+        z = checkJoystickDeadzone(m_Joystick2.getRawAxis(0), Joystick_Deadzone - .08);
 
         HeldButton = m_Joystick1.getRawButton(13);
         HeldButtonReleased = m_Joystick1.getRawButtonReleased(13);

@@ -24,9 +24,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   int gearRatio = 25; // Change later!??!?!?
   boolean driverControl = false;
   boolean run = true;
-  WPI_TalonFX ElevMotor = new WPI_TalonFX(01);
+  WPI_TalonFX ElevMotor = new WPI_TalonFX(19);
   Joystick ElevJoystick = new Joystick(0);
-  ElevatorFeedforward ElevFeedforward = new ElevatorFeedforward(maxHeight, 0.21, 24.47, 0.03);
+  ElevatorFeedforward ElevFeedforward = new ElevatorFeedforward(1, 2.45, .66, 0.31);
 
   public ElevatorSubsystem() {
   }
@@ -76,7 +76,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     } else if (limitSwitch.get() && ElevJoystick.getY() < 0) {
       ElevMotor.set(0);
     } else {
-      ElevMotor.set((ElevJoystick.getY()) * (ElevJoystick.getY()));
+      ElevMotor.set(ElevFeedforward.calculate((ElevJoystick.getY()) * (ElevJoystick.getY())));
     }
   }
 
