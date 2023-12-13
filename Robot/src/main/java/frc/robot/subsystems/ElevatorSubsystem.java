@@ -24,7 +24,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   int gearRatio = 25; // Change later!??!?!?
   boolean driverControl = false;
   boolean run = true;
-  WPI_TalonFX ElevMotor = new WPI_TalonFX(01);
+  WPI_TalonFX ElevMotorLeft = new WPI_TalonFX(01);
+  WPI_TalonFX ElevMotorRight = new WPI_TalonFX(01);
   Joystick ElevJoystick = new Joystick(0);
   ElevatorFeedforward ElevFeedforward = new ElevatorFeedforward(maxHeight, 0.21, 24.47, 0.03);
 
@@ -66,17 +67,20 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void goToSetpoint() {
-    ElevMotor.set(ElevFeedforward.calculate(elevatorPID.calculate(ElevMotor.getSelectedSensorPosition(), currentsetpoint)));
+    ElevMotorRight.set(ElevFeedforward.calculate(elevatorPID.calculate(ElevMotorRight.getSelectedSensorPosition(), currentsetpoint)));
+    ElevMotorLeft.set(ElevFeedforward.calculate(elevatorPID.calculate(ElevMotorLeft.getSelectedSensorPosition(), -currentsetpoint)));
   }
 
   public void JoystickControl() {
-    if (((ElevMotor.getSelectedSensorPosition() > maxHeight) && (ElevJoystick.getY() > 0))
-        || ((ElevMotor.getSelectedSensorPosition() < minHeight) && (ElevJoystick.getY() < 0))) {
+    if (((ElevMotorLeft.getSelectedSensorPosition() > maxHeight) && (ElevJoystick.getY() > 0))
+        || ((ElevMotorLeft.getSelectedSensorPosition() < minHeight) && (ElevJoystick.getY() < 0))) {
       return;
     } else if (limitSwitch.get() && ElevJoystick.getY() < 0) {
-      ElevMotor.set(0);
+      ElevMotorRight.set(0);
+      ElevMotorLeft.set(0);
     } else {
-      ElevMotor.set((ElevJoystick.getY()) * (ElevJoystick.getY()));
+      ElevMotorRight.set((ElevJoystick.getY()) * (ElevJoystick.getY()));
+      ElevMotorLeft.set((ElevJoystick.getY()) * (-ElevJoystick.getY()));
     }
   }
 
