@@ -4,16 +4,19 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class ElevatorSubsystem extends SubsystemBase {
   PIDController elevatorPID = new PIDController(0.001, 0 , 0.0005);
+  PIDController SillyNoMoreGravity = new PIDController(0.001, 0, 0.0005);
   int[] setpoint = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
   int mass;
   DigitalInput limitSwitch = new DigitalInput(0);
@@ -27,8 +30,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   WPI_TalonFX ElevMotor = new WPI_TalonFX(19);
   Joystick ElevJoystick = new Joystick(0);
   ElevatorFeedforward ElevFeedforward = new ElevatorFeedforward(1, 2.45, .66, 0.31);
-
+  double Joysticksetpoint = 10;
+  
   public ElevatorSubsystem() {
+    // ElevMotor.setSelectedSensorPosition(0);
+    // SmartDashboard.putNumber("elevmotorsetpoint", ElevMotor.getSelectedSensorPosition());
+  }
+  public void SmartDashboardMake() {
+    ElevMotor.setSelectedSensorPosition(0);
+    SmartDashboard.putNumber("elevmotorsetpoint", ElevMotor.getSelectedSensorPosition());
   }
 
   // public void ElevMain() {
@@ -75,8 +85,17 @@ public class ElevatorSubsystem extends SubsystemBase {
       return;
     } else if (limitSwitch.get() && ElevJoystick.getY() < 0) {
       ElevMotor.set(0);
-    } else {
-      ElevMotor.set(ElevFeedforward.calculate((ElevJoystick.getY()) * (ElevJoystick.getY())));
+      System.err.println(ElevMotor);
+    } else if (Math.abs(ElevJoystick.getY()) <=0.1) {
+      System.err.println("Deadzone");
+      System.err.println(ElevMotor.getSelectedSensorVelocity());
+      ElevMotor.setNeutralMode(NeutralMode.Brake);
+      
+    }else {
+      ElevMotor.set(((ElevJoystick.getY())*(ElevJoystick.getY()) * (ElevJoystick.getY()))/Math.abs(ElevJoystick.getY()));
+      // System.err.println(Joysticksetpoint);
+      // Joysticksetpoint = Joysticksetpoint + ((10 *(ElevJoystick.getY())*(ElevJoystick.getY()) * (ElevJoystick.getY()))/Math.abs(ElevJoystick.getY()));
+      // ElevMotor.set(ElevFeedforward.calculate(elevatorPID.calculate(ElevMotor.getSelectedSensorPosition(), Joysticksetpoint)));
     }
   }
 

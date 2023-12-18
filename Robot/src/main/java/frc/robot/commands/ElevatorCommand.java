@@ -32,6 +32,7 @@ public ElevatorCommand(ElevatorSubsystem subsystem) {
   @Override
   public void execute() {
     m_subsystem.ButtonControl();
+    m_subsystem.SmartDashboardMake();
   }
 
   // Called once the command ends or is interrupted.
