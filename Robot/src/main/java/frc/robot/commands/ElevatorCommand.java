@@ -31,8 +31,9 @@ public ElevatorCommand(ElevatorSubsystem subsystem) {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.ButtonControl();
     m_subsystem.SmartDashboardMake();
+    m_subsystem.ButtonControl();
+    
   }
 
   // Called once the command ends or is interrupted.
