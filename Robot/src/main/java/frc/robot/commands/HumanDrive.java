@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
@@ -48,9 +49,11 @@ public class HumanDrive extends CommandBase {
   private double y = 0;
   private double z = 0;
   private int angle;
+  private double prevAngle;
   private DriveModes CurrentDriveMode;
   private DriveModes LastDriveMode = DriveModes.One_Stick_Drive;
 
+  private PIDController correctionPID = new PIDController(0.005, 0, 0);
   private static SendableChooser<DriveModes> DriveModeChooser;
 
   /**
@@ -145,7 +148,6 @@ public class HumanDrive extends CommandBase {
         y = 0;
         // y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0), Joystick_Deadzone);
         z = checkJoystickDeadzone(m_Joystick1.getRawAxis(2), Joystick_Deadzone);
-
         HeldButton = m_Joystick1.getRawButton(13);
         HeldButtonReleased = m_Joystick1.getRawButtonReleased(13);
 
@@ -166,7 +168,12 @@ public class HumanDrive extends CommandBase {
         x = checkJoystickDeadzone(m_Joystick1.getRawAxis(1), Joystick_Deadzone);
         y = checkJoystickDeadzone(m_Joystick1.getRawAxis(0), Joystick_Deadzone);
         z = checkJoystickDeadzone(m_Joystick2.getRawAxis(0), Joystick_Deadzone);
-
+        angle = (int) DriveSubsystem.getHeading();
+        if(Joystick_Deadzone > z && z > -Joystick_Deadzone) {
+          correctionPID.calculate(angle , prevAngle);
+        } else {
+          prevAngle = angle;
+        }
         HeldButton = m_Joystick1.getRawButton(13);
         HeldButtonReleased = m_Joystick1.getRawButtonReleased(13);
         m_VisionSubsystem.setLights(1);
@@ -179,7 +186,7 @@ public class HumanDrive extends CommandBase {
         ToggleButton = m_Joystick1.getRawButton(12);
         ToggleButtonReleased = m_Joystick1.getRawButtonReleased(12);
 
-        angle = (int) DriveSubsystem.getHeading();
+        
         roundAngle(angle);
         // System.out.println(angle);
 
