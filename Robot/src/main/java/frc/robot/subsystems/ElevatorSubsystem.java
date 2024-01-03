@@ -89,18 +89,21 @@ public class ElevatorSubsystem extends SubsystemBase {
     //   ElevMotor.set(0);
     //   System.err.println(ElevMotor);
     } else if (Math.abs(ElevJoystick.getY()) <=0.1) {
-      System.err.println("Deadzone");
+      
       System.err.println(ElevMotor.getSelectedSensorVelocity());
       ElevMotor.setNeutralMode(NeutralMode.Brake);
-      
+      ElevMotor.set(0);
+      System.err.println("Deadzone");
     }
     else {
       System.err.println("moving");
       // ElevMotor.set(((ElevJoystick.getY())*(ElevJoystick.getY()) * (ElevJoystick.getY()))/Math.abs(ElevJoystick.getY()));
       
-      Joysticksetpoint = Joysticksetpoint + ((10 *(ElevJoystick.getY())*(ElevJoystick.getY()) * (ElevJoystick.getY()))/Math.abs(ElevJoystick.getY()));
-      ElevMotor.set(elevatorPID.calculate(ElevMotor.getSelectedSensorPosition(), Joysticksetpoint));
+      //Joysticksetpoint = Joysticksetpoint + ((10 *(ElevJoystick.getY())*(ElevJoystick.getY()) * (ElevJoystick.getY()))/Math.abs(ElevJoystick.getY()));
+      //ElevMotor.set(elevatorPID.calculate(ElevMotor.getSelectedSensorPosition(), Joysticksetpoint));
+      ElevMotor.set(ElevJoystick.getY());
       System.err.println(ElevMotor.getSelectedSensorPosition());
+
     }
   }
 
