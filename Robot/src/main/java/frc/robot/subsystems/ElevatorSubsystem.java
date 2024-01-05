@@ -92,7 +92,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       
       System.err.println(ElevMotor.getSelectedSensorVelocity());
       ElevMotor.setNeutralMode(NeutralMode.Brake);
-      ElevMotor.set(0);
+      ElevMotor.set(-0.05);
       System.err.println("Deadzone");
     }
     else {
