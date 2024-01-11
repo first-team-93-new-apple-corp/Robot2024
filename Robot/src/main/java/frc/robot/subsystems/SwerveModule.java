@@ -40,7 +40,7 @@ public class SwerveModule extends SubsystemBase {
     Driving_Motor = new WPI_TalonFX(driveMotorID);
     
     Driving_Motor.setNeutralMode(NeutralMode.Brake);
-    Driving_Motor.setInverted(true);
+    Driving_Motor.setInverted(false);
     SmartDashboard.putString("State " + driveMotorID, "test");
 
     TalonFXConfiguration driveConfig = new TalonFXConfiguration();
@@ -57,7 +57,6 @@ public class SwerveModule extends SubsystemBase {
     Driving_Motor.configAllSettings(driveConfig);
 
     Turning_Motor = new WPI_TalonFX(turnMotorID);
-    Turning_Motor.setNeutralMode(NeutralMode.Brake);
 
 
     Turning_Motor.configFactoryDefault();

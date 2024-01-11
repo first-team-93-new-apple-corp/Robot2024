@@ -19,6 +19,9 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.DriveSubsystem.DriveState;
 
+import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.Status;
+
 public class HumanDrive extends CommandBase {
 
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
@@ -32,7 +35,7 @@ public class HumanDrive extends CommandBase {
   private DriveSubsystem m_DriveSubsystem;
   private VisionSubsystem m_VisionSubsystem;
   // private CustomRotationHelper rotationHelper;
-
+  private TimeOfFlight tof = new TimeOfFlight(14);
   private Joystick m_Joystick1;
   private Joystick m_Joystick2;
   // private XboxController m_JoyCons = new XboxController(0);
@@ -76,7 +79,7 @@ public class HumanDrive extends CommandBase {
 
     // rotationHelper = new CustomRotationHelper(m_Joystick1);
     m_VisionSubsystem = new VisionSubsystem("limelight-front", m_Joystick1);
-
+        
     try {
       SmartDashboard.getData("DriveScheme");
     } catch (Exception e) {
@@ -131,6 +134,9 @@ public class HumanDrive extends CommandBase {
    * Runs the drive based on the Drive Mode and joystick values
    */
   public void Drive() {
+    SmartDashboard.putNumber("TOF RANGE",tof.getRange());
+    tof.getStatus();
+    SmartDashboard.putNumber("TOF light level", tof.getAmbientLightLevel());
     if (!chooserToggle) {
       CurrentDriveMode = DriveModeChooser.getSelected();
     }
