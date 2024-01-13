@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-public interface IGroundIntake {
-    public void intakeStart();
-    public void intakeStop();
+abstract public class IGroundIntake {
+    abstract public void intakeStart();
+    abstract public void intakeStop();
 }

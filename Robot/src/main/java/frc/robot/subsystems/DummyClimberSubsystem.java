@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class DummyClimberSubsystem extends SubsystemBase implements IClimber{
+public class DummyClimberSubsystem extends IClimber{
     //Initations here later
     Joystick DummyJoystick = new Joystick(0);
     WPI_TalonFX climberMotor1 = new WPI_TalonFX(0);
