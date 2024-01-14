@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class DummyShooterSubsystem extends SubsystemBase implements IShooter{
+public class ShooterSubsystem extends SubsystemBase implements IShooter{
     //Initations here later
     double CurrentSetpoint;
     final double DummyAmpSetPoint = 65;
@@ -42,5 +42,10 @@ public class DummyShooterSubsystem extends SubsystemBase implements IShooter{
         System.out.println("periodic setpoint: " + CurrentSetpoint);
         //DummyMotor.set((ShooterPeriodic.calculate(DummyMotor.getSelectedSensorPosition(), CurrentSetpoint)));
     }
+    @Override
+    public SubsystemBase asSubsystem() {
+        return this;
+    }
+    
 }
 

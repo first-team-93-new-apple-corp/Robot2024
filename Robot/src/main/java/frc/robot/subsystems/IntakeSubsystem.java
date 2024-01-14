@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class DummyIntakeSubsystem extends IGroundIntake{
+public class IntakeSubsystem extends SubsystemBase implements IGroundIntake{
     
     @Override
     public void intakeStart() {
@@ -19,6 +19,11 @@ public class DummyIntakeSubsystem extends IGroundIntake{
     @Override
     public void intakeStop() {
         System.out.println("Brake Motors");
+    }
+
+    @Override
+    public SubsystemBase asSubsystem() {
+        return this;
     }
     
 }

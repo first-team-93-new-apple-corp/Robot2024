@@ -1,8 +1,10 @@
 package frc.robot.subsystems;
 
-abstract public class IShooter {
-    abstract public void intake();
-    abstract public void stop();
-    abstract public void shootAmp();
-    abstract public void shootSpeaker();
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public interface IShooter extends ISubsystem{
+    public void intake();
+    public void stop();
+    public void shootAmp();
+    public void shootSpeaker();
 }

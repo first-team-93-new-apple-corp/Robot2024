@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class DummyClimberSubsystem extends IClimber{
+public class ClimberSubsystem extends SubsystemBase implements IClimber{
     //Initations here later
     Joystick DummyJoystick = new Joystick(0);
     WPI_TalonFX climberMotor1 = new WPI_TalonFX(0);
@@ -41,6 +41,11 @@ public class DummyClimberSubsystem extends IClimber{
         System.out.println("Retract springs all the way");
         System.out.println("Supply extra power");
     }
+
+	@Override
+	public SubsystemBase asSubsystem() {
+		return this;
+	}
 
 }
 
