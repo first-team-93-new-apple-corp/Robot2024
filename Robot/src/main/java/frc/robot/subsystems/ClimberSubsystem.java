@@ -1,21 +1,14 @@
 package frc.robot.subsystems;
-
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimberSubsystem extends SubsystemBase implements IClimber{
+
     //Initations here later
-    Joystick DummyJoystick = new Joystick(0);
-    WPI_TalonFX climberMotor1 = new WPI_TalonFX(0);
-    WPI_TalonFX climberMotor2 = new WPI_TalonFX(1);
-    boolean motor1Touch = false;
-    boolean motor2Touch = false;
+    // Joystick DummyJoystick = new Joystick(0);
+    // WPI_TalonFX climberMotor1 = new WPI_TalonFX(0);
+    // WPI_TalonFX climberMotor2 = new WPI_TalonFX(1);
+    // boolean motor1Touch = false;
+    // boolean motor2Touch = false;
     @Override
     public void raise() {
         // if (DummyJoystick.getRawButton(0)) { // Button for raising climber

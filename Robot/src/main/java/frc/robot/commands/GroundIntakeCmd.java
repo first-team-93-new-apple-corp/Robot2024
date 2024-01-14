@@ -1,18 +1,13 @@
-
 package frc.robot.commands;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.IGroundIntake;
-import frc.robot.subsystems.OperatorInterfaceSubsystem;
 
-public class GroundIntakeCmd extends CommandBase{
+public class GroundIntakeCmd extends CommandBase {
     private IGroundIntake m_IntakeSubsystem;
     Joystick js;
+
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
     public GroundIntakeCmd(IGroundIntake IntakeSubsystem) {
         this.m_IntakeSubsystem = IntakeSubsystem;
@@ -25,9 +20,12 @@ public class GroundIntakeCmd extends CommandBase{
 
     @Override
     public void execute() {
-       if (js.getRawButtonPressed(1)) { // Change port
+        if (js.getRawButton(3)) { //TODO change with driver input
             m_IntakeSubsystem.intakeStart();
-       }
+        }else {
+            //Stop
+           m_IntakeSubsystem.intakeStop(); 
+        }
     }
 
     @Override

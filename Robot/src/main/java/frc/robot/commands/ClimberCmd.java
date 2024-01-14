@@ -1,14 +1,8 @@
-
 package frc.robot.commands;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants;
-import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IClimber;
-import frc.robot.subsystems.OperatorInterfaceSubsystem;
 
 public class ClimberCmd extends CommandBase {
     private IClimber m_climberSubsystem;
@@ -25,8 +19,10 @@ public class ClimberCmd extends CommandBase {
 
     @Override
     public void execute() {
-       if (js.getRawButtonPressed(1)) { // Change port
+       if (js.getRawButtonPressed(4)) { //TODO change with driver imput
             m_climberSubsystem.raise();
+       } else if (js.getRawButtonPressed(5)){ //TODO change with driver imput
+            m_climberSubsystem.lower();
        }
     }
 
