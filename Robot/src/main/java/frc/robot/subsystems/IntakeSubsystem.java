@@ -13,12 +13,12 @@ public class IntakeSubsystem extends SubsystemBase implements IGroundIntake{
     
     @Override
     public void intakeStart() {
-        System.out.println("Spin Motors");
+        System.out.println("Ground Intaking");
     }
 
     @Override
     public void intakeStop() {
-        System.out.println("Brake Motors");
+        System.out.println("Brake Ground Motors");
     }
 
     @Override

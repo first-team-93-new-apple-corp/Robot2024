@@ -20,7 +20,7 @@ public class ShooterSubsystem extends SubsystemBase implements IShooter{
     @Override
     public void intake() {
         CurrentSetpoint = DummyIntakeSetPoint;
-        System.out.println("Intaking");
+        System.out.println("Muzzle loading");
     }
     @Override
     public void stop() {

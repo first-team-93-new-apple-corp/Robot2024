@@ -18,28 +18,30 @@ public class ClimberSubsystem extends SubsystemBase implements IClimber{
     boolean motor2Touch = false;
     @Override
     public void raise() {
-        if (DummyJoystick.getRawButton(0)) { // Button for raising climber
-            System.out.println("Release brake");
-            lower();
-        } else {
-            climberMotor1.setNeutralMode(NeutralMode.Brake);
-            climberMotor2.setNeutralMode(NeutralMode.Brake);
-        }
+        // if (DummyJoystick.getRawButton(0)) { // Button for raising climber
+        //     System.out.println("Release brake");
+        //     lower();
+        // } else {
+        //     // climberMotor1.setNeutralMode(NeutralMode.Brake);
+        //     // climberMotor2.setNeutralMode(NeutralMode.Brake);
+        // }
+        System.out.println("Raise CLimber");
     }
 
     @Override
     public void lower() {
-        while (motor1Touch == false && motor2Touch == false) {
-            System.out.println("Retract Springs");
-            if (climberMotor1.getSupplyCurrent() > 20) { // Change current amount if needed
-                motor1Touch = true;
-            }
-            if (climberMotor2.getSupplyCurrent() > 20) { // Change current amount if needed
-                motor2Touch = true;
-            }
-        }
-        System.out.println("Retract springs all the way");
-        System.out.println("Supply extra power");
+        // while (motor1Touch == false && motor2Touch == false) {
+        //     System.out.println("Retract Springs");
+        //     if (climberMotor1.getSupplyCurrent() > 20) { // Change current amount if needed
+        //         motor1Touch = true;
+        //     }
+        //     if (climberMotor2.getSupplyCurrent() > 20) { // Change current amount if needed
+        //         motor2Touch = true;
+        //     }
+        // }
+        // System.out.println("Retract springs all the way");
+        // System.out.println("Supply extra power");
+        System.out.println("Lower CLimber");
     }
 
 	@Override
