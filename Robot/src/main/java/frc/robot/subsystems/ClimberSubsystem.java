@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Interfaces.IClimber;
 
 public class ClimberSubsystem extends SubsystemBase implements IClimber{
 

@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Interfaces;
 
 public interface IShooter extends ISubsystem{
     public void intake();

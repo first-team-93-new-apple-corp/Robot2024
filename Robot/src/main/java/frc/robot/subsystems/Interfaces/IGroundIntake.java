@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Interfaces;
 
 public interface IGroundIntake extends ISubsystem{
     public void intakeStart();
