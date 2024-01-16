@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.SwerveModule;
 
 public final class Constants {
@@ -67,10 +68,9 @@ public final class Constants {
   }
 
   public class F310 {
-
-    public static final int A = 1;
-    public static final int B = 2;
-    public static final int X = 3;
+    public static final int X = 1;
+    public static final int A = 2;
+    public static final int B = 3;
     public static final int Y = 4;
     public static final int LeftShoulderButton = 5;
     public static final int RightShoulderButton = 6;
