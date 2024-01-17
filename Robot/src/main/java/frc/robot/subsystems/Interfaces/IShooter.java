@@ -6,4 +6,6 @@ public interface IShooter extends ISubsystem{
     public void stop();
     public void shootAmp();
     public void shootSpeaker();
+    public void shootSpeedMinus();
+    public void shootSpeedPlus();
 }

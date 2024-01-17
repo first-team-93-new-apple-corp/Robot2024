@@ -23,16 +23,16 @@ public class ShooterCmd extends CommandBase {
 
     @Override
     public void execute() {
-        if (js.getRawButton(1) || xjs.getRawButton(Constants.F310.RightShoulderButton)) { // TODO button number will change later with driver input
+        if (js.getRawButton(1) || xjs.getRawButton(Constants.F310D.RightShoulderButton)) { // TODO button number will change later with driver input
             // Shoot Amp
             m_ShooterSubsystem.shootAmp();
-        } else if (js.getRawButton(2) || xjs.getRawButton(Constants.F310.Start)) { // TODO button number will change later with driver input
+        } else if (js.getRawButton(2) || xjs.getRawButton(Constants.F310D.Start)) { // TODO button number will change later with driver input
             // Shoot Speaker
             m_ShooterSubsystem.shootSpeaker();
-        } else if (js.getRawButton(3) || xjs.getRawButton(Constants.F310.B)){ // TODO button number will change later with driver input
+        } else if (js.getRawButton(3) || xjs.getRawButton(Constants.F310D.B)){ // TODO button number will change later with driver input
             //Move note into shooter (transport to shooter motors
             m_ShooterSubsystem.intake();
-        } else if (js.getRawButton(4) || xjs.getRawButton(Constants.F310.X)){ // TODO button number will change later with driver input
+        } else if (js.getRawButton(4) || xjs.getRawButton(Constants.F310D.X)){ // TODO button number will change later with driver input
             //muzle intake into shooter from sorce
             m_ShooterSubsystem.muzzleIntake();
         } else {

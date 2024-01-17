@@ -1,12 +1,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Interfaces.IClimber;
 
 public class ClimberCmd extends CommandBase {
     private IClimber m_climberSubsystem;
-    Joystick js = new Joystick(0);
+    Joystick js;
+    private XboxController xjs;
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
     public ClimberCmd(IClimber ClimberSubsystem) {
         this.m_climberSubsystem = ClimberSubsystem;

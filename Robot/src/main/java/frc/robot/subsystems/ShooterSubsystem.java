@@ -7,22 +7,23 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Interfaces.IShooter;
 
 public class ShooterSubsystem extends SubsystemBase implements IShooter{
     //Initations here later
-    double CurrentSetpoint;
-    final double AmpSetPoint = 65;
+    double CurrentSpeed;
+    double ShooterSpeed = 0;
     final double IntakeSetPoint = -1;
-    final double SpeakerSetpoint = -0.5;
+
     TalonFX ShooterL= new TalonFX(11);
     TalonFX ShooterR= new TalonFX(05);
     CANSparkMax NEOIntake = new CANSparkMax(3, MotorType.kBrushless);
     XboxController xjs = new XboxController(0);
     @Override
     public void intake() {
-        CurrentSetpoint = IntakeSetPoint;
+        CurrentSpeed = IntakeSetPoint;
         System.out.println("Muzzle loading");
         NEOIntake.set(IntakeSetPoint);
     }
@@ -35,25 +36,35 @@ public class ShooterSubsystem extends SubsystemBase implements IShooter{
         }
     @Override
     public void shootAmp() {
-        CurrentSetpoint = AmpSetPoint;
+        CurrentSpeed = ShooterSpeed;
         System.out.println("shootAmp at lower speed");
-        ShooterL.set(TalonFXControlMode.PercentOutput, -AmpSetPoint);
-        ShooterR.set(TalonFXControlMode.PercentOutput, AmpSetPoint);
+        ShooterL.set(TalonFXControlMode.PercentOutput, -ShooterSpeed);
+        ShooterR.set(TalonFXControlMode.PercentOutput, ShooterSpeed);
     }
     @Override
     public void shootSpeaker() {
-        CurrentSetpoint = SpeakerSetpoint;
+        CurrentSpeed = ShooterSpeed;
         System.out.println("shootSpeaker at high speed");
-        ShooterL.set(TalonFXControlMode.PercentOutput, -SpeakerSetpoint);
-        ShooterR.set(TalonFXControlMode.PercentOutput, SpeakerSetpoint);
+        ShooterL.set(TalonFXControlMode.PercentOutput, -ShooterSpeed);
+        ShooterR.set(TalonFXControlMode.PercentOutput, ShooterSpeed);
     }
     public void muzzleIntake(){
-        ShooterL.set(TalonFXControlMode.PercentOutput, SpeakerSetpoint);
-        ShooterR.set(TalonFXControlMode.PercentOutput, -SpeakerSetpoint);
+        ShooterL.set(TalonFXControlMode.PercentOutput, ShooterSpeed);
+        ShooterR.set(TalonFXControlMode.PercentOutput, -ShooterSpeed);
+    }
+    public void shootSpeedPlus(){
+        ShooterSpeed += 0.05;
+        CurrentSpeed = ShooterSpeed;
+        SmartDashboard.putNumber("CurrentShooterSpeed", ShooterSpeed);
+    }
+    public void shootSpeedMinus(){
+        ShooterSpeed -= 0.05;
+        CurrentSpeed = ShooterSpeed;
+        SmartDashboard.putNumber("CurrentShooterSpeed", ShooterSpeed);
     }
     @Override
     public void periodic(){
-        System.out.println("periodic setpoint: " + CurrentSetpoint);
+        System.out.println("periodic setpoint: " + CurrentSpeed);
         //DummyMotor.set((ShooterPeriodic.calculate(DummyMotor.getSelectedSensorPosition(), CurrentSetpoint)));
     }
     @Override
