@@ -18,18 +18,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class ShooterAndIntakeCmd extends Command{
     // DCMotor Kicker
-    TalonFX ShooterR = new TalonFX(05);
-    TalonFX ShooterL = new TalonFX(11);
-    CANSparkMax IntoShooter = new CANSparkMax(3, MotorType.kBrushless);
-    CANSparkMax NeoIntakeR = new CANSparkMax(4, MotorType.kBrushless);
-    CANSparkMax NeoIntakeL = new CANSparkMax(5, MotorType.kBrushless);
+    // TalonFX ShooterR = new TalonFX(05);
+    // TalonFX ShooterL = new TalonFX(11);
+    // CANSparkMax IntoShooter = new CANSparkMax(3, MotorType.kBrushless);
+    // CANSparkMax NeoIntakeR = new CANSparkMax(4, MotorType.kBrushless);
+    // CANSparkMax NeoIntakeL = new CANSparkMax(5, MotorType.kBrushless);
     XboxController js = new XboxController(4);
     private ShooterAndIntakeCmd m_ShooterAndIntakeCmd;
-    double SpeakerShooterSpeed = -0.6;
-    double currentspeed;
-    final double AmpShooterSpeed = 0.3;
-    final double IntakeShooterSpeed = 0.75;
-    final double KickerSpeed = -1;
     @Override
     public void execute() {
         ShooterSubsystem.shootConstants();

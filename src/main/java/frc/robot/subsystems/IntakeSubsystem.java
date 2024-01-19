@@ -12,24 +12,28 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Joystick;
 
-public class IntakeSubsystem extends SubsystemBase{
-    static CANSparkMax NeoIntakeR = new CANSparkMax(4, MotorType.kBrushless); 
+public class IntakeSubsystem extends SubsystemBase {
+    static CANSparkMax NeoIntakeR = new CANSparkMax(4, MotorType.kBrushless);
     static CANSparkMax NeoIntakeL = new CANSparkMax(5, MotorType.kBrushless);
 
     final static double IntakeShooterSpeed = 0.75;
-    public static void Intake(){
+
+    public static void Intake() {
         NeoIntakeR.set(IntakeShooterSpeed);
         NeoIntakeL.set(-IntakeShooterSpeed);
     }
-    public static void IntakePassover(){
+
+    public static void IntakePassover() {
         NeoIntakeR.set(IntakeShooterSpeed);
         NeoIntakeL.set(-IntakeShooterSpeed);
     }
-    public static void IntakeStop(){
-        NeoIntakeR.set(IntakeShooterSpeed);
-        NeoIntakeL.set(-IntakeShooterSpeed);
+
+    public static void IntakeStop() {
+        NeoIntakeR.set(0);
+        NeoIntakeL.set(0);
     }
-    public static void IntakeConstants(){
-        
+
+    public static void IntakeConstants() {
+
     }
 }

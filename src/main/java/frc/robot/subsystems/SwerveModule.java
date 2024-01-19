@@ -20,9 +20,9 @@ public class SwerveModule extends SubsystemBase {
   double Motor_Commands;
   double Turning_Degrees;
 
-  WPI_TalonFX Driving_Motor;
-  WPI_TalonFX Turning_Motor;
-  WPI_CANCoder Can_Coder;
+  // WPI_TalonFX Driving_Motor;
+  // WPI_TalonFX Turning_Motor;
+  // WPI_CANCoder Can_Coder;
 
   AbsoluteSensorRange Range;
 
@@ -37,10 +37,10 @@ public class SwerveModule extends SubsystemBase {
 
     this.driveMotorID = driveMotorID;
 
-    Driving_Motor = new WPI_TalonFX(driveMotorID);
+    // Driving_Motor = new WPI_TalonFX(driveMotorID);
     
-    Driving_Motor.setNeutralMode(NeutralMode.Brake);
-    Driving_Motor.setInverted(false);
+    // Driving_Motor.setNeutralMode(NeutralMode.Brake);
+    // Driving_Motor.setInverted(false);
     SmartDashboard.putString("State " + driveMotorID, "test");
 
     TalonFXConfiguration driveConfig = new TalonFXConfiguration();
@@ -53,13 +53,13 @@ public class SwerveModule extends SubsystemBase {
     // driveConfig.statorCurrLimit.triggerThresholdCurrent = 80;
     // driveConfig.statorCurrLimit.triggerThresholdTime = .05;
 
-    Driving_Motor.configFactoryDefault();
-    Driving_Motor.configAllSettings(driveConfig);
+    // Driving_Motor.configFactoryDefault();
+    // Driving_Motor.configAllSettings(driveConfig);
 
-    Turning_Motor = new WPI_TalonFX(turnMotorID);
+    // Turning_Motor = new WPI_TalonFX(turnMotorID);
 
 
-    Turning_Motor.configFactoryDefault();
+    // Turning_Motor.configFactoryDefault();
     TalonFXConfiguration turnConfig = new TalonFXConfiguration();
 
     
@@ -69,38 +69,38 @@ public class SwerveModule extends SubsystemBase {
     turnConfig.slot0.allowableClosedloopError =
     Constants.Drive.Turning_Tolerance;
 
-    Turning_Motor.configAllSettings(turnConfig);
+    // Turning_Motor.configAllSettings(turnConfig);
 
     SmartDashboard.putNumber("P", 0);
     SmartDashboard.putNumber("I", 0);
     SmartDashboard.putNumber("D", 0);
 
-    Can_Coder = new WPI_CANCoder(CanCoderID);
-    Can_Coder.configMagnetOffset(magnetOffset);
+    // Can_Coder = new WPI_CANCoder(CanCoderID);
+    // Can_Coder.configMagnetOffset(magnetOffset);
     Range = AbsoluteSensorRange.valueOf(0);
-    Can_Coder.configAbsoluteSensorRange(Range);
-    Turning_Motor.setSelectedSensorPosition(
-      (Can_Coder.getAbsolutePosition() / 360.) * (2048 * 12.8)
-    );
-    Driving_Motor.setSelectedSensorPosition(0.0);
+    // Can_Coder.configAbsoluteSensorRange(Range);
+    // Turning_Motor.setSelectedSensorPosition(
+    //   (Can_Coder.getAbsolutePosition() / 360.) * (2048 * 12.8)
+    // );
+    // Driving_Motor.setSelectedSensorPosition(0.0);
   }
 
   SwerveModuleState state = new SwerveModuleState(0, new Rotation2d());
 
   public void setDesiredState(SwerveModuleState desiredState) {
-    double currentPos = Turning_Motor.getSelectedSensorPosition();
-    state =
-      SwerveModuleState.optimize(
-        desiredState,
-        Rotation2d.fromDegrees(Can_Coder.getAbsolutePosition())
-      );
+    // double currentPos = Turning_Motor.getSelectedSensorPosition();
+    // state =
+    //   SwerveModuleState.optimize(
+    //     desiredState,
+    //     // Rotation2d.fromDegrees(Can_Coder.getAbsolutePosition())
+    //   );
 
-    double errorBound = (360) / 2.0;
-    double m_positionError = MathUtil.inputModulus(
-      state.angle.getDegrees() - (ticksToDegrees(currentPos)),
-      -errorBound,
-      errorBound
-    );
+    // double errorBound = (360) / 2.0;
+    // double m_positionError = MathUtil.inputModulus(
+    //   state.angle.getDegrees() - (ticksToDegrees(currentPos)),
+    //   -errorBound,
+    //   errorBound
+    // );
 
 
     // do not need PID on drive motors - just a simple voltage calculation
@@ -108,12 +108,12 @@ public class SwerveModule extends SubsystemBase {
       (state.speedMetersPerSecond / Constants.Drive.Max_Strafe_Speed) *
       Constants.Drive.Max_Volts;
 
-    Driving_Motor.setVoltage(driveOutput);
+    // Driving_Motor.setVoltage(driveOutput);
 
-    Turning_Motor.set(
-      ControlMode.Position,
-      currentPos + degreesToTicks(m_positionError)
-    );
+    // Turning_Motor.set(
+    //   ControlMode.Position,
+    //   currentPos + degreesToTicks(m_positionError)
+    // );
   }
 
   public SwerveModulePosition getPosition() {
@@ -141,37 +141,43 @@ public class SwerveModule extends SubsystemBase {
 
   // calculate the current velocity of the driving wheel
   public double getVelocity() {
-    double VelocityInTicks = Driving_Motor.getSelectedSensorVelocity() * 10;
-    double speed =
-      VelocityInTicks * Units.inchesToMeters(4 * Math.PI) / (6.75 * 2048);
-    counter++;
-    if (counter % 50 == 0) {
-    }
-    return speed;
+    // double VelocityInTicks = Driving_Motor.getSelectedSensorVelocity() * 10;
+    // double speed =
+    //   VelocityInTicks * Units.inchesToMeters(4 * Math.PI) / (6.75 * 2048);
+    // counter++;
+    // if (counter % 50 == 0) {
+    // }
+    return 0;
   }
 
   public double getDistance() {
-    return Units.inchesToMeters(Driving_Motor.getSelectedSensorPosition() * 4 * Math.PI) / (Constants.Drive.Driving_Gearing * 2048);
+    return 0;
+    // return Units.inchesToMeters(Driving_Motor.getSelectedSensorPosition() * 4 * Math.PI) / (Constants.Drive.Driving_Gearing * 2048);
   }
 
   // get angle from can coder
   // test to see if get absolute position is continuous
   public Rotation2d getAngle() {
     // return Rotation2d.fromDegrees((Can_Coder.getAbsolutePosition()));
-    return Rotation2d.fromDegrees(ticksToDegrees(Turning_Motor.getSelectedSensorPosition()));
+    // return Rotation2d.fromDegrees(ticksToDegrees(Turning_Motor.getSelectedSensorPosition()));
+    return new Rotation2d(0);
   }
 
   public double getCancoderTicks(){
-    return Can_Coder.getAbsolutePosition(); 
+    // return Can_Coder.getAbsolutePosition(); 
+    return 0;
   }
   public double FrontRightRotations(){
-    return Driving_Motor.getSelectedSensorPosition()/(2048*Constants.Drive.Driving_Gearing);
+    // return Driving_Motor.getSelectedSensorPosition()/(2048*Constants.Drive.Driving_Gearing);
+    return 0;
   }
   public double TurningTemp() {
-    return Turning_Motor.getTemperature();
+    // return Turning_Motor.getTemperature();
+    return 0;
   }
   public double DriveTemp() {
-    return Driving_Motor.getTemperature();
+    // return Driving_Motor.getTemperature();
+    return 0;
   }
 
   @Override
