@@ -27,8 +27,11 @@ public class RobotContainer {
   private final Joystick m_Joystick1 = new Joystick(0);
   private final Joystick m_Joystick2 = new Joystick(1);
   private final JoystickButton m_JoystickTrigger = new JoystickButton(m_Joystick1, 1);
-  private final JoystickButton m_JoystickButton12 = new JoystickButton(m_Joystick1, 12);
-  private final JoystickButton m_JoystickButton2 = new JoystickButton(m_Joystick1, 2);
+  private final JoystickButton m_fieldRelButton = new
+  JoystickButton(m_Joystick1,
+  Constants.Thrustmaster.Left_Buttons.Top_Middle);
+  private final JoystickButton m_JoystickButton2 = new
+  JoystickButton(m_Joystick1, 2);
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -38,41 +41,46 @@ public class RobotContainer {
   private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
-      
+
   private HumanDrive m_HumanDrive = new HumanDrive(m_Joystick1, m_Joystick2, drivetrain, drive, robotDrive);
 
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+  private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   private final Telemetry logger = new Telemetry(MaxSpeed);
-
 
   // Configures the bindings to drive / control the swerve drive :)
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> robotDrive.withVelocityX(-m_Joystick1.getRawAxis(1) * MaxSpeed) // Drive forward with
-            // negative Y (forward)
-            .withVelocityY(-m_Joystick1.getRawAxis(0) * MaxSpeed) // Drive left with negative X (left)
-            .withRotationalRate(-m_Joystick2.getRawAxis(0) * MaxAngularRate) // Drive counterclockwise with negative X
-                                                                             // (left)
-        ));
-        //Brake while held
-    m_JoystickTrigger.whileTrue(drivetrain.applyRequest(() -> brake));
-    //Points all in a direction
+        drivetrain.applyRequest(() -> drive
+            .withVelocityX(
+                m_HumanDrive.checkJoystickDeadzone(
+                    -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y))
+                    * MaxSpeed)
+            .withVelocityY(
+                m_HumanDrive.checkJoystickDeadzone(
+                    -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x))
+                    * MaxSpeed)
+            .withRotationalRate(
+                m_HumanDrive.checkJoystickDeadzone(
+                    -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x))
+                    * MaxAngularRate)));
+    // Brake while held
+    m_JoystickTrigger.onTrue(drivetrain.applyRequest(() -> brake));
+    m_fieldRelButton.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    // Points all in a direction
     m_JoystickButton2.whileTrue(drivetrain
-        .applyRequest(
-            () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0), -m_Joystick1.getRawAxis(1)))));
+    .applyRequest(
+    () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0),
+    -m_Joystick1.getRawAxis(1)))));
 
     // reset the field-centric heading on left bumper press
-    // m_JoystickButton12.onTrue(currentMode = driveMode.fieldRelative1);
-    
-    
+
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
     drivetrain.registerTelemetry(logger::telemeterize);
   }
-
-
 
   public RobotContainer() {
     configureBindings();
@@ -81,6 +89,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }
+
   public Command getTeleopCommand() {
     return m_HumanDrive;
   }
