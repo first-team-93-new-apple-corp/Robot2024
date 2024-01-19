@@ -1,11 +1,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-<<<<<<< HEAD
 import frc.robot.commands.ShooterCommand;
 import edu.wpi.first.wpilibj.XboxController;
-=======
->>>>>>> b11bfc4231072e0cc3b9e927dff39a9ae7e151d4
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;

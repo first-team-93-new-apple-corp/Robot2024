@@ -61,6 +61,7 @@ public class RobotContainer {
     // Commands
     m_TeleopDriveCommand = new HumanDrive(m_DriveSubsystem, Driver1, Driver2);
     m_ShooterCommand = new ShooterCommand();
+    m_IntakeCommand = new IntakeCommand();
   
     // Buttons
     LockWheels = new JoystickButton(Driver2, 3);
