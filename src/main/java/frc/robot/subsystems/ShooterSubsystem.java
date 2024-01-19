@@ -1,23 +1,18 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.ShooterAndIntakeCmd;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.Joystick;
 
 public class ShooterSubsystem extends SubsystemBase {
     static TalonFX ShooterR = new TalonFX(05);
     static TalonFX ShooterL = new TalonFX(11);
     static CANSparkMax IntoShooter = new CANSparkMax(3, MotorType.kBrushless);
-    static double SpeakerShooterSpeed = 0.65;
+    static double SpeakerShooterSpeed = 0.45;
     static double currentspeed;
+    static double MuzzleIntake = 0.25;
     final static double AmpShooterSpeed = 0.3;
     final static double KickerSpeed = -1;
 
@@ -38,8 +33,8 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public static void shootMuzzle() {
-        ShooterR.set(0.15);
-        ShooterL.set(-0.15);
+        ShooterR.set(MuzzleIntake);
+        ShooterL.set(-MuzzleIntake);
     }
 
     public static void shootStop() {
