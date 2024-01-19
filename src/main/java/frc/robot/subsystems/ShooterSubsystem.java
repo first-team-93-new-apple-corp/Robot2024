@@ -1,8 +1,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.ShooterCommand;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
@@ -17,11 +15,14 @@ public class ShooterSubsystem extends SubsystemBase {
     static double MuzzleIntake = 0.25;
     final static double AmpShooterSpeed = 0.3;
     final static double KickerSpeed = -1;
-
-    public static void shootSpeaker() {
+    public ShooterSubsystem() {
+        ShooterL.setInverted(false);
+        ShooterR.setInverted(false);
+    }
+    public static void prime() {
         System.out.println("shooting speaker");
-        ShooterR.set(-SpeakerShooterSpeed);
-        ShooterL.set(SpeakerShooterSpeed);
+        ShooterR.set(SpeakerShooterSpeed);
+        ShooterL.set(-SpeakerShooterSpeed);
 
     }
 
@@ -30,13 +31,13 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterL.set(AmpShooterSpeed);
     }
 
-    public static void shootIntake() {
+    public static void kicker() {
         IntoShooter.set(KickerSpeed);
     }
 
     public static void shootMuzzle() {
-        ShooterR.set(MuzzleIntake);
-        ShooterL.set(-MuzzleIntake);
+        ShooterR.set(-MuzzleIntake);
+        ShooterL.set(MuzzleIntake);
     }
 
     public static void shootStop() {
@@ -49,13 +50,17 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public static void shootPlus() {
-        SpeakerShooterSpeed += 0.05; // +5%speed
+        if (SpeakerShooterSpeed < 0) {
+            SpeakerShooterSpeed += 0.05; // +5%speed
+        }
         SmartDashboard.putNumber("CurrentSpeed", SpeakerShooterSpeed);
 
     }
 
     public static void shootMinus() {
-        SpeakerShooterSpeed -= 0.05; // -5%speed
+        if (SpeakerShooterSpeed > -0.95) {
+            SpeakerShooterSpeed -= 0.05; // -5%speed
+        }
         SmartDashboard.putNumber("CurrentSpeed", SpeakerShooterSpeed);
 
     }
@@ -69,6 +74,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-       
+
     }
 }

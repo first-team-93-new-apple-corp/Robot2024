@@ -20,7 +20,6 @@ public class HumanDrive extends Command {
     private final SwerveRequest.FieldCentric drive;
     private final SwerveRequest.RobotCentric robotDrive;
     private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
-
     private final SwerveRequest.SwerveDriveBrake brake = new
     SwerveRequest.SwerveDriveBrake();
     // private final SwerveRequest.PointWheelsAt point = new
@@ -72,5 +71,7 @@ public class HumanDrive extends Command {
     }
 
     @Override
-    public void execute() {}
+    public void execute() {
+
+    }
 }
