@@ -1,67 +1,77 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+<<<<<<< HEAD
 import frc.robot.commands.ShooterCommand;
 import edu.wpi.first.wpilibj.XboxController;
+=======
+>>>>>>> b11bfc4231072e0cc3b9e927dff39a9ae7e151d4
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Joystick;
-
-public class ShooterSubsystem  extends SubsystemBase{
+public class ShooterSubsystem extends SubsystemBase {
     static TalonFX ShooterR = new TalonFX(05);
     static TalonFX ShooterL = new TalonFX(11);
     static CANSparkMax IntoShooter = new CANSparkMax(3, MotorType.kBrushless);
-    static double SpeakerShooterSpeed = -0.6;
+    static double SpeakerShooterSpeed = 0.45;
     static double currentspeed;
+    static double MuzzleIntake = 0.25;
     final static double AmpShooterSpeed = 0.3;
     final static double KickerSpeed = -1;
-    public static void shootSpeaker(){
-        if (SpeakerShooterSpeed >= 0.6){
-            currentspeed = SpeakerShooterSpeed;
-            ShooterR.set( SpeakerShooterSpeed);
-            ShooterL.set( -SpeakerShooterSpeed);
-        }
+
+    public static void shootSpeaker() {
+        System.out.println("shooting speaker");
+        ShooterR.set(-SpeakerShooterSpeed);
+        ShooterL.set(SpeakerShooterSpeed);
+
     }
-    public static void shootAmp(){
-        ShooterR.set( AmpShooterSpeed);
-        ShooterL.set( -AmpShooterSpeed);
+
+    public static void shootAmp() {
+        ShooterR.set(-AmpShooterSpeed);
+        ShooterL.set(AmpShooterSpeed);
     }
-    public static void shootIntake(){
+
+    public static void shootIntake() {
         IntoShooter.set(KickerSpeed);
     }
-    public static void shootMuzzle(){
-        currentspeed = SpeakerShooterSpeed;
-        ShooterR.set( -SpeakerShooterSpeed);
-        ShooterL.set( SpeakerShooterSpeed);
+
+    public static void shootMuzzle() {
+        ShooterR.set(MuzzleIntake);
+        ShooterL.set(-MuzzleIntake);
     }
-    public static void shootStop(){
+
+    public static void shootStop() {
         ShooterR.set(0);
         ShooterL.set(0);
     }
-    public static void shootIntakeStop(){
+
+    public static void shootIntakeStop() {
         IntoShooter.set(0);
     }
-    public static void shootPlus(){
-        if (SpeakerShooterSpeed < 1.0){ //100% speed
-        SpeakerShooterSpeed += 0.05; //+5%speed
-        currentspeed = SpeakerShooterSpeed;
-        SmartDashboard.putNumber("CurrentSpeed", currentspeed);
-        }
+
+    public static void shootPlus() {
+        SpeakerShooterSpeed += 0.05; // +5%speed
+        SmartDashboard.putNumber("CurrentSpeed", SpeakerShooterSpeed);
+
     }
-    public static void shootMinus(){
-        if (SpeakerShooterSpeed > 0.6){ //60% speed
-        SpeakerShooterSpeed -= 0.05; //-5%speed
-        currentspeed = SpeakerShooterSpeed;
-        SmartDashboard.putNumber("CurrentSpeed", currentspeed);
-        }
+
+    public static void shootMinus() {
+        SpeakerShooterSpeed -= 0.05; // -5%speed
+        SmartDashboard.putNumber("CurrentSpeed", SpeakerShooterSpeed);
+
     }
-    public static void shootConstants(){
-        SmartDashboard.putNumber("Shooter Speed", currentspeed);
+
+    public static void shootConstants() {
+        SmartDashboard.putNumber("Shooter Speed", SpeakerShooterSpeed);
         SmartDashboard.putNumber("ShooterRmp", ShooterR.getVelocity().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter 1 Temp", ShooterL.getDeviceTemp().getValueAsDouble());
+        SmartDashboard.putNumber("Shooter 2 Temp", ShooterR.getDeviceTemp().getValueAsDouble());
+    }
+
+    @Override
+    public void periodic() {
+       
     }
 }
