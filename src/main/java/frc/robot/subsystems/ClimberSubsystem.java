@@ -6,12 +6,12 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -22,12 +22,16 @@ public class ClimberSubsystem  extends SubsystemBase{
     PIDController climber2PID = new PIDController(0,0,0);
     boolean motor1Hit = false;
     boolean motor2Hit = false;
-    
     double startSetpoint = 0;
-    
+    double extendedSetpoint = 1000;
     double currentToStop = 2;
+    double loweringSpeed = 0.1;
+    ElevatorFeedforward feedforward1 = new ElevatorFeedforward(0,0,0,0); // change values
+    ElevatorFeedforward feedforward2 = new ElevatorFeedforward(0,0,0,0); // change values
+    
+
     enum climberState {
-        IDLE,RAISED,LOWERING,LOWER;
+        IDLE,RAISED,LOWERING,LOWERED;
     }
 
     climberState state = climberState.IDLE;
@@ -41,29 +45,9 @@ public class ClimberSubsystem  extends SubsystemBase{
         state = climberState.RAISED;
     }
     public void lowerClimber() {
-        // while (bothHit() == false){
-            // if (climberMotor1.getSupplyCurrent().getValue() > 2) {
-            //     climberMotor1.setNeutralMode(NeutralModeValue.Brake);
-            // } else {
-            //     climberMotor1.set(0.1);
-            // }
-            // if (climberMotor2.getSupplyCurrent().getValue() > 2) {
-            //     climberMotor2.setNeutralMode(NeutralModeValue.Brake);
-            // } else {
-            //     climberMotor2.set(0.1);
-            // }
-            
-        // }
-        state = climberState.LOWERING;
-        
+        state = climberState.LOWERING;       
     }
-    public boolean bothHit() {
-        if (climberMotor2.getSupplyCurrent().getValue() > currentToStop && climberMotor1.getSupplyCurrent().getValue() > currentToStop) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+  
     
         
     
@@ -73,16 +57,15 @@ public class ClimberSubsystem  extends SubsystemBase{
         SmartDashboard.putNumber("Climber2 Encoder", climberMotor2.getPosition().getValueAsDouble());
         SmartDashboard.putString("Climber State", state.toString());
         if (state.equals(climberState.RAISED)) {
-            climberMotor1.set(climber1PID.calculate(1000));
-            climberMotor2.set(climber1PID.calculate(1000));
+            climberMotor1.set(climber1PID.calculate(extendedSetpoint));
+            climberMotor2.set(climber1PID.calculate(extendedSetpoint));
         } else if (state.equals(climberState.IDLE)) {
-            climberMotor1.set(climber1PID.calculate(0));
-            climberMotor2.set(climber1PID.calculate(0));
-        } else if (state.equals(climberState.LOWER)) {
-            // TODO add feedforward
-            climberMotor1.set(climber1PID.calculate(0));
-            climberMotor2.set(climber1PID.calculate(0));
-        } else if (state.equals(climberState.LOWERING)) { // before it hits the chain
+            climberMotor1.set(climber1PID.calculate(startSetpoint));
+            climberMotor2.set(climber1PID.calculate(startSetpoint));
+        } else if (state.equals(climberState.LOWERED)) {
+            climberMotor1.set(feedforward1.calculate(climber1PID.calculate(startSetpoint)));
+            climberMotor2.set(feedforward2.calculate(climber1PID.calculate(startSetpoint)));
+        } else if (state.equals(climberState.LOWERING)) { 
             if (climberMotor1.getSupplyCurrent().getValue() > 2) {
                 motor1Hit = true;
                 climberMotor1.set(0);
@@ -93,14 +76,14 @@ public class ClimberSubsystem  extends SubsystemBase{
                 climberMotor2.set(0);
                 climberMotor2.setNeutralMode(NeutralModeValue.Brake);
             } 
-            if (motor1Hit == false) {
-                climberMotor1.set(0.1);
+            if (!motor1Hit) {
+                climberMotor1.set(loweringSpeed);
             }
-            if (motor2Hit == false) {
-                climberMotor1.set(0.1);
+            if (!motor2Hit) {
+                climberMotor1.set(loweringSpeed);
             }
-            if (bothHit() == true) {
-                state = climberState.LOWER;
+            if (motor1Hit && motor2Hit) {
+                state = climberState.LOWERED;
             }
      
         } 
