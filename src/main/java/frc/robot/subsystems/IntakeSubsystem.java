@@ -13,8 +13,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class IntakeSubsystem extends SubsystemBase {
-    static CANSparkMax NeoIntakeR = new CANSparkMax(4, MotorType.kBrushless);
-    static CANSparkMax NeoIntakeL = new CANSparkMax(5, MotorType.kBrushless);
+    static CANSparkMax NeoIntakeR = new CANSparkMax(2, MotorType.kBrushless);
+    static CANSparkMax NeoIntakeL = new CANSparkMax(3, MotorType.kBrushless);
 
     final static double IntakeShooterSpeed = 0.75;
 

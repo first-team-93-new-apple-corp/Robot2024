@@ -9,9 +9,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class ShooterSubsystem extends SubsystemBase {
-    static TalonFX ShooterR = new TalonFX(05);
-    static TalonFX ShooterL = new TalonFX(11);
-    static CANSparkMax IntoShooter = new CANSparkMax(3, MotorType.kBrushless);
+    static TalonFX ShooterR = new TalonFX(16);
+    static TalonFX ShooterL = new TalonFX(15);
+    static CANSparkMax IntoShooter = new CANSparkMax(1, MotorType.kBrushless);
     static double SpeakerShooterSpeed = 0.45;
     static double currentspeed;
     static double MuzzleIntake = 0.25;
