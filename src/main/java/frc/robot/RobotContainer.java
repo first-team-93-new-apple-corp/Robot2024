@@ -13,6 +13,7 @@ import frc.robot.subsystems.OperatorInterfaceSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 // import frc.robot.commands.AutonCommands.DriveAndLevel;
 import frc.robot.commands.AutonCommands.LockWheels;
+import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.HumanDrive;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.IntakeCommand;
@@ -30,6 +31,7 @@ public class RobotContainer {
   HumanDrive m_TeleopDriveCommand;
   ShooterCommand m_ShooterCommand;
   IntakeCommand m_IntakeCommand;
+  ClimberCommand m_ClimberCommand;
  
   // Controllers
   // XboxController m_F310;
@@ -62,6 +64,7 @@ public class RobotContainer {
     m_TeleopDriveCommand = new HumanDrive(m_DriveSubsystem, Driver1, Driver2);
     m_ShooterCommand = new ShooterCommand();
     m_IntakeCommand = new IntakeCommand();
+    m_ClimberCommand = new ClimberCommand();
   
     // Buttons
     LockWheels = new JoystickButton(Driver2, 3);
@@ -90,6 +93,7 @@ public class RobotContainer {
   public void scheduleTeleopCommands() {
     m_ShooterCommand.schedule();
     m_IntakeCommand.schedule();
+    m_ClimberCommand.schedule();
   }
 
   private void configureButtonBindings() {
