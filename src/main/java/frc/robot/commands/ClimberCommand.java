@@ -14,11 +14,11 @@ public class ClimberCommand extends Command{
     ClimberSubsystem ClimberSubsystem = new ClimberSubsystem();
     @Override
     public void execute() {
-        ClimberSubsystem.ClimberConstants();
-        if (js.getRawButton(F310D.Y)) {
+        
+        if (js.getRawButtonReleased(F310D.Y)) {
             ClimberSubsystem.raiseClimber();
         }
-        if (js.getRawButton(F310D.B)) {
+        if (js.getRawButtonReleased(F310D.B)) {
             ClimberSubsystem.lowerClimber();
         }
     }

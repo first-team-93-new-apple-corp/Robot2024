@@ -11,6 +11,7 @@ import frc.robot.subsystems.AutonSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.OperatorInterfaceSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 // import frc.robot.commands.AutonCommands.DriveAndLevel;
 import frc.robot.commands.AutonCommands.LockWheels;
 import frc.robot.commands.ClimberCommand;
@@ -24,6 +25,7 @@ public class RobotContainer {
   DriveSubsystem m_DriveSubsystem;
   AutonSubsystem m_AutonSubsystem;
   VisionSubsystem m_VisionSubsystem;
+  ClimberSubsystem m_ClimberSubsystem;
   Joystick Driver2;
 
 
@@ -59,6 +61,7 @@ public class RobotContainer {
     m_DriveSubsystem = new DriveSubsystem();
     m_AutonSubsystem = new AutonSubsystem();
     m_VisionSubsystem = new VisionSubsystem("limelight-front");
+    m_ClimberSubsystem = new ClimberSubsystem();
   
     // Commands
     m_TeleopDriveCommand = new HumanDrive(m_DriveSubsystem, Driver1, Driver2);
@@ -94,6 +97,7 @@ public class RobotContainer {
     m_ShooterCommand.schedule();
     m_IntakeCommand.schedule();
     m_ClimberCommand.schedule();
+    m_ClimberSubsystem.register();
   }
 
   private void configureButtonBindings() {
