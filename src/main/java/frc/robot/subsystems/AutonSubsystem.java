@@ -1,6 +1,4 @@
 package frc.robot.subsystems;
-
-import com.pathplanner.lib.path.PathPlannerTrajectory;
 // import com.pathplanner.lib.path.PathPlanner;
 // import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
