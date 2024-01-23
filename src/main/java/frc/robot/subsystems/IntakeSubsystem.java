@@ -1,16 +1,10 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.IntakeCommand;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Joystick;
 
 public class IntakeSubsystem extends SubsystemBase {
     static CANSparkMax NeoIntakeR = new CANSparkMax(2, MotorType.kBrushless);
@@ -33,8 +27,8 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public static void IntakeStop() {
-        NeoIntakeR.set(0);
-        NeoIntakeL.set(0);
+        NeoIntakeFront.set(0);
+        NeoIntakeBack.set(0);
     }
 
     public static void IntakeConstants() {

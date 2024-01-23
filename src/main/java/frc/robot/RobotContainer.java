@@ -1,110 +1,96 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot;
 
-import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.AutonSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.OperatorInterfaceSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
-// import frc.robot.commands.AutonCommands.DriveAndLevel;
-import frc.robot.commands.AutonCommands.LockWheels;
-import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.HumanDrive;
-import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.IntakeCommand;
+import frc.robot.subsystems.DriveConstants;
+import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.subsystems.Telemetry;
+import frc.robot.subsystems.TunerConstants;
 
 public class RobotContainer {
-  // Subsystems
-  OperatorInterfaceSubsystem m_OperatorInterfaceSubsystem;
-  DriveSubsystem m_DriveSubsystem;
-  AutonSubsystem m_AutonSubsystem;
-  VisionSubsystem m_VisionSubsystem;
-  ClimberSubsystem m_ClimberSubsystem;
-  Joystick Driver2;
+  public final double MaxSpeed = DriveConstants.MaxSpeed;
+  public final double MaxAngularRate = DriveConstants.MaxAngularRate;
+  private final Joystick m_Joystick1 = new Joystick(0);
+  private final Joystick m_Joystick2 = new Joystick(1);
+  private final JoystickButton m_JoystickTrigger = new JoystickButton(m_Joystick1, 1);
+  private final JoystickButton m_fieldRelButton = new
+  JoystickButton(m_Joystick1,
+  Constants.Thrustmaster.Left_Buttons.Top_Middle);
+  private final JoystickButton m_JoystickButton2 = new
+  JoystickButton(m_Joystick1, 2);
+  private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
+  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
+                                                               // driving in open loop
 
+  private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric()
+      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+      .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
-  // Commands
-  HumanDrive m_TeleopDriveCommand;
-  ShooterCommand m_ShooterCommand;
-  IntakeCommand m_IntakeCommand;
-  ClimberCommand m_ClimberCommand;
- 
-  // Controllers
-  // XboxController m_F310;
-  Joystick Driver1;
-  Joystick Operator1;
-  Joystick Operator2;
+  private HumanDrive m_HumanDrive = new HumanDrive(m_Joystick1, m_Joystick2, drivetrain, drive, robotDrive);
 
-  // Buttons
-  JoystickButton LockWheels;
-  // JoystickButton OperatorSelectorForward;
-  // JoystickButton OperatorSelectorBackward;
+  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+  private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
+  private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+  private final Telemetry logger = new Telemetry(MaxSpeed);
 
-  // Other Definitions
-  SendableChooser<Command> AutonChooser;
-  Pigeon2 Pigeon;
+  // Configures the bindings to drive / control the swerve drive :)
+  private void configureBindings() {
+    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+        drivetrain.applyRequest(() -> drive
+            .withVelocityX(
+                m_HumanDrive.checkJoystickDeadzone(
+                    -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y))
+                    * MaxSpeed)
+            .withVelocityY(
+                m_HumanDrive.checkJoystickDeadzone(
+                    -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x))
+                    * MaxSpeed)
+            .withRotationalRate(
+                m_HumanDrive.checkJoystickDeadzone(
+                    -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x))
+                    * MaxAngularRate)));
+    // Brake while held
+    m_JoystickTrigger.onTrue(drivetrain.applyRequest(() -> brake));
+    m_fieldRelButton.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    // Points all in a direction
+    m_JoystickButton2.whileTrue(drivetrain
+    .applyRequest(
+    () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0),
+    -m_Joystick1.getRawAxis(1)))));
+
+    // reset the field-centric heading on left bumper press
+
+    if (Utils.isSimulation()) {
+      drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+    }
+    drivetrain.registerTelemetry(logger::telemeterize);
+  }
 
   public RobotContainer() {
-    // Controllers
-    Driver1 = new Joystick(Constants.Joystick_Port.Driver1Port); // Driver 1
-    Driver2 = new Joystick(Constants.Joystick_Port.Driver2Port); // Driver 2
-    Operator1 = new Joystick(Constants.Joystick_Port.Operator1Port); // Operator 1
-    Operator2 = new Joystick(Constants.Joystick_Port.Operator2Port); // Operator 2
-
-    // Subsystems
-    m_DriveSubsystem = new DriveSubsystem();
-    m_AutonSubsystem = new AutonSubsystem();
-    m_VisionSubsystem = new VisionSubsystem("limelight-front");
-    m_ClimberSubsystem = new ClimberSubsystem();
-  
-    // Commands
-    m_TeleopDriveCommand = new HumanDrive(m_DriveSubsystem, Driver1, Driver2);
-    m_ShooterCommand = new ShooterCommand();
-    m_IntakeCommand = new IntakeCommand();
-    m_ClimberCommand = new ClimberCommand();
-  
-    // Buttons
-    LockWheels = new JoystickButton(Driver2, 3);
-
-    // PidgeonAngle
-    SmartDashboard.putNumber("Current Pigeon Angle", DriveSubsystem.getHeading());
-
-    // m_OperatorInterfaceSubsystem = new OperatorInterfaceSubsystem();
-
-    // Auton Path Chooser
-    AutonChooser = new SendableChooser<Command>();
-
-    AutonChooser.setDefaultOption("No Path", null);
-    
-
-    SmartDashboard.putData("Auton Chooser", AutonChooser);
-
-    configureButtonBindings();
-  }
-
-  public void setTeleopBindings() {
-    m_DriveSubsystem.setDefaultCommand(m_TeleopDriveCommand);
-    LockWheels.whileTrue(new LockWheels(m_DriveSubsystem));
-  }
-
-  public void scheduleTeleopCommands() {
-    m_ShooterCommand.schedule();
-    m_IntakeCommand.schedule();
-    m_ClimberCommand.schedule();
-    m_ClimberSubsystem.register();
-  }
-
-  private void configureButtonBindings() {
+    configureBindings();
   }
 
   public Command getAutonomousCommand() {
-    System.out.println(AutonChooser.getSelected());
-    return AutonChooser.getSelected();
+    return Commands.print("No autonomous command configured");
+  }
+
+  public Command getTeleopCommand() {
+    return m_HumanDrive;
   }
 }
