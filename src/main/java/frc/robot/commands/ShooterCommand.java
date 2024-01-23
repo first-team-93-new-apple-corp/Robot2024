@@ -18,6 +18,8 @@ public class ShooterCommand extends Command{
         // Stuff for the shooter
         if (js.getRawButton(Constants.F310_D.RightTrigger)){ // RightTrigger
             ShooterSubsystem.prime();
+        } else if (js.getRawButton(Constants.F310_D.LeftTrigger)) {
+            ShooterSubsystem.shootTrap();
         }
         else if (js.getRawButton(Constants.F310_D.RightShoulderButton)){ // RightShoulderButton
             ShooterSubsystem.shootAmp();

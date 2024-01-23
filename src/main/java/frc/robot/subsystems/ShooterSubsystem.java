@@ -15,6 +15,7 @@ public class ShooterSubsystem extends SubsystemBase {
     static double MuzzleIntake = 0.25;
     final static double AmpShooterSpeed = 0.3;
     final static double KickerSpeed = -1;
+    final static double TrapShooterSpeed = 0.2;
     public ShooterSubsystem() {
         ShooterL.setInverted(false);
         ShooterR.setInverted(false);
@@ -30,7 +31,10 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterR.set(-AmpShooterSpeed);
         ShooterL.set(AmpShooterSpeed);
     }
-
+    public static void shootTrap() {
+        ShooterR.set(-TrapShooterSpeed);
+        ShooterL.set(TrapShooterSpeed);
+    }
     public static void kicker() {
         IntoShooter.set(KickerSpeed);
     }
