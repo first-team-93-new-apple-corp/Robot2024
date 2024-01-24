@@ -14,17 +14,19 @@ public class IntakeSubsystem extends SubsystemBase {
     final static double IntakeShooterSpeed = 0.75;
 
     public static void Intake() {
-        // if (ifNote == false){
+
         NeoIntakeFront.set(IntakeShooterSpeed);
         NeoIntakeBack.set(-IntakeShooterSpeed);
-        // }
+    }
+
+    public static void Outake() {
+        NeoIntakeFront.set(-IntakeShooterSpeed);
+        NeoIntakeBack.set(IntakeShooterSpeed);
     }
 
     public static void IntakePassover() { 
-        // if (ifNote == true){
         NeoIntakeFront.set(IntakeShooterSpeed);
         NeoIntakeBack.set(-IntakeShooterSpeed);
-        // }
     }
 
     public static void IntakeStop() {
@@ -33,7 +35,6 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public static void IntakeConstants() {
-        // if note is in kicker make ifNote True
         SmartDashboard.putBoolean("Note intaked", ifNote);
     }
 }
