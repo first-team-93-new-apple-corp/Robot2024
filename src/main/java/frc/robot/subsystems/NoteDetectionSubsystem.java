@@ -18,6 +18,7 @@ public class NoteDetectionSubsystem extends SubsystemBase {
         if (ifBelow() && ifAbove()) {
             NoteInKicker = true;
         } else {
+            
             NoteInKicker = false;
         }
         ifBelow();
