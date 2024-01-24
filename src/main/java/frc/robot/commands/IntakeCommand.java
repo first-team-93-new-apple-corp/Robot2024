@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class IntakeCommand extends Command {
+
     XboxController opController = new XboxController(2);
 
     public void execute() {
