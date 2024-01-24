@@ -20,7 +20,6 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterR.setInverted(false);
     }
     public static void prime() {
-        System.out.println("shooting speaker");
         ShooterR.set(SpeakerShooterSpeed);
         ShooterL.set(-SpeakerShooterSpeed);
 

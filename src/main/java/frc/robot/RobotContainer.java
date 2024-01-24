@@ -4,16 +4,26 @@
 
 package frc.robot;
 
+import com.choreo.lib.Choreo;
+import com.choreo.lib.ChoreoControlFunction;
+import com.choreo.lib.ChoreoTrajectory;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.HumanDrive;
 import frc.robot.subsystems.DriveConstants;
@@ -21,7 +31,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
 
-public class RobotContainer {
+public class RobotContainer extends TimedRobot{
   public final double MaxSpeed = DriveConstants.MaxSpeed;
   public final double MaxAngularRate = DriveConstants.MaxAngularRate;
   private final Joystick m_Joystick1 = new Joystick(0);
@@ -37,7 +47,11 @@ public class RobotContainer {
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                // driving in open loop
-
+  private ChoreoTrajectory traj;
+  private ChoreoControlFunction choreoControlFunction = Choreo.choreoSwerveController(new PIDController(0,0,0), new PIDController(0,0,0), new PIDController(0,0,0));
+  private Field2d m_field = new Field2d();
+  
+  
   private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
@@ -83,11 +97,62 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
+    traj = Choreo.getTrajectory("TestPath");
+
+    m_field.getObject("traj").setPoses(
+      traj.getInitialPose(), traj.getFinalPose()
+    );
+    m_field.getObject("trajPoses").setPoses(
+      traj.getPoses()
+    );
+
+    SmartDashboard.putData(m_field);
     configureBindings();
   }
-
+  public boolean mirrorAuto() {
+    if(DriverStation.getAlliance().toString() == "blue") {
+      return false;
+    } else {
+      return true;
+    }
+  }
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    var thetaController = new PIDController(2, 0, 0);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    // drivetrain.resetOdometry(traj.getInitialPose());
+
+    Command swerveCommand = Choreo.choreoSwerveCommand(
+        traj, // Choreo trajectory from above
+        () -> drivetrain.getPose2D(), // A function that returns the current field-relative pose of the robot: your
+                               // wheel or vision odometry
+        new PIDController(2, 0.0, 0.0), // PIDController for field-relative X
+                                                                                   // translation (input: X error in meters,
+                                                                                   // output: m/s).
+        new PIDController(2, 0.0, 0.0), // PIDController for field-relative Y
+                                                                                   // translation (input: Y error in meters,
+                                                                                   // output: m/s).
+        thetaController, // PID constants to correct for rotation
+                         // error
+        // (ChassisSpeeds speeds) -> drivetrain.drive( // needs to be robot-relative
+        //     speeds.vxMetersPerSecond,
+        //     speeds.vyMetersPerSecond,
+        //     speeds.omegaRadiansPerSecond),
+        (ChassisSpeeds speeds) -> drivetrain.applyRequest(() -> drive
+        .withVelocityX(
+            speeds.vxMetersPerSecond)
+        .withVelocityY(
+            speeds.vyMetersPerSecond)
+        .withRotationalRate(
+            speeds.omegaRadiansPerSecond)),
+        () -> true, // Whether or not to mirror the path based on alliance (this assumes the path is created for the blue alliance)
+        drivetrain // The subsystem(s) to require, typically your drive subsystem only
+    );
+    return Commands.sequence(
+        Commands.runOnce(() -> drivetrain.resetOdometry(traj.getInitialPose())),
+        swerveCommand,
+        drivetrain.runOnce(() -> drivetrain.applyRequest(() -> drive.withVelocityX(0).withVelocityY(0).withRotationalRate(0)))
+    );
   }
 
   public Command getTeleopCommand() {

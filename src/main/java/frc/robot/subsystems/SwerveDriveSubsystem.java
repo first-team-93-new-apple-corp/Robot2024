@@ -8,6 +8,11 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,9 +37,25 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
         if (Utils.isSimulation()) {
             startSimThread();
         }
+    }   
+    public Pose2d getPose2D() {
+        return new Pose2d(this.getRotation3d().getX(), this.getRotation3d().getY(), new Rotation2d(this.getRotation3d().getAngle()));
+    
     }
-
+    public SwerveDrivePoseEstimator getOdometry() {
+        return m_odometry;
+    }
+    public SwerveDriveKinematics getKinematics() {
+        return m_kinematics;
+    }
+    public void resetOdometry(Pose2d pose) {
+    m_odometry.resetPosition(
+        m_pigeon2.getRotation2d(),
+        m_modulePositions,
+        pose);
+  }
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
+        
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
