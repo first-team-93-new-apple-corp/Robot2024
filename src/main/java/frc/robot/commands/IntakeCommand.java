@@ -14,6 +14,7 @@ public class IntakeCommand extends Command {
 
     public void execute() {
         NoteDetectionSubsystem.NoteDectectionConstants();
+        IntakeSubsystem.IntakeConstants();
         if (!NoteDetectionSubsystem.ifAbove() && !NoteDetectionSubsystem.ifBelow()) { 
             System.out.println("Sensor Intaking");
             IntakeSubsystem.Intake();
@@ -30,7 +31,7 @@ public class IntakeCommand extends Command {
             IntakeSubsystem.Intake();
             System.out.println("Intaking");
         } else if (opController.getRawButton(F310_D.A)){
-            IntakeSubsystem.IntakeConstants();
+            IntakeSubsystem.IntakePassover();
         } else if (opController.getRawButton(F310_D.B)){
             IntakeSubsystem.Outake();
         } else {
