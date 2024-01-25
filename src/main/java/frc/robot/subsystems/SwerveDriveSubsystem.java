@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
-public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
+public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem {
 
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
@@ -37,25 +37,32 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
         if (Utils.isSimulation()) {
             startSimThread();
         }
-    }   
-    public Pose2d getPose2D() {
-        return new Pose2d(this.getRotation3d().getX(), this.getRotation3d().getY(), new Rotation2d(this.getRotation3d().getAngle()));
-    
     }
+
+    public Pose2d getPose2D() {
+        // return new Pose2d(this.getRotation3d().getX(), this.getRotation3d().getY(),
+        //         new Rotation2d(this.getRotation3d().getAngle()));
+        return m_odometry.getEstimatedPosition();
+
+    }
+
     public SwerveDrivePoseEstimator getOdometry() {
         return m_odometry;
     }
+
     public SwerveDriveKinematics getKinematics() {
         return m_kinematics;
     }
+
     public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPosition(
-        m_pigeon2.getRotation2d(),
-        m_modulePositions,
-        pose);
-  }
+        m_odometry.resetPosition(
+                m_pigeon2.getRotation2d(),
+                m_modulePositions,
+                pose);
+    }
+
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
-        
+
         return run(() -> this.setControl(requestSupplier.get()));
     }
 

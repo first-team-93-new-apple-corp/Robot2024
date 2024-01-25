@@ -18,12 +18,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.HumanDrive;
 import frc.robot.subsystems.DriveConstants;
@@ -31,7 +29,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
 
-public class RobotContainer extends TimedRobot{
+public class RobotContainer{
   public final double MaxSpeed = DriveConstants.MaxSpeed;
   public final double MaxAngularRate = DriveConstants.MaxAngularRate;
   private final Joystick m_Joystick1 = new Joystick(0);
@@ -97,7 +95,8 @@ public class RobotContainer extends TimedRobot{
   }
 
   public RobotContainer() {
-    traj = Choreo.getTrajectory("TestPath");
+    configureBindings();
+    traj = Choreo.getTrajectory("TEST.1");
 
     m_field.getObject("traj").setPoses(
       traj.getInitialPose(), traj.getFinalPose()
@@ -107,7 +106,7 @@ public class RobotContainer extends TimedRobot{
     );
 
     SmartDashboard.putData(m_field);
-    configureBindings();
+    
   }
   public boolean mirrorAuto() {
     if(DriverStation.getAlliance().toString() == "blue") {
@@ -117,7 +116,7 @@ public class RobotContainer extends TimedRobot{
     }
   }
   public Command getAutonomousCommand() {
-    var thetaController = new PIDController(2, 0, 0);
+    var thetaController = new PIDController(0.005, 0, 0);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     // drivetrain.resetOdometry(traj.getInitialPose());
@@ -126,10 +125,10 @@ public class RobotContainer extends TimedRobot{
         traj, // Choreo trajectory from above
         () -> drivetrain.getPose2D(), // A function that returns the current field-relative pose of the robot: your
                                // wheel or vision odometry
-        new PIDController(2, 0.0, 0.0), // PIDController for field-relative X
+        new PIDController(0.005, 0.0, 0.0), // PIDController for field-relative X
                                                                                    // translation (input: X error in meters,
                                                                                    // output: m/s).
-        new PIDController(2, 0.0, 0.0), // PIDController for field-relative Y
+        new PIDController(0.005, 0.0, 0.0), // PIDController for field-relative Y
                                                                                    // translation (input: Y error in meters,
                                                                                    // output: m/s).
         thetaController, // PID constants to correct for rotation
@@ -138,7 +137,7 @@ public class RobotContainer extends TimedRobot{
         //     speeds.vxMetersPerSecond,
         //     speeds.vyMetersPerSecond,
         //     speeds.omegaRadiansPerSecond),
-        (ChassisSpeeds speeds) -> drivetrain.applyRequest(() -> drive
+        (ChassisSpeeds speeds) -> drivetrain.setControl(drive
         .withVelocityX(
             speeds.vxMetersPerSecond)
         .withVelocityY(
