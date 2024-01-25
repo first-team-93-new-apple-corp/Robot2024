@@ -10,9 +10,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,8 +40,10 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     public Pose2d getPose2D() {
         // return new Pose2d(this.getRotation3d().getX(), this.getRotation3d().getY(),
         //         new Rotation2d(this.getRotation3d().getAngle()));
-        return m_odometry.getEstimatedPosition();
-
+        return getState().Pose;
+    }
+    public void setPose2D(Pose2d newPose) {
+        getState().Pose = newPose;
     }
 
     public SwerveDrivePoseEstimator getOdometry() {
