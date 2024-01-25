@@ -32,14 +32,18 @@ public class VisionSubsystem extends SubsystemBase {
         updateValues();
         return ta > 0;
     }
-
+    public Pose2d getPose2d() {
+        return pose;
+    }
     @Override
     public void periodic() {
         updateValues();
         SmartDashboard.putBoolean("Has targets", hasTargets());
+
         if (hasTargets()) {
             double[] botpose = m_limelight.getEntry("botpose").getDoubleArray(new double[6]);
             pose = new Pose2d(new Translation2d(botpose[1], botpose[2]), new Rotation2d(drivetrain.getRotation3d().getAngle()));
+            drivetrain.runOnce(() -> drivetrain.resetOdometry(pose));
         }
     }
 }
