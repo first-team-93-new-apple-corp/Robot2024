@@ -1,150 +1,40 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class VisionSubsystem extends SubsystemBase {
-    String limelightName;
-    NetworkTable limelight;
-
-    DriveSubsystem m_DriveSubsystem;
-    double x, forward, size = 0;
-    boolean fieldRel, recent = false;
-    Translation2d COR = DriveConstants.dCenter;
-    PIDController turnPID = new PIDController(0.0065, 0, 0);
-    PIDController drivePID = new PIDController(0.5, 0, 0);
-    double rotate;
-    Timer m_Timer;
-    SlewRateLimiter turn;
-    SlewRateLimiter drive;
-    Joystick m_Joystick1;
-
-    public VisionSubsystem(String limelightName) {
-        limelightName = this.limelightName;
-        limelight = NetworkTableInstance.getDefault().getTable("limelight-front");
-        m_DriveSubsystem = new DriveSubsystem();
-        m_Timer = new Timer();
-        m_Timer.reset();
-        turn = new SlewRateLimiter(0.2);
-        drive = new SlewRateLimiter(0.2);
-    }
-    public VisionSubsystem(String limelightName, Joystick m_Joystick1) {
-        m_Joystick1 = this.m_Joystick1;
-        limelightName = this.limelightName;
-        limelight = NetworkTableInstance.getDefault().getTable("limelight-front");
-        m_DriveSubsystem = new DriveSubsystem();
-        m_Timer = new Timer();
-        m_Timer.reset();
-        turn = new SlewRateLimiter(0.3);
-        drive = new SlewRateLimiter(0.2);
+    NetworkTable m_limelight = NetworkTableInstance.getDefault().getTable("limelight");
+    double tx, ty, tl, ta;
+    Pose2d pose;
+    public VisionSubsystem() {
+        tx = m_limelight.getEntry("tx").getDouble(0);
+        ty = m_limelight.getEntry("ty").getDouble(0);
+        tl = m_limelight.getEntry("tl").getDouble(0);
+        ta = m_limelight.getEntry("ta").getDouble(0);
     }
 
     public void updateValues() {
-        NetworkTableEntry tx = limelight.getEntry("tx");
-        NetworkTableEntry ta = limelight.getEntry("ta");
-
-        // read values periodically
-        x = tx.getDouble(0.0);
-        size = ta.getDouble(0.0);
-
-        // post to smart dashboard periodically
-        SmartDashboard.putBoolean("has target", hasTargets());
-        // System.out.println("updating values");
+        tx = m_limelight.getEntry("tx").getDouble(0);
+        ty = m_limelight.getEntry("ty").getDouble(0);
+        tl = m_limelight.getEntry("tl").getDouble(0);
+        ta = m_limelight.getEntry("ta").getDouble(0);
     }
 
     public boolean hasTargets() {
-        // if no target found
-        SmartDashboard.putBoolean("Recent", recent);
-        SmartDashboard.putNumber("Timer", m_Timer.get());
-        if (size == 0) {
-            // if we haven't started a timer yet
-            if (recent) {
-                m_Timer.start();
-                recent = false;
-            }
-            // if it has been less that a half second since we lost target return true
-            if (m_Timer.get() < 0.25 && m_Timer.get() != 0.0) {
-                return true;
-            } else { // we lost target for more than a half second, stopping timer and returning
-                     // false
-                m_Timer.stop();
-                m_Timer.reset();
-                recent = false;
-                return false;
-            }
-        } else {
-            // Target found, stop timer and allow the timer to start again if the limelight
-            // loses target
-            m_Timer.stop();
-            m_Timer.reset();
-            recent = true;
-            return true;
-        }
-
-    }
-
-    public void setLights(int mode) {
-        /*
-         * [0] use the LED Mode set in the current pipeline
-         * [1] force off
-         * [2] force blink
-         * [3] force on
-         */
-        limelight.getEntry("ledMode").setNumber(mode);
-        SmartDashboard.putNumber("Lights", limelight.getEntry("ledMode").getDouble(0));
-    }
-
-    public void followTape() {
-        // fov = 60 limelight returns -30 to 30
-        setLights(3);
-        if (hasTargets()) {
-            rotate = turnPID.calculate(x, 0);
-            forward = drivePID.calculate(size, 0.5);
-            rotate = turn.calculate(rotate);
-            forward = drive.calculate(forward);
-            MathUtil.clamp(forward, -0.05, 0.5);
-            m_DriveSubsystem.drive(forward, 0, rotate, false, DriveConstants.dCenter);
-        } else {
-            forward = drive.calculate(0);
-            if (forward < 0.05) {
-                drive.reset(0);
-                forward = 0;
-            }
-            m_DriveSubsystem.drive(forward, 0, 0, false, DriveConstants.dCenter);
-            turn.reset(0);
-        }
-
-        // System.out.println("following tape");
-    }
-
-    public void resetLimits() {
-        drive.reset(0);
-        turn.reset(0);
-    }
-
-    public void switchCamera(Joystick m_tempJoystick) {
-        if (m_tempJoystick.getRawButtonPressed(3)) {
-            if (limelight.getEntry("stream").getDouble(0) == 2) {
-                limelight.getEntry("stream").setNumber(1);
-            } else {
-                limelight.getEntry("stream").setNumber(2);
-            }
-        }
+        updateValues();
+        return ta > 0;
     }
 
     @Override
     public void periodic() {
-        // switchCamera();
-        // updateValues();
-        // followTape();
+        updateValues();
+        SmartDashboard.putBoolean("Has targets", hasTargets());
+        if (hasTargets()) {
+            // pose = m_limelight.getEntry("botpose");
+        }
     }
 }
