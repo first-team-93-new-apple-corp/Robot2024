@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -10,7 +12,9 @@ public class VisionSubsystem extends SubsystemBase {
     NetworkTable m_limelight = NetworkTableInstance.getDefault().getTable("limelight");
     double tx, ty, tl, ta;
     Pose2d pose;
-    public VisionSubsystem() {
+    SwerveDriveSubsystem drivetrain;
+    public VisionSubsystem(SwerveDriveSubsystem drivetrain) {
+        this.drivetrain = drivetrain;
         tx = m_limelight.getEntry("tx").getDouble(0);
         ty = m_limelight.getEntry("ty").getDouble(0);
         tl = m_limelight.getEntry("tl").getDouble(0);
@@ -34,7 +38,8 @@ public class VisionSubsystem extends SubsystemBase {
         updateValues();
         SmartDashboard.putBoolean("Has targets", hasTargets());
         if (hasTargets()) {
-            // pose = m_limelight.getEntry("botpose");
+            double[] botpose = m_limelight.getEntry("botpose").getDoubleArray(new double[6]);
+            pose = new Pose2d(new Translation2d(botpose[1], botpose[2]), new Rotation2d(drivetrain.getRotation3d().getAngle()));
         }
     }
 }
