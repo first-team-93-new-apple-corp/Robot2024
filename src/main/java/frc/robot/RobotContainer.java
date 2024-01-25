@@ -28,6 +28,7 @@ import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class RobotContainer{
   public final double MaxSpeed = DriveConstants.MaxSpeed;
@@ -55,7 +56,7 @@ public class RobotContainer{
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
   private HumanDrive m_HumanDrive = new HumanDrive(m_Joystick1, m_Joystick2, drivetrain, drive, robotDrive);
-
+  private VisionSubsystem m_VisionSubsystem = new VisionSubsystem(drivetrain);
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -96,6 +97,7 @@ public class RobotContainer{
 
   public RobotContainer() {
     configureBindings();
+    m_VisionSubsystem.updateValues();
     traj = Choreo.getTrajectory("TEST.1");
 
     m_field.getObject("traj").setPoses(
@@ -148,7 +150,8 @@ public class RobotContainer{
         drivetrain // The subsystem(s) to require, typically your drive subsystem only
     );
     return Commands.sequence(
-        Commands.runOnce(() -> drivetrain.resetOdometry(traj.getInitialPose())),
+        drivetrain.runOnce(() -> drivetrain.seedFieldRelative()),
+        drivetrain.runOnce(() -> drivetrain.resetOdometry(traj.getInitialPose())),
         swerveCommand,
         drivetrain.runOnce(() -> drivetrain.applyRequest(() -> drive.withVelocityX(0).withVelocityY(0).withRotationalRate(0)))
     );
