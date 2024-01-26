@@ -32,7 +32,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
-
+    private Telemetry m_Telemetry = new Telemetry(MaxSpeed);
     public void configAuto() {
 
         AutoBuilder.configureHolonomic(
@@ -42,8 +42,8 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
                 this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your
                                                  // Constants class
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+                        new PIDConstants(0.25, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(0.25, 0.0, 0.0), // Rotation PID constants
                         4.5, // Max module speed, in m/s
                         0.4, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -98,9 +98,10 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     }
 
     public void resetPose(Pose2d pose) {
+        m_Telemetry.updatePose(pose);
         getState().Pose = pose;
     }
-
+    
     public ChassisSpeeds getRobotRelativeSpeeds() {
         return m_kinematics.toChassisSpeeds(m_cachedState.ModuleStates);
     }
