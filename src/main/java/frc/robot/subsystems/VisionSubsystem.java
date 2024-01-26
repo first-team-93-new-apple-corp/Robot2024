@@ -40,10 +40,11 @@ public class VisionSubsystem extends SubsystemBase {
         updateValues();
         SmartDashboard.putBoolean("Has targets", hasTargets());
 
-        if (hasTargets()) {
-            double[] botpose = m_limelight.getEntry("botpose").getDoubleArray(new double[6]);
-            pose = new Pose2d(new Translation2d(botpose[1], botpose[2]), new Rotation2d(drivetrain.getRotation3d().getAngle()));
-            drivetrain.runOnce(() -> drivetrain.resetOdometry(pose));
-        }
+        // if (hasTargets()) {
+        //     double[] botpose = m_limelight.getEntry("botpose").getDoubleArray(new double[6]);
+        //     pose = new Pose2d(new Translation2d(botpose[0], botpose[1]), new Rotation2d(drivetrain.getRotation3d().getAngle()));
+        //     drivetrain.runOnce(() -> drivetrain.resetOdometry(pose));
+        //     System.out.println("Updated pose");
+        // }
     }
 }

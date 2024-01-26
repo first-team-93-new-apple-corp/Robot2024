@@ -55,10 +55,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     }
 
     public void resetOdometry(Pose2d pose) {
-        m_odometry.resetPosition(
-                m_pigeon2.getRotation2d(),
-                m_modulePositions,
-                pose);
+        getState().Pose = pose;
     }
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
