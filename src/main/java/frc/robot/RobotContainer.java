@@ -16,6 +16,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,7 +30,7 @@ import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
 import frc.robot.subsystems.VisionSubsystem;
 
-public class RobotContainer {
+public class RobotContainer extends TimedRobot{
   public final double MaxSpeed = DriveConstants.MaxSpeed;
   public final double MaxAngularRate = DriveConstants.MaxAngularRate;
   private final Joystick m_Joystick1 = new Joystick(0);
@@ -103,7 +105,7 @@ public class RobotContainer {
   }
 
   public boolean mirrorAuto() {
-    if (DriverStation.Alliance.Blue == DriverStation.getAlliance().get()) {
+    if (Alliance.Blue == DriverStation.getAlliance().get()) {
       return false;
     } else {
       return true;
@@ -118,7 +120,7 @@ public class RobotContainer {
 
     Command swerveCommand = Choreo.choreoSwerveCommand(
         traj, // Choreo trajectory from above
-        () -> drivetrain.getPose2D(), // A function that returns the current field-relative pose of the robot: your
+        () -> drivetrain.getPose2D().rotateBy(new Rotation2d(180)), // A function that returns the current field-relative pose of the robot: your
         // wheel or vision odometry
         new PIDController(0.005, 0.0, 0.0), // PIDController for field-relative X
                                             // translation (input: X error in meters,
@@ -139,12 +141,13 @@ public class RobotContainer {
                 speeds.vyMetersPerSecond)
             .withRotationalRate(
                 speeds.omegaRadiansPerSecond)),
-        () -> mirrorAuto(), // Whether or not to mirror the path based on alliance (this assumes the path is
+        // () -> mirrorAuto(),
+        () -> true, // Whether or not to mirror the path based on alliance (this assumes the path is
                             // created for the blue alliance)
         drivetrain // The subsystem(s) to require, typically your drive subsystem only
     );
     return Commands.sequence(
-        drivetrain.runOnce(() -> drivetrain.seedFieldRelative()),
+        drivetrain.runOnce(() -> drivetrain.seedFieldRelative(traj.getInitialPose())),
         drivetrain.runOnce(() -> drivetrain.resetOdometry(traj.getInitialPose())),
         swerveCommand,
         drivetrain.runOnce(
