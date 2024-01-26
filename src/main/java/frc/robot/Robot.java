@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_robotContainer.getTeleopCommand().schedule();
+    m_robotContainer.configureBindings();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
