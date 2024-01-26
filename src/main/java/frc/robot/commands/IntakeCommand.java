@@ -15,27 +15,32 @@ public class IntakeCommand extends Command {
     public void execute() {
         NoteDetectionSubsystem.NoteDectectionConstants();
         IntakeSubsystem.IntakeConstants();
-        if (!NoteDetectionSubsystem.ifAbove() && !NoteDetectionSubsystem.ifBelow()) { 
-            System.out.println("Sensor Intaking");
-            IntakeSubsystem.Intake();
-        } else if (NoteDetectionSubsystem.ifBelow() && !NoteDetectionSubsystem.ifAbove()) {
-            ShooterSubsystem.kicker();
-        } else if ((NoteDetectionSubsystem.ifAbove() && !NoteDetectionSubsystem.ifBelow()) 
-        || (NoteDetectionSubsystem.ifAbove() && NoteDetectionSubsystem.ifBelow())){
-            IntakeSubsystem.IntakePassover();
-        }else {
-            IntakeSubsystem.IntakeStop();
-        }
-        //Manual Control
-        if (opController.getRawButton(F310_D.X)){
+        
+        // Manual Control
+
+        if (opController.getRawButton(F310_D.X)) {
             IntakeSubsystem.Intake();
             System.out.println("Intaking");
-        } else if (opController.getRawButton(F310_D.A)){
+        } else if (opController.getRawButton(F310_D.A)) {
             IntakeSubsystem.IntakePassover();
-        } else if (opController.getRawButton(F310_D.B)){
+        } else if (opController.getRawButton(F310_D.B)) {
             IntakeSubsystem.Outake();
-        } else {
+        } else if (opController.getRawButton(F310_D.Y)) {
             IntakeSubsystem.IntakeStop();
+        } else {
+
+            if (!NoteDetectionSubsystem.ifAbove() && !NoteDetectionSubsystem.ifBelow()) {
+                System.out.println("Sensor Intaking");
+                IntakeSubsystem.Intake();
+            } else {
+                IntakeSubsystem.IntakePassover();
+            }
+
+            // Shooter Section
+
+            if (NoteDetectionSubsystem.ifBelow() && !NoteDetectionSubsystem.ifAbove()) {
+                ShooterSubsystem.kicker();
+            }
         }
     }
 

@@ -7,8 +7,8 @@ import com.playingwithfusion.TimeOfFlight;
 public class NoteDetectionSubsystem extends SubsystemBase {
     static TimeOfFlight AboveKicker = new TimeOfFlight(0);
     static TimeOfFlight BelowKicker = new TimeOfFlight(14);
-    static double BelowKickerVal = 100; // metric dist. to note
-    static double AboveKickerVal = 100; // metric dist. to note
+    static double BelowKickerVal = 150; // metric dist. to note
+    static double AboveKickerVal = 150; // metric dist. to note
     static boolean ifNoteBelowKicker = false;
     static boolean ifNoteAboveKicker = false;
     static boolean NoteInKicker = false;
@@ -31,7 +31,7 @@ public class NoteDetectionSubsystem extends SubsystemBase {
     }
 
     public static boolean ifBelow() {
-        if (BelowKicker.getRange() >= BelowKickerVal) {
+        if (BelowKicker.getRange() <= BelowKickerVal) {
             return true;
         } else {
             return false;
@@ -39,7 +39,7 @@ public class NoteDetectionSubsystem extends SubsystemBase {
     }
 
     public static boolean ifAbove() {
-        if (AboveKicker.getRange() >= AboveKickerVal) {
+        if (AboveKicker.getRange() <= AboveKickerVal) {
             return true;
         } else {
             return false;
