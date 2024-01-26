@@ -46,7 +46,7 @@ public class Telemetry {
     /* Keep a reference of the last pose to calculate the speeds */
     private Pose2d m_lastPose = new Pose2d();
     private double lastTime = Utils.getCurrentTimeSeconds();
-
+    private Pose2d pose;
     /* Mechanisms to represent the swerve module states */
     private final Mechanism2d[] m_moduleMechanisms = new Mechanism2d[] {
         new Mechanism2d(1, 1),
@@ -76,7 +76,7 @@ public class Telemetry {
     /* Accept the swerve drive state and telemeterize it to smartdashboard */
     public void telemeterize(SwerveDriveState state) {
         /* Telemeterize the pose */
-        Pose2d pose = state.Pose;
+        pose = state.Pose;
         fieldTypePub.set("Field2d");
         fieldPub.set(new double[] {
             pose.getX(),
@@ -106,5 +106,8 @@ public class Telemetry {
 
             SmartDashboard.putData("Module " + i, m_moduleMechanisms[i]);
         }
+    }
+    public void updatePose(Pose2d pose) {
+        this.pose = pose;
     }
 }

@@ -7,6 +7,7 @@ package frc.robot;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -83,6 +84,10 @@ public class RobotContainer extends TimedRobot {
   public Command getAutonomousCommand() {
     drivetrain.configAuto();
     return autoChooser.getSelected();
+    // PathPlannerPath path = PathPlannerPath.fromPathFile("Example Path");
+
+    // // Create a path following command using AutoBuilder. This will also trigger event markers.
+    // return AutoBuilder.followPath(path);
   }
 
 }
