@@ -10,7 +10,7 @@ public class IntakeSubsystem extends SubsystemBase {
     static CANSparkMax NeoIntakeFront = new CANSparkMax(2, MotorType.kBrushless);
     static CANSparkMax NeoIntakeBack = new CANSparkMax(3, MotorType.kBrushless);
     final static boolean ifNote = false;
-    final static double IntakeShooterSpeed = 0.75;
+    final static double IntakeShooterSpeed = 1;
 
     public static void Intake() {
         NeoIntakeFront.set(IntakeShooterSpeed);
@@ -33,6 +33,6 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public static void IntakeConstants() {
-
+        SmartDashboard.putBoolean("Note intaked", ifNote);
     }
 }
