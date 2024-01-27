@@ -9,19 +9,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class IntakeCommand extends Command {
-
     XboxController opController = new XboxController(2);
+    private IntakeCommand m_IntakeCommand;
 
     public void execute() {
-        NoteDetectionSubsystem.NoteDectectionConstants();
-        IntakeSubsystem.IntakeConstants();
-        
-        // Manual Control
-
-        if (opController.getRawButton(F310_D.X)) {
+        if (opController.getRawButton(F310_D.X)) { // X
             IntakeSubsystem.Intake();
-            System.out.println("Intaking");
-        } else if (opController.getRawButton(F310_D.A)) {
+        } else if (opController.getRawButton(F310_D.A)) { // A
             IntakeSubsystem.IntakePassover();
         } else if (opController.getRawButton(F310_D.B)) {
             IntakeSubsystem.Outake();
