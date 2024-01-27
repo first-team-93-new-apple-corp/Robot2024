@@ -4,6 +4,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.Constants;
+import frc.robot.Constants.AutoShootStates.RobotStates;
 public class AutoShootSubsystem extends SubsystemBase{
     NetworkTable networkTable;
     double tx;
@@ -16,7 +18,7 @@ public class AutoShootSubsystem extends SubsystemBase{
     double speakerHeight = 100;
     double limelightAngle = 45;
     ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-
+    RobotStates RobotState = RobotStates.TELEOP;
     
     public AutoShootSubsystem() {
         networkTable = NetworkTableInstance.getDefault().getTable("Pipeline_Name");
@@ -24,7 +26,7 @@ public class AutoShootSubsystem extends SubsystemBase{
     // public boolean hasTargets() {
     //     return tv ==1;
     // }
-    public void alignSpeaker() {
+    public void alignToSpeaker() {
         if (aid == speakerID) {
             if (tx <-5) {
                 
@@ -32,7 +34,7 @@ public class AutoShootSubsystem extends SubsystemBase{
             if (tx >5) {
 
             }
-            if (calculateDistance()> targetdistance ) {
+            if (calculateDistance()> targetdistance) {
                 
             }
         }
@@ -51,6 +53,12 @@ public class AutoShootSubsystem extends SubsystemBase{
         ta = networkTable.getValue("ta").getDouble();
         tv = networkTable.getValue("tv").getDouble();
         aid  = networkTable.getValue("tid").getDouble();
-
+        if (RobotState.equals(RobotStates.AUTOSHOOT)) {
+            alignToSpeaker();
+            if (tx >-5 && tx <5 && calculateDistance() < targetdistance) {
+                shootSpeaker();
+                RobotState = RobotStates.TELEOP;
+            }
+        }
     }
 }

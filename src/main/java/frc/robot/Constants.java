@@ -1,6 +1,13 @@
 package frc.robot;
 
 public class Constants {
+    public class AutoShootStates {
+        public enum RobotStates {
+            TELEOP,AUTOSHOOT;
+        }
+
+        
+    }
     public class Thrustmaster {
         public static final int Trigger = 1;
         public static final int Center_Button = 2;
