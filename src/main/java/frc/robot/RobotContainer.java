@@ -22,7 +22,7 @@ import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
 
 public class RobotContainer {
-  public final double MaxSpeed = DriveConstants.MaxSpeed;
+  public static final double MaxSpeed = DriveConstants.MaxSpeed;
   public final double MaxAngularRate = DriveConstants.MaxAngularRate;
   private final Joystick m_Joystick1 = new Joystick(0);
   private final Joystick m_Joystick2 = new Joystick(1);
@@ -32,19 +32,19 @@ public class RobotContainer {
   Constants.Thrustmaster.Left_Buttons.Top_Middle);
   private final JoystickButton m_JoystickButton2 = new
   JoystickButton(m_Joystick1, 2);
-  private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
-  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+  public static final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
+  public final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                // driving in open loop
 
-  private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric()
+  public final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
   private HumanDrive m_HumanDrive = new HumanDrive(m_Joystick1, m_Joystick2, drivetrain, drive, robotDrive);
 
-  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+  public static final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   private final Telemetry logger = new Telemetry(MaxSpeed);
