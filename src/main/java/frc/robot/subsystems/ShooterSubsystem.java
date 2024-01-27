@@ -74,6 +74,21 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (Constants.elevatorState == Constants.ElevatorStates.STOW) {
+            elevatorMotor.set(elefeedforward.calculate(elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), stowSetpoint)));
 
+        } else if (Constants.elevatorState == Constants.ElevatorStates.AMP) {
+            elevatorMotor.set(elefeedforward.calculate(elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), ampSetpoint)));
+
+        } else if (Constants.elevatorState == Constants.ElevatorStates.SOURCE) {
+            elevatorMotor.set(elefeedforward.calculate(elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), sourceSetpoint)));
+
+        }else if (Constants.elevatorState == Constants.ElevatorStates.TRAP) {
+            elevatorMotor.set(elefeedforward.calculate(elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), trapSetpoint)));
+            
+        }else if (Constants.elevatorState == Constants.ElevatorStates.SPEAKER) {
+            elevatorMotor.set(elefeedforward.calculate(elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), speakerSetpoint)));
+            
+        }
     }
 }
