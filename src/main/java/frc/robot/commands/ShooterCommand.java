@@ -16,6 +16,9 @@ public class ShooterCommand extends Command{
     public void execute() {
         ShooterSubsystem.shootConstants();
         // Stuff for the shooter
+        if (js.getRawButton(1)) {
+            ShooterSubsystem.prime();
+        }
         if (js.getRawButton(Constants.F310_D.RightTrigger)){ // RightTrigger
             ShooterSubsystem.prime();
         }

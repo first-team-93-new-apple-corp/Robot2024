@@ -7,6 +7,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.Constants;
+import frc.robot.Constants.ElevatorStates;
 import edu.wpi.first.math.controller.PIDController;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -33,6 +34,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     public static void prime() {
         System.out.println("shooting speaker");
+        Constants.elevatorState = ElevatorStates.SPEAKER;
         ShooterR.set(SpeakerShooterSpeed);
         ShooterL.set(-SpeakerShooterSpeed);
 
