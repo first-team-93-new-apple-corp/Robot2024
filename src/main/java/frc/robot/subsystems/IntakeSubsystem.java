@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-
 public class IntakeSubsystem extends SubsystemBase {
     static CANSparkMax NeoIntakeFront = new CANSparkMax(2, MotorType.kBrushless);
     static CANSparkMax NeoIntakeBack = new CANSparkMax(3, MotorType.kBrushless);
@@ -14,17 +13,18 @@ public class IntakeSubsystem extends SubsystemBase {
     final static double IntakeShooterSpeed = 0.75;
 
     public static void Intake() {
-        // if (ifNote == false){
         NeoIntakeFront.set(IntakeShooterSpeed);
         NeoIntakeBack.set(-IntakeShooterSpeed);
-        // }
     }
 
-    public static void IntakePassover() { 
-        // if (ifNote == true){
+    public static void Outake() {
+        NeoIntakeFront.set(-IntakeShooterSpeed);
+        NeoIntakeBack.set(IntakeShooterSpeed);
+    }
+
+    public static void IntakePassover() {
         NeoIntakeFront.set(IntakeShooterSpeed);
-        NeoIntakeBack.set(-IntakeShooterSpeed);
-        // }
+        NeoIntakeBack.set(IntakeShooterSpeed);
     }
 
     public static void IntakeStop() {
@@ -33,7 +33,6 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public static void IntakeConstants() {
-        // if note is in kicker make ifNote True
-        SmartDashboard.putBoolean("Note intaked", ifNote);
+
     }
 }
