@@ -28,6 +28,9 @@ public class ShooterCommand extends Command{
         else if (js.getRawButton(Constants.F310_D.LeftShoulderButton)){ // LeftShoulderButton
             ShooterSubsystem.shootMuzzle();
         }
+        else if (js.getRawButton(Constants.F310_D.LeftTrigger)){ //LeftTrigger
+            ShooterSubsystem.shootTrap();
+        } 
         else {
             ShooterSubsystem.shootStop();
         }

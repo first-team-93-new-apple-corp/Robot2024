@@ -19,6 +19,7 @@ public class ShooterSubsystem extends SubsystemBase {
     static double MuzzleIntake = 0.25;
     final static double AmpShooterSpeed = 0.3;
     final static double KickerSpeed = -1;
+    static double TrapShooterSpeed = 0.37;
     // Elevator
     static TalonFX elevatorMotor = new TalonFX(11);
     static final double stowSetpoint = 0;
@@ -46,11 +47,18 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterL.set(AmpShooterSpeed);
     }
 
+    public static void shootTrap() {
+        Constants.elevatorState = ElevatorStates.TRAP;
+        ShooterR.set(-TrapShooterSpeed);
+        ShooterL.set(TrapShooterSpeed);
+    }
+
     public static void kicker() {
         IntoShooter.set(KickerSpeed);
     }
 
     public static void shootMuzzle() {
+        Constants.elevatorState = ElevatorStates.SOURCE;
         ShooterR.set(-MuzzleIntake);
         ShooterL.set(MuzzleIntake);
     }
