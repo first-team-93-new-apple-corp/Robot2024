@@ -1,6 +1,10 @@
 package frc.robot;
 
 public class Constants {
+    public static enum ElevatorStates {
+            STOW,AMP,SOURCE,TRAP,SPEAKER;
+        }
+    public static ElevatorStates elevatorState = ElevatorStates.STOW;
     public class Thrustmaster {
         public static final int Trigger = 1;
         public static final int Center_Button = 2;
