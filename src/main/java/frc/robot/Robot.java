@@ -64,6 +64,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     m_Shooter.schedule();
+    m_robotContainer.updateValues();
   }
 
   @Override
