@@ -43,5 +43,4 @@ public class IntakeCommand extends Command {
             }
         }
     }
-
 }

@@ -1,10 +1,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import frc.robot.Constants;
+import edu.wpi.first.math.controller.PIDController;
 
 public class ShooterSubsystem extends SubsystemBase {
     static TalonFX ShooterR = new TalonFX(16);
@@ -15,6 +18,15 @@ public class ShooterSubsystem extends SubsystemBase {
     static double MuzzleIntake = 0.25;
     final static double AmpShooterSpeed = 0.3;
     final static double KickerSpeed = -1;
+    // Elevator
+    static TalonFX elevatorMotor = new TalonFX(11);
+    static final double stowSetpoint = 0;
+    static final double ampSetpoint = 1000;
+    static final double sourceSetpoint = 300;
+    static final double trapSetpoint = 500;
+    static final double speakerSetpoint = 700;
+    ElevatorFeedforward elefeedforward = new ElevatorFeedforward(0,0,0,0); // change values
+    PIDController elevatorPID = new PIDController(0,0,0);
     public ShooterSubsystem() {
         ShooterL.setInverted(false);
         ShooterR.setInverted(false);
@@ -74,6 +86,21 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (Constants.elevatorState == Constants.ElevatorStates.STOW) {
+            elevatorMotor.set(elefeedforward.calculate(elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), stowSetpoint)));
 
+        } else if (Constants.elevatorState == Constants.ElevatorStates.AMP) {
+            elevatorMotor.set(elefeedforward.calculate(elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), ampSetpoint)));
+
+        } else if (Constants.elevatorState == Constants.ElevatorStates.SOURCE) {
+            elevatorMotor.set(elefeedforward.calculate(elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), sourceSetpoint)));
+
+        }else if (Constants.elevatorState == Constants.ElevatorStates.TRAP) {
+            elevatorMotor.set(elefeedforward.calculate(elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), trapSetpoint)));
+            
+        }else if (Constants.elevatorState == Constants.ElevatorStates.SPEAKER) {
+            elevatorMotor.set(elefeedforward.calculate(elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), speakerSetpoint)));
+            
+        }
     }
 }
