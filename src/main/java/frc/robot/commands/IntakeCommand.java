@@ -11,11 +11,11 @@ public class IntakeCommand extends Command {
     private IntakeCommand m_IntakeCommand;
 
     public void execute() {
-        if (js.getRawButton(F310_D.X)) { // X
+        if (opController.getRawButton(F310_D.X)) { // X
             IntakeSubsystem.Intake();
-        } else if (js.getRawButton(F310_D.A)) { // A
+        } else if (opController.getRawButton(F310_D.A)) { // A
             IntakeSubsystem.IntakePassover();
-        } else if (js.getRawButton(F310_D.B)) {
+        } else if (opController.getRawButton(F310_D.B)) {
             IntakeSubsystem.Outake();
         } else {
             IntakeSubsystem.IntakeStop();
