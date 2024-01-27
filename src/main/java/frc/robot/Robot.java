@@ -7,12 +7,15 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.IntakeCommand;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
   private ShooterCommand m_Shooter = new ShooterCommand();
+  private IntakeCommand m_Intake = new IntakeCommand();
 
   @Override
   public void robotInit() {
@@ -59,11 +62,12 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_Shooter.schedule();
+    m_Intake.schedule();
   }
 
   @Override
   public void teleopPeriodic() {
-    m_Shooter.schedule();
   }
 
   @Override

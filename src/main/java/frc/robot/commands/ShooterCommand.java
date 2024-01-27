@@ -10,22 +10,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 
 public class ShooterCommand extends Command{
-    XboxController js = new XboxController(2);
+    XboxController opController = new XboxController(2);
     Joystick m_Joystick2 = new Joystick(1);
     @Override
     public void execute() {
         ShooterSubsystem.shootConstants();
         // Stuff for the shooter
-        if (js.getRawButton(1)) {
+        if (opController.getRawButton(Constants.F310_D.RightTrigger)){ // RightTrigger
             ShooterSubsystem.prime();
         }
-        if (js.getRawButton(Constants.F310_D.RightTrigger)){ // RightTrigger
-            ShooterSubsystem.prime();
-        }
-        else if (js.getRawButton(Constants.F310_D.RightShoulderButton)){ // RightShoulderButton
+        else if (opController.getRawButton(Constants.F310_D.RightShoulderButton)){ // RightShoulderButton
             ShooterSubsystem.shootAmp();
         }
-        else if (js.getRawButton(Constants.F310_D.LeftShoulderButton)){ // LeftShoulderButton
+        else if (opController.getRawButton(Constants.F310_D.LeftShoulderButton)){ // LeftShoulderButton
             ShooterSubsystem.shootMuzzle();
         }
         else {
@@ -39,21 +36,21 @@ public class ShooterCommand extends Command{
             ShooterSubsystem.shootIntakeStop();
         }
         // For the Intake
-        if (js.getRawButton(Constants.F310_D.X)) { // X
+        if (opController.getRawButton(Constants.F310_D.X)) { // X
             IntakeSubsystem.Intake();
         }
-        else if (js.getRawButton(Constants.F310_D.A)){ // A
+        else if (opController.getRawButton(Constants.F310_D.A)){ // A
             IntakeSubsystem.IntakePassover();
         }
         else {
             IntakeSubsystem.IntakeStop();
         }
         //Shooters motor speed control
-        if (js.getRawButtonReleased(Constants.F310_D.Start)) { //Start
+        if (opController.getRawButtonReleased(Constants.F310_D.Start)) { //Start
             
             ShooterSubsystem.shootMinus();
         }
-        if (js.getRawButtonReleased(Constants.F310_D.Back)) {//Back
+        if (opController.getRawButtonReleased(Constants.F310_D.Back)) {//Back
             ShooterSubsystem.shootPlus();
         }                          
     }

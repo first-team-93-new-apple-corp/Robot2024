@@ -64,7 +64,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public static void shootPlus() {
-        if (SpeakerShooterSpeed < 0) {
+        if (SpeakerShooterSpeed < 1) {
             SpeakerShooterSpeed += 0.05; // +5%speed
         }
         SmartDashboard.putNumber("CurrentSpeed", SpeakerShooterSpeed);
@@ -72,7 +72,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public static void shootMinus() {
-        if (SpeakerShooterSpeed > -0.95) {
+        if (SpeakerShooterSpeed > 0.6) {
             SpeakerShooterSpeed -= 0.05; // -5%speed
         }
         SmartDashboard.putNumber("CurrentSpeed", SpeakerShooterSpeed);
