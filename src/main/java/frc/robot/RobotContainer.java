@@ -129,25 +129,25 @@ public class RobotContainer extends TimedRobot {
     RotationPoints(m_Joystick2);
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() ->
-        // FieldCentricDrive
-        // .withVelocityX(
-        // -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
-        // * MaxSpeed)
-        // .withVelocityY(
-        // -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)
-        // * MaxSpeed)
-        // .withRotationalRate(
-        // -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
-        // * MaxAngularRate)
-        m_swerveRequest
-            .withCenterOfRotation(DriveConstants.dCenter)
-            .withSpeeds(fieldSpeeds)
+        FieldCentricDrive
+        .withVelocityX(
+        -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
+        * MaxSpeed)
+        .withVelocityY(
+        -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)
+        * MaxSpeed)
+        .withRotationalRate(
+        -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
+        * MaxAngularRate)
+        // m_swerveRequest
+        //     .withCenterOfRotation(DriveConstants.dCenter)
+        //     .withSpeeds(fieldSpeeds)
             ));
 
     // Brake while held
     m_JoystickTrigger.whileTrue(drivetrain.applyRequest(() -> brake));
-    // m_fieldRelButton.onTrue(drivetrain.runOnce(() ->
-    // drivetrain.seedFieldRelative()));
+    m_fieldRelButton.onTrue(drivetrain.runOnce(() ->
+    drivetrain.seedFieldRelative()));
 
 
     // Points all in a direction
