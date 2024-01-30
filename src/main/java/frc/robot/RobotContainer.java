@@ -12,14 +12,18 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.AutoShootStates.RobotStates;
 import frc.robot.commands.HumanDrive;
+import frc.robot.subsystems.AutoShootSubsystem;
 import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
+import frc.robot.Constants;
 
 public class RobotContainer {
   public static final double MaxSpeed = DriveConstants.MaxSpeed;
@@ -27,6 +31,7 @@ public class RobotContainer {
   private final Joystick m_Joystick1 = new Joystick(0);
   private final Joystick m_Joystick2 = new Joystick(1);
   private final JoystickButton m_JoystickTrigger = new JoystickButton(m_Joystick1, 1);
+  AutoShootSubsystem autoShootSubsystem = new AutoShootSubsystem(drivetrain);
   private final JoystickButton m_fieldRelButton = new
   JoystickButton(m_Joystick1,
   Constants.Thrustmaster.Left_Buttons.Top_Middle);
@@ -51,8 +56,10 @@ public class RobotContainer {
 
   // Configures the bindings to drive / control the swerve drive :)
   private void configureBindings() {
-    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive
+    if (Constants.AutoShootStates.RobotState.equals(RobotStates.TELEOP)) {
+      drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+
+      drivetrain.applyRequest(() -> drive
             .withVelocityX(
                 m_HumanDrive.checkJoystickDeadzone(
                     -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y))
@@ -65,6 +72,8 @@ public class RobotContainer {
                 m_HumanDrive.checkJoystickDeadzone(
                     -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x))
                     * MaxAngularRate)));
+    }
+        
     // Brake while held
     m_JoystickTrigger.onTrue(drivetrain.applyRequest(() -> brake));
     m_fieldRelButton.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
@@ -84,6 +93,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
+    autoShootSubsystem.register();
   }
 
   public Command getAutonomousCommand() {

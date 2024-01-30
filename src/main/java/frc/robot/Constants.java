@@ -5,7 +5,7 @@ public class Constants {
         public enum RobotStates {
             TELEOP,AUTOSHOOT;
         }
-
+        public static RobotStates RobotState = RobotStates.TELEOP;
         
     }
     public class Thrustmaster {
