@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants;
@@ -19,13 +20,13 @@ import frc.robot.RobotContainer;
 public class AutoShootSubsystem extends SubsystemBase{
     Joystick joystick = new Joystick(0);
     NetworkTable networkTable;
-    double tx;
-    double ty;
-    double ta;
-    double tv;
+    double tx =0;
+    double ty = 0;
+    double ta = 0;
+    double tv = 0;
     double aid; // april tag id
-    double speakerID = 3;
-    double targetdistance = 23;
+    double speakerID = 9;
+    double targetdistance = 25;
     double speakerHeight = 100;
     double limelightAngle = 45;
     public static final double MaxSpeed = DriveConstants.MaxSpeed;
@@ -41,7 +42,7 @@ public class AutoShootSubsystem extends SubsystemBase{
     
     public AutoShootSubsystem(SwerveDriveSubsystem driveTrain) {
         this.m_drivetrain = driveTrain;
-        networkTable = NetworkTableInstance.getDefault().getTable("limelight");
+        networkTable = NetworkTableInstance.getDefault().getTable("limelight-front");
     }
     public static final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     // public boolean hasTargets() {
@@ -49,16 +50,20 @@ public class AutoShootSubsystem extends SubsystemBase{
     // }
     public void alignToSpeaker() {
         if (aid == speakerID) {
-            m_drivetrain.setControl(drive.withVelocityX(AutoShootPID.calculate(tx, setpoint)));
+            m_drivetrain.setControl(drive.withRotationalRate(AutoShootPID.calculate(tx, setpoint)));
             if (tx >5) {
+                System.out.println("Outside range");
+                
+            }
+            if (tx <5) {
                 System.out.println("Outside range");
                 
             }
             // if (tx >-5 && tx <5 && calculateDistance()> targetdistance) {
             //     System.out.println("Outside target distance");
-            //     m_drivetrain.setControl(drive.withVelocityY(AutoShootPID.calculate(calculateDistance(), targetdistance)));
+            //     m_drivetrain.setControl(drive.withVelocityY(AutoShootPID.calculate(ta,targetDistance)));
             // }
-            m_drivetrain.setControl(brake);
+            // m_drivetrain.setControl(brake);
         }
 
     }
@@ -69,18 +74,22 @@ public class AutoShootSubsystem extends SubsystemBase{
     public double calculateDistance() {
         return speakerHeight/Math.tan(limelightAngle);
     }
+    @Override
     public void periodic() {
         tx = networkTable.getValue("tx").getDouble();
         ty = networkTable.getValue("ty").getDouble();
         ta = networkTable.getValue("ta").getDouble();
         tv = networkTable.getValue("tv").getDouble();
         aid  = networkTable.getValue("tid").getDouble();
+        SmartDashboard.putNumber("tx", tx);
+        SmartDashboard.putNumber("tx", ty);
+        SmartDashboard.putNumber("tx", ta);
         
         if (Constants.AutoShootStates.RobotState.equals(RobotStates.AUTOSHOOT)) {
             alignToSpeaker();
-            if (tx >-5 && tx <5 && calculateDistance() < targetdistance) {
+            if (tx >-5 && tx <5 && ta < targetdistance) {
                 shootSpeaker();
-                // Constants.AutoShootStates.RobotState = RobotStates.TELEOP;
+                Constants.AutoShootStates.RobotState = RobotStates.TELEOP;
             }
         }
     }
