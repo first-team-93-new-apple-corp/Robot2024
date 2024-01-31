@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
@@ -31,6 +32,8 @@ public class AutoShootSubsystem extends SubsystemBase{
     public final double MaxAngularRate = DriveConstants.MaxAngularRate;
     ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     public SwerveDriveSubsystem m_drivetrain;
+    double setpoint = 0;
+    PIDController AutoShootPID = new PIDController(0.1, 0, 0.1);
     
     public final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -46,16 +49,14 @@ public class AutoShootSubsystem extends SubsystemBase{
     // }
     public void alignToSpeaker() {
         if (aid == speakerID) {
-            if (tx <-5) {
-                System.out.println("Inside range");
-                m_drivetrain.setControl(drive.withVelocityX(0.2 * MaxSpeed));
-            }
+            m_drivetrain.setControl(drive.withVelocityX(AutoShootPID.calculate(tx, setpoint)));
             if (tx >5) {
                 System.out.println("Outside range");
-                m_drivetrain.setControl(drive.withVelocityX(-0.2 * MaxSpeed));
+                
             }
-            if (calculateDistance()> targetdistance) {
-                m_drivetrain.setControl(drive.withVelocityY(0.2 * MaxSpeed));
+            if (tx >-5 && tx <5 && calculateDistance()> targetdistance) {
+                System.out.println("Outside target distance");
+                m_drivetrain.setControl(drive.withVelocityY(AutoShootPID.calculate(t, setpoint)));
             }
             m_drivetrain.setControl(brake);
         }
@@ -74,9 +75,7 @@ public class AutoShootSubsystem extends SubsystemBase{
         ta = networkTable.getValue("ta").getDouble();
         tv = networkTable.getValue("tv").getDouble();
         aid  = networkTable.getValue("tid").getDouble();
-        if (joystick.getRawButtonPressed(11)) {
-            Constants.AutoShootStates.RobotState = RobotStates.AUTOSHOOT;
-        }
+        
         if (Constants.AutoShootStates.RobotState.equals(RobotStates.AUTOSHOOT)) {
             alignToSpeaker();
             if (tx >-5 && tx <5 && calculateDistance() < targetdistance) {

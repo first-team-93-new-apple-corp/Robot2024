@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.Constants;
+import frc.robot.Constants.AutoShootStates.RobotStates;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
@@ -24,6 +25,8 @@ public class ShooterCommand extends Command{
         }
         else if (js.getRawButton(Constants.F310_D.LeftShoulderButton)){ // LeftShoulderButton
             ShooterSubsystem.shootMuzzle();
+        } else if (m_Joystick2.getRawButtonReleased(11)) { // Auto Shoot
+            Constants.AutoShootStates.RobotState = RobotStates.AUTOSHOOT;
         }
         else {
             ShooterSubsystem.shootStop();

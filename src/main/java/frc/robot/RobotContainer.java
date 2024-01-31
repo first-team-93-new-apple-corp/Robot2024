@@ -23,7 +23,7 @@ import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
-import frc.robot.Constants;
+import frc.robot.Constants.AutoShootStates;
 
 public class RobotContainer {
   public static final double MaxSpeed = DriveConstants.MaxSpeed;
@@ -56,7 +56,7 @@ public class RobotContainer {
 
   // Configures the bindings to drive / control the swerve drive :)
   private void configureBindings() {
-    if (Constants.AutoShootStates.RobotState.equals(RobotStates.TELEOP)) {
+    if (Constants.AutoShootStates.RobotState == RobotStates.TELEOP) {
       drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
 
       drivetrain.applyRequest(() -> drive
