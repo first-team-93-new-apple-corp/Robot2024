@@ -54,10 +54,10 @@ public class AutoShootSubsystem extends SubsystemBase{
                 System.out.println("Outside range");
                 
             }
-            if (tx >-5 && tx <5 && calculateDistance()> targetdistance) {
-                System.out.println("Outside target distance");
-                m_drivetrain.setControl(drive.withVelocityY(AutoShootPID.calculate(t, setpoint)));
-            }
+            // if (tx >-5 && tx <5 && calculateDistance()> targetdistance) {
+            //     System.out.println("Outside target distance");
+            //     m_drivetrain.setControl(drive.withVelocityY(AutoShootPID.calculate(calculateDistance(), targetdistance)));
+            // }
             m_drivetrain.setControl(brake);
         }
 
