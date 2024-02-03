@@ -1,17 +1,15 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.ControlModeValue;
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase {
-    public TalonFX climberLeft = new TalonFX(26, "drivetrain");
-    public TalonFX climberRight = new TalonFX(25, "drivetrain");
+    public TalonFX climberLeft = new TalonFX(Constants.CTRE.RIO.L_Climber, "rio");
+    public TalonFX climberRight = new TalonFX(Constants.CTRE.RIO.R_Climber, "rio");
     public XboxController opController;
     public JoystickButton opButtonBack;
     public JoystickButton opButtonStart;

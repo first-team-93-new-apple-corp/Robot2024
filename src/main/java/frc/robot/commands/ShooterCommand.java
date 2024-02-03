@@ -9,9 +9,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ShooterCommand extends Command {
     XboxController opController = new XboxController(2);
     Joystick driver2 = new Joystick(1);
+    ShooterSubsystem m_ShooterSubsystem;
+    public ShooterCommand() {
+        m_ShooterSubsystem = new ShooterSubsystem();
+    }
     @Override
     public void execute() {
-        ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+        
         // Stuff for the shooter
         if (opController.getRawButton(Constants.F310_D.RightTrigger)) { // RightTrigger
             m_ShooterSubsystem.prime();

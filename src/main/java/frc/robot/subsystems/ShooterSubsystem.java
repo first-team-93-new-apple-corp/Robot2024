@@ -11,8 +11,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 public class ShooterSubsystem extends SubsystemBase {
     TalonFX ShooterR = new TalonFX(Constants.CTRE.RIO.R_Shoot, "rio");
     TalonFX ShooterL = new TalonFX(Constants.CTRE.RIO.L_Shoot, "rio");
-    CANSparkMax KickerL = new CANSparkMax(Constants.REV.L_Kicker, MotorType.kBrushless);
-    CANSparkMax KickerR = new CANSparkMax(Constants.REV.R_Kicker, MotorType.kBrushless);
+    static CANSparkMax KickerL;
+    static CANSparkMax KickerR;
     double SpeakerShooterSpeed = 0.45;
     double currentspeed;
     final double MuzzleIntake = 0.25;
@@ -20,6 +20,8 @@ public class ShooterSubsystem extends SubsystemBase {
     final double KickerSpeed = -1;
 
     public ShooterSubsystem() {
+        KickerL = new CANSparkMax(Constants.REV.L_Kicker, MotorType.kBrushless);
+        KickerR = new CANSparkMax(Constants.REV.R_Kicker, MotorType.kBrushless);
         ShooterL.setInverted(false);
         ShooterR.setInverted(false);
     }
@@ -56,7 +58,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void increaseSpeed() {
         if (SpeakerShooterSpeed <= 0.95) {
-        SpeakerShooterSpeed += 0.05; // +5%speed
+            SpeakerShooterSpeed += 0.05; // +5%speed
         }
         SmartDashboard.putNumber("CurrentSpeed", SpeakerShooterSpeed);
 
@@ -64,7 +66,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void decreaseSpeed() {
         if (SpeakerShooterSpeed >= 0.1) {
-        SpeakerShooterSpeed -= 0.05; // -5%speed
+            SpeakerShooterSpeed -= 0.05; // -5%speed
         }
         SmartDashboard.putNumber("CurrentSpeed", SpeakerShooterSpeed);
 

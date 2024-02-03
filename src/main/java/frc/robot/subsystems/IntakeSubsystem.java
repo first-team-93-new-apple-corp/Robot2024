@@ -12,9 +12,9 @@ public class IntakeSubsystem extends SubsystemBase {
     private double PassoverSpeed = 0.5;
 
     public IntakeSubsystem() {
-        frontIntake = new TalonFX(Constants.CTRE.Canivore.F_Intake, "drivetrain");
-        backIntake = new TalonFX(Constants.CTRE.Canivore.B_Intake, "drivetrain");
-        backIntake.setInverted(false);
+        frontIntake = new TalonFX(Constants.CTRE.RIO.F_Intake, "rio");
+        backIntake = new TalonFX(Constants.CTRE.RIO.B_Intake, "rio");
+        backIntake.setInverted(true);
     }
 
     public void Intake() {
@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void passthrough() {
         frontIntake.set(PassoverSpeed);
-        backIntake.set(PassoverSpeed);
+        backIntake.set(-PassoverSpeed);
     }
 
     public void stop() {
