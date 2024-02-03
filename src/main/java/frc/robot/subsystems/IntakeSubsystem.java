@@ -1,30 +1,34 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
-    // static CANSparkMax NeoIntakeFront = new CANSparkMax(2, MotorType.kBrushless);
-    // static CANSparkMax NeoIntakeBack = new CANSparkMax(3, MotorType.kBrushless);
+    private TalonFX frontIntake;
+    private TalonFX backIntake;
 
-    final static double IntakeShooterSpeed = 0.75;
+    private double IntakeSpeed = 0.75;
+    private double PassoverSpeed = 0.5;
 
-    public static void Intake() {
-        // NeoIntakeFront.set(IntakeShooterSpeed);
-        // NeoIntakeBack.set(-IntakeShooterSpeed);
+    public IntakeSubsystem() {
+        frontIntake = new TalonFX(Constants.CTRE.Canivore.F_Intake, "drivetrain");
+        backIntake = new TalonFX(Constants.CTRE.Canivore.B_Intake, "drivetrain");
+        backIntake.setInverted(false);
     }
 
-    public static void IntakePassover() {
-        // NeoIntakeFront.set(IntakeShooterSpeed);
-        // NeoIntakeBack.set(-IntakeShooterSpeed);
+    public void Intake() {
+        frontIntake.set(IntakeSpeed);
+        backIntake.set(IntakeSpeed);
     }
 
-    public static void IntakeStop() {
-        // NeoIntakeFront.set(0);
-        // NeoIntakeBack.set(0);
+    public void passthrough() {
+        frontIntake.set(PassoverSpeed);
+        backIntake.set(PassoverSpeed);
     }
 
-    public static void IntakeConstants() {
-
+    public void stop() {
+        frontIntake.set(0);
+        backIntake.set(0);
     }
 }
