@@ -13,7 +13,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,6 +33,8 @@ public class RobotContainer extends TimedRobot {
   private final SendableChooser<Command> autoChooser;
   public final double MaxSpeed = DriveConstants.MaxSpeed;
   public final double MaxAngularRate = DriveConstants.MaxAngularRate;
+  private double angle;
+  private double deadzone = DriveConstants.JoystickDeadzone;
   private final Joystick m_Joystick1 = new Joystick(0);
   private final Joystick m_Joystick2 = new Joystick(1);
   private Pigeon2 m_Pigeon2 = new Pigeon2(0);
@@ -38,17 +42,13 @@ public class RobotContainer extends TimedRobot {
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
-  private final JoystickButton m_JoystickTrigger = new JoystickButton(m_Joystick1, 1);
+  private final JoystickButton m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
   private final JoystickButton m_fieldRelButton = new JoystickButton(m_Joystick1,
       Constants.Thrustmaster.Left_Buttons.Top_Middle);
-  private final JoystickButton m_JoystickButton2 = new JoystickButton(m_Joystick1, 2);
-
+  private final JoystickButton m_JoystickButton2 = new JoystickButton(m_Joystick1,
+      Constants.Thrustmaster.Center_Button);
   private final JoystickButton m_RobotRelButton = new JoystickButton(m_Joystick1,
       Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
-  private SwerveRequest.FieldCentric FieldCentricDrive = new SwerveRequest.FieldCentric()
-      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
-                                                               // driving in open loop
 
   private SwerveRequest.RobotCentric RobotCentricDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -70,6 +70,7 @@ public class RobotContainer extends TimedRobot {
 
   // Configures the bindings to drive / control the swerve drive :)
   public void RotationPoints(Joystick m_Joystick2) {
+    m_Joystick2 = this.m_Joystick2;
     pov0 = new POVButton(m_Joystick2, 0); // front
     pov45 = new POVButton(m_Joystick2, 45); // fr wheel
     pov90 = new POVButton(m_Joystick2, 90); // right
@@ -126,29 +127,25 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void configureBindings() {
-    RotationPoints(m_Joystick2);
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() ->
-        FieldCentricDrive
-        .withVelocityX(
-        -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
-        * MaxSpeed)
-        .withVelocityY(
-        -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)
-        * MaxSpeed)
-        .withRotationalRate(
-        -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
-        * MaxAngularRate)
-        // m_swerveRequest
-        //     .withCenterOfRotation(DriveConstants.dCenter)
-        //     .withSpeeds(fieldSpeeds)
-            ));
+        drivetrain.applyRequest(() -> 
+        m_swerveRequest
+        .withCenterOfRotation(DriveConstants.dCenter)
+        .withSpeeds(fieldSpeeds)
+        ));
 
     // Brake while held
     m_JoystickTrigger.whileTrue(drivetrain.applyRequest(() -> brake));
-    m_fieldRelButton.onTrue(drivetrain.runOnce(() ->
-    drivetrain.seedFieldRelative()));
-
+    m_RobotRelButton.onTrue(drivetrain.applyRequest(() -> RobotCentricDrive
+        .withVelocityX(
+            -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
+                * MaxSpeed)
+        .withVelocityY(
+            -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)
+                * MaxSpeed)
+        .withRotationalRate(
+            -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
+                * MaxAngularRate)));
 
     // Points all in a direction
     m_JoystickButton2.whileTrue(drivetrain
@@ -168,7 +165,6 @@ public class RobotContainer extends TimedRobot {
     drivetrain.configAuto();
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
-
   }
 
   public Command getAutonomousCommand() {
@@ -176,20 +172,32 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void updateValues() {
-    for(double angle = m_Pigeon2.getAngle(); angle%360 > 1;) {
+    SmartDashboard.putNumber("PigeonAngle", angle);
+    for (angle = m_Pigeon2.getAngle(); angle % 360 > 1;) {
       angle -= 360;
     }
-    if(m_Joystick1.getRawButton(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
-      fieldRelativeOffset = m_Pigeon2.getAngle();
+    if (m_Joystick1.getRawButton(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
+      fieldRelativeOffset = angle;
     }
+    angle = angle / (Math.PI * 2);
     speeds = new ChassisSpeeds(
-        (-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y) * MaxSpeed),
-        (-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x) * MaxSpeed),
-        (-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x) * MaxAngularRate));
-    // fieldSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(speeds, new Rotation2d( m_Pigeon2.getAngle()%360));
-    fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, m_Pigeon2.getRotation2d().minus(new Rotation2d(fieldRelativeOffset)));
-    SmartDashboard.putNumber("Pigeon Rot2d", m_Pigeon2.getAngle()%360);
-    // fieldSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds((-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y) * MaxSpeed), (-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x) * MaxSpeed), (-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x) * MaxAngularRate), drivetrain.getPigeon2().getRotation2d());
+        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * MaxSpeed),
+        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
+        (checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxAngularRate));
+    // fieldSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(speeds, new Rotation2d(
+    // m_Pigeon2.getAngle()%360));
+    fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
+        new Rotation2d(angle - (fieldRelativeOffset / (Math.PI * 2))));
+    SmartDashboard.putNumber("Pigeon FR angle", angle - fieldRelativeOffset);
+    RotationPoints(m_Joystick2);
     POVButton();
+  }
+
+  public double checkDeadzone(double input) {
+    if (deadzone > input && input > -deadzone) {
+      return 0;
+    } else {
+      return input;
+    }
   }
 }
