@@ -12,7 +12,7 @@ public class DriveConstants {
 
         public static Translation2d dCenter = new Translation2d(
                         0,
-                        6.5);
+                        -0.17);
         public static final Translation2d Front = new Translation2d(
                         Wheel_Base / 2,
                         0);

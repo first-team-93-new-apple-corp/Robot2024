@@ -6,11 +6,15 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class IntakeCommand extends Command {
-    XboxController opController = new XboxController(2);
+    private static XboxController opController = new XboxController(2);
+    static IntakeSubsystem m_IntakeSubsystem;
+
+    public IntakeCommand() {
+        m_IntakeSubsystem = new IntakeSubsystem();
+    }
 
     @Override
     public void execute() {
-        IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
         // For the Intake
         if (opController.getRawButton(Constants.F310_D.X)) { // X
             m_IntakeSubsystem.Intake();
