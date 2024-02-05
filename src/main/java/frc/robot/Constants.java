@@ -1,6 +1,12 @@
 package frc.robot;
 
 public class Constants {
+    public class PWF {
+        public static final int Before_Kick = 0;
+        public static final int After_Kick = 1;
+        public static final int FrontBumber = 2;
+        public static final int BackBumper = 3;
+    }
     public class REV {
         public static final int L_Kicker = 2;
         public static final int R_Kicker = 3;
