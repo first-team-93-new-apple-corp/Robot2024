@@ -14,12 +14,12 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem() {
         frontIntake = new TalonFX(Constants.CTRE.RIO.F_Intake, "rio");
         backIntake = new TalonFX(Constants.CTRE.RIO.B_Intake, "rio");
-        backIntake.setInverted(true);
+        backIntake.setInverted(false);
     }
 
     public void Intake() {
-        frontIntake.set(IntakeSpeed);
-        backIntake.set(IntakeSpeed);
+        frontIntake.set(-IntakeSpeed);
+        backIntake.set(-IntakeSpeed);
     }
 
     public void passthrough() {

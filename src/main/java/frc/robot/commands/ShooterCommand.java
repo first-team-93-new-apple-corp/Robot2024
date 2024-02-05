@@ -17,21 +17,26 @@ public class ShooterCommand extends Command {
     public void execute() {
         
         // Stuff for the shooter
-        if (opController.getRawButton(Constants.F310_D.RightTrigger)) { // RightTrigger
+        if (opController.getRawAxis(Constants.xbox.Axis.RT) > 0.6) { // RightTrigger
             m_ShooterSubsystem.prime();
-        } else if (opController.getRawButton(Constants.F310_D.RightShoulderButton)) { // RightShoulderButton
+        } else if (opController.getRawButton(Constants.xbox.RightShoulderButton)) { // RightShoulderButton
             m_ShooterSubsystem.shootAmp();
-        } else if (opController.getRawButton(Constants.F310_D.LeftShoulderButton)) { // LeftShoulderButton
+        } else if (opController.getRawButton(Constants.xbox.LeftShoulderButton)) { // LeftShoulderButton
             m_ShooterSubsystem.intakeFront();
         } else {
             m_ShooterSubsystem.shooterStop();
         }
 
+        if(opController.getRawButtonPressed(Constants.xbox.Menu)) {
+            m_ShooterSubsystem.increaseSpeed();
+        } else if (opController.getRawButtonPressed(Constants.xbox.Window)) {
+            m_ShooterSubsystem.decreaseSpeed();
+        }
 
         // For the Kicker
         if (driver2.getRawButton(Constants.Thrustmaster.Trigger)) { // B
             m_ShooterSubsystem.kicker();
-        } else {
+        } else if(!opController.getRawButton(Constants.xbox.LeftShoulderButton)) {
             m_ShooterSubsystem.kickerStop();
         }
     }

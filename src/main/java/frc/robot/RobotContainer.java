@@ -5,7 +5,6 @@
 package frc.robot;
 
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
@@ -13,9 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.units.Angle;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,14 +34,11 @@ public class RobotContainer extends TimedRobot {
   private double deadzone = DriveConstants.JoystickDeadzone;
   private final Joystick m_Joystick1 = new Joystick(0);
   private final Joystick m_Joystick2 = new Joystick(1);
-  private Pigeon2 m_Pigeon2 = new Pigeon2(0);
   private boolean Limit = true;
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
   private final JoystickButton m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
-  private final JoystickButton m_fieldRelButton = new JoystickButton(m_Joystick1,
-      Constants.Thrustmaster.Left_Buttons.Top_Middle);
   private final JoystickButton m_JoystickButton2 = new JoystickButton(m_Joystick1,
       Constants.Thrustmaster.Center_Button);
   private final JoystickButton m_RobotRelButton = new JoystickButton(m_Joystick1,
@@ -173,9 +167,6 @@ public class RobotContainer extends TimedRobot {
 
   public void updateValues() {
     SmartDashboard.putNumber("PigeonAngle", angle);
-    for (angle = m_Pigeon2.getAngle(); angle % 360 > 1;) {
-      angle -= 360;
-    }
     if (m_Joystick1.getRawButton(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
       fieldRelativeOffset = angle;
     }

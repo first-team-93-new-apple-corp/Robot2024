@@ -15,35 +15,38 @@ public class ShooterSubsystem extends SubsystemBase {
     static CANSparkMax KickerR;
     double SpeakerShooterSpeed = 0.45;
     double currentspeed;
-    final double MuzzleIntake = 0.25;
+    final double MuzzleIntake = -0.25;
     final double AmpShooterSpeed = 0.3;
-    final double KickerSpeed = -1;
+    final double KickerSpeed = 1;
 
     public ShooterSubsystem() {
         KickerL = new CANSparkMax(Constants.REV.L_Kicker, MotorType.kBrushless);
         KickerR = new CANSparkMax(Constants.REV.R_Kicker, MotorType.kBrushless);
-        ShooterL.setInverted(false);
+        ShooterL.setInverted(true);
         ShooterR.setInverted(false);
+        KickerR.setInverted(true);
     }
 
     public void prime() {
         ShooterR.set(SpeakerShooterSpeed);
-        ShooterL.set(-SpeakerShooterSpeed);
+        ShooterL.set(SpeakerShooterSpeed);
     }
 
     public void shootAmp() {
         ShooterR.set(AmpShooterSpeed);
-        ShooterL.set(-AmpShooterSpeed);
+        ShooterL.set(AmpShooterSpeed);
     }
 
     public void kicker() {
         KickerL.set(KickerSpeed);
-        KickerR.set(-KickerSpeed);
+        KickerR.set(KickerSpeed);
     }
 
     public void intakeFront() {
-        ShooterR.set(-MuzzleIntake);
+        ShooterR.set(MuzzleIntake);
         ShooterL.set(MuzzleIntake);
+        KickerL.set(-0.2);
+        KickerR.set(-0.2);
     }
 
     public void shooterStop() {

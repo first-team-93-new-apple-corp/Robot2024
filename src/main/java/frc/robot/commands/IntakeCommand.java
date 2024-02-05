@@ -16,9 +16,9 @@ public class IntakeCommand extends Command {
     @Override
     public void execute() {
         // For the Intake
-        if (opController.getRawButton(Constants.F310_D.X)) { // X
+        if (opController.getRawButton(Constants.xbox.X)) { // X
             m_IntakeSubsystem.Intake();
-        } else if (opController.getRawButton(Constants.F310_D.A)) { // A
+        } else if (opController.getRawButton(Constants.xbox.A)) { // A
             m_IntakeSubsystem.passthrough();
         } else {
             m_IntakeSubsystem.stop();
