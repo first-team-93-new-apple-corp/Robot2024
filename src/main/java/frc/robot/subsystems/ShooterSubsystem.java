@@ -15,7 +15,7 @@ public class ShooterSubsystem extends SubsystemBase {
     static CANSparkMax KickerR;
     double SpeakerShooterSpeed = 0.45;
     double currentspeed;
-    final double MuzzleIntake = -0.25;
+    final double MuzzleIntake = -0.10;
     final double AmpShooterSpeed = 0.3;
     final double KickerSpeed = 1;
 
@@ -45,8 +45,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public void intakeFront() {
         ShooterR.set(MuzzleIntake);
         ShooterL.set(MuzzleIntake);
-        KickerL.set(-0.2);
-        KickerR.set(-0.2);
+        KickerL.set(-0.05);
+        KickerR.set(-0.05);
     }
 
     public void shooterStop() {

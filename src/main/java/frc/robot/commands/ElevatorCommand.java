@@ -7,8 +7,8 @@ import frc.robot.subsystems.ElevatorSubsystem;
 public class ElevatorCommand extends Command {
     XboxController op;
     ElevatorSubsystem m_elevator = new ElevatorSubsystem();
-    double upSpeed = -0.5;
-    double downSpeed = 0.2;
+    double upSpeed = -0.6;
+    double downSpeed = 0.4;
     public ElevatorCommand(XboxController op) {
         this.op = op;
     }

@@ -21,7 +21,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public ElevatorSubsystem() {
         m_motor = new TalonFX(Constants.CTRE.RIO.Elevator, "rio");
-        m_motor.setNeutralMode(NeutralModeValue.Brake);
+        m_motorconfig = new TalonFXConfiguration();
         m_motorconfig.Slot0.kG = 0.36;
         m_motorconfig.Slot0.kV = 2.38;
         m_motorconfig.Slot0.kA = 0.05;
@@ -29,6 +29,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_motorconfig.Slot0.kI = 0;
         m_motorconfig.Slot0.kD = 0;
         m_motor.getConfigurator().apply(m_motorconfig);
+        m_motor.setNeutralMode(NeutralModeValue.Brake);
         topLimit = new DigitalInput(0);
         bottomLimit = new DigitalInput(1);
     }
@@ -49,6 +50,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             setpoint = 0;
         } else if (setpoint < -78) {
             setpoint = -78;
+        } else {
         }
         m_motor.setControl(m_control.withPosition(setpoint).withSlot(0));
     }
