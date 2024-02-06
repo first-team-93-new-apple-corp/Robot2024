@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.25,
-        "y": 4.6
+        "x": 2.9,
+        "y": 4.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5330258387789504,
-        "y": 4.113976955226638
+        "x": 2.233465367831636,
+        "y": 3.7071259728105046
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.9,
-        "y": 4.0953194633662
+        "x": 1.25,
+        "y": 4.6
       },
       "prevControl": {
-        "x": 2.1872418519611814,
-        "y": 3.771838895029142
+        "x": 1.4569103012079896,
+        "y": 4.012201177555508
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "Shoot Note",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 1.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -42,8 +42,8 @@
       }
     },
     {
-      "name": "Start Ground Intake",
-      "waypointRelativePos": 0.5,
+      "name": "End Ground Intake",
+      "waypointRelativePos": 0.3,
       "command": {
         "type": "parallel",
         "data": {
@@ -60,7 +60,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": 145.0,
     "rotateFast": true
   },
   "reversed": false,
