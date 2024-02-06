@@ -14,13 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Top Shoot Grab Top"
+            "pathName": "(B.L  R.R) Shoot Grab (B.L  R.R)"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "2 Note Shoot Top"
+            "pathName": "2 Note Shoot (B.L  R.R)"
           }
         },
         {
@@ -38,18 +38,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Note Shoot Grab Bottom"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Start Top Shoot 4 Note End Bottom"
+            "pathName": "3 Note Shoot Grab (B.R  R.L)"
           }
         }
       ]
     }
   },
-  "folder": "4 Note Shoot",
+  "folder": "3 Note Shoot 1 Grab",
   "choreoAuto": false
 }

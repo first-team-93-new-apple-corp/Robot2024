@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5477852757467225,
-        "y": 7.247847288488859
+        "x": 2.7662964416837923,
+        "y": 6.380862216269887
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.25,
-        "y": 6.45
+        "x": 1.4,
+        "y": 5.55
       },
       "prevControl": {
-        "x": 1.7122351587045517,
-        "y": 7.217310363449556
+        "x": 2.1412704643591107,
+        "y": 5.653220033712795
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,8 +42,8 @@
       }
     },
     {
-      "name": "Stop Ground Intake",
-      "waypointRelativePos": 0.3,
+      "name": "End Intake",
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "parallel",
         "data": {
@@ -60,11 +60,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -145.0,
-    "rotateFast": false
+    "rotation": 180.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "Top",
+  "folder": "(B.L  R.R)",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }

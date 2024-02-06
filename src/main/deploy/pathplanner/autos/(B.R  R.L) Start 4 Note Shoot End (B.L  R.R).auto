@@ -3,7 +3,7 @@
   "startingPose": {
     "position": {
       "x": 1.25,
-      "y": 4.6
+      "y": 6.45
     },
     "rotation": 145.0
   },
@@ -14,13 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Bottom Shoot Bottom Grab"
+            "pathName": "(B.R  R.L) Shoot (B.R  R.L) Grab"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "2 Note Shoot Bottom"
+            "pathName": "2 Note Shoot (B.R  R.L)"
           }
         },
         {
@@ -34,10 +34,22 @@
           "data": {
             "pathName": "3 Note Shoot"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Note Shoot Grab (B.L  R.R)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 Note Shoot End (B.L  R.R)"
+          }
         }
       ]
     }
   },
-  "folder": "3 Note Shoot",
+  "folder": "4 Note Shoot",
   "choreoAuto": false
 }

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9,
-        "y": 4.0953194633662
+        "x": 1.25,
+        "y": 4.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9822863249330096,
-        "y": 4.761022134656883
+        "x": 1.5330258387789504,
+        "y": 4.113976955226638
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.4,
-        "y": 5.55
+        "x": 2.9,
+        "y": 4.0953194633662
       },
       "prevControl": {
-        "x": 2.10321541552174,
-        "y": 5.494631352899069
+        "x": 2.1872418519611814,
+        "y": 3.771838895029142
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,17 @@
   "eventMarkers": [
     {
       "name": "Shoot Note",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "Start Ground Intake",
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "parallel",
         "data": {
@@ -54,7 +64,7 @@
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "Bottom",
+  "folder": "(B.R  R.L)",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }

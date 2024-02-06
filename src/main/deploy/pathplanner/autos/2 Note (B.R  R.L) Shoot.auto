@@ -14,13 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Bottom Shoot Bottom Grab"
+            "pathName": "(B.R  R.L) Shoot (B.R  R.L) Grab"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "2 Note Shoot Bottom"
+            "pathName": "2 Note Shoot (B.R  R.L)"
           }
         }
       ]

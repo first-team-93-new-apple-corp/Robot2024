@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.35,
-      "y": 6.399519708130326
+      "x": 1.25,
+      "y": 4.6
     },
-    "rotation": -145.0
+    "rotation": 145.0
   },
   "command": {
     "type": "sequential",
@@ -14,18 +14,24 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Top Shoot Grab Top"
+            "pathName": "(B.R  R.L) Shoot (B.R  R.L) Grab"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "2 Note Shoot Top"
+            "pathName": "2 Note Shoot (B.R  R.L)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mid Shoot Grab Mid"
           }
         }
       ]
     }
   },
-  "folder": "2 Note Shoot",
+  "folder": "2 Shoot 1 Grab",
   "choreoAuto": false
 }
