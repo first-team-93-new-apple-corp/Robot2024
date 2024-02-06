@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.25,
+      "y": 4.6
+    },
+    "rotation": 145.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom Shoot Bottom Grab"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Note Shoot Bottom"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "2 Note Shoot",
+  "choreoAuto": false
+}

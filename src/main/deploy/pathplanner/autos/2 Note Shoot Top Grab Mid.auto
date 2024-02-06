@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.25,
+      "y": 6.399519708130326
+    },
+    "rotation": -145.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Shoot Grab Top"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Note Shoot Top"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mid Shoot Grab Mid"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "2 Shoot 1 Grab",
+  "choreoAuto": false
+}

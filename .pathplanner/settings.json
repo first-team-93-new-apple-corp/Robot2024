@@ -1,0 +1,21 @@
+{
+  "robotWidth": 0.9,
+  "robotLength": 0.9,
+  "holonomicMode": true,
+  "pathFolders": [
+    "Bottom",
+    "Mid",
+    "Top"
+  ],
+  "autoFolders": [
+    "1 Shoot 1 Grab",
+    "2 Note Shoot",
+    "2 Shoot 1 Grab",
+    "3 Note Shoot"
+  ],
+  "defaultMaxVel": 3.0,
+  "defaultMaxAccel": 3.0,
+  "defaultMaxAngVel": 540.0,
+  "defaultMaxAngAccel": 720.0,
+  "maxModuleSpeed": 4.5
+}
