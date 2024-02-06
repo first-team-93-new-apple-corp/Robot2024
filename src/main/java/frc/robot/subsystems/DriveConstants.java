@@ -9,7 +9,7 @@ public class DriveConstants {
         public static final double JoystickDeadzone = 0.05;
         public static final double Track_Width = Units.inchesToMeters(23); // right wheel to left wheel
         public static final double Wheel_Base = Units.inchesToMeters(25); // Front To Back
-
+        public static final Translation2d Center = new Translation2d(0, -0.17);
         public static Translation2d dCenter = new Translation2d(
                         0,
                         -0.17);

@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -107,12 +108,12 @@ public class RobotContainer extends TimedRobot {
           DriveConstants.dCenter = DriveConstants.Location_FL
               .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()));
         } else {
-          DriveConstants.dCenter = new Translation2d(0, 0);
+          DriveConstants.dCenter = DriveConstants.Center;
         }
       } else {
         Limit = false;
         if (povCenter.getAsBoolean()) {
-          DriveConstants.dCenter = new Translation2d(0, 0);
+          DriveConstants.dCenter = DriveConstants.Center;
         }
       }
     } else {
@@ -122,11 +123,9 @@ public class RobotContainer extends TimedRobot {
 
   public void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> 
-        m_swerveRequest
-        .withCenterOfRotation(DriveConstants.dCenter)
-        .withSpeeds(fieldSpeeds)
-        ));
+        drivetrain.applyRequest(() -> m_swerveRequest
+            .withCenterOfRotation(DriveConstants.dCenter)
+            .withSpeeds(fieldSpeeds)));
 
     // Brake while held
     m_JoystickTrigger.whileTrue(drivetrain.applyRequest(() -> brake));
@@ -175,11 +174,7 @@ public class RobotContainer extends TimedRobot {
         (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * MaxSpeed),
         (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
         (checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxAngularRate));
-    // fieldSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(speeds, new Rotation2d(
-    // m_Pigeon2.getAngle()%360));
-    fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
-        new Rotation2d(angle - (fieldRelativeOffset / (Math.PI * 2))));
-    SmartDashboard.putNumber("Pigeon FR angle", angle - fieldRelativeOffset);
+    fieldSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(speeds, Rotation2d.fromDegrees(drivetrain.getPigeon2().getRotation2d().getRadians()));
     RotationPoints(m_Joystick2);
     POVButton();
   }
