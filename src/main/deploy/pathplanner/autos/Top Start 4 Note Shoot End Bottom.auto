@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.25,
+      "y": 6.45
+    },
+    "rotation": -145.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Shoot Grab Top"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Note Shoot Top"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mid Shoot Grab Mid"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Note Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Note Shoot Grab Bottom"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start Top Shoot 4 Note End Bottom"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "4 Note Shoot",
+  "choreoAuto": false
+}
