@@ -27,6 +27,9 @@ public class ElevatorCommand extends Command {
             m_elevator.toAmp();
         } else if (op.getPOV() == 180) {
             m_elevator.goDown();
+        } else if (op.getPOV() == 270) {
+            // ELevator out for balancing on the chain (This broke it last time for some odd reason)
+            m_elevator.toSetpoint(-15);
         }
     }
 }
