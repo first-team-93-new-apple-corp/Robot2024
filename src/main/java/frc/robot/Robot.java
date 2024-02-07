@@ -25,6 +25,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
+    m_Elevator.initOnce();
   }
 
   @Override
@@ -74,6 +75,7 @@ public class Robot extends TimedRobot {
     m_Shooter.schedule();
     m_Elevator.schedule();
     m_Climber.schedule();
+    m_robotContainer.configAuto();
     m_robotContainer.updateValues();
     m_robotContainer.configureBindings();
   }

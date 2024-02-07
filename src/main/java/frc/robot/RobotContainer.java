@@ -14,17 +14,26 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.commands.ClimberCommand;
+import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
 
 public class RobotContainer extends TimedRobot {
+  public ShooterCommand m_ShooterCommand;
+  public ClimberCommand m_ClimberCommand;
+  public IntakeCommand m_IntakeCommand;
+  public ElevatorCommand m_ElevatorCommand;
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private final SendableChooser<Command> autoChooser;
@@ -34,6 +43,7 @@ public class RobotContainer extends TimedRobot {
   private double deadzone = DriveConstants.JoystickDeadzone;
   private final Joystick m_Joystick1 = new Joystick(0);
   private final Joystick m_Joystick2 = new Joystick(1);
+  private final XboxController op = new XboxController(2);
   private boolean Limit = true;
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
@@ -152,9 +162,22 @@ public class RobotContainer extends TimedRobot {
     }
     drivetrain.registerTelemetry(logger::telemeterize);
   }
-
+  public void configAuto() {
+    drivetrain.configAuto(
+      m_ShooterCommand,
+      m_IntakeCommand,
+      m_ElevatorCommand
+    );
+  }
   public RobotContainer() {
-    drivetrain.configAuto();
+    m_ShooterCommand = new ShooterCommand();
+    m_IntakeCommand = new IntakeCommand();
+    m_ElevatorCommand = new ElevatorCommand(op);
+    drivetrain.configAuto(
+      m_ShooterCommand,
+      m_IntakeCommand,
+      m_ElevatorCommand
+    );
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
@@ -172,8 +195,11 @@ public class RobotContainer extends TimedRobot {
         (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * MaxSpeed),
         (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
         (checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxAngularRate));
-    fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
-    SmartDashboard.putNumber("E", new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians()).rotateBy(new Rotation2d(-fieldRelativeOffset)).getDegrees());
+    fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
+        new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
+            .rotateBy(new Rotation2d(-fieldRelativeOffset)));
+    SmartDashboard.putNumber("E", new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
+        .rotateBy(new Rotation2d(-fieldRelativeOffset)).getDegrees());
     RotationPoints(m_Joystick2);
     POVButton();
   }

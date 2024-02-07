@@ -20,8 +20,10 @@ public class ShooterSubsystem extends SubsystemBase {
     final double KickerSpeed = 1;
 
     public ShooterSubsystem() {
-        KickerL = new CANSparkMax(Constants.REV.L_Kicker, MotorType.kBrushless);
-        KickerR = new CANSparkMax(Constants.REV.R_Kicker, MotorType.kBrushless);
+        if (KickerL == null || KickerR == null) {
+            KickerL = new CANSparkMax(Constants.REV.L_Kicker, MotorType.kBrushless);
+            KickerR = new CANSparkMax(Constants.REV.R_Kicker, MotorType.kBrushless);
+        }
         ShooterL.setInverted(true);
         ShooterR.setInverted(false);
         KickerR.setInverted(true);
