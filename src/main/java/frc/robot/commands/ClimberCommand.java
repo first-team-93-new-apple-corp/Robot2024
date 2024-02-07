@@ -12,13 +12,33 @@ public class ClimberCommand extends Command {
         this.op = op;
         m_climber = new ClimberSubsystem(op);
     }
+    public ClimberCommand() {
+        m_climber = new ClimberSubsystem(op);
+    }
 
     public void testClimbers() {
             m_climber.leftSpeed(op.getRawAxis(Constants.xbox.Axis.Left_Stick_Y));
             m_climber.rightSpeed(op.getRawAxis(Constants.xbox.Axis.Right_Stick_Y));
 
     }
-
+    public void windLeft(double speed) {
+        m_climber.leftSpeed(speed);
+    }
+    public void windRight(double speed) {
+        m_climber.rightSpeed(speed);
+    }
+    public void zeroLeft() {
+        m_climber.zeroLeft();
+    }
+    public void zeroRight() {
+        m_climber.zeroRight();
+    }
+    public double leftDraw() {
+        return m_climber.getLeftDraw();
+    }
+    public double rightDraw() {
+        return m_climber.getRightDraw();
+    }
     @Override
     public void execute() {
         testClimbers();

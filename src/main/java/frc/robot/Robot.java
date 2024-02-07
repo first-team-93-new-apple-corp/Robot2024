@@ -12,6 +12,7 @@ import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.Preflight;
 
 public class Robot extends TimedRobot {
   XboxController op = new XboxController(2);
@@ -21,6 +22,7 @@ public class Robot extends TimedRobot {
   private IntakeCommand m_Intake = new IntakeCommand();
   private ElevatorCommand m_Elevator = new ElevatorCommand(op);
   private ClimberCommand m_Climber = new ClimberCommand(op);
+  private Preflight m_Preflight = new Preflight();
 
   @Override
   public void robotInit() {
@@ -87,6 +89,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
+    m_Preflight.schedule();
   }
 
   @Override

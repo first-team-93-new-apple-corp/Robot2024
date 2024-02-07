@@ -27,7 +27,18 @@ public class ClimberSubsystem extends SubsystemBase {
     public void rightSpeed(double speed) {
         climberRight.set(speed);
     }
-
+    public void zeroLeft() {
+        climberLeft.setPosition(0);
+    }
+    public void zeroRight() {
+        climberRight.setPosition(0);
+    }
+    public double getLeftDraw() {
+        return climberLeft.getSupplyCurrent().getValueAsDouble();
+    }
+    public double getRightDraw() {
+        return climberRight.getSupplyCurrent().getValueAsDouble();
+    }
     @Override
     public void periodic() {
 
