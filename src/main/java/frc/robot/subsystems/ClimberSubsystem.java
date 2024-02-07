@@ -19,11 +19,10 @@ public class ClimberSubsystem extends SubsystemBase {
         climberLeft.setNeutralMode(NeutralModeValue.Brake);
         climberRight.setNeutralMode(NeutralModeValue.Brake);
     }
-
+    
     public void leftSpeed(double speed) {
         climberLeft.set(speed);
     }
-
     public void rightSpeed(double speed) {
         climberRight.set(speed);
     }
@@ -38,6 +37,13 @@ public class ClimberSubsystem extends SubsystemBase {
     }
     public double getRightDraw() {
         return climberRight.getSupplyCurrent().getValueAsDouble();
+    }
+    public double leftPosition() {
+        return climberLeft.getPosition().getValueAsDouble();
+    }
+    
+    public double rightPosition() {
+        return climberRight.getPosition().getValueAsDouble();
     }
     @Override
     public void periodic() {
