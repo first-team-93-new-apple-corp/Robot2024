@@ -96,7 +96,15 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
         return speed;
     }
-
+    public void toAmp() {
+        toSetpoint(-76);
+    }
+    public void toSource() {
+        toSetpoint(-60);
+    }
+    public void goDown() {
+        toSetpoint(0);
+    }
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Elevator Pos", m_motor.getPosition().getValueAsDouble());

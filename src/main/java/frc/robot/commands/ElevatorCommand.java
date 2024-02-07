@@ -22,20 +22,11 @@ public class ElevatorCommand extends Command {
     @Override
     public void execute() {
         if (op.getPOV() == 0) {
-            // m_elevator.runMotor(upSpeed);
-            setpoint -= 5;
+            m_elevator.toSource();
+        } else if (op.getPOV() == 90) {
+            m_elevator.toAmp();
         } else if (op.getPOV() == 180) {
-            // m_elevator.runMotor(downSpeed);
-            setpoint += 5;
-        } else {
-            // m_elevator.runMotor(0);
+            m_elevator.goDown();
         }
-        if (setpoint > 0) {
-            setpoint = 0;
-        }
-        if (setpoint < -75) {
-            setpoint = -75;
-        }
-        m_elevator.toSetpoint(setpoint);
     }
 }
