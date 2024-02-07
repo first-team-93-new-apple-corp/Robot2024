@@ -10,6 +10,7 @@ import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,7 +21,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     DigitalInput bottomLimit;
     TalonFX m_motor;
     TalonFXConfiguration m_motorconfig;
-    PositionVoltage m_control = new PositionVoltage(0);
+    double output;
+    PIDController pid = new PIDController(0.05, 0, 0);
 
     public ElevatorSubsystem() {
         m_motor = new TalonFX(Constants.CTRE.RIO.Elevator, "rio");
@@ -70,7 +72,14 @@ public class ElevatorSubsystem extends SubsystemBase {
         } else if (setpoint < -77) {
             setpoint = -77;
         }
-        m_motor.setControl(m_control.withPosition(setpoint).withSlot(0));
+        output = pid.calculate(m_motor.getPosition().getValueAsDouble(), setpoint);
+        if (-0.03 < output && output < 0.03) {
+            output = 0;
+        }
+        SmartDashboard.putNumber("Elevator PID Output", output);
+        output = closeToEndpoint(output);
+        output = checkLimits(output);
+        m_motor.set(output);
     }
 
     public double checkLimits(double speed) {
