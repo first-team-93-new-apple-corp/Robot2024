@@ -1,12 +1,7 @@
 package frc.robot.subsystems;
 
-import org.opencv.core.Mat;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.ControlRequest;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
@@ -17,8 +12,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ElevatorSubsystem extends SubsystemBase {
-    DigitalInput topLimit;
-    DigitalInput bottomLimit;
+    static DigitalInput topLimit;
+    static DigitalInput bottomLimit;
     TalonFX m_motor;
     TalonFXConfiguration m_motorconfig;
     double output;
@@ -104,6 +99,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
     public void goDown() {
         toSetpoint(0);
+    }
+    public void zero() {
+        if(!bottomLimitTriggered()) {
+            runMotor(checkLimits(0.1));
+        } else {
+            runMotor(0);
+        }
     }
     @Override
     public void periodic() {

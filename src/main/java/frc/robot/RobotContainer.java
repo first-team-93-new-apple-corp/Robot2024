@@ -42,9 +42,9 @@ public class RobotContainer extends TimedRobot {
   public final double MaxAngularRate = DriveConstants.MaxAngularRate;
   private double angle;
   private double deadzone = DriveConstants.JoystickDeadzone;
-  private final Joystick m_Joystick1 = new Joystick(0);
-  private final Joystick m_Joystick2 = new Joystick(1);
-  private final XboxController op = new XboxController(2);
+  private Joystick m_Joystick1;
+  private Joystick m_Joystick2;
+  private XboxController op;
   private boolean Limit = true;
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
@@ -170,8 +170,10 @@ public class RobotContainer extends TimedRobot {
       m_ElevatorCommand
     );
   }
-  
-  public RobotContainer() {
+  public RobotContainer(Joystick m_Joystick1, Joystick m_Joystick2, XboxController op) {
+    this.m_Joystick1 = m_Joystick1;
+    this.m_Joystick2 = m_Joystick2;
+    this.op = op;
     m_ShooterCommand = new ShooterCommand();
     m_IntakeCommand = new IntakeCommand();
     m_ElevatorCommand = new ElevatorCommand(op);
@@ -213,5 +215,8 @@ public class RobotContainer extends TimedRobot {
     } else {
       return input;
     }
+  }
+  public SwerveDriveSubsystem getDrive() {
+    return drivetrain;
   }
 }
