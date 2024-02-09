@@ -4,18 +4,23 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.Preflight;
 
 public class Robot extends TimedRobot {
-  XboxController op = new XboxController(2);
+  static Joystick m_Joystick1 = new Joystick(0);
+  static Joystick m_Joystick2 = new Joystick(1);
+  static XboxController op = new XboxController(2);
+
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
   private ShooterCommand m_Shooter = new ShooterCommand();
@@ -23,11 +28,13 @@ public class Robot extends TimedRobot {
   private ElevatorCommand m_Elevator = new ElevatorCommand(op);
   private ClimberCommand m_Climber = new ClimberCommand(op);
   private Preflight m_Preflight = new Preflight();
+  private SwerveDriveSubsystem m_SwerveDriveSubsystem = m_robotContainer.getDrive();
 
   @Override
   public void robotInit() {
-    m_robotContainer = new RobotContainer();
+    m_robotContainer = new RobotContainer(m_Joystick1, m_Joystick2, op);
     m_Elevator.initOnce();
+    m_SwerveDriveSubsystem.configAuto(m_Shooter, m_Intake, m_Elevator);
   }
 
   @Override
@@ -77,7 +84,6 @@ public class Robot extends TimedRobot {
     m_Shooter.schedule();
     m_Elevator.schedule();
     m_Climber.schedule();
-    m_robotContainer.configAuto();
     m_robotContainer.updateValues();
     m_robotContainer.configureBindings();
   }

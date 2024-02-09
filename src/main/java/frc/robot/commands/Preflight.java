@@ -12,11 +12,11 @@ public class Preflight extends Command {
     SlewRateLimiter right = new SlewRateLimiter(0.5, -0.5, 0.5);
     boolean leftFinished = false;
     boolean rightFinished = false;
+    boolean elevatorFinished = false;
 
     public Preflight() {
         pdh = new PowerDistribution(1, ModuleType.kRev);
         climbers = new ClimberCommand();
-        left.calculate(climbers.leftDraw());
 
     }
 
@@ -40,6 +40,6 @@ public class Preflight extends Command {
                 rightFinished = true;
             }
         }
+        
     }
-
 }
