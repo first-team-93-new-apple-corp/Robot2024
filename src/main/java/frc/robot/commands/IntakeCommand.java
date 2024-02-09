@@ -11,6 +11,7 @@ public class IntakeCommand extends Command {
 
     public IntakeCommand() {
         m_IntakeSubsystem = new IntakeSubsystem();
+        m_IntakeSubsystem.Intake();
     }
 
     @Override

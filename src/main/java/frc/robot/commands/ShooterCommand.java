@@ -10,12 +10,16 @@ public class ShooterCommand extends Command {
     XboxController opController = new XboxController(2);
     Joystick driver2 = new Joystick(1);
     ShooterSubsystem m_ShooterSubsystem;
+
     public ShooterCommand() {
         m_ShooterSubsystem = new ShooterSubsystem();
+        m_ShooterSubsystem.prime();
+        m_ShooterSubsystem.shootAmp();
+        m_ShooterSubsystem.kicker();
     }
+
     @Override
     public void execute() {
-        
         // Stuff for the shooter
         if (opController.getRawAxis(Constants.xbox.Axis.RT) > 0.6) { // RightTrigger
             m_ShooterSubsystem.prime();
@@ -27,7 +31,7 @@ public class ShooterCommand extends Command {
             m_ShooterSubsystem.shooterStop();
         }
 
-        if(opController.getRawButtonPressed(Constants.xbox.Menu)) {
+        if (opController.getRawButtonPressed(Constants.xbox.Menu)) {
             m_ShooterSubsystem.increaseSpeed();
         } else if (opController.getRawButtonPressed(Constants.xbox.Window)) {
             m_ShooterSubsystem.decreaseSpeed();
@@ -36,7 +40,7 @@ public class ShooterCommand extends Command {
         // For the Kicker
         if (driver2.getRawButton(Constants.Thrustmaster.Trigger)) { // B
             m_ShooterSubsystem.kicker();
-        } else if(!opController.getRawButton(Constants.xbox.LeftShoulderButton)) {
+        } else if (!opController.getRawButton(Constants.xbox.LeftShoulderButton)) {
             m_ShooterSubsystem.kickerStop();
         }
     }

@@ -7,6 +7,7 @@ package frc.robot;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -169,6 +170,7 @@ public class RobotContainer extends TimedRobot {
       m_ElevatorCommand
     );
   }
+  
   public RobotContainer() {
     m_ShooterCommand = new ShooterCommand();
     m_IntakeCommand = new IntakeCommand();
@@ -178,6 +180,7 @@ public class RobotContainer extends TimedRobot {
       m_IntakeCommand,
       m_ElevatorCommand
     );
+    
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }

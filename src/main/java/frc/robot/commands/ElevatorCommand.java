@@ -13,6 +13,8 @@ public class ElevatorCommand extends Command {
 
     public ElevatorCommand(XboxController op) {
         this.op = op;
+        m_elevator.toAmp();
+        m_elevator.toSource();
     }
 
     public void initOnce() {
