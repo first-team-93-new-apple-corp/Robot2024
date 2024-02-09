@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.ClimberCommand;
+import frc.robot.commands.ClimbingLevel;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
@@ -35,6 +36,7 @@ import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
 
 public class RobotContainer extends TimedRobot {
+  public ClimbingLevel m_ClimbingLevel;
   public ShooterCommand m_ShooterCommand;
   public ClimberCommand m_ClimberCommand;
   public IntakeCommand m_IntakeCommand;
@@ -50,6 +52,14 @@ public class RobotContainer extends TimedRobot {
   private Joystick m_Joystick2;
   private XboxController op;
   private boolean Limit = true;
+
+
+  // can set this to whatever button you want you can also just 
+  // delete this and use the constants file for the button
+  // (just so that the logic works for now)
+  private int climbingLevelButton;
+
+
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
@@ -58,6 +68,13 @@ public class RobotContainer extends TimedRobot {
       Constants.Thrustmaster.Center_Button);
   private final JoystickButton m_RobotRelButton = new JoystickButton(m_Joystick1,
       Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
+
+
+  // added this for button bindings and the logic I added
+  private final JoystickButton m_climingLevelButton = new JoystickButton(op,
+      climbingLevelButton);
+
+
 
   private SwerveRequest.RobotCentric RobotCentricDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -154,6 +171,12 @@ public class RobotContainer extends TimedRobot {
             -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
                 * MaxAngularRate)));
 
+
+    // Climbing Level logic added to button
+    // When the button of your choosing is held it should atomaticly do the climbing level
+    m_climingLevelButton.whileTrue(m_ClimbingLevel);
+
+
     // Points all in a direction
     m_JoystickButton2.whileTrue(drivetrain
         .applyRequest(
@@ -168,8 +191,7 @@ public class RobotContainer extends TimedRobot {
     drivetrain.registerTelemetry(logger::telemeterize);
   }
   public void configAuto() {
-    drivetrain.configAuto(
-    );
+    drivetrain.configAuto();
   }
   public RobotContainer(Joystick m_Joystick1, Joystick m_Joystick2, XboxController op) { 
     this.m_Joystick1 = m_Joystick1;
