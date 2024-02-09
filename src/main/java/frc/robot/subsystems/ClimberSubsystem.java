@@ -41,7 +41,6 @@ public class ClimberSubsystem extends SubsystemBase {
     public double leftPosition() {
         return climberLeft.getPosition().getValueAsDouble();
     }
-    
     public double rightPosition() {
         return climberRight.getPosition().getValueAsDouble();
     }

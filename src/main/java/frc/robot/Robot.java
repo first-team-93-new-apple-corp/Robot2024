@@ -15,7 +15,7 @@ import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.Preflight;
-
+import com.ctre.phoenix6.hardware.*;
 public class Robot extends TimedRobot {
   static Joystick m_Joystick1 = new Joystick(0);
   static Joystick m_Joystick2 = new Joystick(1);
@@ -29,12 +29,14 @@ public class Robot extends TimedRobot {
   private ClimberCommand m_Climber = new ClimberCommand(op);
   private Preflight m_Preflight = new Preflight();
   private SwerveDriveSubsystem m_SwerveDriveSubsystem = m_robotContainer.getDrive();
-
+  public Pigeon2 getPigeon() {
+    return m_robotContainer.getPigeon();
+  }
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer(m_Joystick1, m_Joystick2, op);
     m_Elevator.initOnce();
-    m_SwerveDriveSubsystem.configAuto(m_Shooter, m_Intake, m_Elevator);
+    m_SwerveDriveSubsystem.configAuto();
   }
 
   @Override

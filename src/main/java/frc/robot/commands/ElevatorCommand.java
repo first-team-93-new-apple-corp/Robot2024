@@ -14,8 +14,6 @@ public class ElevatorCommand extends Command {
 
     public ElevatorCommand(XboxController op) {
         this.op = op;
-        m_elevator.toAmp();
-        m_elevator.toSource();
     }
 
     public ElevatorCommand() {
@@ -30,11 +28,12 @@ public class ElevatorCommand extends Command {
     //     }
     //     finished = true;
     // }
-
+    public void toSetpoint(double setpoint) {
+        m_elevator.toSetpoint(setpoint);
+    }
     public boolean isFinished() {
         return finished;
     }
-
     @Override
     public void execute() {
         if (op.getPOV() == 0) {

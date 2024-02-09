@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -91,17 +92,21 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
         return speed;
     }
+
     public void toAmp() {
         toSetpoint(-76);
     }
+
     public void toSource() {
         toSetpoint(-60);
     }
+
     public void goDown() {
         toSetpoint(0);
     }
+
     public void zero() {
-        if(!bottomLimitTriggered()) {
+        if (!bottomLimitTriggered()) {
             runMotor(checkLimits(0.1));
         } else {
             runMotor(0);

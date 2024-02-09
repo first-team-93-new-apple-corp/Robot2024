@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
-
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -59,6 +59,18 @@ public class ShooterSubsystem extends SubsystemBase {
     public void kickerStop() {
         KickerL.set(0);
         KickerR.set(0);
+    }
+
+    public Command AutonKicker() {
+        return this.runOnce(() -> kicker());
+    }
+
+    public Command AutonAmp(){
+        return this.runOnce(() -> shootAmp());
+    }
+
+    public Command AutonShooter() {
+        return this.runOnce(() -> prime());
     }
 
     public void increaseSpeed() {

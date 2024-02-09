@@ -1,10 +1,12 @@
 // Copyright (c) FIRST and other WPILib contributors.
+
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
 
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -26,6 +28,8 @@ import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.DriveConstants;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
@@ -165,23 +169,20 @@ public class RobotContainer extends TimedRobot {
   }
   public void configAuto() {
     drivetrain.configAuto(
-      m_ShooterCommand,
-      m_IntakeCommand,
-      m_ElevatorCommand
     );
   }
-  public RobotContainer(Joystick m_Joystick1, Joystick m_Joystick2, XboxController op) {
+  public RobotContainer(Joystick m_Joystick1, Joystick m_Joystick2, XboxController op) { 
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.op = op;
-    m_ShooterCommand = new ShooterCommand();
-    m_IntakeCommand = new IntakeCommand();
-    m_ElevatorCommand = new ElevatorCommand(op);
-    drivetrain.configAuto(
-      m_ShooterCommand,
-      m_IntakeCommand,
-      m_ElevatorCommand
-    );
+    IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+    ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+    NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
+    NamedCommands.registerCommand("PrimeShooter", m_ShooterSubsystem.AutonShooter());   
+    NamedCommands.registerCommand("Shooter", m_ShooterSubsystem.AutonKicker());
+
+   
+    drivetrain.configAuto();
     
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -218,5 +219,8 @@ public class RobotContainer extends TimedRobot {
   }
   public SwerveDriveSubsystem getDrive() {
     return drivetrain;
+  }
+  public Pigeon2 getPigeon() {
+    return drivetrain.getPigeon2();
   }
 }

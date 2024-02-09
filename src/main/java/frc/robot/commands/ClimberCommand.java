@@ -58,12 +58,26 @@ public class ClimberCommand extends Command {
     public double rightDraw() {
         return m_climber.getRightDraw();
     }
+
+    public void changeLeftSetpoint(double amount) {
+        leftSetpoint = amount;
+    }
+    public void changeRightSetpoint(double amount) {
+        rightSetpoint = amount;
+    }
+
     public void changeLeft(double amount) {
         leftSetpoint += amount;
     }
     
     public void changeRight(double amount) {
         rightSetpoint += amount;
+    }
+    public void calculateLeft() {
+        m_climber.leftSpeed(leftPID.calculate(m_climber.leftPosition(), leftSetpoint));
+    }
+    public void calculateRight() {
+        m_climber.rightSpeed(rightPID.calculate(m_climber.rightPosition(), rightSetpoint));
     }
     @Override
     public void execute() {

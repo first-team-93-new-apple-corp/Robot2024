@@ -47,19 +47,8 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
     private Telemetry m_Telemetry = new Telemetry(MaxSpeed);
-    
-    public void configAuto(
-        ShooterCommand m_ShooterCommand,
-        IntakeCommand m_IntakeCommand,
-        ElevatorCommand m_ElevatorCommand
-    ) {
-        this.m_ShooterCommand = m_ShooterCommand;
-        this.m_IntakeCommand = m_IntakeCommand;
-        this.m_ElevatorCommand = m_ElevatorCommand;
-        
-        NamedCommands.registerCommand("Elevator", m_ElevatorCommand);
-        NamedCommands.registerCommand("Intake", m_IntakeCommand);
-        NamedCommands.registerCommand("Shooter", m_ShooterCommand);
+
+    public void configAuto() {
 
         // AutoBuilder.configureHolonomic(
         //         this::getPose, // Robot pose supplier

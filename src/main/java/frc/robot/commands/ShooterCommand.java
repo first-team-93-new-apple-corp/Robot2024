@@ -13,9 +13,6 @@ public class ShooterCommand extends Command {
 
     public ShooterCommand() {
         m_ShooterSubsystem = new ShooterSubsystem();
-        m_ShooterSubsystem.prime();
-        m_ShooterSubsystem.shootAmp();
-        m_ShooterSubsystem.kicker();
     }
 
     @Override
