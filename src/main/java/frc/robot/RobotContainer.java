@@ -177,7 +177,7 @@ public class RobotContainer extends TimedRobot {
             m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)
                 * MaxSpeed)
         .withRotationalRate(
-            m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
+            -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
                 * MaxAngularRate)));
 
     // Climbing Level logic added to button
