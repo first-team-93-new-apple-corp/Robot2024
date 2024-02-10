@@ -47,6 +47,16 @@
           ]
         }
       }
+    },
+    {
+      "name": "End Shooter",
+      "waypointRelativePos": 0.25,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
     }
   ],
   "globalConstraints": {

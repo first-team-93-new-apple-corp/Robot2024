@@ -43,6 +43,12 @@
               "data": {
                 "name": "Shooter"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "PrimeShooter"
+              }
             }
           ]
         }
