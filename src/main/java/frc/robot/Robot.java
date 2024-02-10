@@ -8,23 +8,27 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.ClimberCommand;
-import frc.robot.commands.ElevatorCommand;
-import frc.robot.commands.IntakeCommand;
+// import frc.robot.commands.ShooterCommand;
+// import frc.robot.commands.ClimberCommand;
+// import frc.robot.commands.ElevatorCommand;
+// import frc.robot.commands.IntakeCommand;
+import frc.robot.subsystems.CameraSubsystem;
 
 public class Robot extends TimedRobot {
   XboxController op = new XboxController(2);
+  CameraSubsystem m_cam = new CameraSubsystem();
   private Command m_autonomousCommand;
+  private Command m_Camera;
   private RobotContainer m_robotContainer;
-  private ShooterCommand m_Shooter = new ShooterCommand();
-  private IntakeCommand m_Intake = new IntakeCommand();
-  private ElevatorCommand m_Elevator = new ElevatorCommand(op);
-  private ClimberCommand m_Climber = new ClimberCommand(op);
+  // private ShooterCommand m_Shooter = new ShooterCommand();
+  // private IntakeCommand m_Intake = new IntakeCommand();
+  // private ElevatorCommand m_Elevator = new ElevatorCommand(op);
+  // private ClimberCommand m_Climber = new ClimberCommand(op);
 
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
+    m_cam.register();
   }
 
   @Override
@@ -70,10 +74,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_Intake.schedule();
-    m_Shooter.schedule();
-    m_Elevator.schedule();
-    m_Climber.schedule();
+    // m_Intake.schedule();
+    // m_Shooter.schedule();
+    // m_Elevator.schedule();
+    // m_Climber.schedule();
+      // m_Camera.schedule();
     m_robotContainer.updateValues();
     m_robotContainer.configureBindings();
   }
