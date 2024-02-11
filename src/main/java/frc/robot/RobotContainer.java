@@ -61,18 +61,14 @@ public class RobotContainer extends TimedRobot {
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
-  private final JoystickButton m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
-  private final JoystickButton m_JoystickButton2 = new JoystickButton(m_Joystick1,
-      Constants.Thrustmaster.Center_Button);
-  private final JoystickButton m_RobotRelButton = new JoystickButton(m_Joystick1,
-      Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
+  private final JoystickButton m_JoystickTrigger;
+  private final JoystickButton m_JoystickButton2;
+  private final JoystickButton m_RobotRelButton;
 
-  private final JoystickButton m_CameraRelButton = new JoystickButton(m_Joystick1,
-      Constants.Thrustmaster.Trigger);
+  private final JoystickButton m_CameraRelButton;
 
   // added this for button bindings and the logic I added
-  private final JoystickButton m_climingLevelButton = new JoystickButton(op,
-      climbingLevelButton);
+  private final JoystickButton m_climingLevelButton;
 
   private SwerveRequest.RobotCentric RobotCentricDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -204,6 +200,11 @@ public class RobotContainer extends TimedRobot {
   }
 
   public RobotContainer(Joystick m_Joystick1, Joystick m_Joystick2, XboxController op) {
+    m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
+    m_JoystickButton2 = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
+    m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
+    m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
+    m_climingLevelButton = new JoystickButton(op, climbingLevelButton);
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.op = op;

@@ -1,13 +1,8 @@
 {
   "HALProvider": {
-    "Other Devices": {
+    "RoboRIO": {
       "window": {
-        "visible": false
-      }
-    },
-    "Timing": {
-      "window": {
-        "visible": false
+        "visible": true
       }
     }
   },
@@ -29,6 +24,9 @@
     }
   },
   "NetworkTables Info": {
+    "AdvantageScope@1": {
+      "open": true
+    },
     "Clients": {
       "open": true
     },
@@ -37,6 +35,9 @@
     },
     "Server": {
       "Publishers": {
+        "open": true
+      },
+      "Subscribers": {
         "open": true
       },
       "open": true
@@ -49,7 +50,11 @@
         "open": true
       },
       "open": true
-    }
+    },
+    "elastic@2": {
+      "open": true
+    },
+    "visible": true
   },
   "NetworkTables View": {
     "visible": false
@@ -64,7 +69,7 @@
             0.05999999865889549,
             0.9399999976158142
           ],
-          "height": 338
+          "height": 303
         }
       ]
     }
