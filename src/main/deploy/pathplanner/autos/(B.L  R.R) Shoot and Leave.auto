@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.25,
+      "y": 6.45
+    },
+    "rotation": -145.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(B.L  R.R) Shoot and Leave"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Shoot and Leave",
+  "choreoAuto": false
+}
