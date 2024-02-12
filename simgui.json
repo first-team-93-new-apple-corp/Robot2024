@@ -9,69 +9,25 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/Auto Chooser": "String Chooser"
-    }
-  },
-  "NetworkTables": {
-    "Persistent Values": {
-      "open": false
-    },
-    "Retained Values": {
-      "open": false
-    },
-    "Transitory Values": {
-      "open": false
+      "/Pose": "Field2d",
+      "/SmartDashboard/Auto Chooser": "String Chooser",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Module 0": "Mechanism2d",
+      "/SmartDashboard/Module 1": "Mechanism2d",
+      "/SmartDashboard/Module 2": "Mechanism2d",
+      "/SmartDashboard/Module 3": "Mechanism2d"
     }
   },
   "NetworkTables Info": {
-    "AdvantageScope@1": {
-      "open": true
-    },
-    "Clients": {
-      "open": true
-    },
-    "Connections": {
-      "open": true
-    },
-    "Server": {
-      "Publishers": {
-        "open": true
-      },
-      "Subscribers": {
-        "open": true
-      },
-      "open": true
-    },
     "elastic@1": {
       "Publishers": {
-        "open": true
+        "open": false
       },
       "Subscribers": {
-        "open": true
+        "open": false
       },
-      "open": true
-    },
-    "elastic@2": {
-      "open": true
+      "open": false
     },
     "visible": true
-  },
-  "NetworkTables View": {
-    "visible": false
-  },
-  "Plot": {
-    "Plot <0>": {
-      "plots": [
-        {
-          "backgroundColor": [
-            0.05999999865889549,
-            0.05999999865889549,
-            0.05999999865889549,
-            0.9399999976158142
-          ],
-          "height": 303
-        }
-      ]
-    }
   }
 }

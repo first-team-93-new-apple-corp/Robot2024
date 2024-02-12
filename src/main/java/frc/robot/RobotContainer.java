@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -66,6 +67,7 @@ public class RobotContainer extends TimedRobot {
   private final JoystickButton m_RobotRelButton;
 
   private final JoystickButton m_CameraRelButton;
+  final Field2d m_field = new Field2d();
 
   // added this for button bindings and the logic I added
   private final JoystickButton m_climingLevelButton;
@@ -179,7 +181,8 @@ public class RobotContainer extends TimedRobot {
     // Climbing Level logic added to button
     // When the button of your choosing is held it should atomaticly do the climbing
     // level
-    m_climingLevelButton.whileTrue(m_ClimbingLevel);
+    
+    // m_climingLevelButton.whileTrue(m_ClimbingLevel);
 
     // Points all in a direction
     m_JoystickButton2.whileTrue(drivetrain
@@ -205,6 +208,7 @@ public class RobotContainer extends TimedRobot {
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_climingLevelButton = new JoystickButton(op, climbingLevelButton);
+    SmartDashboard.putData("Field", m_field);
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.op = op;
@@ -226,6 +230,7 @@ public class RobotContainer extends TimedRobot {
 
   public void updateValues() {
     SmartDashboard.putNumber("PigeonAngle", angle);
+    m_field.setRobotPose(drivetrain.getPose());
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
       fieldRelativeOffset = drivetrain.getPigeon2().getRotation2d().getRadians();
     }
