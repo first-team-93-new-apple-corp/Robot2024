@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ElevatorSubsystem extends SubsystemBase {
-    static DigitalInput topLimit;
-    static DigitalInput bottomLimit;
+    static DigitalInput topLimit = new DigitalInput(0);
+    static DigitalInput bottomLimit = new DigitalInput(1);
     TalonFX m_motor;
     TalonFXConfiguration m_motorconfig;
     double output;
@@ -35,8 +35,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void initOnce() {
-        topLimit = new DigitalInput(0);
-        bottomLimit = new DigitalInput(1);
+        // topLimit = new DigitalInput(0);
+        // bottomLimit = new DigitalInput(1);
     }
 
     public boolean topLimitTriggered() {

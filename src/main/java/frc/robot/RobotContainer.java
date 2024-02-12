@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.ClimberCommand;
-import frc.robot.commands.ClimbingLevel;
+import frc.robot.commands.ClimbingLevelCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
@@ -37,9 +37,9 @@ import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
 
 public class RobotContainer extends TimedRobot {
-  public ClimbingLevel m_ClimbingLevel;
-  public ShooterCommand m_ShooterCommand;
   public ClimberCommand m_ClimberCommand;
+  public ClimbingLevelCommand m_ClimbingLevel;
+  public ShooterCommand m_ShooterCommand;
   public IntakeCommand m_IntakeCommand;
   public ElevatorCommand m_ElevatorCommand;
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
@@ -182,7 +182,7 @@ public class RobotContainer extends TimedRobot {
     // When the button of your choosing is held it should atomaticly do the climbing
     // level
     
-    // m_climingLevelButton.whileTrue(m_ClimbingLevel);
+    m_climingLevelButton.whileTrue(m_ClimbingLevel.levelCommand());
 
     // Points all in a direction
     m_JoystickButton2.whileTrue(drivetrain
@@ -208,12 +208,15 @@ public class RobotContainer extends TimedRobot {
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_climingLevelButton = new JoystickButton(op, climbingLevelButton);
+    m_ClimberCommand = new ClimberCommand();
+    m_ClimbingLevel = new ClimbingLevelCommand(m_ClimberCommand);
     SmartDashboard.putData("Field", m_field);
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.op = op;
     IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
     ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+    // m_LevelCommand = new ClimbingLevelCommand(null)
     NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
     NamedCommands.registerCommand("PrimeShooter", m_ShooterSubsystem.AutonShooter());
     NamedCommands.registerCommand("Shooter", m_ShooterSubsystem.AutonKicker());
