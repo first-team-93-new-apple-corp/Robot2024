@@ -40,6 +40,9 @@ public class RobotContainer extends TimedRobot {
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
+  private final JoystickButton m_JoystickRightTopMiddle = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Middle);
+  private final JoystickButton m_JoystickRightBottomMiddle = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Bottom_Middle);
+
   private final JoystickButton m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
   private final JoystickButton m_JoystickButton2 = new JoystickButton(m_Joystick1,
       Constants.Thrustmaster.Center_Button);
@@ -126,10 +129,12 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void configureBindings() {
+    if (m_Joystick1.getRawButtonReleased(Constants.Thrustmaster.Right_Buttons.Top_Middle) || (m_Joystick1.getRawButtonReleased(Constants.Thrustmaster.Right_Buttons.Bottom_Middle))){
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> m_swerveRequest
             .withCenterOfRotation(DriveConstants.dCenter)
             .withSpeeds(speeds)));
+    }
     // m_Joystick2Trigger.onTrue(m_Vision.Thing());
     // Brake while held
     m_JoystickTrigger.whileTrue(drivetrain.applyRequest(() -> brake));
