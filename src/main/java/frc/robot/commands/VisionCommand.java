@@ -11,19 +11,19 @@ public class VisionCommand extends Command {
     // double Tty = 20.84;
     // double Tta = 2.61;
     // double Ttl = 22-25;
-    Joystick joystick1 = new Joystick(1);
+    Joystick m_joystick1 = new Joystick(0);
     VisionSubsystem Vision;
 
-    public VisionCommand() {
-        Vision = new VisionSubsystem();
+    public VisionCommand(SwerveDriveSubsystem drivetrain) {
+        Vision = new VisionSubsystem(drivetrain);
     }
 
     @Override
     public void execute() {
         Vision.hasTargets();
-        if (joystick1.getRawButton(Constants.Thrustmaster.Right_Button)) {
+        if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Top_Middle)) {
             Vision.AutoAimAmp();
-        } else if (joystick1.getRawButton(Constants.Thrustmaster.Left_Button)) {
+        } else if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Bottom_Middle)) {
             Vision.AutoAimTrap();
         }
         // Vision.periodic();

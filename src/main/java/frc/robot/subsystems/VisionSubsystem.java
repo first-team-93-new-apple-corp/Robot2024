@@ -7,24 +7,31 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class VisionSubsystem extends SubsystemBase {
+    ChassisSpeeds alignSpeeds;
     NetworkTable m_limelight = NetworkTableInstance.getDefault().getTable("limelight-front");
+    private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
+    PIDController AlignPID = new PIDController(0.05, 0, 0);
     double tx, ty, tl, ta, tid, targetpose_robotspace;
     Pose2d pose;
     double LimelightAngle = 29.8;
-    SwerveDriveSubsystem m_DriveSubsystem = TunerConstants.DriveTrain;
+    SwerveDriveSubsystem drivetrain;
     Telemetry m_Telemetry;
     SwerveDriveState state;
+    Joystick m_joystick1 = new Joystick(0);
     double[] LimelightValue = new double[4];
     double[] LimelightTrapValue = new double[4];
     Joystick joystick1 = new Joystick(1);
@@ -35,8 +42,8 @@ public class VisionSubsystem extends SubsystemBase {
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
             .withSteerRequestType(SteerRequestType.MotionMagicExpo);
 
-    public VisionSubsystem() {
-
+    public VisionSubsystem(SwerveDriveSubsystem drivetrain) {
+        this.drivetrain = drivetrain;
         tx = m_limelight.getEntry("tx").getDouble(0);
         ty = m_limelight.getEntry("ty").getDouble(0);
         tl = m_limelight.getEntry("tl").getDouble(0);
@@ -51,7 +58,16 @@ public class VisionSubsystem extends SubsystemBase {
         tl = m_limelight.getEntry("tl").getDouble(0);
         ta = m_limelight.getEntry("ta").getDouble(0);
         tid = m_limelight.getEntry("tid").getDouble(0);
+        SmartDashboard.putNumber("PIDOutput", AlignPID.calculate(tx, 0));
+        // System.out.println("updateing value");
         targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDouble(0);
+        // System.out.println(AlignPID.calculate(tx, 0));
+        
+        alignSpeeds = new ChassisSpeeds(
+                (0.2), // Velocity X
+                (0), // Velocity Y
+                (AlignPID.calculate(tx, 0))); // Rotational Speeds
+
     }
 
     public boolean hasTargets() {
@@ -62,71 +78,51 @@ public class VisionSubsystem extends SubsystemBase {
     public void AutoAimTrap() {
         updateValues();
         Optional<Alliance> DS = DriverStation.getAlliance();
-        if (hasTargets()) {
-            if (DS.get() == Alliance.Red) {
-                // if (joystick1.getRawButton(Constants.Thrustmaster.Center_Button)) {
-                //     // auto aim to trap
-                //     if (tid == 16 || tid == 15 || tid == 14) {
-                //         // see trap
-                //         m_DriveSubsystem.setControl(m_driveRequest.withRotationalRate(tx / 29.8));
-                //     }
-                // }
-            }
-            if (DS.get() == Alliance.Blue) {
-                if (joystick1.getRawButton(Constants.Thrustmaster.Center_Button)) {
-                    // auto aim to trap
-                    if (tid == 16 || tid == 15 || tid == 14) {
-                        // see trap
-                        // m_DriveSubsystem.applyRequest(m_driveRequest.withRotationalRate(tx / 29.8));
-                    }
+        // if (hasTargets()) {
+        if (DS.get() == Alliance.Red) {
+            // if (joystick1.getRawButton(Constants.Thrustmaster.Center_Button)) {
+            // // auto aim to trap
+            // if (tid == 16 || tid == 15 || tid == 14) {
+            // // see trap
+            // m_DriveSubsystem.setControl(m_driveRequest.withRotationalRate(tx / 29.8));
+            // }
+            // }
+        }
+        if (DS.get() == Alliance.Blue) {
+            if (joystick1.getRawButton(Constants.Thrustmaster.Center_Button)) {
+                // auto aim to trap
+                if (tid == 16 || tid == 15 || tid == 14) {
+                    // see trap
+                    // m_DriveSubsystem.applyRequest(m_driveRequest.withRotationalRate(tx / 29.8));
                 }
             }
         }
+        // }
     }
 
     public void AutoAimAmp() {
-        updateValues();
-        Optional<Alliance> DS = DriverStation.getAlliance();
-        if (hasTargets()) {
-            // if (DS.get() == Alliance.Red) {
-            //     // auto aim to amp
-            //     if (tid == 6) {
-            //         // see amp
-            //         m_DriveSubsystem.setControl(m_driveRequest.withRotationalRate(tx / 29.8));
-            //     }
-            // }
-            if (DS.get() == Alliance.Blue) {
-                // auto aim to amp
-                if (tid == 6) {
-                    // see amp
-                    AimAmp();
-                }
-            }
-        }
-    }
-    public void AimAmp(){
-        if (tx > 0){
-            LimelightAngle = -LimelightAngle;
-        } else if (tx < 0){
-            LimelightAngle = LimelightAngle;
-        } else {
-            return;
-        }
-        m_DriveSubsystem.applyRequest(() -> m_driveRequest
-        .withVelocityX(0)
-        .withVelocityY(0)
-        .withRotationalRate(tx * LimelightAngle));
-    }
+        // updateValues();
+        // Optional<Alliance> DS = DriverStation.getAlliance();
+        // if (hasTargets()) {
+        // if (DS.get() == Alliance.Red) {
+        // if (tid == 6) {
+        // see amp
 
-    public void gotoTrap(double[] LimelightTrapValue) {
-        double Ttx = -3.6665;
-        double Tty = 20.84;
-        double Tta = 2.61;
-        double Ttl = 22 - 25;
-        LimelightTrapValue[0] = Ttx;
-        LimelightTrapValue[1] = Tty;
-        LimelightTrapValue[2] = Ttl;
-        LimelightTrapValue[3] = Tta;
+        // }
+        // }
+        // if (DS.get() == Alliance.Blue) {
+        // auto aim to amp
+        // if (tid == 6) {
+        // see amp
+        System.out.println("alining");
+        drivetrain.driveRobotRelative(alignSpeeds);
+        // drivetrain.applyRequest(() -> m_swerveRequest
+        //         .withCenterOfRotation(DriveConstants.dCenter)
+        //         .withSpeeds(alignSpeeds));
+
+        // }
+        // }
+        // }
     }
 
     public Pose2d getPose2d() {
@@ -136,10 +132,9 @@ public class VisionSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         updateValues();
-        LimelightValue[0] = tx;
-        LimelightValue[1] = ty;
-        LimelightValue[2] = tl;
-        LimelightValue[3] = ta;
+        if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Top_Middle)) {
+            AutoAimAmp();
+        }
         SmartDashboard.putBoolean("Has targets", hasTargets());
         SmartDashboard.putNumberArray("LimelightValues", LimelightValue);
         // if (hasTargets()) {

@@ -18,7 +18,7 @@ import frc.robot.subsystems.CameraSubsystem;
 public class Robot extends TimedRobot {
   XboxController op = new XboxController(2);
   CameraSubsystem m_cam = new CameraSubsystem();
-  VisionCommand m_Vision = new VisionCommand();
+  VisionCommand m_Vision;
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
   // private ShooterCommand m_Shooter = new ShooterCommand();
@@ -29,6 +29,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
+    m_Vision = new VisionCommand(m_robotContainer.getDrivetrain());
     m_cam.register();
   }
 

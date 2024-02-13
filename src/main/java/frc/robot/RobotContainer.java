@@ -19,10 +19,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class RobotContainer extends TimedRobot {
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
@@ -43,6 +45,7 @@ public class RobotContainer extends TimedRobot {
       Constants.Thrustmaster.Center_Button);
   private final JoystickButton m_RobotRelButton = new JoystickButton(m_Joystick1,
       Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
+  private final JoystickButton m_Joystick2Trigger = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Trigger);
 
   private SwerveRequest.RobotCentric RobotCentricDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -75,7 +78,9 @@ public class RobotContainer extends TimedRobot {
     pov315 = new POVButton(m_Joystick2, 315); // fl wheel
     povCenter = new POVButton(m_Joystick2, -1);
   }
-
+  public SwerveDriveSubsystem getDrivetrain(){
+    return drivetrain;
+  }
   public void POVButton() {
     // SmartDashboard.putNumber("Limit", Limit);
     if (!(m_Joystick2.getRawAxis(0) <= 0.1 && m_Joystick2.getRawAxis(0) >= -0.1)) {
@@ -125,7 +130,7 @@ public class RobotContainer extends TimedRobot {
         drivetrain.applyRequest(() -> m_swerveRequest
             .withCenterOfRotation(DriveConstants.dCenter)
             .withSpeeds(speeds)));
-
+    // m_Joystick2Trigger.onTrue(m_Vision.Thing());
     // Brake while held
     m_JoystickTrigger.whileTrue(drivetrain.applyRequest(() -> brake));
     m_RobotRelButton.onTrue(drivetrain.applyRequest(() -> RobotCentricDrive
@@ -171,9 +176,12 @@ public class RobotContainer extends TimedRobot {
     speeds = new ChassisSpeeds(
         (checkDeadzone(m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * MaxSpeed),
         (checkDeadzone(m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
-        (checkDeadzone(m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxAngularRate));
-    fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
-    SmartDashboard.putNumber("E", new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians()).rotateBy(new Rotation2d(-fieldRelativeOffset)).getDegrees());
+        (checkDeadzone(m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.rotate)) * MaxAngularRate));
+    fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
+        new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
+            .rotateBy(new Rotation2d(-fieldRelativeOffset)));
+    SmartDashboard.putNumber("E", new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
+        .rotateBy(new Rotation2d(-fieldRelativeOffset)).getDegrees());
     RotationPoints(m_Joystick2);
     POVButton();
   }
