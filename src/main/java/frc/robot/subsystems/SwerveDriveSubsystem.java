@@ -31,7 +31,7 @@ import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 
-public class SwerveDriveSubsystem extends DriveBaseSubsystem {
+public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
     public XboxController opController = new XboxController(2);
     public ShooterCommand m_ShooterCommand = new ShooterCommand();
     public IntakeCommand m_IntakeCommand = new IntakeCommand();
