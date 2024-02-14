@@ -138,7 +138,7 @@ public class RobotContainer extends TimedRobot {
       drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
           drivetrain.applyRequest(() -> m_swerveRequest
               .withCenterOfRotation(DriveConstants.dCenter)
-              .withSpeeds(speeds)));
+              .withSpeeds(fieldSpeeds)));
              
     // m_Joystick2Trigger.onTrue(m_Vision.Thing());
     // Brake while held
@@ -188,7 +188,7 @@ public class RobotContainer extends TimedRobot {
         (checkDeadzone(m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
         (checkDeadzone(m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxAngularRate));
 
-    fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
+        fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
         new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
             .rotateBy(new Rotation2d(-fieldRelativeOffset)));
     SmartDashboard.putNumber("E", new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())

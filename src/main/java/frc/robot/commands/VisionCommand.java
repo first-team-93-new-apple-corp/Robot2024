@@ -22,9 +22,11 @@ public class VisionCommand extends Command {
     public void execute() {
         Vision.hasTargets();
         if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Top_Middle)) {
-            Vision.AutoAimAmp();
-        } else if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Bottom_Middle)) {
-            Vision.AutoAimTrap();
+            Vision.AutoAim();
+        } else if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Top_Left)){
+            Vision.LimeLightOn();
+        } else if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Bottom_Left)){
+            Vision.LimeLightOff();
         }
         // Vision.periodic();
     }
