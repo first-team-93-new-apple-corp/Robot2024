@@ -3,7 +3,7 @@ package frc.robot.commands;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Code24.IntakeSubsystem;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
 

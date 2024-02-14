@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Code24;
 
 import java.util.function.Supplier;
 
@@ -26,18 +26,18 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.DriveBaseSubsystem;
 
-public class SwerveDriveSubsystem extends DriveBaseSubsystem {
+public class SwerveDriveSubsystem2024 extends DriveBaseSubsystem {
     public XboxController opController = new XboxController(2);
     public ShooterCommand m_ShooterCommand = new ShooterCommand();
     public IntakeCommand m_IntakeCommand = new IntakeCommand();
     public ElevatorCommand m_ElevatorCommand = new ElevatorCommand(opController);
-    public final double MaxSpeed = DriveConstants.MaxSpeed;
-    public final double MaxAngularRate = DriveConstants.MaxAngularRate;
+    public final double MaxSpeed = DriveConstants24.MaxSpeed;
+    public final double MaxAngularRate = DriveConstants24.MaxAngularRate;
     private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric()
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
@@ -46,7 +46,7 @@ public class SwerveDriveSubsystem extends DriveBaseSubsystem {
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
-    private Telemetry m_Telemetry = new Telemetry(MaxSpeed);
+    private Telemetry24 m_Telemetry = new Telemetry24(MaxSpeed);
 
     public void configAuto() {
 
@@ -89,7 +89,7 @@ public class SwerveDriveSubsystem extends DriveBaseSubsystem {
             (speeds)->this.setControl(autoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the robot
             new HolonomicPathFollowerConfig(new PIDConstants(10, 0, 0),
                                             new PIDConstants(10, 0, 0),
-                                            TunerConstants.kSpeedAt12VoltsMps,
+                                            TunerConstants24.kSpeedAt12VoltsMps,
                                             driveBaseRadius,
                                             new ReplanningConfig()),
             ()-> (DriverStation.getAlliance().get() == DriverStation.Alliance.Red), // Change this if the path needs to be flipped on red vs blue
@@ -102,7 +102,7 @@ public class SwerveDriveSubsystem extends DriveBaseSubsystem {
     public void applyConfig(TalonFXConfiguration config, TalonFXConfigurator configurator) {
         
     }
-    public SwerveDriveSubsystem(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
+    public SwerveDriveSubsystem2024(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
             SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
         if (Utils.isSimulation()) {
@@ -119,7 +119,7 @@ public class SwerveDriveSubsystem extends DriveBaseSubsystem {
         return yaw;
       }
 
-    public SwerveDriveSubsystem(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
+    public SwerveDriveSubsystem2024(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         if (Utils.isSimulation()) {
             startSimThread();
@@ -168,7 +168,7 @@ public class SwerveDriveSubsystem extends DriveBaseSubsystem {
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
-    private void startSimThread() {
+    public void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 
         /* Run simulation at a faster rate so PID gains behave more reasonably */

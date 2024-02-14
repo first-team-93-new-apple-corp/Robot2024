@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public abstract class DriveBaseSubsystem extends SwerveDrivetrain implements Subsystem {
     public abstract void configAuto();
+    public abstract void startSimThread();
 
     public DriveBaseSubsystem(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
             SwerveModuleConstants... modules) {

@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Code24;
 
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -65,7 +65,7 @@ public class ShooterSubsystem extends SubsystemBase {
         return this.runOnce(() -> kicker());
     }
 
-    public Command AutonAmp(){
+    public Command AutonAmp() {
         return this.runOnce(() -> shootAmp());
     }
 

@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Code24;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -18,7 +18,7 @@ public class IntakeSubsystem extends SubsystemBase {
         backIntake = new TalonFX(Constants.CTRE.RIO.B_Intake, "rio");
         backIntake.setInverted(false);
     }
-    
+
     public void Intake() {
         frontIntake.set(-IntakeSpeed);
         backIntake.set(-IntakeSpeed);

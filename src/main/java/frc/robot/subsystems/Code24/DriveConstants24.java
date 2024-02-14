@@ -1,9 +1,9 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Code24;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
-public class DriveConstants {
+public class DriveConstants24 {
         public static final double yOffset = 0;
         public static final double MaxSpeed = 6; // 6 Meters per second or 19.6850394 freedom units per second
         public static final double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation in radians (for some reason)

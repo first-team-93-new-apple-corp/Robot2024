@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Code24;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain.SwerveDriveState;
@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Telemetry extends SubsystemBase{
+public class Telemetry24 extends SubsystemBase{
     private final double MaxSpeed;
 
     /**
@@ -25,7 +25,7 @@ public class Telemetry extends SubsystemBase{
      * 
      * @param maxSpeed Maximum speed in meters per second
      */
-    public Telemetry(double maxSpeed) {
+    public Telemetry24(double maxSpeed) {
         MaxSpeed = maxSpeed;
     }
 

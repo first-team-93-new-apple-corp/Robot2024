@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Code24;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -112,6 +112,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             runMotor(0);
         }
     }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Elevator Pos", m_motor.getPosition().getValueAsDouble());
