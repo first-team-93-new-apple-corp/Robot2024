@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.security.ProviderException;
 import java.util.Optional;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain.SwerveDriveState;
@@ -23,17 +24,20 @@ import frc.robot.Constants;
 public class VisionSubsystem extends SubsystemBase {
     ChassisSpeeds alignSpeeds;
     NetworkTable m_limelight = NetworkTableInstance.getDefault().getTable("limelight-front");
-    PIDController AlignPID = new PIDController(0.1125, 0, 0);
-    double tx, ty, tl, ta, tid, targetpose_robotspace;
+    PIDController AlignRotatePID = new PIDController(0.1125, 0, 0); //Rotationly PID
+    PIDController AlignXPID = new PIDController(0.1125, 0, 0); // Horizontal PID
+    PIDController AlignYPID = new PIDController(0.1125, 0, 0); // Proximity PID
+    double tx, ty, tl, ta, tid, targetpose_robotspace, PIDRotate, PIDx, PIDy;
     Pose2d pose;
-    double PIDSetpoint = 13.5;
+    double PIDSetpointRotate = 13.5;
+    double PIDSetpointX = 13.5;
+    double PIDSetpointY = -7;
     double LimelightAngle = 29.8;
-    double PIDtx;
+    double MaxRotate = DriveConstants.MaxAngularRate;
     SwerveDriveSubsystem drivetrain;
     Telemetry m_Telemetry;
     SwerveDriveState state;
     Joystick m_joystick1 = new Joystick(0);
-    double[] LimelightValue = new double[4];
     Joystick joystick1 = new Joystick(1);
     public final double MaxSpeed = DriveConstants.MaxSpeed;
     public final double MaxAngularRate = DriveConstants.MaxAngularRate;
@@ -58,17 +62,20 @@ public class VisionSubsystem extends SubsystemBase {
         tl = m_limelight.getEntry("tl").getDouble(0);
         ta = m_limelight.getEntry("ta").getDouble(0);
         tid = m_limelight.getEntry("tid").getDouble(0);
-        PIDtx = Math.max(LimelightAngle, targetpose_robotspace)
-        SmartDashboard.putNumber("PIDOutput", AlignPID.calculate(-tx, PIDSetpoint/10));
+        PIDRotate = tx / DriveConstants.MaxSpeed;
+        PIDx = tx / DriveConstants.MaxSpeed;
+        PIDy = ta / DriveConstants.MaxSpeed;
+        SmartDashboard.putNumber("PIDOutput", AlignRotatePID.calculate(-PIDRotate, PIDSetpointRotate));
+        SmartDashboard.putNumber("PIDOutput", AlignRotatePID.calculate(-PIDx, PIDSetpointX));
+        SmartDashboard.putNumber("PIDOutput", AlignRotatePID.calculate(PIDy, PIDSetpointY));
         // System.out.println("updateing value");
         targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDouble(0);
         // System.out.println(AlignPID.calculate(tx, 0));
 
         alignSpeeds = new ChassisSpeeds(
-                (0), // Velocity X
+                ((AlignYPID.calculate(PIDy, PIDSetpointY))), // Velocity X
                 (0), // Velocity Y
-                ((AlignPID.calculate((-tx / 10) , PIDSetpoint / 10)))); // Rotational Speeds
-
+                ((AlignRotatePID.calculate(-PIDRotate , PIDSetpointRotate)))); // Rotational Speeds
     }
 
     public boolean hasTargets() {
@@ -99,14 +106,5 @@ public class VisionSubsystem extends SubsystemBase {
     public void periodic() {
         updateValues();
         SmartDashboard.putBoolean("Has targets", hasTargets());
-        SmartDashboard.putNumberArray("LimelightValues", LimelightValue);
-        // if (hasTargets()) {
-        // double[] botpose = m_limelight.getEntry("botpose").getDoubleArray(new
-        // double[6]);
-        // pose = new Pose2d(new Translation2d(botpose[0], botpose[1]), new
-        // Rotation2d(drivetrain.getRotation3d().getAngle()));
-        // drivetrain.runOnce(() -> drivetrain.resetOdometry(pose));
-        // System.out.println("Updated pose");
-        // }
     }
 }
