@@ -23,10 +23,10 @@ import frc.robot.Constants;
 public class VisionSubsystem extends SubsystemBase {
     ChassisSpeeds alignSpeeds;
     NetworkTable m_limelight = NetworkTableInstance.getDefault().getTable("limelight-front");
-    private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
-    PIDController AlignPID = new PIDController(0.05, 0, 0);
+    PIDController AlignPID = new PIDController(0.1125, 0, 0);
     double tx, ty, tl, ta, tid, targetpose_robotspace;
     Pose2d pose;
+    double PIDSetpoint = 13.5;
     double LimelightAngle = 29.8;
     SwerveDriveSubsystem drivetrain;
     Telemetry m_Telemetry;
@@ -58,15 +58,17 @@ public class VisionSubsystem extends SubsystemBase {
         tl = m_limelight.getEntry("tl").getDouble(0);
         ta = m_limelight.getEntry("ta").getDouble(0);
         tid = m_limelight.getEntry("tid").getDouble(0);
-        SmartDashboard.putNumber("PIDOutput", AlignPID.calculate(tx, 0));
+        SmartDashboard.putNumber("PIDOutput", AlignPID.calculate(-tx, PIDSetpoint));
         // System.out.println("updateing value");
         targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDouble(0);
         // System.out.println(AlignPID.calculate(tx, 0));
-        
-        alignSpeeds = new ChassisSpeeds(
-                (0.2), // Velocity X
+
+   
+            alignSpeeds = new ChassisSpeeds(
+                (0), // Velocity X
                 (0), // Velocity Y
-                (AlignPID.calculate(tx, 0))); // Rotational Speeds
+                ((AlignPID.calculate(-tx, PIDSetpoint)))); // Rotational Speeds
+        
 
     }
 
@@ -102,27 +104,30 @@ public class VisionSubsystem extends SubsystemBase {
 
     public void AutoAimAmp() {
         // updateValues();
-        // Optional<Alliance> DS = DriverStation.getAlliance();
-        // if (hasTargets()) {
-        // if (DS.get() == Alliance.Red) {
-        // if (tid == 6) {
-        // see amp
+        Optional<Alliance> DS = DriverStation.getAlliance();
+        if (hasTargets()) {
+            if (DS.get() == Alliance.Red) {
+                if (tid == 6) {
+                    // see amp
 
-        // }
-        // }
-        // if (DS.get() == Alliance.Blue) {
-        // auto aim to amp
-        // if (tid == 6) {
-        // see amp
-        System.out.println("alining");
-        drivetrain.driveRobotRelative(alignSpeeds);
-        // drivetrain.applyRequest(() -> m_swerveRequest
-        //         .withCenterOfRotation(DriveConstants.dCenter)
-        //         .withSpeeds(alignSpeeds));
+                    System.out.println("alining");
+                    drivetrain.driveRobotRelative(alignSpeeds);
 
-        // }
-        // }
-        // }
+                }
+            }
+            if (DS.get() == Alliance.Blue) {
+                // auto aim to amp
+                if (tid == 6) {
+                    // see amp
+                    System.out.println("alining");
+                    drivetrain.driveRobotRelative(alignSpeeds);
+                    // drivetrain.applyRequest(() -> m_swerveRequest
+                    // .withCenterOfRotation(DriveConstants.dCenter)
+                    // .withSpeeds(alignSpeeds));
+
+                }
+            }
+        }
     }
 
     public Pose2d getPose2d() {
@@ -132,9 +137,6 @@ public class VisionSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         updateValues();
-        if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Top_Middle)) {
-            AutoAimAmp();
-        }
         SmartDashboard.putBoolean("Has targets", hasTargets());
         SmartDashboard.putNumberArray("LimelightValues", LimelightValue);
         // if (hasTargets()) {

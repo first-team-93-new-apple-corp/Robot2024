@@ -40,8 +40,10 @@ public class RobotContainer extends TimedRobot {
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
-  private final JoystickButton m_JoystickRightTopMiddle = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Middle);
-  private final JoystickButton m_JoystickRightBottomMiddle = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Bottom_Middle);
+  private final JoystickButton m_JoystickRightTopMiddle = new JoystickButton(m_Joystick1,
+      Constants.Thrustmaster.Right_Buttons.Top_Middle);
+  private final JoystickButton m_JoystickRightBottomMiddle = new JoystickButton(m_Joystick1,
+      Constants.Thrustmaster.Right_Buttons.Bottom_Middle);
 
   private final JoystickButton m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
   private final JoystickButton m_JoystickButton2 = new JoystickButton(m_Joystick1,
@@ -56,6 +58,7 @@ public class RobotContainer extends TimedRobot {
 
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+  VisionCommand m_Vision = new VisionCommand(drivetrain);
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
   POVButton pov0; // front
@@ -81,9 +84,11 @@ public class RobotContainer extends TimedRobot {
     pov315 = new POVButton(m_Joystick2, 315); // fl wheel
     povCenter = new POVButton(m_Joystick2, -1);
   }
-  public SwerveDriveSubsystem getDrivetrain(){
+
+  public SwerveDriveSubsystem getDrivetrain() {
     return drivetrain;
   }
+
   public void POVButton() {
     // SmartDashboard.putNumber("Limit", Limit);
     if (!(m_Joystick2.getRawAxis(0) <= 0.1 && m_Joystick2.getRawAxis(0) >= -0.1)) {
@@ -129,24 +134,24 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void configureBindings() {
-    if (m_Joystick1.getRawButtonReleased(Constants.Thrustmaster.Right_Buttons.Top_Middle) || (m_Joystick1.getRawButtonReleased(Constants.Thrustmaster.Right_Buttons.Bottom_Middle))){
-    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> m_swerveRequest
-            .withCenterOfRotation(DriveConstants.dCenter)
-            .withSpeeds(speeds)));
-    }
+    m_JoystickRightTopMiddle.whileTrue(m_Vision);
+      drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+          drivetrain.applyRequest(() -> m_swerveRequest
+              .withCenterOfRotation(DriveConstants.dCenter)
+              .withSpeeds(speeds)));
+             
     // m_Joystick2Trigger.onTrue(m_Vision.Thing());
     // Brake while held
     m_JoystickTrigger.whileTrue(drivetrain.applyRequest(() -> brake));
     m_RobotRelButton.onTrue(drivetrain.applyRequest(() -> RobotCentricDrive
         .withVelocityX(
-            -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
+            m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
                 * MaxSpeed)
         .withVelocityY(
-            -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)
+            m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)
                 * MaxSpeed)
         .withRotationalRate(
-            -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
+            m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
                 * MaxAngularRate)));
 
     // Points all in a direction
@@ -181,7 +186,8 @@ public class RobotContainer extends TimedRobot {
     speeds = new ChassisSpeeds(
         (checkDeadzone(m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * MaxSpeed),
         (checkDeadzone(m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
-        (checkDeadzone(m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.rotate)) * MaxAngularRate));
+        (checkDeadzone(m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxAngularRate));
+
     fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
         new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
             .rotateBy(new Rotation2d(-fieldRelativeOffset)));

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,6 +17,7 @@ import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.CameraSubsystem;
 
 public class Robot extends TimedRobot {
+  Joystick m_Joystick1 = new Joystick(0);
   XboxController op = new XboxController(2);
   CameraSubsystem m_cam = new CameraSubsystem();
   VisionCommand m_Vision;
