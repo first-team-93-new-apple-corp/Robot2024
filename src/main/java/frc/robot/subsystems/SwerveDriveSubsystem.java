@@ -27,15 +27,16 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.commands.ElevatorCommand;
+// import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 
 public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem {
     public XboxController opController = new XboxController(2);
     public ShooterCommand m_ShooterCommand = new ShooterCommand();
-    public IntakeCommand m_IntakeCommand = new IntakeCommand();
-    public ElevatorCommand m_ElevatorCommand = new ElevatorCommand(opController);
+    public ShooterSubsystem m_shooter = new ShooterSubsystem();
+    public IntakeCommand m_IntakeCommand = new IntakeCommand(m_shooter);
+    // public ElevatorCommand m_ElevatorCommand = new ElevatorCommand(opController);
     public final double MaxSpeed = DriveConstants.MaxSpeed;
     public final double MaxAngularRate = DriveConstants.MaxAngularRate;
     private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric()

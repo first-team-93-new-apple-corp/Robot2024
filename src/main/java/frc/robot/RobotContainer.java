@@ -24,8 +24,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.ClimberCommand;
-import frc.robot.commands.ClimbingLevel;
-import frc.robot.commands.ElevatorCommand;
+// import frc.robot.commands.ClimbingLevel;
+// import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.DriveConstants;
@@ -36,11 +36,11 @@ import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
 
 public class RobotContainer extends TimedRobot {
-  public ClimbingLevel m_ClimbingLevel;
+  // public ClimbingLevel m_ClimbingLevel;
   public ShooterCommand m_ShooterCommand;
   public ClimberCommand m_ClimberCommand;
   public IntakeCommand m_IntakeCommand;
-  public ElevatorCommand m_ElevatorCommand;
+  // public ElevatorCommand m_ElevatorCommand;
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private final SendableChooser<Command> autoChooser;
@@ -61,18 +61,14 @@ public class RobotContainer extends TimedRobot {
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
-  private final JoystickButton m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
-  private final JoystickButton m_JoystickButton2 = new JoystickButton(m_Joystick1,
-      Constants.Thrustmaster.Center_Button);
-  private final JoystickButton m_RobotRelButton = new JoystickButton(m_Joystick1,
-      Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
+  private JoystickButton m_JoystickTrigger;
+  private JoystickButton m_JoystickButton2;
+  private JoystickButton m_RobotRelButton;
 
-  private final JoystickButton m_CameraRelButton = new JoystickButton(m_Joystick1,
-      Constants.Thrustmaster.Trigger);
+  private JoystickButton m_CameraRelButton;
 
   // added this for button bindings and the logic I added
-  private final JoystickButton m_climingLevelButton = new JoystickButton(op,
-      climbingLevelButton);
+  private JoystickButton m_climbingLevelButton;
 
   private SwerveRequest.RobotCentric RobotCentricDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -184,7 +180,7 @@ public class RobotContainer extends TimedRobot {
     // Climbing Level logic added to button
     // When the button of your choosing is held it should atomaticly do the climbing
     // level
-    m_climingLevelButton.whileTrue(m_ClimbingLevel);
+    // m_climbingLevelButton.whileTrue(m_ClimbingLevel);
 
     // Points all in a direction
     m_JoystickButton2.whileTrue(drivetrain
@@ -208,8 +204,13 @@ public class RobotContainer extends TimedRobot {
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.op = op;
-    IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+    m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
+    m_JoystickButton2 = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
+    m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
+    m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
+    m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);
     ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+    IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
     NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
     NamedCommands.registerCommand("PrimeShooter", m_ShooterSubsystem.AutonShooter());
     NamedCommands.registerCommand("Shooter", m_ShooterSubsystem.AutonKicker());
@@ -236,8 +237,6 @@ public class RobotContainer extends TimedRobot {
     fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
         new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
             .rotateBy(new Rotation2d(-fieldRelativeOffset)));
-    SmartDashboard.putNumber("E", new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
-        .rotateBy(new Rotation2d(-fieldRelativeOffset)).getDegrees());
     RotationPoints(m_Joystick2);
     POVButton();
   }
