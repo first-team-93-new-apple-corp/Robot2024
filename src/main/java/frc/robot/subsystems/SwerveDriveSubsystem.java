@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 
-public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem {
+public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
     public XboxController opController = new XboxController(2);
     public ShooterCommand m_ShooterCommand = new ShooterCommand();
     public ShooterSubsystem m_shooter = new ShooterSubsystem();

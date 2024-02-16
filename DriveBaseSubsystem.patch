@@ -1,0 +1,40 @@
+diff --git a/src/main/java/frc/robot/subsystems/DriveBaseSubsystem.java b/src/main/java/frc/robot/subsystems/DriveBaseSubsystem.java
+new file mode 100644
+index 0000000..a5f1008
+--- /dev/null
++++ b/src/main/java/frc/robot/subsystems/DriveBaseSubsystem.java
+@@ -0,0 +1,21 @@
++package frc.robot.subsystems;
++
++import com.ctre.phoenix6.Utils;
++import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
++import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
++import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
++
++import edu.wpi.first.wpilibj2.command.Subsystem;
++
++public abstract class DriveBaseSubsystem extends SwerveDrivetrain implements Subsystem {
++    public abstract void configAuto();
++
++    public DriveBaseSubsystem(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
++            SwerveModuleConstants... modules) {
++        super(driveTrainConstants, OdometryUpdateFrequency, modules);
++    }
++
++    public DriveBaseSubsystem(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
++        super(driveTrainConstants, modules);
++    }
++}
+diff --git a/src/main/java/frc/robot/subsystems/SwerveDriveSubsystem.java b/src/main/java/frc/robot/subsystems/SwerveDriveSubsystem.java
+index 98166e7..19ad7a2 100644
+--- a/src/main/java/frc/robot/subsystems/SwerveDriveSubsystem.java
++++ b/src/main/java/frc/robot/subsystems/SwerveDriveSubsystem.java
+@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.RobotController;
+ import edu.wpi.first.wpilibj2.command.Command;
+ import edu.wpi.first.wpilibj2.command.Subsystem;
+ 
+-public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem {
++public class SwerveDriveSubsystem extends DriveBaseSubsystem {
+     public final double MaxSpeed = DriveConstants.MaxSpeed;
+     public final double MaxAngularRate = DriveConstants.MaxAngularRate;
+     private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric()
