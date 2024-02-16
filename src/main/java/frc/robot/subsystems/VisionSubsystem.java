@@ -25,15 +25,15 @@ public class VisionSubsystem extends SubsystemBase {
     PIDController AlignPID = new PIDController(0.1125, 0, 0); // Rotationly PID
 
     double tx, ty, tl, ta, tid, targetpose_robotspace;
-    double PIDSetpointRotate = -18; //Setpoint for Rotational value (Limlight offset from center) //TODO Change to Setpoint of this years robot
-    double PIDSetpointY = 20; //Setpoint for Horizontal driving (Closeness to apriltag) //TODO Change to Setpoint of this years robot
+    double PIDSetpointRotate = -11; //Setpoint for Rotational value (Limlight offset from center) //TODO Change to Setpoint of this years robot
+    double PIDSetpointY = 6.6; //Setpoint for Horizontal driving (Closeness to apriltag) //TODO Change to Setpoint of this years robot
 
     public VisionSubsystem(SwerveDriveSubsystem drivetrain) {
         this.drivetrain = drivetrain;
         tx = m_limelight.getEntry("tx").getDouble(0);
         ty = m_limelight.getEntry("ty").getDouble(0);
         // tl = m_limelight.getEntry("tl").getDouble(0);
-        // ta = m_limelight.getEntry("ta").getDouble(0);
+        ta = m_limelight.getEntry("ta").getDouble(0);
         // tid = m_limelight.getEntry("tid").getDouble(0);
         // targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDouble(0);
     }
@@ -42,7 +42,7 @@ public class VisionSubsystem extends SubsystemBase {
         tx = m_limelight.getEntry("tx").getDouble(0); 
         ty = m_limelight.getEntry("ty").getDouble(0);
         // tl = m_limelight.getEntry("tl").getDouble(0);
-        // ta = m_limelight.getEntry("ta").getDouble(0);
+        ta = m_limelight.getEntry("ta").getDouble(0);
         // tid = m_limelight.getEntry("tid").getDouble(0);
         // targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDouble(0);
 

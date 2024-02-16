@@ -5,8 +5,8 @@ import edu.wpi.first.math.util.Units;
 
 public class DriveConstants {
         public static final double yOffset = 0;
-        public static final double MaxSpeed = 0.5; // 6 Meters per second or 19.6850394 freedom units per second //TODO Change to max speed of this years robot
-        public static final double MaxAngularRate = 0.25 * Math.PI; // 3/4 of a rotation in radians (for some reason) //TODO Change to max speed of this years robot
+        public static final double MaxSpeed = 2; // 6 Meters per second or 19.6850394 freedom units per second //TODO Change to max speed of this years robot
+        public static final double MaxAngularRate = 0.5 * Math.PI; // 3/4 of a rotation in radians (for some reason) //TODO Change to max speed of this years robot
         public static final double JoystickDeadzone = 0.07; //Change back tot 0.05 for merge to Robot dev if merged
         public static final double Track_Width = Units.inchesToMeters(35); // right wheel to left wheel
         public static final double Wheel_Base = Units.inchesToMeters(35); // Front To Back
