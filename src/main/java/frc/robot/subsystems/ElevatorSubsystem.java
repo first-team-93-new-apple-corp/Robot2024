@@ -92,12 +92,17 @@ public class ElevatorSubsystem extends SubsystemBase {
                     if (currentPos <= -65 || currentPos >= -15) {
                         output = MathUtil.clamp(output, -0.2, 0.2);
                     }
-                    output = MathUtil.clamp(output, -0.5, 0.5);
+                    output = MathUtil.clamp(output, -0.75, 0.75);
                     m_motor.set(output);
                 }
                 break;
             case Zeroing:
-                // TODO: add zeroing code that can be used for preflight
+                if (!bottomLimitTriggered()) {
+                    m_motor.set(0.05);
+                } else {
+                    m_motor.set(0);
+                    currentState = elevatorState.HoldState;
+                }
                 break;
 
             case Init:
@@ -111,7 +116,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         setpoint = MathUtil.clamp(setpoint, highSetpoint, lowSetpoint);
         currentState = elevatorState.ToSetpoint;
     }
-
+    public void zero() {
+        currentState = elevatorState.Zeroing;
+    }
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Elevator Pos",

@@ -35,15 +35,9 @@
       "name": "All Subsystems",
       "waypointRelativePos": 0.0,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Shooter"
-              }
-            },
             {
               "type": "named",
               "data": {
@@ -51,9 +45,22 @@
               }
             },
             {
-              "type": "named",
+              "type": "sequential",
               "data": {
-                "name": "PrimeShooter"
+                "commands": [
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "PrimeShooter"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "Shooter"
+                    }
+                  }
+                ]
               }
             }
           ]

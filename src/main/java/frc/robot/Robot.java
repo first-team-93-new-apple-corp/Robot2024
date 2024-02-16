@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
   private IntakeCommand m_Intake = new IntakeCommand(m_ShooterSubsystem);
   private ElevatorCommand m_Elevator = new ElevatorCommand(op);
   private ClimberCommand m_Climber = new ClimberCommand(op);
-  private Preflight m_Preflight = new Preflight();
+  private Preflight m_Preflight = new Preflight(op, m_Elevator);
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
   public Pigeon2 getPigeon() {
     return m_robotContainer.getPigeon();

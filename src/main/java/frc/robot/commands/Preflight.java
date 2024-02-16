@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -9,22 +10,23 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class Preflight extends Command {
     PowerDistribution pdh;
     ClimberCommand climbers;
-    // ElevatorCommand elevatorCommand;
+    ElevatorCommand elevatorCommand;
     SlewRateLimiter left = new SlewRateLimiter(0.5, -0.5, 0.5);
     SlewRateLimiter right = new SlewRateLimiter(0.5, -0.5, 0.5);
     boolean leftFinished = false;
     boolean rightFinished = false;
     boolean elevatorFinished = false;
 
-    public Preflight() {
+    public Preflight(XboxController op, ElevatorCommand elevatorCommand) {
         pdh = new PowerDistribution(1, ModuleType.kRev);
         climbers = new ClimberCommand();
-        // elevatorCommand = new ElevatorCommand();
+        this.elevatorCommand = elevatorCommand;
     }
 
     public void resetPreflight() {
         leftFinished = false;
         rightFinished = false;
+        elevatorFinished = false;
     }
 
     @Override
@@ -47,6 +49,7 @@ public class Preflight extends Command {
                 rightFinished = true;
             }
         }
+        elevatorCommand.preflight();
         // elevatorCommand.preflight();
         if (leftFinished && rightFinished) {
             SmartDashboard.putBoolean("Preflight Done?", true);
