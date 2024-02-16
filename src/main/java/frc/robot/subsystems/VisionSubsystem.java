@@ -11,22 +11,27 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
 public class VisionSubsystem extends SubsystemBase {
     public final double MaxSpeed = DriveConstants.MaxSpeed;
     public final double MaxAngularRate = DriveConstants.MaxAngularRate;
 
     SwerveDriveSubsystem drivetrain;
 
-    ChassisSpeeds alignSpeeds; //Chassis Speeds which robot uses for auto align
+    ChassisSpeeds alignSpeeds; // Chassis Speeds which robot uses for auto align
 
     NetworkTable m_limelight = NetworkTableInstance.getDefault().getTable("limelight-front");
 
     PIDController AlignPID = new PIDController(0.1125, 0, 0); // Rotationly PID
 
-    double tx, ty, tl, ta, tid, targetpose_robotspace;
-    double PIDSetpointRotate = -11; //Setpoint for Rotational value (Limlight offset from center) //TODO Change to Setpoint of this years robot
-    double PIDSetpointY = 6.6; //Setpoint for Horizontal driving (Closeness to apriltag) //TODO Change to Setpoint of this years robot
+    double tx, ty, tl, ta, tid;
+    double[] targetpose_robotspace;
+    double x, y, z;
+    double PIDSetpointRotate = -11; // Setpoint for Rotational value (Limlight offset from center) //TODO Change to
+                                    // Setpoint of this years robot
+    double PIDSetpointY = 17; // Setpoint for Horizontal driving (Closeness to apriltag) //TODO Change to
+                              // Setpoint of this years robot
+    double PIDSetpointY2 = .75; // Setpoint for Horizontal driving (Closeness to apriltag) //TODO Change to
+                                // Setpoint of this years robot
 
     public VisionSubsystem(SwerveDriveSubsystem drivetrain) {
         this.drivetrain = drivetrain;
@@ -35,29 +40,32 @@ public class VisionSubsystem extends SubsystemBase {
         // tl = m_limelight.getEntry("tl").getDouble(0);
         ta = m_limelight.getEntry("ta").getDouble(0);
         // tid = m_limelight.getEntry("tid").getDouble(0);
-        // targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDouble(0);
+        targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
     }
 
     public void updateValues() {
-        tx = m_limelight.getEntry("tx").getDouble(0); 
+        tx = m_limelight.getEntry("tx").getDouble(0);
         ty = m_limelight.getEntry("ty").getDouble(0);
         // tl = m_limelight.getEntry("tl").getDouble(0);
         ta = m_limelight.getEntry("ta").getDouble(0);
         // tid = m_limelight.getEntry("tid").getDouble(0);
-        // targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDouble(0);
-
+        targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
+        y = targetpose_robotspace[1];
         alignSpeeds = new ChassisSpeeds(
-                (-MathUtil.clamp((AlignPID.calculate(ty, PIDSetpointY)), 0, MaxSpeed)), // Velocity y
+                (-MathUtil.clamp((AlignPID.calculate(ty, PIDSetpointY)), 0, MaxSpeed / 3)), // Velocity y
                 (0), // Velocity x
-                (-MathUtil.clamp((AlignPID.calculate(tx, PIDSetpointRotate)), 0, MaxAngularRate))); // Rotational Speeds
+                (-MathUtil.clamp((AlignPID.calculate(tx, PIDSetpointRotate)), -MaxAngularRate, MaxAngularRate))); // Rotational
+                                                                                                                  // Speeds
     }
 
+    // (-MathUtil.clamp((AlignPID.calculate(y, PIDSetpointY2)), -MaxSpeed/3,
+    // MaxSpeed/3)), // Velocity y //SAWYEERS THING
     public boolean hasTargets() {
         updateValues();
         return ta > 0;
     }
 
-    public void AutoAim() { //Works with all filtered apriltags
+    public void AutoAim() { // Works with all filtered apriltags
         if (hasTargets()) {
             System.out.println("alining");
             drivetrain.driveRobotRelative(alignSpeeds);
@@ -76,5 +84,6 @@ public class VisionSubsystem extends SubsystemBase {
     public void periodic() {
         updateValues();
         SmartDashboard.putBoolean("Has targets", hasTargets());
+        SmartDashboard.putNumber("y", y);
     }
 }
