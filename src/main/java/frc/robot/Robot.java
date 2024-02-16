@@ -14,15 +14,17 @@ import frc.robot.commands.VisionCommand;
 // import frc.robot.commands.ClimberCommand;
 // import frc.robot.commands.ElevatorCommand;
 // import frc.robot.commands.IntakeCommand;
-import frc.robot.subsystems.CameraSubsystem;
+// import frc.robot.subsystems.CameraSubsystem;
 
 public class Robot extends TimedRobot {
-  Joystick m_Joystick1 = new Joystick(0);
-  XboxController op = new XboxController(2);
-  CameraSubsystem m_cam = new CameraSubsystem();
+  // CameraSubsystem m_cam = new CameraSubsystem();
+
   VisionCommand m_Vision;
+
   private Command m_autonomousCommand;
+
   private RobotContainer m_robotContainer;
+
   // private ShooterCommand m_Shooter = new ShooterCommand();
   // private IntakeCommand m_Intake = new IntakeCommand();
   // private ElevatorCommand m_Elevator = new ElevatorCommand(op);
@@ -32,7 +34,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer();
     m_Vision = new VisionCommand(m_robotContainer.getDrivetrain());
-    m_cam.register();
+    // m_cam.register();
   }
 
   @Override
