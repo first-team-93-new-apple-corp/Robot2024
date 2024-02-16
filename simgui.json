@@ -31,15 +31,42 @@
       }
     }
   },
+  "NetworkTables": {
+    "Transitory Values": {
+      "open": false
+    },
+    "transitory": {
+      "Shuffleboard": {
+        "open": true
+      },
+      "SmartDashboard": {
+        "Auto Chooser": {
+          "open": true,
+          "string[]##v_/SmartDashboard/Auto Chooser/options": {
+            "open": true
+          }
+        },
+        "open": true
+      }
+    }
+  },
   "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "Server": {
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
+    },
     "elastic@1": {
       "Publishers": {
         "open": false
       },
       "Subscribers": {
         "open": false
-      },
-      "open": false
+      }
     },
     "visible": true
   }

@@ -7,10 +7,11 @@ package frc.robot;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -181,7 +182,7 @@ public class RobotContainer extends TimedRobot {
     // Climbing Level logic added to button
     // When the button of your choosing is held it should atomaticly do the climbing
     // level
-    
+
     m_climingLevelButton.whileTrue(m_ClimbingLevel.levelCommand());
 
     // Points all in a direction
@@ -233,6 +234,10 @@ public class RobotContainer extends TimedRobot {
 
   public void updateValues() {
     SmartDashboard.putNumber("PigeonAngle", angle);
+    // m_odometry.update(m_gyro.getRotation2d(),
+    //     m_leftEncoder.getDistance(),
+    //     m_rightEncoder.getDistance());
+    // m_field.setRobotPose(m_odometry.getPoseMeters());
     m_field.setRobotPose(drivetrain.getPose());
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
       fieldRelativeOffset = drivetrain.getPigeon2().getRotation2d().getRadians();
@@ -248,6 +253,7 @@ public class RobotContainer extends TimedRobot {
         .rotateBy(new Rotation2d(-fieldRelativeOffset)).getDegrees());
     RotationPoints(m_Joystick2);
     POVButton();
+
   }
 
   public double checkDeadzone(double input) {

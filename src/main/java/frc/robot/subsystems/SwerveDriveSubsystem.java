@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -144,6 +146,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         // return new Pose2d(this.getRotation3d().getX(), this.getRotation3d().getY(),
         // new Rotation2d(this.getRotation3d().getAngle()));
         return m_cachedState.Pose;
+        // return m_odometry.getEstimatedPosition();
     }
 
     public void setPose2D(Pose2d newPose) {
@@ -187,7 +190,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
 
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
-
+        this.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
         /* Run simulation at a faster rate so PID gains behave more reasonably */
         m_simNotifier = new Notifier(() -> {
             final double currentTime = Utils.getCurrentTimeSeconds();
