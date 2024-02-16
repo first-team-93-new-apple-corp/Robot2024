@@ -47,7 +47,7 @@ public class IntakeSubsystem extends SubsystemBase {
                 break;
             case Stage2:
                 if (midTOF.getRange() < 130) {
-                    m_shooter.kicker(-0.3);
+                    m_shooter.kicker(-0.2);
                 } else {
                     state = intakeState.Stage3;
                 }
