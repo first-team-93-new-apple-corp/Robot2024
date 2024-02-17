@@ -39,9 +39,73 @@
         "data": {
           "commands": [
             {
-              "type": "named",
+              "type": "sequential",
               "data": {
-                "name": "Intake"
+                "commands": [
+                  {
+                    "type": "parallel",
+                    "data": {
+                      "commands": [
+                        {
+                          "type": "named",
+                          "data": {
+                            "name": "Intake"
+                          }
+                        },
+                        {
+                          "type": "wait",
+                          "data": {
+                            "waitTime": 0.25
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "StopIntake"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 0.5
+              }
+            },
+            {
+              "type": "sequential",
+              "data": {
+                "commands": [
+                  {
+                    "type": "parallel",
+                    "data": {
+                      "commands": [
+                        {
+                          "type": "named",
+                          "data": {
+                            "name": "PrimeShooter"
+                          }
+                        },
+                        {
+                          "type": "wait",
+                          "data": {
+                            "waitTime": 0.25
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "StopPrime"
+                    }
+                  }
+                ]
               }
             }
           ]
