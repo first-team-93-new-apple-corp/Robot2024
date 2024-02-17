@@ -61,10 +61,10 @@ public class RobotContainer extends TimedRobot {
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
-  private JoystickButton m_JoystickTrigger;
-  private JoystickButton m_JoystickButton2;
+  private JoystickButton m_BrakeButton;
+  private JoystickButton m_WheelsPointForwardButton;
   private JoystickButton m_RobotRelButton;
-
+  private JoystickButton m_fieldRelButton;
   private JoystickButton m_CameraRelButton;
 
   // added this for button bindings and the logic I added
@@ -153,8 +153,13 @@ public class RobotContainer extends TimedRobot {
             .withCenterOfRotation(DriveConstants.dCenter)
             .withSpeeds(fieldSpeeds)));
 
+    m_fieldRelButton.onTrue(
+        drivetrain.applyRequest(() -> m_swerveRequest
+            .withCenterOfRotation(DriveConstants.dCenter)
+            .withSpeeds(fieldSpeeds)));
+
     // Brake while held
-    m_JoystickTrigger.whileTrue(drivetrain.applyRequest(() -> brake));
+    m_BrakeButton.whileTrue(drivetrain.applyRequest(() -> brake));
     m_RobotRelButton.onTrue(drivetrain.applyRequest(() -> RobotCentricDrive
         .withVelocityX(
             -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
@@ -183,7 +188,7 @@ public class RobotContainer extends TimedRobot {
     // m_climbingLevelButton.whileTrue(m_ClimbingLevel);
 
     // Points all in a direction
-    m_JoystickButton2.whileTrue(drivetrain
+    m_WheelsPointForwardButton.whileTrue(drivetrain
         .applyRequest(
             () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0),
                 -m_Joystick1.getRawAxis(1)))));
@@ -204,8 +209,9 @@ public class RobotContainer extends TimedRobot {
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.op = op;
-    m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
-    m_JoystickButton2 = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
+    m_fieldRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Top_Middle);
+    m_BrakeButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
+    m_WheelsPointForwardButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);
