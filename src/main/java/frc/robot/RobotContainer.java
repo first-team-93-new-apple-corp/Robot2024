@@ -40,17 +40,12 @@ public class RobotContainer extends TimedRobot {
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
-  private final JoystickButton m_JoystickRightTopMiddle = new JoystickButton(m_Joystick1,
-      Constants.Thrustmaster.Right_Buttons.Top_Middle);
-  private final JoystickButton m_JoystickRightBottomMiddle = new JoystickButton(m_Joystick1,
-      Constants.Thrustmaster.Right_Buttons.Bottom_Middle);
-
-  private final JoystickButton m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
-  private final JoystickButton m_JoystickButton2 = new JoystickButton(m_Joystick1,
-      Constants.Thrustmaster.Center_Button);
-  private final JoystickButton m_RobotRelButton = new JoystickButton(m_Joystick1,
-      Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
-  private final JoystickButton m_Joystick2Trigger = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Trigger);
+  private JoystickButton m_AmpAlignButton;
+  private JoystickButton m_TrapAlignButton;
+  private JoystickButton m_BrakeButton;
+  private JoystickButton m_wheelsPointForwardButton;
+  private JoystickButton m_RobotRelButton;
+  private JoystickButton m_CameraRelButton;
 
   private SwerveRequest.RobotCentric RobotCentricDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -134,15 +129,15 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void configureBindings() {
-    m_JoystickRightTopMiddle.whileTrue(m_Vision);
-      drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-          drivetrain.applyRequest(() -> m_swerveRequest
-              .withCenterOfRotation(DriveConstants.dCenter)
-              .withSpeeds(fieldSpeeds)));
-             
+    m_AmpAlignButton.whileTrue(m_Vision);
+    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+        drivetrain.applyRequest(() -> m_swerveRequest
+            .withCenterOfRotation(DriveConstants.dCenter)
+            .withSpeeds(fieldSpeeds)));
+
     // m_Joystick2Trigger.onTrue(m_Vision.Thing());
     // Brake while held
-    m_JoystickTrigger.whileTrue(drivetrain.applyRequest(() -> brake));
+    m_BrakeButton.whileTrue(drivetrain.applyRequest(() -> brake));
     m_RobotRelButton.onTrue(drivetrain.applyRequest(() -> RobotCentricDrive
         .withVelocityX(
             m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
@@ -153,9 +148,19 @@ public class RobotContainer extends TimedRobot {
         .withRotationalRate(
             m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
                 * MaxAngularRate)));
+    m_CameraRelButton.whileTrue(drivetrain.applyRequest(() -> RobotCentricDrive
+        .withVelocityX(
+            -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
+                * MaxSpeed)
+        .withVelocityY(
+            -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)
+                * MaxSpeed)
+        .withRotationalRate(
+            m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
+                * MaxAngularRate)));
 
     // Points all in a direction
-    m_JoystickButton2.whileTrue(drivetrain
+    m_wheelsPointForwardButton.whileTrue(drivetrain
         .applyRequest(
             () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0),
                 -m_Joystick1.getRawAxis(1)))));
@@ -169,6 +174,18 @@ public class RobotContainer extends TimedRobot {
   }
 
   public RobotContainer() {
+    m_AmpAlignButton = new JoystickButton(m_Joystick1,
+        Constants.Thrustmaster.Trigger);
+    m_AmpAlignButton = new JoystickButton(m_Joystick1,
+        Constants.Thrustmaster.Right_Buttons.Top_Middle);
+    m_TrapAlignButton = new JoystickButton(m_Joystick1,
+        Constants.Thrustmaster.Right_Buttons.Bottom_Middle);
+
+    m_BrakeButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
+    m_wheelsPointForwardButton = new JoystickButton(m_Joystick1,
+        Constants.Thrustmaster.Center_Button);
+    m_RobotRelButton = new JoystickButton(m_Joystick1,
+        Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     drivetrain.configAuto();
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -188,7 +205,7 @@ public class RobotContainer extends TimedRobot {
         (checkDeadzone(m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
         (checkDeadzone(m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxAngularRate));
 
-        fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
+    fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
         new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
             .rotateBy(new Rotation2d(-fieldRelativeOffset)));
     SmartDashboard.putNumber("E", new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
