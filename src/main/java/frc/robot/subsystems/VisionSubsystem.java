@@ -59,6 +59,7 @@ public class VisionSubsystem extends SubsystemBase {
     // (-MathUtil.clamp((AlignPID.calculate(tx, PIDSetpointRotate)), -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
     //(-MathUtil.clamp((AlignPID.calculate(y, PIDSetpointY2)), 0, MaxSpeed / 3)), // Velocity y Sawyer
     // -MathUtil.clamp((AlignPID.calculate(z2, PIDSetpointZ3)), -MaxAngularRate / 2, MaxAngularRate / 2)
+    // (-MathUtil.clamp((AlignPID.calculate(y, PIDSetpointY2)), -MaxSpeed/3 )); // Velocity y //SAWYEERS THING
     public boolean hasTargets() {
         updateValues();
         return ta > 0;
