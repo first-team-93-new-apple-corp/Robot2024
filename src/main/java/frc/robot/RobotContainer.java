@@ -14,6 +14,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
@@ -54,7 +55,7 @@ public class RobotContainer extends TimedRobot {
   private Joystick m_Joystick2;
   private XboxController op;
   private boolean Limit = true;
-
+  private Pose2d pose;
   // can set this to whatever button you want you can also just
   // delete this and use the constants file for the button
   // (just so that the logic works for now)
@@ -215,6 +216,7 @@ public class RobotContainer extends TimedRobot {
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.op = op;
+    pose = new Pose2d();
     IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
     ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
     // m_LevelCommand = new ClimbingLevelCommand(null)
@@ -238,10 +240,10 @@ public class RobotContainer extends TimedRobot {
     //     m_leftEncoder.getDistance(),
     //     m_rightEncoder.getDistance());
     // m_field.setRobotPose(m_odometry.getPoseMeters());
-    m_field.setRobotPose(drivetrain.getPose());
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
       fieldRelativeOffset = drivetrain.getPigeon2().getRotation2d().getRadians();
     }
+    // pose = pose.transformBy(new Transform2d(.05, 0, new Rotation2d()));
     speeds = new ChassisSpeeds(
         (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * MaxSpeed),
         (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
@@ -253,6 +255,10 @@ public class RobotContainer extends TimedRobot {
         .rotateBy(new Rotation2d(-fieldRelativeOffset)).getDegrees());
     RotationPoints(m_Joystick2);
     POVButton();
+    pose = pose.transformBy(new Transform2d( (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * .7),
+    (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x))) * .7, new Rotation2d((checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * .7))));
+
+    m_field.setRobotPose(pose);
 
   }
 

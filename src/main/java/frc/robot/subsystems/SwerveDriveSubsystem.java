@@ -145,8 +145,8 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     public Pose2d getPose() {
         // return new Pose2d(this.getRotation3d().getX(), this.getRotation3d().getY(),
         // new Rotation2d(this.getRotation3d().getAngle()));
-        return m_cachedState.Pose;
-        // return m_odometry.getEstimatedPosition();
+        // return m_cachedState.Pose;
+        return m_odometry.getEstimatedPosition();
     }
 
     public void setPose2D(Pose2d newPose) {
