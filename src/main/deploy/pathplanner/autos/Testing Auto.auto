@@ -20,25 +20,6 @@
                 "data": {
                   "pathName": "Test"
                 }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "PrimeShooter"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Shooter"
-                      }
-                    }
-                  ]
-                }
               }
             ]
           }
