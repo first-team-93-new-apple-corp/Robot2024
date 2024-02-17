@@ -34,9 +34,11 @@ public class ElevatorCommand extends Command {
         if (op.getPOV() == 0) {
             m_elevator.toSetpoint(-75);
         } else if (op.getPOV() == 90) {
+            m_elevator.toSetpoint(-40);
         } else if (op.getPOV() == 180) {
             m_elevator.toSetpoint(-3);
         } else if (op.getPOV() == 270) {
+            m_elevator.toSetpoint(-25);
         } else {
 
         }

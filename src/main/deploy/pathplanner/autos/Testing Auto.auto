@@ -20,24 +20,24 @@
                 "data": {
                   "pathName": "Test"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "PrimeShooter"
-                }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Shooter"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "PrimeShooter"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Shooter"
+                      }
+                    }
+                  ]
                 }
               }
             ]
