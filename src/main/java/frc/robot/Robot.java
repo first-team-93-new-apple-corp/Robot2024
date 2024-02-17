@@ -32,8 +32,8 @@ public class Robot extends TimedRobot {
   private IntakeCommand m_Intake = new IntakeCommand(m_ShooterSubsystem);
   private ElevatorCommand m_Elevator = new ElevatorCommand(op);
   private ClimberCommand m_Climber = new ClimberCommand(op);
-  private Preflight m_Preflight = new Preflight(op, m_Elevator);
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
+  private Preflight m_Preflight;
   public Pigeon2 getPigeon() {
     return m_robotContainer.getPigeon();
   }
@@ -41,6 +41,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer(m_Joystick1, m_Joystick2, op);
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
+    m_Preflight = new Preflight(op, m_Elevator, m_Intake);
     m_Elevator.initOnce();
     m_SwerveDriveSubsystem.configAuto();
     // m_UsbCameraSubsystem.register();

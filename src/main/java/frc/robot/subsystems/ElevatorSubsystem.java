@@ -5,6 +5,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,7 +27,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     double setpoint = 0;
     double highSetpoint = -75;
     double lowSetpoint = -3;
-
     public enum elevatorState {
         HoldState,
         ToSetpoint,
@@ -90,7 +90,7 @@ public class ElevatorSubsystem extends SubsystemBase {
                     // currentState = elevatorState.TempState;
                 } else {
                     if (currentPos <= -65 || currentPos >= -15) {
-                        output = MathUtil.clamp(output, -0.2, 0.2);
+                        output = MathUtil.clamp(output, -0.3, 0.3);
                     }
                     output = MathUtil.clamp(output, -0.75, 0.75);
                     m_motor.set(output);
@@ -119,6 +119,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void zero() {
         currentState = elevatorState.Zeroing;
     }
+    public TalonFX getMotor() {
+        return m_motor;
+    }
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Elevator Pos",
@@ -126,8 +129,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Top Limit?", topLimitTriggered());
         SmartDashboard.putBoolean("Bottom Limit?", bottomLimitTriggered());
         runElevator();
-        if (!(bottomLimit == null) && bottomLimitTriggered()) {
-            m_motor.setPosition(0);
-        }
+        // if (!(bottomLimit == null) && bottomLimitTriggered()) {
+        //     m_motor.setPosition(0);
+        // }
     }
 }

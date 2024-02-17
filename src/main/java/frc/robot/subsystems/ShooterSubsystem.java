@@ -64,6 +64,12 @@ public class ShooterSubsystem extends SubsystemBase {
         KickerL.set(0);
         KickerR.set(0);
     }
+    public Command AutonKickerStop() {
+        return this.runOnce(() -> kickerStop());
+    }
+    public Command AutonShooterStop() {
+        return this.runOnce(() -> shooterStop());
+    }
 
     // public void kickerSetMode(boolean mode) {
     //     if (mode == true){

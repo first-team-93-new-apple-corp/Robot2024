@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
@@ -101,6 +102,12 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
     }
     public void applyConfig(TalonFXConfiguration config, TalonFXConfigurator configurator) {
         
+    }
+    public TalonFX getTurn(int module) {
+        return Modules[module].getSteerMotor();
+    }
+    public TalonFX getDrive(int module) {
+        return Modules[module].getDriveMotor();
     }
     public SwerveDriveSubsystem(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
             SwerveModuleConstants... modules) {

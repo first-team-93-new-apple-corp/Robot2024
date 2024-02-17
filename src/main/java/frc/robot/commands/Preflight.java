@@ -11,16 +11,20 @@ public class Preflight extends Command {
     PowerDistribution pdh;
     ClimberCommand climbers;
     ElevatorCommand elevatorCommand;
+    IntakeCommand m_IntakeCommand;
+    OrchestraCommand m_OrchestraCommand;
     SlewRateLimiter left = new SlewRateLimiter(0.5, -0.5, 0.5);
     SlewRateLimiter right = new SlewRateLimiter(0.5, -0.5, 0.5);
     boolean leftFinished = false;
     boolean rightFinished = false;
     boolean elevatorFinished = false;
 
-    public Preflight(XboxController op, ElevatorCommand elevatorCommand) {
+    public Preflight(XboxController op, ElevatorCommand elevatorCommand, IntakeCommand m_IntakeCommand) {
         pdh = new PowerDistribution(1, ModuleType.kRev);
         climbers = new ClimberCommand();
         this.elevatorCommand = elevatorCommand;
+        this.m_IntakeCommand = m_IntakeCommand;
+        m_OrchestraCommand = new OrchestraCommand();
     }
 
     public void resetPreflight() {
@@ -49,10 +53,15 @@ public class Preflight extends Command {
                 rightFinished = true;
             }
         }
-        elevatorCommand.preflight();
+        if(!elevatorFinished) {
+          elevatorCommand.preflight();  
+          elevatorFinished = true;
+        } 
+        
         // elevatorCommand.preflight();
         if (leftFinished && rightFinished) {
             SmartDashboard.putBoolean("Preflight Done?", true);
+            m_OrchestraCommand.play();
         }
     }
 }

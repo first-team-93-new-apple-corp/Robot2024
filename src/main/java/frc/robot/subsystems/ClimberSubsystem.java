@@ -45,6 +45,12 @@ public class ClimberSubsystem extends SubsystemBase {
     public double rightPosition() {
         return climberRight.getPosition().getValueAsDouble();
     }
+    public TalonFX getLeft() {
+        return climberLeft;
+    }
+    public TalonFX getRight() {
+        return climberRight;
+    }
     public double checkLeftBound(double output) {
         if(output < 0 && climberLeft.getPosition().getValueAsDouble() < -maxHeight) {
             output = 0;

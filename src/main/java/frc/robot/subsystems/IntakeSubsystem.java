@@ -33,6 +33,10 @@ public class IntakeSubsystem extends SubsystemBase {
         midTOF.setRangingMode(RangingMode.Short, 24);
     }
 
+    public Command AutonStopIntake() {
+        return this.runOnce(() -> stop());
+    }
+
     public void Intake() {
         switch (state) {
             case Stage1:

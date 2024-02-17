@@ -214,6 +214,9 @@ public class RobotContainer extends TimedRobot {
     NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
     NamedCommands.registerCommand("PrimeShooter", m_ShooterSubsystem.AutonShooter());
     NamedCommands.registerCommand("Shooter", m_ShooterSubsystem.AutonKicker());
+    NamedCommands.registerCommand("StopPrime", m_ShooterSubsystem.AutonShooterStop());
+    NamedCommands.registerCommand("StopShooter", m_ShooterSubsystem.AutonKickerStop());
+    NamedCommands.registerCommand("StopIntake", m_IntakeSubsystem.AutonStopIntake());
 
     drivetrain.configAuto();
 

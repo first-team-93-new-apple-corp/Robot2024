@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 2.8806111279485536,
+        "x": 3.5,
         "y": 7.0
       },
       "prevControl": {
-        "x": 2.7006111279485534,
+        "x": 3.32,
         "y": 7.0
       },
       "nextControl": null,
@@ -42,25 +42,6 @@
               "type": "named",
               "data": {
                 "name": "Intake"
-              }
-            },
-            {
-              "type": "sequential",
-              "data": {
-                "commands": [
-                  {
-                    "type": "named",
-                    "data": {
-                      "name": "PrimeShooter"
-                    }
-                  },
-                  {
-                    "type": "named",
-                    "data": {
-                      "name": "Shooter"
-                    }
-                  }
-                ]
               }
             }
           ]
