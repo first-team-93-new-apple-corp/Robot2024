@@ -65,10 +65,10 @@ public class ShooterSubsystem extends SubsystemBase {
         KickerR.set(0);
     }
     public Command AutonKickerStop() {
-        return this.runOnce(() -> kickerStop());
+        return this.run(() -> kickerStop());
     }
     public Command AutonShooterStop() {
-        return this.runOnce(() -> shooterStop());
+        return this.run(() -> shooterStop());
     }
 
     // public void kickerSetMode(boolean mode) {
@@ -82,15 +82,15 @@ public class ShooterSubsystem extends SubsystemBase {
     // }
 
     public Command AutonKicker() {
-        return this.runOnce(() -> kicker(0.15));
+        return this.run(() -> kicker(0.15));
     }
 
     public Command AutonAmp(){
-        return this.runOnce(() -> shootAmp());
+        return this.run(() -> shootAmp());
     }
 
     public Command AutonShooter() {
-        return this.runOnce(() -> prime());
+        return this.run(() -> prime());
     }
 
     public void increaseSpeed() {

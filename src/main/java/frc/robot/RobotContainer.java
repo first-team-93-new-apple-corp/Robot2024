@@ -209,6 +209,14 @@ public class RobotContainer extends TimedRobot {
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);
+    ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+    IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
+    NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
+    NamedCommands.registerCommand("PrimeShooter", m_ShooterSubsystem.AutonShooter());
+    NamedCommands.registerCommand("Shooter", m_ShooterSubsystem.AutonKicker());
+    NamedCommands.registerCommand("StopPrime", m_ShooterSubsystem.AutonShooterStop());
+    NamedCommands.registerCommand("StopShooter", m_ShooterSubsystem.AutonKickerStop());
+    NamedCommands.registerCommand("StopIntake", m_IntakeSubsystem.AutonStopIntake());
 
     drivetrain.configAuto();
 
@@ -221,14 +229,6 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void updateValues() {
-    ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-    IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
-    NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
-    NamedCommands.registerCommand("PrimeShooter", m_ShooterSubsystem.AutonShooter());
-    NamedCommands.registerCommand("Shooter", m_ShooterSubsystem.AutonKicker());
-    NamedCommands.registerCommand("StopPrime", m_ShooterSubsystem.AutonShooterStop());
-    NamedCommands.registerCommand("StopShooter", m_ShooterSubsystem.AutonKickerStop());
-    NamedCommands.registerCommand("StopIntake", m_IntakeSubsystem.AutonStopIntake());
     SmartDashboard.putNumber("PigeonAngle", angle);
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
       fieldRelativeOffset = drivetrain.getPigeon2().getRotation2d().getRadians();

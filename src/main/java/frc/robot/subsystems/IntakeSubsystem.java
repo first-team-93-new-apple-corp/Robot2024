@@ -34,7 +34,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command AutonStopIntake() {
-        return this.runOnce(() -> stop());
+        return this.run(() -> stop());
     }
 
     public void Intake() {
@@ -51,7 +51,7 @@ public class IntakeSubsystem extends SubsystemBase {
                 break;
             case Stage2:
                 if (midTOF.getRange() < 130) {
-                    m_shooter.kicker(-0.2);
+                    m_shooter.kicker(-0.1);
                 } else {
                     state = intakeState.Stage3;
                 }
@@ -71,7 +71,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command AutoIntake() {
-        return this.runOnce(() -> Intake());
+        return this.run(() -> Intake());
     }
 
     public void passthrough() {
