@@ -130,6 +130,7 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void configureBindings() {
+     m_TrapAlignButton.whileTrue(m_Vision);
     m_AmpAlignButton.whileTrue(m_Vision);
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> m_swerveRequest
@@ -140,8 +141,6 @@ public class RobotContainer extends TimedRobot {
         drivetrain.applyRequest(() -> m_swerveRequest
             .withCenterOfRotation(DriveConstants.dCenter)
             .withSpeeds(fieldSpeeds)));
-
-    // m_Joystick2Trigger.onTrue(m_Vision.Thing());
     // Brake while held
     m_BrakeButton.whileTrue(drivetrain.applyRequest(() -> brake));
 
@@ -167,10 +166,10 @@ public class RobotContainer extends TimedRobot {
                 * MaxAngularRate)));
 
     // Points all in a direction
-    m_wheelsPointForwardButton.whileTrue(drivetrain
-        .applyRequest(
-            () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0),
-                -m_Joystick1.getRawAxis(1)))));
+    // m_wheelsPointForwardButton.whileTrue(drivetrain
+    //     .applyRequest(
+    //         () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0),
+    //             -m_Joystick1.getRawAxis(1)))));
 
     // reset the field-centric heading on left bumper press
 
@@ -182,17 +181,17 @@ public class RobotContainer extends TimedRobot {
 
   public RobotContainer() {
     m_FieldRelButton = new JoystickButton(m_Joystick1,
-        Constants.Thrustmaster.Left_Buttons.Top_Middle);
+        Constants.Thrustmaster.Right_Buttons.Bottom_Middle);
     m_CameraRelButton = new JoystickButton(m_Joystick1,
         Constants.Thrustmaster.Trigger);
     m_AmpAlignButton = new JoystickButton(m_Joystick1,
-        Constants.Thrustmaster.Right_Buttons.Top_Middle);
+        Constants.Thrustmaster.Center_Button);
     m_TrapAlignButton = new JoystickButton(m_Joystick1,
-        Constants.Thrustmaster.Right_Buttons.Bottom_Middle);
+        Constants.Thrustmaster.Right_Button);
 
     m_BrakeButton = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Trigger);
-    m_wheelsPointForwardButton = new JoystickButton(m_Joystick1,
-        Constants.Thrustmaster.Center_Button);
+    // m_wheelsPointForwardButton = new JoystickButton(m_Joystick1,
+    //     Constants.Thrustmaster.Center_Button);
     m_RobotRelButton = new JoystickButton(m_Joystick1,
         Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     drivetrain.configAuto();

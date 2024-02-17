@@ -19,9 +19,11 @@ public class VisionCommand extends Command {
     @Override
     public void execute() {
         Vision.hasTargets();
-        if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Top_Middle)) {
-            Vision.AutoAim();
-        } else if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Top_Left)) {
+        if (m_joystick1.getRawButton(Constants.Thrustmaster.Center_Button)) {
+            Vision.AutoAimAmp();
+        } else if(m_joystick1.getRawButton(Constants.Thrustmaster.Right_Button)){
+            Vision.AutoAimTrap();
+        }else if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Top_Left)) {
             Vision.LimeLightOn();
         } else if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Bottom_Left)) {
             Vision.LimeLightOff();
