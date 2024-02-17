@@ -174,14 +174,14 @@ public class RobotContainer extends TimedRobot {
   }
 
   public RobotContainer() {
-    m_AmpAlignButton = new JoystickButton(m_Joystick1,
+    m_CameraRelButton = new JoystickButton(m_Joystick1,
         Constants.Thrustmaster.Trigger);
     m_AmpAlignButton = new JoystickButton(m_Joystick1,
         Constants.Thrustmaster.Right_Buttons.Top_Middle);
     m_TrapAlignButton = new JoystickButton(m_Joystick1,
         Constants.Thrustmaster.Right_Buttons.Bottom_Middle);
 
-    m_BrakeButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
+    m_BrakeButton = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Trigger);
     m_wheelsPointForwardButton = new JoystickButton(m_Joystick1,
         Constants.Thrustmaster.Center_Button);
     m_RobotRelButton = new JoystickButton(m_Joystick1,
