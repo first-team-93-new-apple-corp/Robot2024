@@ -12,6 +12,8 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -71,6 +73,7 @@ public class RobotContainer extends TimedRobot {
   private final JoystickButton m_CameraRelButton;
   final Field2d m_field = new Field2d();
 
+  // private final SwerveDrivePoseEstimator m_poseEstimator;
   // added this for button bindings and the logic I added
   private final JoystickButton m_climingLevelButton;
 
@@ -205,6 +208,7 @@ public class RobotContainer extends TimedRobot {
   }
 
   public RobotContainer(Joystick m_Joystick1, Joystick m_Joystick2, XboxController op) {
+    // m_poseEstimator = new SwerveDrivePoseEstimator());
     m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_JoystickButton2 = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
@@ -255,9 +259,9 @@ public class RobotContainer extends TimedRobot {
         .rotateBy(new Rotation2d(-fieldRelativeOffset)).getDegrees());
     RotationPoints(m_Joystick2);
     POVButton();
-    pose = pose.transformBy(new Transform2d( (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * .7),
-    (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x))) * .7, new Rotation2d((checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * .7))));
-
+    // pose = pose.transformBy(new Transform2d( (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * .7),(checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x))) * .7, new Rotation2d((checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * .7))));
+    drivetrain.UpdateOdometry();
+    pose = drivetrain.m_poseEstimator.getEstimatedPosition();
     m_field.setRobotPose(pose);
 
   }

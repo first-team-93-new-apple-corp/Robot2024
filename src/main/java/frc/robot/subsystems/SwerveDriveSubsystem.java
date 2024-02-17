@@ -19,12 +19,16 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.hal.SimBoolean;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
@@ -52,9 +56,21 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
     private Telemetry m_Telemetry = new Telemetry(MaxSpeed);
+    public final SwerveDrivePoseEstimator m_poseEstimator =
+      new SwerveDrivePoseEstimator(
+          m_kinematics,
+          m_pigeon2.getRotation2d(),
+          new SwerveModulePosition[] {
+            Modules[0].getPosition(true),
+            Modules[1].getPosition(true),
+            Modules[2].getPosition(true),
+            Modules[3].getPosition(true),
+          },
+          new Pose2d(),
+          VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+          VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
     public void configAuto() {
-
         // AutoBuilder.configureHolonomic(
         // this::getPose, // Robot pose supplier
         // this::resetPose, // Method to reset odometry (will be called if your auto has
@@ -140,6 +156,29 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         if (Utils.isSimulation()) {
             startSimThread();
         }
+    }
+
+    public void UpdateOdometry() {
+        if (Utils.isSimulation()) {
+            m_poseEstimator.update(
+                m_pigeon2.getRotation2d(),
+                new SwerveModulePosition[] {
+                    Modules[0].getPosition(false),
+                    Modules[1].getPosition(false),
+                    Modules[2].getPosition(false),
+                    Modules[3].getPosition(false)
+            });
+        } else {
+            m_poseEstimator.update(
+                m_pigeon2.getRotation2d(),
+                new SwerveModulePosition[] {
+                    Modules[0].getPosition(false),
+                    Modules[1].getPosition(false),
+                    Modules[2].getPosition(false),
+                    Modules[3].getPosition(false)
+            });
+        }
+        
     }
 
     public Pose2d getPose() {
