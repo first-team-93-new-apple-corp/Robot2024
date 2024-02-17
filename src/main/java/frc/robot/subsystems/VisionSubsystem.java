@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class VisionSubsystem extends SubsystemBase {
-    public final double MaxSpeed = DriveConstants.MaxSpeed;
+    public final double MaxSpeed = (DriveConstants.MaxSpeed/5);
     public final double MaxAngularRate = DriveConstants.MaxAngularRate;
 
     SwerveDriveSubsystem drivetrain;
@@ -21,17 +21,16 @@ public class VisionSubsystem extends SubsystemBase {
 
     NetworkTable m_limelight = NetworkTableInstance.getDefault().getTable("limelight-front");
 
-    PIDController AlignPID = new PIDController(0.1125, 0, 0); // Rotationly PID
+    PIDController AlignPIDTheata = new PIDController(0.1125, 0, 0); // Rotationly PID
+    PIDController AlignPIDY = new PIDController(.75, 0, 0.1);
 
     double tx, ty, tl, ta, tid;
-    double[] targetpose_robotspace;
+    double[] targetpose_robotspace, botpose;
     double x, y, z;
-    double PIDSetpointRotate = -11; // Setpoint for Rotational value (Limlight offset from center) //TODO Change to
+    double PIDSetpointRotate = -13.9; // Setpoint for Rotational value (Limlight offset from center) //TODO Change to
                                     // Setpoint of this years robot
-    double PIDSetpointY = 17; // Setpoint for Horizontal driving (Closeness to apriltag) //TODO Change to
-                              // Setpoint of this years robot
-    double PIDSetpointY2 = .75; // Setpoint for Horizontal driving (Closeness to apriltag) //TODO Change to
-                                // Setpoint of this years robot
+    double PIDSetpointY = 17; // Setpoint for Horizontal driving (Closeness to apriltag) // TODO Change to Setpoint of this years robot
+    double PIDSetpointY2 = .1; // Setpoint for Horizontal driving (Closeness to apriltag) //TODO Change to Setpoint of this years robot
 
     public VisionSubsystem(SwerveDriveSubsystem drivetrain) {
         this.drivetrain = drivetrain;
@@ -50,16 +49,16 @@ public class VisionSubsystem extends SubsystemBase {
         ta = m_limelight.getEntry("ta").getDouble(0);
         // tid = m_limelight.getEntry("tid").getDouble(0);
         targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
-        y = targetpose_robotspace[1];
+        y = targetpose_robotspace[2];
         alignSpeeds = new ChassisSpeeds(
-                (-MathUtil.clamp((AlignPID.calculate(ty, PIDSetpointY)), 0, MaxSpeed / 3)), // Velocity y
+                ((MathUtil.clamp((AlignPIDY.calculate(y, PIDSetpointY2)), -MaxSpeed, MaxSpeed))), // Velocity y Sawyer
                 (0), // Velocity x
-                (-MathUtil.clamp((AlignPID.calculate(tx, PIDSetpointRotate)), -MaxAngularRate, MaxAngularRate))); // Rotational
-                                                                                                                  // Speeds
-    }
-
-    // (-MathUtil.clamp((AlignPID.calculate(y, PIDSetpointY2)), -MaxSpeed/3,
-    // MaxSpeed/3)), // Velocity y //SAWYEERS THING
+                (-MathUtil.clamp((AlignPIDTheata.calculate(tx, PIDSetpointRotate)), -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
+}
+    // (-MathUtil.clamp((AlignPID.calculate(ty, PIDSetpointY)), 0, MaxSpeed / 3)), // Velocity y CONNOr
+    // (-MathUtil.clamp((AlignPID.calculate(tx, PIDSetpointRotate)), -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
+    //(-MathUtil.clamp((AlignPID.calculate(y, PIDSetpointY2)), 0, MaxSpeed / 3)), // Velocity y Sawyer
+    // -MathUtil.clamp((AlignPID.calculate(z2, PIDSetpointZ3)), -MaxAngularRate / 2, MaxAngularRate / 2)
     public boolean hasTargets() {
         updateValues();
         return ta > 0;
@@ -85,5 +84,6 @@ public class VisionSubsystem extends SubsystemBase {
         updateValues();
         SmartDashboard.putBoolean("Has targets", hasTargets());
         SmartDashboard.putNumber("y", y);
+        SmartDashboard.putNumber("PID Putdown", (-MathUtil.clamp((AlignPIDY.calculate(y, PIDSetpointY2)), -MaxSpeed, MaxSpeed)));
     }
 }
