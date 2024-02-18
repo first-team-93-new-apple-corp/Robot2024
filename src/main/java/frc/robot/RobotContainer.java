@@ -12,11 +12,8 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
@@ -222,7 +219,6 @@ public class RobotContainer extends TimedRobot {
     pose = new Pose2d();
     IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
     ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-    // m_LevelCommand = new ClimbingLevelCommand(null)
     NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
     NamedCommands.registerCommand("PrimeShooter", m_ShooterSubsystem.AutonShooter());
     NamedCommands.registerCommand("Shooter", m_ShooterSubsystem.AutonKicker());
@@ -240,14 +236,9 @@ public class RobotContainer extends TimedRobot {
   public void updateValues() {
     angle = drivetrain.getHeading();
     SmartDashboard.putNumber("PigeonAngle", angle);
-    // m_odometry.update(m_gyro.getRotation2d(),
-    //     m_leftEncoder.getDistance(),
-    //     m_rightEncoder.getDistance());
-    // m_field.setRobotPose(m_odometry.getPoseMeters());
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
       fieldRelativeOffset = drivetrain.getPigeon2().getRotation2d().getRadians();
     }
-    // pose = pose.transformBy(new Transform2d(.05, 0, new Rotation2d()));
     speeds = new ChassisSpeeds(
         (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * MaxSpeed),
         (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
@@ -259,13 +250,7 @@ public class RobotContainer extends TimedRobot {
         .rotateBy(new Rotation2d(-fieldRelativeOffset)).getDegrees());
     RotationPoints(m_Joystick2);
     POVButton();
-    // pose = pose.transformBy(new Transform2d( (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * .7),(checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x))) * .7, new Rotation2d((checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * .7))));
-    // drivetrain.UpdateOdometry();s
-    // pose = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition();
-    // pose = drivetrain.getPose();
-    // pose = pose.plus(new Transform2d(drivetrain.getPose().getTranslation(), drivetrain.getPose().getRotation()));
-    // pose.plus(new Transform2d(pose, drivetrain.getPose().plus(pose.getTranslation())));
-    // m_field.setRobotPose(pose);
+
     drivetrain.updateOdometry();
     pose = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition();
     m_Field2d.setRobotPose(pose);
