@@ -57,7 +57,6 @@ public class RobotContainer extends TimedRobot {
   private Joystick m_Joystick2;
   private XboxController op;
   private boolean Limit = true;
-  private Pose2d pose;
   // can set this to whatever button you want you can also just
   // delete this and use the constants file for the button
   // (just so that the logic works for now)
@@ -71,8 +70,8 @@ public class RobotContainer extends TimedRobot {
   private final JoystickButton m_RobotRelButton;
 
   private final JoystickButton m_CameraRelButton;
-  final Field2d m_field = new Field2d();
-
+  public Field2d m_Field2d = new Field2d();
+  private Pose2d pose = new Pose2d();
   // private final SwerveDrivePoseEstimator m_poseEstimator;
   // added this for button bindings and the logic I added
   private final JoystickButton m_climingLevelButton;
@@ -216,7 +215,7 @@ public class RobotContainer extends TimedRobot {
     m_climingLevelButton = new JoystickButton(op, climbingLevelButton);
     m_ClimberCommand = new ClimberCommand();
     m_ClimbingLevel = new ClimbingLevelCommand(m_ClimberCommand);
-    SmartDashboard.putData("Field", m_field);
+    SmartDashboard.putData("Field",m_Field2d);
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.op = op;
@@ -262,12 +261,14 @@ public class RobotContainer extends TimedRobot {
     POVButton();
     // pose = pose.transformBy(new Transform2d( (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * .7),(checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x))) * .7, new Rotation2d((checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * .7))));
     // drivetrain.UpdateOdometry();s
-    pose = drivetrain.m_poseEstimator.getEstimatedPosition();
+    // pose = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition();
     // pose = drivetrain.getPose();
     // pose = pose.plus(new Transform2d(drivetrain.getPose().getTranslation(), drivetrain.getPose().getRotation()));
     // pose.plus(new Transform2d(pose, drivetrain.getPose().plus(pose.getTranslation())));
-    m_field.setRobotPose(pose);
-
+    // m_field.setRobotPose(pose);
+    drivetrain.updateOdometry();
+    pose = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition();
+    m_Field2d.setRobotPose(pose);
   }
 
   public double checkDeadzone(double input) {

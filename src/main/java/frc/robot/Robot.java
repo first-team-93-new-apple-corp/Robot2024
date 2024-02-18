@@ -49,7 +49,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    m_SwerveDriveSubsystem.UpdateOdometry();
   }
 
   @Override
@@ -74,7 +73,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    m_robotContainer.m_field.setRobotPose(m_SwerveDriveSubsystem.getPose());
+    m_robotContainer.m_Field2d.setRobotPose(m_SwerveDriveSubsystem.getPose());
   }
 
   @Override

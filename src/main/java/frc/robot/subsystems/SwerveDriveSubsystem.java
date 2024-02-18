@@ -57,22 +57,14 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
-    private Rotation2d angle = new Rotation2d();
     private Telemetry m_Telemetry = new Telemetry(MaxSpeed);
-    public final SwerveDrivePoseEstimator m_poseEstimator =
-      new SwerveDrivePoseEstimator(
-          m_kinematics,
-          m_pigeon2.getRotation2d(),
-          new SwerveModulePosition[] {
-            Modules[0].getPosition(true),
-            Modules[1].getPosition(true),
-            Modules[2].getPosition(true),
-            Modules[3].getPosition(true),
-          },
-          new Pose2d(),
-          VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-          VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
-
+    public SwerveDrivePoseEstimator m_SwerveDrivePoseEstimator =
+        new SwerveDrivePoseEstimator(
+            m_kinematics,
+            m_pigeon2.getRotation2d(),
+            m_modulePositions,
+            new Pose2d()
+        );
     public void configAuto() {
         // AutoBuilder.configureHolonomic(
         // this::getPose, // Robot pose supplier
@@ -117,7 +109,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
                 this::getCurrentRobotChassisSpeeds,
                 (speeds) -> this.setControl(autoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the
                                                                              // robot
-                new HolonomicPathFollowerConfig(new PIDConstants(.25, 0, 0),
+                new HolonomicPathFollowerConfig(new PIDConstants(.01, 0, 0),
                         new PIDConstants(.25, 0, 0),
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius,
@@ -160,17 +152,8 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         }
     }
 
-    public void UpdateOdometry() {
-        m_odometry.update(m_pigeon2.getRotation2d(),m_modulePositions);
-        // m_odometry.addVisionMeasurement(null, Timer.getFPGATimestamp() - 0.3);
-        m_poseEstimator.update(
-            m_pigeon2.getRotation2d(),
-            new SwerveModulePosition[] {
-                 m_modulePositions[0],
-                 m_modulePositions[1],
-                 m_modulePositions[2],
-                 m_modulePositions[3],
-        });
+    public void updateOdometry (){
+        m_SwerveDrivePoseEstimator.update(m_pigeon2.getRotation2d(), m_modulePositions);
     }
 
     public Pose2d getPose() {
