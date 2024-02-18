@@ -239,6 +239,7 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void updateValues() {
+    angle = drivetrain.getHeading();
     SmartDashboard.putNumber("PigeonAngle", angle);
     // m_odometry.update(m_gyro.getRotation2d(),
     //     m_leftEncoder.getDistance(),
@@ -260,8 +261,11 @@ public class RobotContainer extends TimedRobot {
     RotationPoints(m_Joystick2);
     POVButton();
     // pose = pose.transformBy(new Transform2d( (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * .7),(checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x))) * .7, new Rotation2d((checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * .7))));
-    drivetrain.UpdateOdometry();
+    // drivetrain.UpdateOdometry();s
     pose = drivetrain.m_poseEstimator.getEstimatedPosition();
+    // pose = drivetrain.getPose();
+    // pose = pose.plus(new Transform2d(drivetrain.getPose().getTranslation(), drivetrain.getPose().getRotation()));
+    // pose.plus(new Transform2d(pose, drivetrain.getPose().plus(pose.getTranslation())));
     m_field.setRobotPose(pose);
 
   }

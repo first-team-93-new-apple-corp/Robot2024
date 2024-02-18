@@ -13,6 +13,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerTrajectory.State;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -32,6 +33,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -55,6 +57,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+    private Rotation2d angle = new Rotation2d();
     private Telemetry m_Telemetry = new Telemetry(MaxSpeed);
     public final SwerveDrivePoseEstimator m_poseEstimator =
       new SwerveDrivePoseEstimator(
@@ -103,7 +106,6 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         // },
         // this // Reference to this subsystem to set requirements
         // );
-
         double driveBaseRadius = 0;
         for (var moduleLocation : m_moduleLocations) {
             driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
@@ -115,8 +117,8 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
                 this::getCurrentRobotChassisSpeeds,
                 (speeds) -> this.setControl(autoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the
                                                                              // robot
-                new HolonomicPathFollowerConfig(new PIDConstants(10, 0, 0),
-                        new PIDConstants(10, 0, 0),
+                new HolonomicPathFollowerConfig(new PIDConstants(.25, 0, 0),
+                        new PIDConstants(.25, 0, 0),
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius,
                         new ReplanningConfig()),
@@ -159,31 +161,19 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     }
 
     public void UpdateOdometry() {
-        if (Utils.isSimulation()) {
-            m_poseEstimator.update(
-                m_pigeon2.getRotation2d(),
-                new SwerveModulePosition[] {
-                    Modules[0].getPosition(false),
-                    Modules[1].getPosition(false),
-                    Modules[2].getPosition(false),
-                    Modules[3].getPosition(false)
-            });
-        } else {
-            m_poseEstimator.update(
-                m_pigeon2.getRotation2d(),
-                new SwerveModulePosition[] {
-                    Modules[0].getPosition(false),
-                    Modules[1].getPosition(false),
-                    Modules[2].getPosition(false),
-                    Modules[3].getPosition(false)
-            });
-        }
-        
+        m_odometry.update(m_pigeon2.getRotation2d(),m_modulePositions);
+        // m_odometry.addVisionMeasurement(null, Timer.getFPGATimestamp() - 0.3);
+        m_poseEstimator.update(
+            m_pigeon2.getRotation2d(),
+            new SwerveModulePosition[] {
+                 m_modulePositions[0],
+                 m_modulePositions[1],
+                 m_modulePositions[2],
+                 m_modulePositions[3],
+        });
     }
 
     public Pose2d getPose() {
-        // return new Pose2d(this.getRotation3d().getX(), this.getRotation3d().getY(),
-        // new Rotation2d(this.getRotation3d().getAngle()));
         // return m_cachedState.Pose;
         return m_odometry.getEstimatedPosition();
     }
