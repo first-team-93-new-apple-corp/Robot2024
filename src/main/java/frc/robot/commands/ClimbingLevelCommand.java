@@ -19,7 +19,7 @@ public class ClimbingLevelCommand extends Command {
             ClimberCommand m_climberCommand) {
         // Use addRequirements() here to declare subsystem dependencies.
         this.m_climberCommand = m_climberCommand;
-        m_ElevatorCommand = new ElevatorCommand();
+        // m_ElevatorCommand = new ElevatorCommand();
         m_pigeon2 = drivetrain.getPigeon2();
 
         /*

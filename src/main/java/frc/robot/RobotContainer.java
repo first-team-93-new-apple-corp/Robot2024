@@ -61,8 +61,8 @@ public class RobotContainer extends TimedRobot {
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
-  private final JoystickButton m_JoystickTrigger;
-  private final JoystickButton m_JoystickButton2;
+  private final JoystickButton m_BrakeButton;
+  private final JoystickButton m_fieldRelButton;
   private final JoystickButton m_RobotRelButton;
 
   private final JoystickButton m_CameraRelButton;
@@ -190,10 +190,10 @@ public class RobotContainer extends TimedRobot {
     // m_climbingLevelButton.whileTrue(m_ClimbingLevel);
 
     // Points all in a direction
-    m_WheelsPointForwardButton.whileTrue(drivetrain
-        .applyRequest(
-            () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0),
-                -m_Joystick1.getRawAxis(1)))));
+    // m_WheelsPointForwardButton.whileTrue(drivetrain
+    //     .applyRequest(
+    //         () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0),
+    //             -m_Joystick1.getRawAxis(1)))));
 
     // reset the field-centric heading on left bumper press
 
@@ -211,18 +211,18 @@ public class RobotContainer extends TimedRobot {
     // m_poseEstimator = new SwerveDrivePoseEstimator());
     // m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     // m_JoystickButton2 = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
-    m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
-    m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
-    m_climingLevelButton = new JoystickButton(op, climbingLevelButton);
-    m_ClimberCommand = new ClimberCommand();
-    m_ClimbingLevel = new ClimbingLevelCommand(m_ClimberCommand);
+    // m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
+    // m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
+    // m_climingLevelButton = new JoystickButton(op, climbingLevelButton);
+    // m_ClimberCommand = new ClimberCommand();
+    // m_ClimbingLevel = new ClimbingLevelCommand(m_ClimberCommand);
     SmartDashboard.putData("Field",m_Field2d);
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.op = op;
     m_fieldRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Top_Middle);
     m_BrakeButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
-    m_WheelsPointForwardButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
+    // m_WheelsPointForwardButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ShooterCommand;
@@ -32,7 +33,7 @@ public class Robot extends TimedRobot {
   private IntakeCommand m_Intake = new IntakeCommand(m_ShooterSubsystem);
   private ElevatorCommand m_Elevator = new ElevatorCommand(op);
   private ClimberCommand m_Climber = new ClimberCommand(op);
-  private Preflight m_Preflight = new Preflight();
+  private Preflight m_Preflight = new Preflight(op, m_Elevator, m_Intake);
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
   public Pigeon2 getPigeon() {
     return m_robotContainer.getPigeon();
