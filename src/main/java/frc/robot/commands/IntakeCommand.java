@@ -4,6 +4,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -14,8 +15,8 @@ public class IntakeCommand extends Command {
                    backIntake = new TalonFX(Constants.CTRE.RIO.B_Intake, "rio");
     public int IntakeSpeed;
 
-    public IntakeCommand() {
-        m_IntakeSubsystem = new IntakeSubsystem();
+    public IntakeCommand(ShooterSubsystem m_shooter) {
+        m_IntakeSubsystem = new IntakeSubsystem(m_shooter);
     }
 
    
@@ -29,6 +30,7 @@ public class IntakeCommand extends Command {
             m_IntakeSubsystem.passthrough();
         } else {
             m_IntakeSubsystem.stop();
+            m_IntakeSubsystem.resetIntakeState();
         }
     }
 }

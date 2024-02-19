@@ -5,13 +5,13 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -35,16 +35,16 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-
-import frc.robot.commands.ElevatorCommand;
+// import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 
-public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem {
+public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
     public XboxController opController = new XboxController(2);
     public ShooterCommand m_ShooterCommand = new ShooterCommand();
-    public IntakeCommand m_IntakeCommand = new IntakeCommand();
-    public ElevatorCommand m_ElevatorCommand = new ElevatorCommand(opController);
+    public ShooterSubsystem m_shooter = new ShooterSubsystem();
+    public IntakeCommand m_IntakeCommand = new IntakeCommand(m_shooter);
+    // public ElevatorCommand m_ElevatorCommand = new ElevatorCommand(opController);
     public final double MaxSpeed = DriveConstants.MaxSpeed;
     public final double MaxAngularRate = DriveConstants.MaxAngularRate;
     private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric()
@@ -133,7 +133,12 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     public void applyConfig(TalonFXConfiguration config, TalonFXConfigurator configurator) {
 
     }
-
+    public TalonFX getTurn(int module) {
+        return Modules[module].getSteerMotor();
+    }
+    public TalonFX getDrive(int module) {
+        return Modules[module].getDriveMotor();
+    }
     public SwerveDriveSubsystem(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
             SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);

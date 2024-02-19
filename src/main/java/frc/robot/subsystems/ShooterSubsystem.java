@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+
 public class ShooterSubsystem extends SubsystemBase {
     TalonFX ShooterR = new TalonFX(Constants.CTRE.RIO.R_Shoot, "rio");
     TalonFX ShooterL = new TalonFX(Constants.CTRE.RIO.L_Shoot, "rio");
@@ -16,7 +17,7 @@ public class ShooterSubsystem extends SubsystemBase {
     double SpeakerShooterSpeed = 0.45;
     double currentspeed;
     final double MuzzleIntake = -0.10;
-    final double AmpShooterSpeed = 0.3;
+    final double AmpShooterSpeed = 0.1;
     final double KickerSpeed = 1;
 
     public ShooterSubsystem() {
@@ -28,7 +29,10 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterR.setInverted(false);
         KickerR.setInverted(true);
     }
-
+    public void shoot(double speed) {
+        ShooterR.set(speed);
+        ShooterL.set(speed);
+    }
     public void prime() {
         ShooterR.set(SpeakerShooterSpeed);
         ShooterL.set(SpeakerShooterSpeed);
@@ -39,7 +43,7 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterL.set(AmpShooterSpeed);
     }
 
-    public void kicker() {
+    public void kicker(double KickerSpeed) {
         KickerL.set(KickerSpeed);
         KickerR.set(KickerSpeed);
     }
@@ -60,17 +64,33 @@ public class ShooterSubsystem extends SubsystemBase {
         KickerL.set(0);
         KickerR.set(0);
     }
+    public Command AutonKickerStop() {
+        return this.run(() -> kickerStop());
+    }
+    public Command AutonShooterStop() {
+        return this.run(() -> shooterStop());
+    }
+
+    // public void kickerSetMode(boolean mode) {
+    //     if (mode == true){
+    //         KickerL.setIdleMode(IdleMode.kBrake);
+    //         KickerR.setIdleMode(IdleMode.kBrake);
+    //     } else {
+    //         KickerL.setIdleMode(IdleMode.kCoast);
+    //         KickerR.setIdleMode(IdleMode.kCoast);
+    //     }
+    // }
 
     public Command AutonKicker() {
-        return this.runOnce(() -> kicker());
+        return this.run(() -> kicker(0.15));
     }
 
     public Command AutonAmp(){
-        return this.runOnce(() -> shootAmp());
+        return this.run(() -> shootAmp());
     }
 
     public Command AutonShooter() {
-        return this.runOnce(() -> prime());
+        return this.run(() -> prime());
     }
 
     public void increaseSpeed() {
@@ -88,7 +108,6 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("CurrentSpeed", SpeakerShooterSpeed);
 
     }
-
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Shooter Speed", SpeakerShooterSpeed);

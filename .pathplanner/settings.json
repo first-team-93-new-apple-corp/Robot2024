@@ -3,17 +3,19 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "(B.R  R.L)",
     "Mid",
-    "(B.L  R.R)"
+    "(B.L   R.R)",
+    "(B.R   R.L)",
+    "Away From Notes"
   ],
   "autoFolders": [
     "1 Shoot 1 Grab",
     "2 Note Shoot",
     "2 Shoot 1 Grab",
     "3 Note Shoot",
+    "3 Note Shoot 1 Grab",
     "4 Note Shoot",
-    "3 Note Shoot 1 Grab"
+    "Shoot and Leave"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
