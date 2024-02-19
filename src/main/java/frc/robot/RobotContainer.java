@@ -12,11 +12,8 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
@@ -56,7 +53,6 @@ public class RobotContainer extends TimedRobot {
   private Joystick m_Joystick2;
   private XboxController op;
   private boolean Limit = true;
-  private Pose2d pose;
   // can set this to whatever button you want you can also just
   // delete this and use the constants file for the button
   // (just so that the logic works for now)
@@ -65,12 +61,14 @@ public class RobotContainer extends TimedRobot {
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
-  private JoystickButton m_BrakeButton;
-  private JoystickButton m_WheelsPointForwardButton;
-  private JoystickButton m_RobotRelButton;
-  private JoystickButton m_fieldRelButton;
-  private JoystickButton m_CameraRelButton;
+  private final JoystickButton m_JoystickTrigger;
+  private final JoystickButton m_JoystickButton2;
+  private final JoystickButton m_RobotRelButton;
 
+  private final JoystickButton m_CameraRelButton;
+  public Field2d m_Field2d = new Field2d();
+  private Pose2d pose = new Pose2d();
+  // private final SwerveDrivePoseEstimator m_poseEstimator;
   // added this for button bindings and the logic I added
   private JoystickButton m_climbingLevelButton;
 
@@ -215,10 +213,10 @@ public class RobotContainer extends TimedRobot {
     // m_JoystickButton2 = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
-    // m_climingLevelButton = new JoystickButton(op, climbingLevelButton);
-    // m_ClimberCommand = new ClimberCommand();
-    // m_ClimbingLevel = new ClimbingLevelCommand(m_ClimberCommand);
-    SmartDashboard.putData("Field", m_field);
+    m_climingLevelButton = new JoystickButton(op, climbingLevelButton);
+    m_ClimberCommand = new ClimberCommand();
+    m_ClimbingLevel = new ClimbingLevelCommand(m_ClimberCommand);
+    SmartDashboard.putData("Field",m_Field2d);
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.op = op;
@@ -248,15 +246,11 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void updateValues() {
+    angle = drivetrain.getHeading();
     SmartDashboard.putNumber("PigeonAngle", angle);
-    // m_odometry.update(m_gyro.getRotation2d(),
-    //     m_leftEncoder.getDistance(),
-    //     m_rightEncoder.getDistance());
-    // m_field.setRobotPose(m_odometry.getPoseMeters());
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
       fieldRelativeOffset = drivetrain.getPigeon2().getRotation2d().getRadians();
     }
-    // pose = pose.transformBy(new Transform2d(.05, 0, new Rotation2d()));
     speeds = new ChassisSpeeds(
         (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * MaxSpeed),
         (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
@@ -266,11 +260,10 @@ public class RobotContainer extends TimedRobot {
             .rotateBy(new Rotation2d(-fieldRelativeOffset)));
     RotationPoints(m_Joystick2);
     POVButton();
-    // pose = pose.transformBy(new Transform2d( (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * .7),(checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x))) * .7, new Rotation2d((checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * .7))));
-    drivetrain.UpdateOdometry();
-    pose = drivetrain.m_poseEstimator.getEstimatedPosition();
-    m_field.setRobotPose(pose);
 
+    drivetrain.updateOdometry();
+    pose = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition();
+    m_Field2d.setRobotPose(pose);
   }
 
   public double checkDeadzone(double input) {

@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
@@ -32,7 +33,15 @@ public class TunerConstants {
 
     // The stator current at which the wheels start to slip;
     // This needs to be tuned to your individual robot
-    private static final double kSlipCurrentA = 50.0;
+    private static final double kSlipCurrentA() {
+        if (Utils.isSimulation()) {
+                return 300.0;
+        } else {
+                return 50.0;
+        }
+
+    }
+//     private static final double kSlipCurrentA = 250.0;
     // Theoretical free speed (m/s) at 12v applied output;
     // This needs to be tuned to your individual robot
     public static final double kSpeedAt12VoltsMps = 5.21;
@@ -68,7 +77,7 @@ public class TunerConstants {
             .withDriveMotorGearRatio(kDriveGearRatio)
             .withSteerMotorGearRatio(kSteerGearRatio)
             .withWheelRadius(kWheelRadiusInches)
-            .withSlipCurrent(kSlipCurrentA)
+            .withSlipCurrent(kSlipCurrentA())
             .withSteerMotorGains(steerGains)
             .withDriveMotorGains(driveGains)
             .withSteerMotorClosedLoopOutput(steerClosedLoopOutput)

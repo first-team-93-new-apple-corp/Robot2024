@@ -25,16 +25,16 @@ jobs:
 
     # Declares the repository safe and not under dubious ownership.
     - name: Add repository to git safe directories
-      working-directory: ./Robot
+      working-directory: ./
       run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
     
     # Grant execute permission for gradlew
     - name: Grant execute permission for gradlew
-      working-directory: ./Robot
+      working-directory: ./
       run: chmod +x gradlew
 
     # Runs a single command using the runners shell
     - name: Compile and run tests on robot code
-      working-directory: ./Robot
+      working-directory: ./
       run: ./gradlew build
