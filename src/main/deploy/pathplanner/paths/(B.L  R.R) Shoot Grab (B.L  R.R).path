@@ -65,6 +65,9 @@
   },
   "reversed": false,
   "folder": "(B.L  R.R)",
-  "previewStartingState": null,
+  "previewStartingState": {
+    "rotation": -145.0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }
