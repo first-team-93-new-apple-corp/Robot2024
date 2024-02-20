@@ -131,9 +131,8 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void configureBindings() {
-    // m_TestAlignButton.whileTrue(m_Vision);
     m_TrapAlignButton.whileTrue(m_Vision);
-    // m_AmpAlignButton.whileTrue(m_Vision);
+    m_AmpAlignButton.whileTrue(m_Vision);
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> m_swerveRequest
             .withCenterOfRotation(DriveConstants.dCenter)
@@ -143,6 +142,7 @@ public class RobotContainer extends TimedRobot {
         drivetrain.applyRequest(() -> m_swerveRequest
             .withCenterOfRotation(DriveConstants.dCenter)
             .withSpeeds(fieldSpeeds)));
+
     // Brake while held
     m_BrakeButton.whileTrue(drivetrain.applyRequest(() -> brake));
 
@@ -156,6 +156,7 @@ public class RobotContainer extends TimedRobot {
         .withRotationalRate(
             m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
                 * MaxAngularRate)));
+
     m_CameraRelButton.whileTrue(drivetrain.applyRequest(() -> RobotCentricDrive
         .withVelocityX(
             -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
@@ -169,14 +170,14 @@ public class RobotContainer extends TimedRobot {
 
     // Points all in a direction
     // m_wheelsPointForwardButton.whileTrue(drivetrain
-    //     .applyRequest(
-    //         () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0),
-    //             -m_Joystick1.getRawAxis(1)))));
+    // .applyRequest(
+    // () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0),
+    // -m_Joystick1.getRawAxis(1)))));
 
     // reset the field-centric heading on left bumper press
 
     if (Utils.isSimulation()) {
-      drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+      drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
     }
     drivetrain.registerTelemetry(logger::telemeterize);
   }
@@ -189,13 +190,14 @@ public class RobotContainer extends TimedRobot {
     m_AmpAlignButton = new JoystickButton(m_Joystick1,
         3);
     m_TrapAlignButton = new JoystickButton(m_Joystick1,
-        2);
+        Constants.Thrustmaster.Right_Button);
 
     m_BrakeButton = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Trigger);
     // m_wheelsPointForwardButton = new JoystickButton(m_Joystick1,
-    //     Constants.Thrustmaster.Center_Button);
+    // Constants.Thrustmaster.Center_Button);
     m_RobotRelButton = new JoystickButton(m_Joystick1,
         Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
+
     drivetrain.configAuto();
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
