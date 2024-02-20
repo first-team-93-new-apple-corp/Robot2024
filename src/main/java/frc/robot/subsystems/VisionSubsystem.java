@@ -17,71 +17,149 @@ public class VisionSubsystem extends SubsystemBase {
 
     SwerveDriveSubsystem drivetrain;
 
-    ChassisSpeeds alignSpeeds; // Chassis Speeds which robot uses for auto align
+    ChassisSpeeds alignSpeeds, rotateAlignSpeeds, xAlignSpeeds, yAlignSpeeds, BlankSpeeds; // Chassis Speeds which
+                                                                                                // robot uses for
+    // auto align
 
     NetworkTable m_limelight = NetworkTableInstance.getDefault().getTable("limelight-front");
 
-    PIDController AlignPIDTheata = new PIDController(0.1125, 0, 0); // Rotationly PID
-    PIDController AlignPIDY = new PIDController(.75, 0, 0.1);
+    PIDController AlignPIDX = new PIDController(.1, 0, 0); // Rotationly PID
+    PIDController AlignPIDY = new PIDController(.1, 0, 0);
+    PIDController AlignRotate = new PIDController(.1, 0, 0);
 
-    double tx, ty, tl, ta, tid;
+    double tx, ty, tl, ta, tid, ts;
     double[] targetpose_robotspace, botpose;
     double x, y, z;
-    double PIDSetpointRotate = -13.9; // Setpoint for Rotational value (Limlight offset from center)
-    double PIDSetpointY = .1; // Setpoint for Horizontal driving (Closeness to apriltag) 
-    double PIDSetpointY2 = .4;
-    double PIDSetpointRotate2 = -17.5;
+    double TrapAlignY = 3.3; 
+    double TrapAlignX = -18.4;
+    double TrapAlignRotate = 0;
+    double arcSpeed;
+    double tv;
+
     public VisionSubsystem(SwerveDriveSubsystem drivetrain) {
         this.drivetrain = drivetrain;
         tx = m_limelight.getEntry("tx").getDouble(0);
         ty = m_limelight.getEntry("ty").getDouble(0);
         // tl = m_limelight.getEntry("tl").getDouble(0);
+        tv = m_limelight.getEntry("tv").getDouble(0);
         ta = m_limelight.getEntry("ta").getDouble(0);
-        // tid = m_limelight.getEntry("tid").getDouble(0);
+        tid = m_limelight.getEntry("tid").getDouble(0);
+        ts = m_limelight.getEntry("ts").getDouble(0);
         targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
     }
 
     public void updateValues() {
+        arcSpeed = -MathUtil.clamp((AlignRotate.calculate(ts, TrapAlignRotate)), -MaxAngularRate, MaxAngularRate);
         tx = m_limelight.getEntry("tx").getDouble(0);
+        tv = m_limelight.getEntry("tv").getDouble(0);
         ty = m_limelight.getEntry("ty").getDouble(0);
         tid = m_limelight.getEntry("tid").getDouble(0);
+        ts = m_limelight.getEntry("ts").getDouble(0);
         targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
         y = targetpose_robotspace[2];
-        if (tid == 6) {
-            alignSpeeds = new ChassisSpeeds(
-                ((MathUtil.clamp((AlignPIDY.calculate(y, PIDSetpointY)), -MaxSpeed, MaxSpeed))), // Velocity y Sawyer
-                (0), // Velocity x
-                (-MathUtil.clamp((AlignPIDTheata.calculate(tx, PIDSetpointRotate)), -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
-        } else if (tid == 11 || tid == 12 || tid == 13 || tid == 14 || tid == 15 || tid == 16){
-            alignSpeeds = new ChassisSpeeds(
-                ((MathUtil.clamp((AlignPIDY.calculate(y, PIDSetpointY2)), -MaxSpeed, MaxSpeed))), // Velocity y Sawyer
-                (0), // Velocity x
-                (-MathUtil.clamp((AlignPIDTheata.calculate(tx, PIDSetpointRotate2)), -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
+        arcSpeed = -MathUtil.clamp((AlignPIDX.calculate(ts, TrapAlignRotate)), -MaxAngularRate, MaxAngularRate);
+        if (ts >= 0 && ts <= 13) {
+            arcSpeed = -arcSpeed;
         } else {
-            alignSpeeds = new ChassisSpeeds(
+            arcSpeed = arcSpeed;
+        }
+        rotateAlignSpeeds = new ChassisSpeeds(
                 (0),
+                (0),
+                (arcSpeed));
+        xAlignSpeeds = new ChassisSpeeds(
+                (0),
+                (-MathUtil.clamp((AlignPIDX.calculate(tx, TrapAlignX)), -MaxSpeed / 5, MaxSpeed / 5)),
+                (0));
+        yAlignSpeeds = new ChassisSpeeds(
+                (-MathUtil.clamp((AlignPIDY.calculate(ty, TrapAlignY)), -MaxSpeed / 5, MaxSpeed / 5)),
                 (0),
                 (0));
-        }
-        
-}
-    // (-MathUtil.clamp((AlignPID.calculate(ty, PIDSetpointY)), 0, MaxSpeed / 3)), // Velocity y CONNOr
-    // (-MathUtil.clamp((AlignPID.calculate(tx, PIDSetpointRotate)), -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
-    //(-MathUtil.clamp((AlignPID.calculate(y, PIDSetpointY2)), 0, MaxSpeed / 3)), // Velocity y Sawyer
-    // -MathUtil.clamp((AlignPID.calculate(z2, PIDSetpointZ3)), -MaxAngularRate / 2, MaxAngularRate / 2)
-    // (-MathUtil.clamp((AlignPID.calculate(y, PIDSetpointY2)), -MaxSpeed/3 )); // Velocity y //SAWYEERS THING
+        BlankSpeeds = new ChassisSpeeds(0, 0, 0);
+    }
+
+    // (-MathUtil.clamp((AlignPID.calculate(ty, PIDSetpointY)), 0, MaxSpeed / 3)),
+    // Velocity y CONNOr MathUtil.clamp((AlignPIDY.calculate(tx,
+    // PIDSetpointRotate2)), -MaxSpeed/5, MaxSpeed/5)
+    // (-MathUtil.clamp((AlignPID.calculate(tx, PIDSetpointRotate)),
+    // -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
+    // (-MathUtil.clamp((AlignPID.calculate(y, PIDSetpointY2)), 0, MaxSpeed / 3)),
+    // Velocity y Sawyer
+    // -MathUtil.clamp((AlignPID.calculate(z2, PIDSetpointZ3)), -MaxAngularRate / 2,
+    // MaxAngularRate / 2)
+    // (-MathUtil.clamp((AlignPID.calculate(y, PIDSetpointY2)), -MaxSpeed/3 ));
+    // Velocity y SAWYEERS THING
     public boolean hasTargets() {
         updateValues();
-        return ta > 0;
-    }
-    public void AutoAimAmp() { // Works amp
-        if (hasTargets()) {
-            drivetrain.driveRobotRelative(alignSpeeds);
+        if (tv == 1) {
+            return true;
+        } else {
+            return false;
         }
     }
-    public void AutoAimTrap(){ // Works with all trap locations
+
+    public enum AutoAlignTrap {
+        stage1,
+        stage2,
+        stage3
+    }
+
+    public AutoAlignTrap Curentstate = AutoAlignTrap.stage1;
+
+    public void Align() {
+        switch (Curentstate) {
+            default:
+            case stage1:
+                RotateAlign();
+                break;
+            case stage2:
+                XAlign();
+                break;
+            case stage3:
+                YAlign();
+                break;
+        }
+    }
+
+    public void resetState() {
+        Curentstate = AutoAlignTrap.stage1;
+    }
+
+    public void XAlign() { // Works amp
         if (hasTargets()) {
-            drivetrain.driveRobotRelative(alignSpeeds);
+            if (-MathUtil.clamp((AlignPIDX.calculate(tx, TrapAlignX)), -MaxSpeed / 5, MaxSpeed / 5) <= 0.2
+                    && -MathUtil.clamp((AlignPIDX.calculate(tx, TrapAlignX)), -MaxSpeed / 5,
+                            MaxSpeed / 5) >= -0.2) {
+                Curentstate = AutoAlignTrap.stage3;
+            } else
+                drivetrain.driveRobotRelative(xAlignSpeeds);
+        } else {
+            drivetrain.driveRobotRelative(BlankSpeeds);
+        }
+    }
+
+    public void YAlign() { // Works with all trap locations
+        if (hasTargets()) {
+            if (-MathUtil.clamp((AlignPIDY.calculate(ty, TrapAlignY)), -MaxSpeed / 5, MaxSpeed / 5) <= 0.2
+                    && -MathUtil.clamp((AlignPIDY.calculate(ty, TrapAlignY)), -MaxSpeed / 5, MaxSpeed / 5) >= -0.2) {
+                Curentstate = AutoAlignTrap.stage1;
+            } else {
+                drivetrain.driveRobotRelative(yAlignSpeeds);
+            }
+        } else {
+            drivetrain.driveRobotRelative(BlankSpeeds);
+        }
+    }
+
+    public void RotateAlign() {
+        if (hasTargets()) {
+            if (arcSpeed <= 0.2 && arcSpeed >= -0.2) {
+                Curentstate = AutoAlignTrap.stage2;
+            } else {
+                drivetrain.driveRobotRelative(rotateAlignSpeeds);
+            }
+        } else {
+            drivetrain.driveRobotRelative(BlankSpeeds);
         }
     }
 
