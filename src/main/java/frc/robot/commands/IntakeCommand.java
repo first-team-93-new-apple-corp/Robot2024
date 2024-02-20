@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -11,8 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class IntakeCommand extends Command {
     private static XboxController opController = new XboxController(2);
     IntakeSubsystem m_IntakeSubsystem;
-    public TalonFX frontIntake = new TalonFX(Constants.CTRE.RIO.F_Intake, "rio"),
-                   backIntake = new TalonFX(Constants.CTRE.RIO.B_Intake, "rio");
     public int IntakeSpeed;
 
     public IntakeCommand(ShooterSubsystem m_shooter) {
