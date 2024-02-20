@@ -7,10 +7,11 @@ package frc.robot;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -18,6 +19,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,7 +40,6 @@ import frc.robot.subsystems.TunerConstants;
 public class RobotContainer extends TimedRobot {
   // public ClimbingLevel m_ClimbingLevel;
   public ShooterCommand m_ShooterCommand;
-  public ClimberCommand m_ClimberCommand;
   public IntakeCommand m_IntakeCommand;
   // public ElevatorCommand m_ElevatorCommand;
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
@@ -52,7 +53,6 @@ public class RobotContainer extends TimedRobot {
   private Joystick m_Joystick2;
   private XboxController op;
   private boolean Limit = true;
-
   // can set this to whatever button you want you can also just
   // delete this and use the constants file for the button
   // (just so that the logic works for now)
@@ -61,12 +61,14 @@ public class RobotContainer extends TimedRobot {
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
-  private JoystickButton m_BrakeButton;
-  private JoystickButton m_WheelsPointForwardButton;
-  private JoystickButton m_RobotRelButton;
-  private JoystickButton m_fieldRelButton;
-  private JoystickButton m_CameraRelButton;
+  private final JoystickButton m_BrakeButton;
+  private final JoystickButton m_fieldRelButton;
+  private final JoystickButton m_RobotRelButton;
 
+  private final JoystickButton m_CameraRelButton;
+  public Field2d m_Field2d = new Field2d();
+  private Pose2d pose = new Pose2d();
+  // private final SwerveDrivePoseEstimator m_poseEstimator;
   // added this for button bindings and the logic I added
   private JoystickButton m_climbingLevelButton;
 
@@ -188,10 +190,10 @@ public class RobotContainer extends TimedRobot {
     // m_climbingLevelButton.whileTrue(m_ClimbingLevel);
 
     // Points all in a direction
-    m_WheelsPointForwardButton.whileTrue(drivetrain
-        .applyRequest(
-            () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0),
-                -m_Joystick1.getRawAxis(1)))));
+    // m_WheelsPointForwardButton.whileTrue(drivetrain
+    //     .applyRequest(
+    //         () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0),
+    //             -m_Joystick1.getRawAxis(1)))));
 
     // reset the field-centric heading on left bumper press
 
@@ -206,12 +208,21 @@ public class RobotContainer extends TimedRobot {
   }
 
   public RobotContainer(Joystick m_Joystick1, Joystick m_Joystick2, XboxController op) {
+    // m_poseEstimator = new SwerveDrivePoseEstimator());
+    // m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
+    // m_JoystickButton2 = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
+    // m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
+    // m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
+    // m_climingLevelButton = new JoystickButton(op, climbingLevelButton);
+    // m_ClimberCommand = new ClimberCommand();
+    // m_ClimbingLevel = new ClimbingLevelCommand(m_ClimberCommand);
+    SmartDashboard.putData("Field",m_Field2d);
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.op = op;
     m_fieldRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Top_Middle);
     m_BrakeButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
-    m_WheelsPointForwardButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
+    // m_WheelsPointForwardButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);
@@ -235,6 +246,7 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void updateValues() {
+    angle = drivetrain.getHeading();
     SmartDashboard.putNumber("PigeonAngle", angle);
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
       fieldRelativeOffset = drivetrain.getPigeon2().getRotation2d().getRadians();
@@ -248,6 +260,10 @@ public class RobotContainer extends TimedRobot {
             .rotateBy(new Rotation2d(-fieldRelativeOffset)));
     RotationPoints(m_Joystick2);
     POVButton();
+
+    drivetrain.updateOdometry();
+    pose = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition();
+    m_Field2d.setRobotPose(pose);
   }
 
   public double checkDeadzone(double input) {

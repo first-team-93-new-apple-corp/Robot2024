@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,8 +33,8 @@ public class Robot extends TimedRobot {
   private IntakeCommand m_Intake = new IntakeCommand(m_ShooterSubsystem);
   private ElevatorCommand m_Elevator = new ElevatorCommand(op);
   private ClimberCommand m_Climber = new ClimberCommand(op);
+  private Preflight m_Preflight = new Preflight(op, m_Elevator, m_Intake);
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
-  private Preflight m_Preflight;
   public Pigeon2 getPigeon() {
     return m_robotContainer.getPigeon();
   }
@@ -41,7 +42,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer(m_Joystick1, m_Joystick2, op);
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
-    m_Preflight = new Preflight(op, m_Elevator, m_Intake);
     m_Elevator.initOnce();
     m_SwerveDriveSubsystem.configAuto();
     // m_UsbCameraSubsystem.register();
@@ -69,7 +69,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
@@ -77,6 +76,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    m_robotContainer.m_Field2d.setRobotPose(m_SwerveDriveSubsystem.getPose());
   }
 
   @Override
@@ -121,5 +121,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void simulationPeriodic() {
+    m_SwerveDriveSubsystem.updateSimState(0.020, RobotController.getBatteryVoltage());
   }
 }
