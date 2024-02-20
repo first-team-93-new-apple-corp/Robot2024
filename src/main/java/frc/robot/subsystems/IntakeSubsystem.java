@@ -11,6 +11,7 @@ import frc.robot.Constants;
 public class IntakeSubsystem extends SubsystemBase {
     private TalonFX frontIntake;
     private TalonFX backIntake;
+    private TalonFX bumperIntake;
     TimeOfFlight midTOF;
     private double IntakeSpeed = 0.75;
     private double PassoverSpeed = 0.5;
@@ -28,6 +29,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.m_shooter = m_shooter;
         frontIntake = new TalonFX(Constants.CTRE.RIO.F_Intake, "rio");
         backIntake = new TalonFX(Constants.CTRE.RIO.B_Intake, "rio");
+        bumperIntake = new TalonFX(Constants.CTRE.RIO.Bump_Intake, "rio");
         backIntake.setInverted(false);
         midTOF = new TimeOfFlight(22);
         midTOF.setRangingMode(RangingMode.Short, 24);
@@ -44,6 +46,7 @@ public class IntakeSubsystem extends SubsystemBase {
                     m_shooter.kicker(0.5);
                     frontIntake.set(-IntakeSpeed);
                     backIntake.set(-IntakeSpeed);
+                    bumperIntake.set(-IntakeSpeed);
                     m_shooter.shoot(-0.3);
                 } else {
                     state = intakeState.Stage2;
@@ -61,6 +64,7 @@ public class IntakeSubsystem extends SubsystemBase {
                 m_shooter.shoot(0);
                 frontIntake.set(0);
                 backIntake.set(0);
+                bumperIntake.set(0);
                 break;
         }
 
@@ -77,10 +81,12 @@ public class IntakeSubsystem extends SubsystemBase {
     public void passthrough() {
         frontIntake.set(PassoverSpeed);
         backIntake.set(-PassoverSpeed);
+        bumperIntake.set(PassoverSpeed);
     }
 
     public void stop() {
         frontIntake.set(0);
         backIntake.set(0);
+        bumperIntake.set(0);
     }
 }

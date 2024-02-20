@@ -8,7 +8,7 @@ public class Constants {
 
     public class CTRE {
         public class RIO {
-            
+            public static final int Bump_Intake = 25;
             public static final int F_Intake = 14;
             public static final int B_Intake = 15;
             
