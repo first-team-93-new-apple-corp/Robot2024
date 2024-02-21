@@ -36,11 +36,11 @@ public class AutoAlignSubsystem extends SubsystemBase {
     PIDController AlignPIDTheta = new PIDController(0.0023, 0.025, 0.0015); // Rotationly PID
     PIDController AlignPIDY = new PIDController(1.15, 0.07, 0.075);
     PIDController AlignPIDX = new PIDController(1.15, 0.07, 0.075);
-
+    double X, Y, Theta;
     double AmpSetpointX = 1.75, AmpSetpointY = 7.6, AmpSetpointTheta = -90;
-    double TrapSetpoint1X = 4, TrapSetpoint1Y = 2.7, TrapSetpoint1Theta = 0;
-    double TrapSetpoint2X = 4, TrapSetpoint2Y = 2.7, TrapSetpoint2Theta = 0;
-    double TrapSetpoint3X = 4, TrapSetpoint3Y = 2.7, TrapSetpoint3Theta = 0;
+    double TrapSetpoint1X = 4.1, TrapSetpoint1Y = 2.8, TrapSetpoint1Theta = -120;
+    double TrapSetpoint2X = 4, TrapSetpoint2Y = 5.2, TrapSetpoint2Theta = 120;
+    double TrapSetpoint3X = 6.2, TrapSetpoint3Y = 4, TrapSetpoint3Theta = 0;
     double toleranceX = .2, toleranceY = .2, toleranceTheta = 12;
 
     public AutoAlignSubsystem(SwerveDriveSubsystem drivetrain) {
@@ -56,7 +56,14 @@ public class AutoAlignSubsystem extends SubsystemBase {
                 AmpSetpointX = 1.75;
                 AmpSetpointY = 7.6;
                 AmpSetpointTheta = -90;
-
+                TrapSetpoint1X = 4.1;
+                TrapSetpoint1Y = 2.8;
+                TrapSetpoint1Theta = -60;
+                TrapSetpoint2X = 4;
+                TrapSetpoint2Y = 5.2;
+                TrapSetpoint2Theta = 60;
+                TrapSetpoint3X = 6.2; TrapSetpoint3Y = 4;
+                TrapSetpoint3Theta = 180;
             }
         }
 
@@ -70,44 +77,33 @@ public class AutoAlignSubsystem extends SubsystemBase {
 
     public void updateValues(double PIDSetpointX, double PIDSetpointY, Double PIDSetpointTheta) {
         drivetrain.updateOdometry();
+        X = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getX();
+        Y = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getY();
+        Theta = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getRotation().getDegrees();
+        
         alignSpeeds = new ChassisSpeeds(
-                ((MathUtil.clamp((AlignPIDX
-                        .calculate(drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getX(), PIDSetpointX)),
-                        -MaxSpeed, MaxSpeed)) * 1), // Velocity y Sawyer
-                ((MathUtil.clamp((AlignPIDY
-                        .calculate(drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getY(), PIDSetpointY)),
-                        -MaxSpeed, MaxSpeed)) * 1), // Velocity X Sawyer
-                (-MathUtil.clamp((AlignPIDTheta.calculate(
-                        drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getRotation().getDegrees(),
-                        PIDSetpointTheta)), -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
+                ((MathUtil.clamp((AlignPIDX.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * 1), // Velocity y Sawyer
+                ((MathUtil.clamp((AlignPIDY.calculate(Y, PIDSetpointY)), -MaxSpeed, MaxSpeed)) * 1), // Velocity X Sawyer
+                (-MathUtil.clamp((AlignPIDTheta.calculate(Theta, PIDSetpointTheta)), -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
+        
         fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(alignSpeeds,
-                new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
-                        .rotateBy(new Rotation2d(0)));
+            new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
+            .rotateBy(new Rotation2d(0)));
 
     }
-    // (-MathUtil.clamp((AlignPID.calculate(ty, PIDSetpointY)), 0, MaxSpeed / 3)),
-    // // Velocity y CONNOr
-    // (-MathUtil.clamp((AlignPID.calculate(tx, PIDSetpointRotate)),
-    // -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
-    // (-MathUtil.clamp((AlignPID.calculate(y, PIDSetpointY2)), 0, MaxSpeed / 3)),
-    // // Velocity y Sawyer
-    // -MathUtil.clamp((AlignPID.calculate(z2, PIDSetpointZ3)), -MaxAngularRate / 2,
-    // MaxAngularRate / 2)
-    // (-MathUtil.clamp((AlignPID.calculate(y, PIDSetpointY2)), -MaxSpeed/3 )); //
-    // Velocity y //SAWYEERS THING
 
     public void AutoAimAmp() { // Works amp
         AutoAim(AmpSetpointX, AmpSetpointY, AmpSetpointTheta);
     }
 
     public void AutoAimTrap() { // Works with all trap locations
-        if (true) {
+        if (Y < 4 && X < 5.3) {
             // Trap 1
             AutoAim(TrapSetpoint1X, TrapSetpoint1Y, TrapSetpoint1Theta);
-        } else if (true) {
+        } else if (Y > 4 && X < 5.3) {
             // Trap 2
             AutoAim(TrapSetpoint2X, TrapSetpoint2Y, TrapSetpoint2Theta);
-        } else if (true) {
+        } else if (X> 5.3) {
             // Trap 3
             AutoAim(TrapSetpoint3X, TrapSetpoint3Y, TrapSetpoint3Theta);
         }
@@ -115,11 +111,11 @@ public class AutoAlignSubsystem extends SubsystemBase {
     public void AutoAim (double SetpointX, double SetpointY, Double SetpointTheta ) {
         updateValues(SetpointX, SetpointY, SetpointTheta);
         if (
-            Math.abs(drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getX() - SetpointX) < toleranceX
+            Math.abs(X - SetpointX) < toleranceX
             &&
-            Math.abs(drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getY() - SetpointY) < toleranceY
+            Math.abs(Y - SetpointY) < toleranceY
             &&
-            Math.abs(drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getRotation().getDegrees() + SetpointTheta) < toleranceTheta)
+            Math.abs(-180 + Math.abs(Theta) + Math.abs(SetpointTheta)) < toleranceTheta)
             {
             return;
         } else {
