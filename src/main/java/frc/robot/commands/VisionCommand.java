@@ -19,19 +19,17 @@ public class VisionCommand extends Command {
     @Override
     public void execute() {
         Vision.periodic();
-        if (m_joystick1.getRawButton(2)) {
-            Vision.Align();
+        if (m_joystick1.getRawButton(Constants.Thrustmaster.Center_Button)) {
+            Vision.AlignAmp();
+        } else if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Button)) {
+            Vision.AlignTrap();
         } else {
-            Vision.resetState();
-        }
-        if (m_joystick1.getRawButton(4)) {
-            // Vision.YAlign();
-            return;
+            Vision.resetStateTrap();
+            Vision.resetStateAmp();
         }
         if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Top_Left)) {
             Vision.LimeLightOn();
-        }
-        if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Bottom_Left)) {
+        } else if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Bottom_Left)) {
             Vision.LimeLightOff();
         }
     }
