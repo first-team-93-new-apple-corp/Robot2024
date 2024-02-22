@@ -25,6 +25,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.commands.AutoAlignCommand;
+import frc.robot.commands.ClimberCommand;
+// import frc.robot.commands.ClimbingLevel;
+// import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.AutoAlignSubsystem;
 import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -33,7 +40,12 @@ import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
 
 public class RobotContainer extends TimedRobot {
-  
+
+  // public ClimbingLevel m_ClimbingLevel;
+  public ShooterCommand m_ShooterCommand;
+  public IntakeCommand m_IntakeCommand;
+  public AutoAlignSubsystem m_AutoAlignSubsystem;
+  // public ElevatorCommand m_ElevatorCommand;  
   public ShooterSubsystem m_ShooterSubsystem;
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
@@ -55,6 +67,8 @@ public class RobotContainer extends TimedRobot {
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
+  private JoystickButton m_AmpAlignButton;
+  private JoystickButton m_TrapAlignButton;
   private final JoystickButton m_BrakeButton;
   private final JoystickButton m_fieldRelButton;
   private final JoystickButton m_RobotRelButton;
@@ -64,7 +78,8 @@ public class RobotContainer extends TimedRobot {
   private Pose2d pose = new Pose2d();
   // private final SwerveDrivePoseEstimator m_poseEstimator;
   // added this for button bindings and the logic I added
-  // private JoystickButton m_climbingLevelButton;
+  
+  AutoAlignCommand m_AutoAlignCommand = new AutoAlignCommand(drivetrain);
 
   private SwerveRequest.RobotCentric RobotCentricDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -144,6 +159,13 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void configureBindings() {
+    m_TrapAlignButton.whileTrue(m_AutoAlignCommand);
+    m_AmpAlignButton.whileTrue(m_AutoAlignCommand);
+    
+    // m_AmpAlignButton.whileTrue(drivetrain.applyRequest(() -> m_swerveRequest
+    // .withCenterOfRotation(DriveConstants.dCenter)
+    // .withSpeeds(m_AutoAlignSubsystem.fieldSpeeds)));
+
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> m_swerveRequest
             .withCenterOfRotation(DriveConstants.dCenter)
@@ -220,6 +242,11 @@ public class RobotContainer extends TimedRobot {
     // m_WheelsPointForwardButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
+    m_AmpAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
+    m_TrapAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Button);
+    //ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+    //IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
+    m_AutoAlignSubsystem = new AutoAlignSubsystem(drivetrain);
     // m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);
     NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
     NamedCommands.registerCommand("PrimeShooter", m_ShooterSubsystem.AutonShooter());
@@ -253,7 +280,7 @@ public class RobotContainer extends TimedRobot {
             .rotateBy(new Rotation2d(-fieldRelativeOffset)));
     RotationPoints(m_Joystick2);
     POVButton();
-
+    m_AutoAlignSubsystem.Alliance();
     drivetrain.updateOdometry();
     pose = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition();
     m_Field2d.setRobotPose(pose);

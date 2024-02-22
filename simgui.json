@@ -43,6 +43,7 @@
         "left": 150,
         "right": 2961,
         "top": 79,
+        "units": "meters",
         "width": 16.541748046875,
         "window": {
           "visible": true
@@ -92,14 +93,18 @@
       "open": true
     },
     "elastic@1": {
-      "Publishers": {
-        "open": false
-      },
       "Subscribers": {
         "open": true
       },
       "open": true
-    }
+    },
+    "elastic@2": {
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
+    },
+    "visible": true
   },
   "NetworkTables View": {
     "visible": false
