@@ -11,11 +11,9 @@ public class IntakeCommand extends Command {
     IntakeSubsystem m_IntakeSubsystem;
     public int IntakeSpeed;
 
-    public IntakeCommand(ShooterSubsystem m_shooter) {
-        m_IntakeSubsystem = new IntakeSubsystem(m_shooter);
+    public IntakeCommand(ShooterSubsystem m_shooter, IntakeSubsystem m_IntakeSubsystem) {
+        this.m_IntakeSubsystem = m_IntakeSubsystem;
     }
-
-   
 
     @Override
     public void execute() {
@@ -23,7 +21,7 @@ public class IntakeCommand extends Command {
         if (opController.getRawButton(Constants.xbox.X)) { // X
             m_IntakeSubsystem.Intake();
         } else if (opController.getRawButton(Constants.xbox.A)) { // A
-            m_IntakeSubsystem.passthrough();
+            // m_IntakeSubsystem.passthrough();
         } else {
             m_IntakeSubsystem.stop();
             m_IntakeSubsystem.resetIntakeState();

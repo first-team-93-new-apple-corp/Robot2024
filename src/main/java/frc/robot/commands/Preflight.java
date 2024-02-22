@@ -19,9 +19,9 @@ public class Preflight extends Command {
     boolean rightFinished = false;
     boolean elevatorFinished = false;
 
-    public Preflight(XboxController op, ElevatorCommand elevatorCommand, IntakeCommand m_IntakeCommand) {
+    public Preflight(XboxController op, ElevatorCommand elevatorCommand, IntakeCommand m_IntakeCommand, ClimberCommand climbers) {
         pdh = new PowerDistribution(1, ModuleType.kRev);
-        climbers = new ClimberCommand();
+        this.climbers = climbers;
         this.elevatorCommand = elevatorCommand;
         this.m_IntakeCommand = m_IntakeCommand;
         m_OrchestraCommand = new OrchestraCommand();

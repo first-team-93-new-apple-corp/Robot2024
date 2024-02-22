@@ -1,17 +1,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.ElevatorSubsystem;
+// import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.TunerConstants;
 
 import com.ctre.phoenix6.hardware.*;
 public class ClimbingLevelCommand extends Command {
     ClimberCommand m_climberCommand;
-    ElevatorCommand m_ElevatorCommand;
-    ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+    // ElevatorCommand m_ElevatorCommand;
+    // ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
     Pigeon2 m_pigeon2;
     double elevatorSetpoint = -20.0;
     private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
@@ -38,7 +36,7 @@ public class ClimbingLevelCommand extends Command {
             m_climberCommand.changeRight(-5);
         }
         //This doesn't have to change since the weight forward/backwards should always be the same
-        m_ElevatorSubsystem.toSetpoint(elevatorSetpoint);
+        // m_ElevatorSubsystem.toSetpoint(elevatorSetpoint);
     }
     public Command levelCommand () {
         return this;

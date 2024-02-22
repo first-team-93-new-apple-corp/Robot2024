@@ -29,10 +29,11 @@ public class IntakeSubsystem extends SubsystemBase {
         this.m_shooter = m_shooter;
         frontIntake = new TalonFX(Constants.CTRE.RIO.F_Intake, "rio");
         backIntake = new TalonFX(Constants.CTRE.RIO.B_Intake, "rio");
-        bumperIntake = new TalonFX(Constants.CTRE.RIO.Bump_Intake, "rio");
+        bumperIntake = new TalonFX(Constants.CTRE.RIO.Bump_Intake, "drivetrain");
         backIntake.setInverted(false);
         midTOF = new TimeOfFlight(22);
         midTOF.setRangingMode(RangingMode.Short, 24);
+        bumperIntake.setInverted(true);
     }
 
     public Command AutonStopIntake() {
@@ -46,7 +47,7 @@ public class IntakeSubsystem extends SubsystemBase {
                     m_shooter.kicker(0.5);
                     frontIntake.set(-IntakeSpeed);
                     backIntake.set(-IntakeSpeed);
-                    bumperIntake.set(-IntakeSpeed);
+                    bumperIntake.set(-IntakeSpeed * 1.27);
                     m_shooter.shoot(-0.3);
                 } else {
                     state = intakeState.Stage2;

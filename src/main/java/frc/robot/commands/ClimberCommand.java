@@ -20,10 +20,6 @@ public class ClimberCommand extends Command {
         m_climber = new ClimberSubsystem(op);
     }
 
-    public ClimberCommand() {
-        m_climber = new ClimberSubsystem(op);
-    }
-
     // public void leftToSetpoint(double setpoint) {
     //     m_climber.leftSpeed(leftPID.calculate(m_climber.leftPosition(), leftSetpoint));
     // }
@@ -94,12 +90,10 @@ public class ClimberCommand extends Command {
     }
     @Override
     public void execute() {
-        if(op.getRawButtonPressed(Constants.xbox.LeftPaddle)) {
+        if(op.getRawButtonPressed(Constants.xbox.A)) {
             stow();
-        } else if(op.getRawButtonPressed(Constants.xbox.RightPaddle)) {
+        } else if(op.getRawButtonPressed(Constants.xbox.B)) {
             toHang();
-        } else if(op.getRawAxis(Constants.xbox.Axis.LT) > 0.95) {
-            toClimb();
         }
         calculateLeft();
         calculateRight();

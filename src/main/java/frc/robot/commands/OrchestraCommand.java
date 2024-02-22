@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import com.ctre.phoenix6.Orchestra;
-import com.ctre.phoenix6.hardware.TalonFX;
 
 public class OrchestraCommand {
     Orchestra orchestra = new Orchestra();

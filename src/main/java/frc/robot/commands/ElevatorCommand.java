@@ -32,24 +32,24 @@ public class ElevatorCommand extends Command {
 
     @Override
     public void execute() {
-        if (op.getPOV() == 0) {
-            m_elevator.toSetpoint(-75);
-        } else if (op.getPOV() == 90) {
-            m_elevator.toSetpoint(-40);
-        } else if (op.getPOV() == 180) {
-            m_elevator.toSetpoint(-3);
-        } else if (op.getPOV() == 270) {
-            m_elevator.toSetpoint(-25);
-        } else {
+        // if (op.getPOV() == 0) {
+        //     m_elevator.toSetpoint(-75);
+        // } else if (op.getPOV() == 90) {
+        //     m_elevator.toSetpoint(-40);
+        // } else if (op.getPOV() == 180) {
+        //     m_elevator.toSetpoint(-3);
+        // } else if (op.getPOV() == 270) {
+        //     m_elevator.toSetpoint(-25);
+        // } else {
 
-        }
+        // }
 
         if (op.getRawButton(Constants.xbox.RightShoulderButton)) {
             m_elevator.toSetpoint(ampSetpoint);
-        }
-
-        if (op.getRawButton(Constants.xbox.LeftShoulderButton)) {
+        } else if (op.getRawButton(Constants.xbox.LeftShoulderButton)) {
             m_elevator.toSetpoint(sourceSetpoint);
+        } else {
+            m_elevator.toSetpoint(3);
         }
     }
 }

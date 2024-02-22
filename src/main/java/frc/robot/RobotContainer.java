@@ -25,11 +25,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.commands.ClimberCommand;
-// import frc.robot.commands.ClimbingLevel;
-// import frc.robot.commands.ElevatorCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -38,10 +33,8 @@ import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
 
 public class RobotContainer extends TimedRobot {
-  // public ClimbingLevel m_ClimbingLevel;
-  public ShooterCommand m_ShooterCommand;
-  public IntakeCommand m_IntakeCommand;
-  // public ElevatorCommand m_ElevatorCommand;
+  
+  public ShooterSubsystem m_ShooterSubsystem;
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private final SendableChooser<Command> autoChooser;
@@ -51,12 +44,13 @@ public class RobotContainer extends TimedRobot {
   private double deadzone = DriveConstants.JoystickDeadzone;
   private Joystick m_Joystick1;
   private Joystick m_Joystick2;
+  @SuppressWarnings("unused")
   private XboxController op;
   private boolean Limit = true;
   // can set this to whatever button you want you can also just
   // delete this and use the constants file for the button
   // (just so that the logic works for now)
-  private int climbingLevelButton;
+  // private int climbingLevelButton;
 
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
@@ -70,14 +64,14 @@ public class RobotContainer extends TimedRobot {
   private Pose2d pose = new Pose2d();
   // private final SwerveDrivePoseEstimator m_poseEstimator;
   // added this for button bindings and the logic I added
-  private JoystickButton m_climbingLevelButton;
+  // private JoystickButton m_climbingLevelButton;
 
   private SwerveRequest.RobotCentric RobotCentricDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-  private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+  // private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
   POVButton pov0; // front
@@ -113,28 +107,28 @@ public class RobotContainer extends TimedRobot {
         // SmartDashboard.putNumber("Limit", Limit);
         if (pov0.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Front
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
         } else if (pov45.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Location_FR
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
         } else if (pov90.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Right
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
         } else if (pov135.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Location_BR
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
         } else if (pov180.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Back
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
         } else if (pov225.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Location_BL
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
         } else if (pov270.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Left
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
         } else if (pov315.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Location_FL
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
         } else {
           DriveConstants.dCenter = DriveConstants.Center;
         }
@@ -207,7 +201,8 @@ public class RobotContainer extends TimedRobot {
     drivetrain.configAuto();
   }
 
-  public RobotContainer(Joystick m_Joystick1, Joystick m_Joystick2, XboxController op) {
+  public RobotContainer(Joystick m_Joystick1, Joystick m_Joystick2, XboxController op, ShooterSubsystem m_ShooterSubsystem, IntakeSubsystem m_IntakeSubsystem) {
+    this.m_ShooterSubsystem = m_ShooterSubsystem;
     // m_poseEstimator = new SwerveDrivePoseEstimator());
     // m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     // m_JoystickButton2 = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
@@ -225,9 +220,7 @@ public class RobotContainer extends TimedRobot {
     // m_WheelsPointForwardButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
-    m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);
-    ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-    IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
+    // m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);
     NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
     NamedCommands.registerCommand("PrimeShooter", m_ShooterSubsystem.AutonShooter());
     NamedCommands.registerCommand("Shooter", m_ShooterSubsystem.AutonKicker());
