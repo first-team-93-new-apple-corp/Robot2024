@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 // import frc.robot.subsystems.USBCameraSubsystem;
@@ -28,19 +29,20 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
   // private USBCameraSubsystem m_UsbCameraSubsystem = new USBCameraSubsystem();
-  private ShooterCommand m_Shooter = new ShooterCommand();
   private ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-  private IntakeCommand m_Intake = new IntakeCommand(m_ShooterSubsystem);
+  private ShooterCommand m_Shooter = new ShooterCommand(m_ShooterSubsystem);
+  private IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
+  private IntakeCommand m_Intake = new IntakeCommand(m_ShooterSubsystem, m_IntakeSubsystem);
   private ElevatorCommand m_Elevator = new ElevatorCommand(op);
   private ClimberCommand m_Climber = new ClimberCommand(op);
-  private Preflight m_Preflight = new Preflight(op, m_Elevator, m_Intake);
+  private Preflight m_Preflight = new Preflight(op, m_Elevator, m_Intake, m_Climber);
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
   public Pigeon2 getPigeon() {
     return m_robotContainer.getPigeon();
   }
   @Override
   public void robotInit() {
-    m_robotContainer = new RobotContainer(m_Joystick1, m_Joystick2, op);
+    m_robotContainer = new RobotContainer(m_Joystick1, m_Joystick2, op, m_ShooterSubsystem, m_IntakeSubsystem);
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
     m_Elevator.initOnce();
     m_SwerveDriveSubsystem.configAuto();

@@ -11,8 +11,8 @@ public class ShooterCommand extends Command {
     Joystick driver2 = new Joystick(1);
     ShooterSubsystem m_ShooterSubsystem;
 
-    public ShooterCommand() {
-        m_ShooterSubsystem = new ShooterSubsystem();
+    public ShooterCommand(ShooterSubsystem m_ShooterSubsystem) {
+        this.m_ShooterSubsystem = m_ShooterSubsystem;
     }
 
     @Override

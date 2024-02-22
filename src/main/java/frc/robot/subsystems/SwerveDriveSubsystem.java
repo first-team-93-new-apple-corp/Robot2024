@@ -18,31 +18,24 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-// import frc.robot.commands.ElevatorCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ShooterCommand;
 
 public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
     public XboxController opController = new XboxController(2);
-    public ShooterCommand m_ShooterCommand = new ShooterCommand();
-    public ShooterSubsystem m_shooter = new ShooterSubsystem();
-    public IntakeCommand m_IntakeCommand = new IntakeCommand(m_shooter);
+    // public ShooterCommand m_ShooterCommand = new ShooterCommand();
+    // public ShooterSubsystem m_shooter = new ShooterSubsystem();
+    // public IntakeCommand m_IntakeCommand = new IntakeCommand(m_shooter);
     // public ElevatorCommand m_ElevatorCommand = new ElevatorCommand(opController);
     public final double MaxSpeed = DriveConstants.MaxSpeed;
     public final double MaxAngularRate = DriveConstants.MaxAngularRate;

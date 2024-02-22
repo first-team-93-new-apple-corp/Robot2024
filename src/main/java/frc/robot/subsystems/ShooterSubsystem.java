@@ -14,9 +14,9 @@ public class ShooterSubsystem extends SubsystemBase {
     TalonFX ShooterL = new TalonFX(Constants.CTRE.RIO.L_Shoot, "rio");
     static CANSparkMax KickerL;
     static CANSparkMax KickerR;
-    double SpeakerShooterSpeed = 0.45;
+    double SpeakerShooterSpeed = 0.55;
     double currentspeed;
-    final double MuzzleIntake = -0.10;
+    final double MuzzleIntake = -0.30;
     final double AmpShooterSpeed = 0.1;
     final double KickerSpeed = 1;
 
@@ -64,6 +64,11 @@ public class ShooterSubsystem extends SubsystemBase {
         KickerL.set(0);
         KickerR.set(0);
     }
+
+    public void ShootingforAuton(){
+        prime();
+        kicker(KickerSpeed);
+    }
     public Command AutonKickerStop() {
         return this.run(() -> kickerStop());
     }
@@ -82,7 +87,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // }
 
     public Command AutonKicker() {
-        return this.run(() -> kicker(0.15));
+        return this.run(() -> ShootingforAuton());
     }
 
     public Command AutonAmp(){
@@ -97,7 +102,7 @@ public class ShooterSubsystem extends SubsystemBase {
         if (SpeakerShooterSpeed <= 0.95) {
             SpeakerShooterSpeed += 0.05; // +5%speed
         }
-        SmartDashboard.putNumber("CurrentSpeed", SpeakerShooterSpeed);
+        // SmartDashboard.putNumber("CurrentSpeed", SpeakerShooterSpeed);
 
     }
 
@@ -105,7 +110,7 @@ public class ShooterSubsystem extends SubsystemBase {
         if (SpeakerShooterSpeed >= 0.1) {
             SpeakerShooterSpeed -= 0.05; // -5%speed
         }
-        SmartDashboard.putNumber("CurrentSpeed", SpeakerShooterSpeed);
+        // SmartDashboard.putNumber("CurrentSpeed", SpeakerShooterSpeed);
 
     }
     @Override

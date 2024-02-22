@@ -12,9 +12,6 @@
     "1 Shoot 1 Grab",
     "2 Note Shoot",
     "2 Shoot 1 Grab",
-    "3 Note Shoot",
-    "3 Note Shoot 1 Grab",
-    "4 Note Shoot",
     "Shoot and Leave"
   ],
   "defaultMaxVel": 3.0,
