@@ -275,7 +275,7 @@ public class RobotContainer extends TimedRobot {
             .rotateBy(new Rotation2d(-fieldRelativeOffset)));
     RotationPoints(m_Joystick2);
     POVButton();
-
+    m_AutoAlignSubsystem.Alliance();
     drivetrain.updateOdometry();
     pose = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition();
     m_Field2d.setRobotPose(pose);
