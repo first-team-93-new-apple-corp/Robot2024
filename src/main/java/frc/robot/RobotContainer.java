@@ -244,8 +244,8 @@ public class RobotContainer extends TimedRobot {
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_AmpAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
     m_TrapAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Button);
-    ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-    IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
+    //ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+    //IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
     m_AutoAlignSubsystem = new AutoAlignSubsystem(drivetrain);
     // m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);
     NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
