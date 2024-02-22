@@ -188,7 +188,7 @@ public class AutoAlignSubsystem extends SubsystemBase {
             Math.abs(-180 + Math.abs(Theta) + Math.abs(SetpointTheta)) < toleranceTheta)
             {
             
-            m_ShooterSubsystem.shootAmp();
+            // m_ShooterSubsystem.shootAmp();
             return;
         } else {
             drivetrain.driveRobotRelative(fieldSpeeds);
