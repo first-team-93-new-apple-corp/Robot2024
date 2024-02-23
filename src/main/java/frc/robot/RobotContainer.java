@@ -44,8 +44,8 @@ public class RobotContainer extends TimedRobot {
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private final SendableChooser<Command> autoChooser;
-  public final double MaxSpeed = DriveConstants.MaxSpeed;
-  public final double MaxAngularRate = DriveConstants.MaxAngularRate;
+  public final double MaxSpeed = DriveConstants.MaxSpeed/5;
+  public final double MaxAngularRate = DriveConstants.MaxAngularRate/3;
   private double angle;
   private double deadzone = DriveConstants.JoystickDeadzone;
   private Joystick m_Joystick1;
@@ -66,7 +66,7 @@ public class RobotContainer extends TimedRobot {
   private JoystickButton m_RobotRelButton;
   private JoystickButton m_fieldRelButton;
   private JoystickButton m_CameraRelButton;
-
+  private JoystickButton m_xboxFieldRelButton;
   // added this for button bindings and the logic I added
   private JoystickButton m_climbingLevelButton;
 
@@ -215,6 +215,7 @@ public class RobotContainer extends TimedRobot {
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);
+    m_xboxFieldRelButton = new JoystickButton(op, Constants.F310_D.Y);
     ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
     IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
     NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
@@ -238,11 +239,13 @@ public class RobotContainer extends TimedRobot {
     SmartDashboard.putNumber("PigeonAngle", angle);
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
       fieldRelativeOffset = drivetrain.getPigeon2().getRotation2d().getRadians();
+    } else if (op.getRawButtonPressed(Constants.F310_D.Y)){
+      fieldRelativeOffset = drivetrain.getPigeon2().getRotation2d().getRadians();
     }
     speeds = new ChassisSpeeds(
-        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * MaxSpeed),
-        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
-        (checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxAngularRate));
+        (checkDeadzone(op.getRawAxis(Constants.F310_D.Axis.Left_Stick_X)) * MaxSpeed),
+        (checkDeadzone(op.getRawAxis(Constants.F310_D.Axis.Left_Stick_Y)) * MaxSpeed),
+        (checkDeadzone(op.getRawAxis(Constants.F310_D.Axis.Right_Stick_X)) * MaxAngularRate));
     fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
         new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
             .rotateBy(new Rotation2d(-fieldRelativeOffset)));

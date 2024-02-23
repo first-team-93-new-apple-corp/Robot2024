@@ -5,7 +5,6 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
@@ -24,19 +23,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-// import frc.robot.commands.ElevatorCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ShooterCommand;
 
-public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
-    public XboxController opController = new XboxController(2);
-    public ShooterCommand m_ShooterCommand = new ShooterCommand();
-    public ShooterSubsystem m_shooter = new ShooterSubsystem();
-    public IntakeCommand m_IntakeCommand = new IntakeCommand(m_shooter);
-    // public ElevatorCommand m_ElevatorCommand = new ElevatorCommand(opController);
+public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem {
     public final double MaxSpeed = DriveConstants.MaxSpeed;
     public final double MaxAngularRate = DriveConstants.MaxAngularRate;
     private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric()
@@ -50,7 +40,6 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
     private Telemetry m_Telemetry = new Telemetry(MaxSpeed);
 
     public void configAuto() {
-
         // AutoBuilder.configureHolonomic(
         //         this::getPose, // Robot pose supplier
         //         this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -77,7 +66,6 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
         //         },
         //         this // Reference to this subsystem to set requirements
         // );
-        
         double driveBaseRadius = 0;
         for (var moduleLocation : m_moduleLocations) {
             driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
@@ -88,8 +76,8 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
             this::seedFieldRelative,  // Consumer for seeding pose against auto
             this::getCurrentRobotChassisSpeeds,
             (speeds)->this.setControl(autoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the robot
-            new HolonomicPathFollowerConfig(new PIDConstants(10, 0, 0),
-                                            new PIDConstants(10, 0, 0),
+            new HolonomicPathFollowerConfig(new PIDConstants(.3, 0, 0),
+                                            new PIDConstants(.3, 0, 0),
                                             TunerConstants.kSpeedAt12VoltsMps,
                                             driveBaseRadius,
                                             new ReplanningConfig()),
@@ -102,12 +90,6 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
     }
     public void applyConfig(TalonFXConfiguration config, TalonFXConfigurator configurator) {
         
-    }
-    public TalonFX getTurn(int module) {
-        return Modules[module].getSteerMotor();
-    }
-    public TalonFX getDrive(int module) {
-        return Modules[module].getDriveMotor();
     }
     public SwerveDriveSubsystem(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
             SwerveModuleConstants... modules) {

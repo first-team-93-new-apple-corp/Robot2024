@@ -17,6 +17,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.LEDCommand;
 import frc.robot.commands.Preflight;
 import com.ctre.phoenix6.hardware.*;
 public class Robot extends TimedRobot {
@@ -32,6 +33,7 @@ public class Robot extends TimedRobot {
   private IntakeCommand m_Intake = new IntakeCommand(m_ShooterSubsystem);
   private ElevatorCommand m_Elevator = new ElevatorCommand(op);
   private ClimberCommand m_Climber = new ClimberCommand(op);
+  private LEDCommand m_LED = new LEDCommand(op);
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
   private Preflight m_Preflight;
   public Pigeon2 getPigeon() {
@@ -96,6 +98,7 @@ public class Robot extends TimedRobot {
     m_Shooter.schedule();
     m_Elevator.schedule();
     m_Climber.schedule();
+    m_LED.schedule();
     m_robotContainer.updateValues();
     m_robotContainer.configureBindings();
   }
