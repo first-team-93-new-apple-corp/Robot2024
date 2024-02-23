@@ -36,7 +36,7 @@ public class Preflight extends Command {
     @Override
     public void execute() {
         if (!leftFinished) {
-            if (!(left.calculate(climbers.leftDraw()) > 0.5)) {
+            if (!(left.calculate(climbers.leftDraw()) > 0.6)) {
                 climbers.windLeft(0.05);
             } else {
                 climbers.windLeft(0);
@@ -45,7 +45,7 @@ public class Preflight extends Command {
             }
         }
         if (!rightFinished) {
-            if (!(right.calculate(climbers.rightDraw()) > 0.5)) {
+            if (!(right.calculate(climbers.rightDraw()) > 0.6)) {
                 climbers.windRight(0.05);
             } else {
                 climbers.windRight(0);

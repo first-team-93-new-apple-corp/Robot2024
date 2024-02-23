@@ -222,10 +222,9 @@ public class RobotContainer extends TimedRobot {
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     // m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);
     NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
-    NamedCommands.registerCommand("PrimeShooter", m_ShooterSubsystem.AutonShooter());
-    NamedCommands.registerCommand("Shooter", m_ShooterSubsystem.AutonKicker());
-    NamedCommands.registerCommand("StopPrime", m_ShooterSubsystem.AutonShooterStop());
-    NamedCommands.registerCommand("StopShooter", m_ShooterSubsystem.AutonKickerStop());
+    NamedCommands.registerCommand("Shooter", m_ShooterSubsystem.AutonShooter());
+    // NamedCommands.registerCommand("StopShooter", m_ShooterSubsystem.AutonShooterStop());
+    // NamedCommands.registerCommand("StopKicker", m_ShooterSubsystem.AutonKickerStop());
     NamedCommands.registerCommand("StopIntake", m_IntakeSubsystem.AutonStopIntake());
 
     drivetrain.configAuto();

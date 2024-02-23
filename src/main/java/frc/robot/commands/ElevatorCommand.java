@@ -11,8 +11,8 @@ public class ElevatorCommand extends Command {
     XboxController op;
     ElevatorSubsystem m_elevator = new ElevatorSubsystem();
     double setpoint = 0;
-    double ampSetpoint = -75;
-    double sourceSetpoint = -75;
+    double ampSetpoint = -70;
+    double sourceSetpoint = -70;
 
     public ElevatorCommand(XboxController op) {
         this.op = op;

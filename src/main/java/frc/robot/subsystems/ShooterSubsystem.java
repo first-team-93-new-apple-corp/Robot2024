@@ -8,7 +8,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-
 public class ShooterSubsystem extends SubsystemBase {
     TalonFX ShooterR = new TalonFX(Constants.CTRE.RIO.R_Shoot, "rio");
     TalonFX ShooterL = new TalonFX(Constants.CTRE.RIO.L_Shoot, "rio");
@@ -29,10 +28,12 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterR.setInverted(false);
         KickerR.setInverted(true);
     }
+
     public void shoot(double speed) {
         ShooterR.set(speed);
         ShooterL.set(speed);
     }
+
     public void prime() {
         ShooterR.set(SpeakerShooterSpeed);
         ShooterL.set(SpeakerShooterSpeed);
@@ -58,6 +59,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public void shooterStop() {
         ShooterR.set(0);
         ShooterL.set(0);
+        KickerL.set(0);
+        KickerR.set(0);
     }
 
     public void kickerStop() {
@@ -65,37 +68,41 @@ public class ShooterSubsystem extends SubsystemBase {
         KickerR.set(0);
     }
 
-    public void ShootingforAuton(){
+    public void ShootingforAuton() {
+        int timer;
         prime();
         kicker(KickerSpeed);
+        for (timer = 0; timer < 6; timer++) {
+            if (timer >= 5) {
+                shooterStop();
+            }
+        }
     }
+
     public Command AutonKickerStop() {
         return this.run(() -> kickerStop());
     }
+
     public Command AutonShooterStop() {
         return this.run(() -> shooterStop());
     }
 
     // public void kickerSetMode(boolean mode) {
-    //     if (mode == true){
-    //         KickerL.setIdleMode(IdleMode.kBrake);
-    //         KickerR.setIdleMode(IdleMode.kBrake);
-    //     } else {
-    //         KickerL.setIdleMode(IdleMode.kCoast);
-    //         KickerR.setIdleMode(IdleMode.kCoast);
-    //     }
+    // if (mode == true){
+    // KickerL.setIdleMode(IdleMode.kBrake);
+    // KickerR.setIdleMode(IdleMode.kBrake);
+    // } else {
+    // KickerL.setIdleMode(IdleMode.kCoast);
+    // KickerR.setIdleMode(IdleMode.kCoast);
+    // }
     // }
 
-    public Command AutonKicker() {
-        return this.run(() -> ShootingforAuton());
-    }
-
-    public Command AutonAmp(){
+    public Command AutonAmp() {
         return this.run(() -> shootAmp());
     }
 
     public Command AutonShooter() {
-        return this.run(() -> prime());
+        return this.run(() -> ShootingforAuton());
     }
 
     public void increaseSpeed() {
@@ -113,6 +120,7 @@ public class ShooterSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("CurrentSpeed", SpeakerShooterSpeed);
 
     }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Shooter Speed", SpeakerShooterSpeed);

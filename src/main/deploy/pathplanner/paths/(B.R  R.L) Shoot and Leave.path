@@ -32,84 +32,16 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Prime Shooter",
-      "waypointRelativePos": 0,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "PrimeShooter"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "End Shooter",
-      "waypointRelativePos": 0.35,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "StopShooter"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Wait .25 sec",
-      "waypointRelativePos": 0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "wait",
-              "data": {
-                "waitTime": 0.25
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
       "name": "Shoot",
-      "waypointRelativePos": 0.05,
+      "waypointRelativePos": 0,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
                 "name": "Shooter"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Wait .5 sec",
-      "waypointRelativePos": 0.05,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "wait",
-              "data": {
-                "waitTime": 0.5
               }
             }
           ]

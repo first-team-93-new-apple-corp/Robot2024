@@ -12,7 +12,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public TalonFX climberLeft;
     public TalonFX climberRight;
     public XboxController op;
-    public double maxHeight = 160;
+    public double maxHeight = 155;
     public ClimberSubsystem(XboxController op) {
         this.op = op;
         climberLeft = new TalonFX(Constants.CTRE.RIO.L_Climber, "drivetrain");

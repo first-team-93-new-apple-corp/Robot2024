@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -18,6 +20,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // TalonFXConfiguration m_motorconfig;
     double output;
     PIDController pid = new PIDController(0.075, 0, 0);
+    TalonFXConfiguration config = new TalonFXConfiguration();
     // AnalogInput m_encoder;
     AnalogEncoder m_encoder;
     double zeroPos;
@@ -38,7 +41,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public ElevatorSubsystem() {
         m_motor = new TalonFX(Constants.CTRE.RIO.Elevator, "rio");
-        m_motor.setNeutralMode(NeutralModeValue.Brake);
+        config.CurrentLimits.SupplyCurrentLimit = 15;
+        config.CurrentLimits.SupplyCurrentThreshold = 0;
+        config.CurrentLimits.SupplyTimeThreshold = 0;
+        config.CurrentLimits.SupplyCurrentLimitEnable = true;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        m_motor.getConfigurator().apply(config);
         currentState = elevatorState.Init;
     }
 
@@ -89,9 +97,9 @@ public class ElevatorSubsystem extends SubsystemBase {
                     // currentState = elevatorState.TempState;
                 } else {
                     if (currentPos <= -65 || currentPos >= -15) {
-                        output = MathUtil.clamp(output, -0.3, 0.3);
+                        output = MathUtil.clamp(output, -0.6, 0.6);
                     }
-                    output = MathUtil.clamp(output, -0.75, 0.75);
+                    output = MathUtil.clamp(output, -0.90, 0.90);
                     m_motor.set(output);
                 }
                 break;
@@ -100,6 +108,7 @@ public class ElevatorSubsystem extends SubsystemBase {
                     m_motor.set(0.05);
                 } else {
                     m_motor.set(0);
+                    m_motor.setPosition(0);
                     currentState = elevatorState.HoldState;
                 }
                 break;
