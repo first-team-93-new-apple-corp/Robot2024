@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.25,
+      "y": 4.6
+    },
+    "rotation": 145.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(B.R  R.L) Shoot (B.R  R.L) Grab"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start (B.L  R.R) Shoot 4 Note End (B.R  R.L)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(B.R  R.L) Shoot and Leave to Midline"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "2 Note Shoot",
+  "choreoAuto": false
+}
