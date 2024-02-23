@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6393423695938301,
+      "y": 2.733322557554207
+    },
+    "rotation": 90.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(A.F.N) Drop Note, Leave"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Shoot and Leave",
+  "choreoAuto": false
+}

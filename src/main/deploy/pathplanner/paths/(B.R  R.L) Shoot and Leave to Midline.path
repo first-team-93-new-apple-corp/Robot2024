@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 4.4,
-        "y": 2.0
+        "x": 7.747846768420809,
+        "y": 0.8
       },
       "prevControl": {
-        "x": 2.710323966102478,
-        "y": 1.8097767104625118
+        "x": 3.1860900085436534,
+        "y": 0.8489158796499418
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,10 +47,20 @@
           ]
         }
       }
+    },
+    {
+      "name": "End Shoot",
+      "waypointRelativePos": 0.25,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.5,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0

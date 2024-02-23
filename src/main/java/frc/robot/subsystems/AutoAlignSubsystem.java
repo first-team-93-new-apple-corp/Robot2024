@@ -1,29 +1,29 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain.SwerveDriveState;
+// import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain.SwerveDriveState;
 
 import java.util.Optional;
 
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+// import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
+// import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.networktables.DoubleArrayEntry;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+// import edu.wpi.first.networktables.DoubleArrayEntry;
+// import edu.wpi.first.networktables.NetworkTable;
+// import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+// import frc.robot.Constants;
 
 public class AutoAlignSubsystem extends SubsystemBase {
     public final double MaxSpeed = DriveConstants.MaxSpeed;
     public final double MaxAngularRate = DriveConstants.MaxAngularRate;
-    private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
+    // private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
     // private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; //
     // My drivetrain
     ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();

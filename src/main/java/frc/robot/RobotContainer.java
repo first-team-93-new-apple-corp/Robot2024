@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.AutoAlignCommand;
-import frc.robot.commands.ClimberCommand;
+// import frc.robot.commands.ClimberCommand;
 // import frc.robot.commands.ClimbingLevel;
 // import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
