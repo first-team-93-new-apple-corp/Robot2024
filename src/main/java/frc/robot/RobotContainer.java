@@ -48,6 +48,7 @@ public class RobotContainer extends TimedRobot {
   private JoystickButton m_CameraRelButton;
   private JoystickButton m_FieldRelButton;
   private JoystickButton m_TestAlignButton;
+  private JoystickButton m_LimelightFlashButton;
 
   private SwerveRequest.RobotCentric RobotCentricDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -133,6 +134,7 @@ public class RobotContainer extends TimedRobot {
   public void configureBindings() {
     m_TrapAlignButton.whileTrue(m_Vision);
     m_AmpAlignButton.whileTrue(m_Vision);
+    m_LimelightFlashButton.whileTrue(m_Vision);
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> m_swerveRequest
             .withCenterOfRotation(DriveConstants.dCenter)
@@ -191,7 +193,8 @@ public class RobotContainer extends TimedRobot {
         Constants.Thrustmaster.Center_Button);
     m_TrapAlignButton = new JoystickButton(m_Joystick1,
         Constants.Thrustmaster.Right_Button);
-
+    m_LimelightFlashButton = new JoystickButton(m_Joystick1,
+        Constants.Thrustmaster.Right_Buttons.Top_Left);
     m_BrakeButton = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Trigger);
     // m_wheelsPointForwardButton = new JoystickButton(m_Joystick1,
     // Constants.Thrustmaster.Center_Button);

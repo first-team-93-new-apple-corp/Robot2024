@@ -27,9 +27,9 @@ public class VisionCommand extends Command {
             Vision.resetStateTrap();
             Vision.resetStateAmp();
         }
-        if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Top_Left)) {
+        if (m_joystick1.getRawButtonPressed(Constants.Thrustmaster.Right_Buttons.Top_Left)) {
             Vision.LimeLightOn();
-        } else if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Buttons.Bottom_Left)) {
+        } else if (m_joystick1.getRawButtonReleased(Constants.Thrustmaster.Right_Buttons.Top_Left)) {
             Vision.LimeLightOff();
         }
     }
