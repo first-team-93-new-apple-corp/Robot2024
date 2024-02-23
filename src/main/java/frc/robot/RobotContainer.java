@@ -23,23 +23,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.commands.ClimberCommand;
-// import frc.robot.commands.ClimbingLevel;
-// import frc.robot.commands.ElevatorCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ShooterCommand;
+// import frc.robot.commands.ClimberCommand;
+// // import frc.robot.commands.ClimbingLevel;
+// // import frc.robot.commands.ElevatorCommand;
+// import frc.robot.commands.IntakeCommand;
+// import frc.robot.commands.ShooterCommand;%
 import frc.robot.subsystems.DriveConstants;
-import frc.robot.subsystems.IntakeSubsystem;
+// import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
-
+import frc.robot.commands.AutoAlignCommand;
 public class RobotContainer extends TimedRobot {
   // public ClimbingLevel m_ClimbingLevel;
-  public ShooterCommand m_ShooterCommand;
-  public ClimberCommand m_ClimberCommand;
-  public IntakeCommand m_IntakeCommand;
+  public AutoAlignCommand m_AutoAlignCommand;
+  // public ShooterCommand m_ShooterCommand;
+  // public ClimberCommand m_ClimberCommand;
+  // public IntakeCommand m_IntakeCommand;
   // public ElevatorCommand m_ElevatorCommand;
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
@@ -67,8 +68,11 @@ public class RobotContainer extends TimedRobot {
   private JoystickButton m_fieldRelButton;
   private JoystickButton m_CameraRelButton;
   private JoystickButton m_xboxFieldRelButton;
+  private JoystickButton m_trapAlignButton;
+  private JoystickButton m_ampAlignButton;
   // added this for button bindings and the logic I added
   private JoystickButton m_climbingLevelButton;
+
 
   private SwerveRequest.RobotCentric RobotCentricDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -87,7 +91,7 @@ public class RobotContainer extends TimedRobot {
   POVButton pov270;// left
   POVButton pov315; // fl wheel
   POVButton povCenter;
-
+  
   // logan was here you silly gooses ;)
   // Configures the bindings to drive / control the swerve drive :)
   public void RotationPoints(Joystick m_Joystick2) {
@@ -148,6 +152,9 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void configureBindings() {
+    // m_trapAlignButton.whileTrue(m_AutoAlignCommand);
+    // m_ampAlignButton.whileTrue(m_AutoAlignCommand);
+    
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> m_swerveRequest
             .withCenterOfRotation(DriveConstants.dCenter)
@@ -216,14 +223,16 @@ public class RobotContainer extends TimedRobot {
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);
     m_xboxFieldRelButton = new JoystickButton(op, Constants.F310_D.Y);
-    ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-    IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
-    NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
-    NamedCommands.registerCommand("PrimeShooter", m_ShooterSubsystem.AutonShooter());
-    NamedCommands.registerCommand("Shooter", m_ShooterSubsystem.AutonKicker());
-    NamedCommands.registerCommand("StopPrime", m_ShooterSubsystem.AutonShooterStop());
-    NamedCommands.registerCommand("StopShooter", m_ShooterSubsystem.AutonKickerStop());
-    NamedCommands.registerCommand("StopIntake", m_IntakeSubsystem.AutonStopIntake());
+    m_trapAlignButton = new JoystickButton(op, 5);
+    m_ampAlignButton = new JoystickButton(op, 6);
+    // ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+    // IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
+    // NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
+    // NamedCommands.registerCommand("PrimeShooter", m_ShooterSubsystem.AutonShooter());
+    // NamedCommands.registerCommand("Shooter", m_ShooterSubsystem.AutonKicker());
+    // NamedCommands.registerCommand("StopPrime", m_ShooterSubsystem.AutonShooterStop());
+    // NamedCommands.registerCommand("StopShooter", m_ShooterSubsystem.AutonKickerStop());
+    // NamedCommands.registerCommand("StopIntake", m_IntakeSubsystem.AutonStopIntake());
 
     drivetrain.configAuto();
 

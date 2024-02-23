@@ -24,6 +24,6 @@ public class LEDCommand extends Command{
 
     @Override
     public void initialize(){
-        LEDSubsystem.Startup();
+        // LEDSubsystem.Startup();
     }
 }

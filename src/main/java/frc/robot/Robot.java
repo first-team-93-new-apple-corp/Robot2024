@@ -10,15 +10,17 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.AutoAlignSubsystem;
+// import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.commands.AutoAlignCommand;
 // import frc.robot.subsystems.USBCameraSubsystem;
-import frc.robot.commands.ClimberCommand;
-import frc.robot.commands.ElevatorCommand;
-import frc.robot.commands.IntakeCommand;
+// import frc.robot.commands.ClimberCommand;
+// import frc.robot.commands.ElevatorCommand;
+// import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LEDCommand;
-import frc.robot.commands.Preflight;
+// import frc.robot.commands.Preflight;
 import com.ctre.phoenix6.hardware.*;
 public class Robot extends TimedRobot {
   static Joystick m_Joystick1 = new Joystick(0);
@@ -28,14 +30,14 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
   // private USBCameraSubsystem m_UsbCameraSubsystem = new USBCameraSubsystem();
-  private ShooterCommand m_Shooter = new ShooterCommand();
+  // private ShooterCommand m_Shooter = new ShooterCommand();
   private ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-  private IntakeCommand m_Intake = new IntakeCommand(m_ShooterSubsystem);
-  private ElevatorCommand m_Elevator = new ElevatorCommand(op);
-  private ClimberCommand m_Climber = new ClimberCommand(op);
+  // private IntakeCommand m_Intake = new IntakeCommand(m_ShooterSubsystem);
+  // private ElevatorCommand m_Elevator = new ElevatorCommand(op);
+  // private ClimberCommand m_Climber = new ClimberCommand(op);
   private LEDCommand m_LED = new LEDCommand(op);
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
-  private Preflight m_Preflight;
+  // private Preflight m_Preflight;
   public Pigeon2 getPigeon() {
     return m_robotContainer.getPigeon();
   }
@@ -43,8 +45,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer(m_Joystick1, m_Joystick2, op);
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
-    m_Preflight = new Preflight(op, m_Elevator, m_Intake);
-    m_Elevator.initOnce();
+    // m_Preflight = new Preflight(op, m_Elevator, m_Intake);
+    // m_Elevator.initOnce();
     m_SwerveDriveSubsystem.configAuto();
     // m_UsbCameraSubsystem.register();
     SmartDashboard.putBoolean("Preflight Done?", false);
@@ -94,11 +96,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_Intake.schedule();
-    m_Shooter.schedule();
-    m_Elevator.schedule();
-    m_Climber.schedule();
-    m_LED.schedule();
+    // m_Intake.schedule();
+    // m_Shooter.schedule();
+    // m_Elevator.schedule();
+    // m_Climber.schedule();
+    // m_LED.schedule();
+    // m_AutoAlignCommand.schedule();
     m_robotContainer.updateValues();
     m_robotContainer.configureBindings();
   }
@@ -110,8 +113,8 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
-    m_Preflight.resetPreflight();
-    m_Preflight.schedule();
+    // m_Preflight.resetPreflight();
+    // m_Preflight.schedule();
   }
 
   @Override
