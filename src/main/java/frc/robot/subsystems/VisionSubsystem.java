@@ -4,6 +4,8 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain.SwerveDriveState;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -25,8 +27,8 @@ public class VisionSubsystem extends SubsystemBase {
     PIDController AlignPIDY = new PIDController(.1, 0, 0);
     PIDController AlignRotate = new PIDController(.05, 0, 0.029);
 
-    double tx, ty, tl, ta, tid, ts;
-    double[] targetpose_robotspace, botpose;
+    double tx, ty, tl, ta, tid, ts, cl;
+    double[] targetpose_robotspace, botpose, botpose_wpiblue;
     double x, y, z;
     double TrapAlignSetpointY = 3.3;
     double TrapAlignSetpointX = -18.4;
@@ -35,6 +37,8 @@ public class VisionSubsystem extends SubsystemBase {
     double AlignRotateSetpoint = 0;
     double arcSpeed, xTrapSpeed, yTrapSpeed, xAmpSpeed, yAmpSpeed;
     double tv;
+
+    Pose2d pose;
 
     public VisionSubsystem(SwerveDriveSubsystem drivetrain) {
         this.drivetrain = drivetrain;
@@ -45,6 +49,8 @@ public class VisionSubsystem extends SubsystemBase {
         tid = m_limelight.getEntry("tid").getDouble(0);
         ts = m_limelight.getEntry("ts").getDouble(0);
         targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
+        botpose_wpiblue = m_limelight.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
+        pose = new Pose2d();
     }
 
     public boolean hasTargets() {
@@ -222,7 +228,14 @@ public class VisionSubsystem extends SubsystemBase {
         tid = m_limelight.getEntry("tid").getDouble(0);
         ts = m_limelight.getEntry("ts").getDouble(0);
         targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
+        botpose_wpiblue = m_limelight.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
         y = targetpose_robotspace[2];
+    }   
+
+    public Pose2d getPose() {
+        updateValues();
+        pose = new Pose2d(botpose_wpiblue[0], botpose_wpiblue[1], new Rotation2d(botpose_wpiblue[5]));
+        return pose;
     }
 
     @Override
