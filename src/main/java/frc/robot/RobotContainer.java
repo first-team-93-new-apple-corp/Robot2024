@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
@@ -253,7 +254,7 @@ public class RobotContainer extends TimedRobot {
     // NamedCommands.registerCommand("StopShooter", m_ShooterSubsystem.AutonShooterStop());
     // NamedCommands.registerCommand("StopKicker", m_ShooterSubsystem.AutonKickerStop());
     NamedCommands.registerCommand("StopIntake", m_IntakeSubsystem.AutonStopIntake());
-
+    SignalLogger.start();
     drivetrain.configAuto();
 
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -283,6 +284,7 @@ public class RobotContainer extends TimedRobot {
     drivetrain.updateOdometry();
     pose = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition();
     m_Field2d.setRobotPose(pose);
+    SignalLogger.writeDoubleArray("pose", new double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
   }
 
   public double checkDeadzone(double input) {
