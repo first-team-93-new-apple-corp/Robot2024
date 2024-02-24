@@ -26,8 +26,8 @@ public class AutoAlignSubsystem extends SubsystemBase {
     private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
     // private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; //
     // My drivetrain
-    ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-    ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+    // ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+    // ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
     SwerveDriveSubsystem drivetrain;
 
     ChassisSpeeds alignSpeeds; // Chassis Speeds which robot uses for auto align
@@ -165,8 +165,8 @@ public class AutoAlignSubsystem extends SubsystemBase {
             }
          } else {
             if (Y < 4 && X < 5.3) {
-                 // Trap 1
-                 AutoAim(TrapSetpoint1X, TrapSetpoint1Y, TrapSetpoint1Theta);
+                // Trap 1
+                AutoAim(TrapSetpoint1X, TrapSetpoint1Y, TrapSetpoint1Theta);
              } else if (Y > 4 && X < 5.3) {
                 // Trap 2
                 AutoAim(TrapSetpoint2X, TrapSetpoint2Y, TrapSetpoint2Theta);

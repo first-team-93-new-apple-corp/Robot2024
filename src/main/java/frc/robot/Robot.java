@@ -10,9 +10,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.AutoAlignSubsystem;
 // import frc.robot.commands.ShooterCommand;
-import frc.robot.subsystems.ShooterSubsystem;
+// import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.commands.AutoAlignCommand;
 // import frc.robot.subsystems.USBCameraSubsystem;
@@ -31,13 +30,14 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   // private USBCameraSubsystem m_UsbCameraSubsystem = new USBCameraSubsystem();
   // private ShooterCommand m_Shooter = new ShooterCommand();
-  private ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+  // private ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   // private IntakeCommand m_Intake = new IntakeCommand(m_ShooterSubsystem);
   // private ElevatorCommand m_Elevator = new ElevatorCommand(op);
   // private ClimberCommand m_Climber = new ClimberCommand(op);
   private LEDCommand m_LED = new LEDCommand(op);
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
   // private Preflight m_Preflight;
+  private AutoAlignCommand m_Aligh = new AutoAlignCommand(m_SwerveDriveSubsystem);
   public Pigeon2 getPigeon() {
     return m_robotContainer.getPigeon();
   }
@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
     // m_Preflight = new Preflight(op, m_Elevator, m_Intake);
     // m_Elevator.initOnce();
-    m_SwerveDriveSubsystem.configAuto();
+    // m_SwerveDriveSubsystem.configAuto();
     // m_UsbCameraSubsystem.register();
     SmartDashboard.putBoolean("Preflight Done?", false);
 
@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
     // m_Elevator.schedule();
     // m_Climber.schedule();
     // m_LED.schedule();
-    // m_AutoAlignCommand.schedule();
+    m_Aligh.schedule();
     m_robotContainer.updateValues();
     m_robotContainer.configureBindings();
   }
