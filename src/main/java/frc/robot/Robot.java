@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
   // private USBCameraSubsystem m_UsbCameraSubsystem = new USBCameraSubsystem();
   private ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   private ShooterCommand m_Shooter = new ShooterCommand(m_ShooterSubsystem);
-  private IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
+  private IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem, op);
   private IntakeCommand m_Intake = new IntakeCommand(m_ShooterSubsystem, m_IntakeSubsystem);
   private ElevatorCommand m_Elevator = new ElevatorCommand(op);
   private ClimberCommand m_Climber = new ClimberCommand(op);
@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer(m_Joystick1, m_Joystick2, op, m_ShooterSubsystem, m_IntakeSubsystem);
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
-    m_Elevator.initOnce();
+    // m_Elevator.initOnce();
     m_SwerveDriveSubsystem.configAuto();
     // m_UsbCameraSubsystem.register();
     SmartDashboard.putBoolean("Preflight Done?", false);

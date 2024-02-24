@@ -18,9 +18,9 @@ public class ElevatorCommand extends Command {
         this.op = op;
     }
 
-    public void initOnce() {
-        m_elevator.initOnce();
-    }
+    // public void initOnce() {
+    //     m_elevator.initOnce();
+    // }
 
     public void preflight() {
         m_elevator.zero();

@@ -21,13 +21,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     PIDController pid = new PIDController(0.075, 0, 0);
     TalonFXConfiguration config = new TalonFXConfiguration();
     // AnalogInput m_encoder;
-    AnalogEncoder m_encoder;
+    // AnalogEncoder m_encoder;
     double zeroPos;
     double rawoutput;
     double currentPos;
     double setpoint = 0;
     double highSetpoint = -75;
     double lowSetpoint = -3;
+
     public enum elevatorState {
         HoldState,
         ToSetpoint,
@@ -51,10 +52,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void initOnce() {
         if (currentState == elevatorState.Init) {
-            topLimit = new DigitalInput(0);
-            bottomLimit = new DigitalInput(1);
-            m_encoder = new AnalogEncoder(0);
-            zeroPos = m_encoder.getAbsolutePosition();
+            if (topLimit == null) {
+                topLimit = new DigitalInput(0);
+            }
+            if (bottomLimit == null) {
+                bottomLimit = new DigitalInput(1);
+            }
             currentState = elevatorState.HoldState;
         } else {
             System.out.println("Elevator has already been initialized!");
@@ -62,11 +65,19 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public boolean topLimitTriggered() {
-        return topLimit.get();
+        if (!(topLimit == null)) {
+            return topLimit.get();
+        } else {
+            return true;
+        }
     }
 
     public boolean bottomLimitTriggered() {
-        return bottomLimit.get();
+        if (!(bottomLimit == null)) {
+            return bottomLimit.get();
+        } else {
+            return true;
+        }
     }
 
     public void runElevator() {
@@ -123,12 +134,15 @@ public class ElevatorSubsystem extends SubsystemBase {
         setpoint = MathUtil.clamp(setpoint, highSetpoint, lowSetpoint);
         currentState = elevatorState.ToSetpoint;
     }
+
     public void zero() {
         currentState = elevatorState.Zeroing;
     }
+
     public TalonFX getMotor() {
         return m_motor;
     }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Elevator Pos",
@@ -137,7 +151,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Bottom Limit?", bottomLimitTriggered());
         runElevator();
         // if (!(bottomLimit == null) && bottomLimitTriggered()) {
-        //     m_motor.setPosition(0);
+        // m_motor.setPosition(0);
         // }
     }
 }

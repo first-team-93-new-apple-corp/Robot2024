@@ -21,7 +21,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     ChassisSpeeds rotateAlignSpeeds, xAlignTrapSpeeds, yAlignTrapSpeeds, xAlignAmpSpeeds, yAlignAmpSpeeds, BlankSpeeds;
 
-    NetworkTable m_limelight = NetworkTableInstance.getDefault().getTable("limelight-front");
+    NetworkTable m_limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
     PIDController AlignPIDX = new PIDController(.05, 0, 0);
     PIDController AlignPIDY = new PIDController(.1, 0, 0);
@@ -91,7 +91,7 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public void AlignAmp() {
-        if (tid == 6 || tid == 3) {
+        if (tid == 6 || tid == 5) {
             switch (CurentstateAmp) {
                 default:
                 case rotateAmp:
@@ -234,7 +234,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     public Pose2d getPose() {
         updateValues();
-        pose = new Pose2d(botpose_wpiblue[0], botpose_wpiblue[1], new Rotation2d(botpose_wpiblue[5]));
+        pose = new Pose2d(botpose_wpiblue[0], botpose_wpiblue[1], new Rotation2d(Math.toRadians(botpose_wpiblue[5])));
         return pose;
     }
 

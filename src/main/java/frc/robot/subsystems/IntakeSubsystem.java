@@ -4,6 +4,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
 
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -16,6 +18,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private double IntakeSpeed = 0.75;
     private double PassoverSpeed = 0.5;
     private ShooterSubsystem m_shooter;
+    XboxController op;
 
     public enum intakeState {
         Stage1,
@@ -25,8 +28,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private intakeState state = intakeState.Stage1;
 
-    public IntakeSubsystem(ShooterSubsystem m_shooter) {
+    public IntakeSubsystem(ShooterSubsystem m_shooter, XboxController op) {
         this.m_shooter = m_shooter;
+        this.op = op;
         frontIntake = new TalonFX(Constants.CTRE.RIO.F_Intake, "rio");
         backIntake = new TalonFX(Constants.CTRE.RIO.B_Intake, "rio");
         bumperIntake = new TalonFX(Constants.CTRE.RIO.Bump_Intake, "drivetrain");
@@ -49,6 +53,7 @@ public class IntakeSubsystem extends SubsystemBase {
                     backIntake.set(-IntakeSpeed);
                     bumperIntake.set(-IntakeSpeed * 1.27);
                     m_shooter.shoot(-0.3);
+                    op.setRumble(RumbleType.kBothRumble, 0.5);
                 } else {
                     state = intakeState.Stage2;
                 }
@@ -56,6 +61,7 @@ public class IntakeSubsystem extends SubsystemBase {
             case Stage2:
                 if (midTOF.getRange() < 130) {
                     m_shooter.kicker(-0.1);
+                    op.setRumble(RumbleType.kBothRumble, 0.5);
                 } else {
                     state = intakeState.Stage3;
                 }
@@ -66,6 +72,7 @@ public class IntakeSubsystem extends SubsystemBase {
                 frontIntake.set(0);
                 backIntake.set(0);
                 bumperIntake.set(0);
+                op.setRumble(RumbleType.kBothRumble, 0);
                 break;
         }
 

@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants;
@@ -25,6 +26,7 @@ public class IntakeCommand extends Command {
         } else {
             m_IntakeSubsystem.stop();
             m_IntakeSubsystem.resetIntakeState();
+            opController.setRumble(RumbleType.kBothRumble, 0);
         }
     }
 }
