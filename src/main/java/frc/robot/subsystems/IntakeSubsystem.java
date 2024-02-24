@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
@@ -14,7 +15,9 @@ public class IntakeSubsystem extends SubsystemBase {
     private TalonFX frontIntake;
     private TalonFX backIntake;
     private TalonFX bumperIntake;
+    TalonFXConfiguration config;
     TimeOfFlight midTOF;
+    TimeOfFlight upperTOF;
     private double IntakeSpeed = 0.75;
     private double PassoverSpeed = 0.5;
     private ShooterSubsystem m_shooter;
@@ -31,12 +34,20 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem(ShooterSubsystem m_shooter, XboxController op) {
         this.m_shooter = m_shooter;
         this.op = op;
+        config = new TalonFXConfiguration();
+        config.CurrentLimits.SupplyCurrentLimit = 50;
+        config.CurrentLimits.SupplyCurrentLimitEnable = true;
         frontIntake = new TalonFX(Constants.CTRE.RIO.F_Intake, "rio");
         backIntake = new TalonFX(Constants.CTRE.RIO.B_Intake, "rio");
         bumperIntake = new TalonFX(Constants.CTRE.RIO.Bump_Intake, "drivetrain");
+        frontIntake.getConfigurator().apply(config);
+        backIntake.getConfigurator().apply(config);
+        bumperIntake.getConfigurator().apply(config);
         backIntake.setInverted(false);
         midTOF = new TimeOfFlight(22);
         midTOF.setRangingMode(RangingMode.Short, 24);
+        upperTOF = new TimeOfFlight(25);
+        upperTOF.setRangingMode(RangingMode.Short, 24);
         bumperIntake.setInverted(true);
     }
 
@@ -67,12 +78,16 @@ public class IntakeSubsystem extends SubsystemBase {
                 }
                 break;
             case Stage3:
-                m_shooter.kicker(0);
-                m_shooter.shoot(0);
-                frontIntake.set(0);
-                backIntake.set(0);
-                bumperIntake.set(0);
-                op.setRumble(RumbleType.kBothRumble, 0);
+                if (upperTOF.getRange() < 130) {
+                    state = intakeState.Stage1;
+                } else {
+                    m_shooter.kicker(0);
+                    m_shooter.shoot(0);
+                    frontIntake.set(0);
+                    backIntake.set(0);
+                    bumperIntake.set(0);
+                    op.setRumble(RumbleType.kBothRumble, 0);
+                }
                 break;
         }
 
