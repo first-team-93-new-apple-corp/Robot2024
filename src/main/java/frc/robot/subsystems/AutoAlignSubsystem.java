@@ -70,7 +70,7 @@ public class AutoAlignSubsystem extends SubsystemBase {
         AlignPIDX.setIntegratorRange(-0.3, 0.3);
         AlignPIDY.setIntegratorRange(-0.3, 0.3);
         if (true) {
-            if (true) {
+            if (false) {
                 AmpSetpointX = 14.6;
                 AmpSetpointY = 7.6;
                 AmpSetpointTheta = -90;
@@ -87,7 +87,7 @@ public class AutoAlignSubsystem extends SubsystemBase {
                 TrapSetpoint3Y = 4;
                 TrapSetpoint3Theta = 0;
             }
-            if (false) {
+            if (true) {
                 AmpSetpointX = 1.75;
                 AmpSetpointY = 7.6;
                 AmpSetpointTheta = -90;
