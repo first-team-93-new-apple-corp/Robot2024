@@ -35,6 +35,7 @@ public class VisionSubsystem extends SubsystemBase {
     double AlignRotateSetpoint = 0;
     double arcSpeed, xTrapSpeed, yTrapSpeed, xAmpSpeed, yAmpSpeed;
     double tv;
+    double xSpeeds;
 
     public VisionSubsystem(SwerveDriveSubsystem drivetrain) {
         this.drivetrain = drivetrain;
@@ -74,9 +75,6 @@ public class VisionSubsystem extends SubsystemBase {
                 case rotateTrap:
                     RotateAlign();
                     break;
-                case XTrap:
-                    XAlignTrap();
-                    break;
                 case YTrap:
                     YAlignTrap();
                     break;
@@ -90,9 +88,6 @@ public class VisionSubsystem extends SubsystemBase {
                 default:
                 case rotateAmp:
                     RotateAlign();
-                    break;
-                case XAmp:
-                    XAlignAmp();
                     break;
                 case YAmp:
                     YAlignAmp();
@@ -158,8 +153,8 @@ public class VisionSubsystem extends SubsystemBase {
     public void RotateAlign() {
         if (hasTargets()) {
             if (arcSpeed <= 0.2 && arcSpeed >= -0.2) {
-                CurentstateTrap = AutoAlignTrap.XTrap;
-                CurentstateAmp = AutoAlignAmp.XAmp;
+                CurentstateTrap = AutoAlignTrap.YTrap;
+                CurentstateAmp = AutoAlignAmp.YAmp;
             } else {
                 drivetrain.driveRobotRelative(rotateAlignSpeeds);
             }
@@ -176,9 +171,16 @@ public class VisionSubsystem extends SubsystemBase {
             arcSpeed = -MathUtil.clamp((AlignRotate.calculate(ts, AlignRotateSetpoint)), -MaxAngularRate,
                     MaxAngularRate);
         }
+        if (tid == 11 || tid == 12 || tid == 13 || tid == 14 || tid == 15 || tid == 16){
+            xSpeeds = -MathUtil.clamp((AlignPIDX.calculate(tx, TrapAlignSetpointX)), -MaxSpeed / 3, MaxSpeed / 3);
+        } else if(tid == 6 || tid ==5){
+            xSpeeds = -MathUtil.clamp((AlignPIDX.calculate(tx, AmpAlignSetpointX)), -MaxSpeed / 4, MaxSpeed / 4);
+        } else {
+            xSpeeds = 0;
+        }
         rotateAlignSpeeds = new ChassisSpeeds(
                 (0),
-                (0),
+                (xSpeeds),
                 (arcSpeed));
         xAlignTrapSpeeds = new ChassisSpeeds(
                 (0),
