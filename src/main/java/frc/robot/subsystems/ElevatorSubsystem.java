@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.jni.SignalLoggerJNI;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
@@ -166,10 +168,14 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Elevator Pos",
-                m_motor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Elevator Pos", m_motor.getPosition().getValueAsDouble());
         SmartDashboard.putBoolean("Top Limit?", topLimitTriggered());
         SmartDashboard.putBoolean("Bottom Limit?", bottomLimitTriggered());
+
+        SignalLogger.writeDouble("Elevator Pos", m_motor.getPosition().getValueAsDouble());
+        SignalLogger.writeBoolean("Top Limit?", topLimitTriggered());
+        SignalLogger.writeBoolean("Bottom Limit?", bottomLimitTriggered());
+
         runElevator();
         // if (!(bottomLimit == null) && bottomLimitTriggered()) {
         // m_motor.setPosition(0);
