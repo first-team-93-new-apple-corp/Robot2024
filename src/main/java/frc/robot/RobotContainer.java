@@ -152,9 +152,6 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void configureBindings() {
-    // m_trapAlignButton.whileTrue(m_AutoAlignCommand);
-    // m_ampAlignButton.whileTrue(m_AutoAlignCommand);
-    
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> m_swerveRequest
             .withCenterOfRotation(DriveConstants.dCenter)

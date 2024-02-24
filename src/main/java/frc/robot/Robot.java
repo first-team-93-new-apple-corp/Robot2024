@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
   private LEDCommand m_LED = new LEDCommand(op);
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
   // private Preflight m_Preflight;
-  private AutoAlignCommand m_Aligh = new AutoAlignCommand(m_SwerveDriveSubsystem);
+  // private AutoAlignCommand m_Aligh = new AutoAlignCommand(m_SwerveDriveSubsystem);
   public Pigeon2 getPigeon() {
     return m_robotContainer.getPigeon();
   }
@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
     // m_Elevator.schedule();
     // m_Climber.schedule();
     // m_LED.schedule();
-    m_Aligh.schedule();
+    // m_Aligh.schedule();
     m_robotContainer.updateValues();
     m_robotContainer.configureBindings();
   }
