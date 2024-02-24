@@ -96,13 +96,14 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
         }
 
         AutoBuilder.configureHolonomic(
-                () -> this.getState().Pose, // Supplier of current robot pose
+                // () -> this.getState().Pose, // Supplier of current robot pose
+                () -> this.m_SwerveDrivePoseEstimator.getEstimatedPosition(),
                 this::seedFieldRelative, // Consumer for seeding pose against auto
                 this::getCurrentRobotChassisSpeeds,
                 (speeds) -> this.setControl(autoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the
                                                                              // robot
-                new HolonomicPathFollowerConfig(new PIDConstants(.01, 0, 0),
-                        new PIDConstants(.005, 0, 0),
+                new HolonomicPathFollowerConfig(new PIDConstants(.001, 0, 0),
+                        new PIDConstants(.001, 0, 0),
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius,
                         new ReplanningConfig()),
