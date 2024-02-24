@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
@@ -18,6 +19,7 @@ public class ShooterSubsystem extends SubsystemBase {
     final double MuzzleIntake = -0.30;
     final double AmpShooterSpeed = 0.1;
     final double KickerSpeed = 1;
+    double StartTime;
 
     public ShooterSubsystem() {
         if (KickerL == null || KickerR == null) {
@@ -67,35 +69,18 @@ public class ShooterSubsystem extends SubsystemBase {
         KickerL.set(0);
         KickerR.set(0);
     }
-
+    public void AmpForAuton(){
+        
+    }
     public void ShootingforAuton() {
-        int timer;
         prime();
         kicker(KickerSpeed);
-        for (timer = 0; timer < 6; timer++) {
-            if (timer >= 5) {
-                shooterStop();
-            }
+        StartTime = Timer.getFPGATimestamp();
+        while (Timer.getFPGATimestamp() < (StartTime+1)) {
+            
         }
+        shooterStop();
     }
-
-    public Command AutonKickerStop() {
-        return this.run(() -> kickerStop());
-    }
-
-    public Command AutonShooterStop() {
-        return this.run(() -> shooterStop());
-    }
-
-    // public void kickerSetMode(boolean mode) {
-    // if (mode == true){
-    // KickerL.setIdleMode(IdleMode.kBrake);
-    // KickerR.setIdleMode(IdleMode.kBrake);
-    // } else {
-    // KickerL.setIdleMode(IdleMode.kCoast);
-    // KickerR.setIdleMode(IdleMode.kCoast);
-    // }
-    // }
 
     public Command AutonAmp() {
         return this.run(() -> shootAmp());
