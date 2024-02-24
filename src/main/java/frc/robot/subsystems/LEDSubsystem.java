@@ -54,6 +54,19 @@ public class LEDSubsystem extends SubsystemBase {
         setColor(Color.kBlack);
     }
 
+    public void X(){
+        setColor(Color.kBlue);
+    }
+    public void Y(){
+        setColor(Color.kYellow);
+    }
+    public void A(){
+        setColor(Color.kGreen);
+    }
+    public void B(){
+        setColor(Color.kRed);
+    }
+
     public void noteInBot(){
         red.disablePWM();
         green.disablePWM();
@@ -70,8 +83,5 @@ public class LEDSubsystem extends SubsystemBase {
         red1.enablePWM(0);
         green1.enablePWM(191.25);
         blue1.enablePWM(0);
-    }
-    public void LEDOff(){
-        setColor(Color.kBlack);
     }
 }

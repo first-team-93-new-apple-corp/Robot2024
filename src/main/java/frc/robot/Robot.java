@@ -100,7 +100,7 @@ public class Robot extends TimedRobot {
     // m_Shooter.schedule();
     // m_Elevator.schedule();
     // m_Climber.schedule();
-    // m_LED.schedule();
+    m_LED.schedule();
     // m_AutoAlignCommand.schedule();
     m_robotContainer.updateValues();
     m_robotContainer.configureBindings();
