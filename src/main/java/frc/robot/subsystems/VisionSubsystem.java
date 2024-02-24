@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
+import java.util.Currency;
+
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain.SwerveDriveState;
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -17,7 +20,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     SwerveDriveSubsystem drivetrain;
 
-    ChassisSpeeds rotateAlignSpeeds, xAlignTrapSpeeds, yAlignTrapSpeeds, xAlignAmpSpeeds, yAlignAmpSpeeds, BlankSpeeds;
+    ChassisSpeeds rotateAlignSpeeds, xAlignSpeeds, yAlignSpeeds, blankSpeeds;
 
     NetworkTable m_limelight = NetworkTableInstance.getDefault().getTable("limelight-front");
 
@@ -35,7 +38,7 @@ public class VisionSubsystem extends SubsystemBase {
     double AlignRotateSetpoint = 0;
     double arcSpeed, xTrapSpeed, yTrapSpeed, xAmpSpeed, yAmpSpeed;
     double tv;
-    double xSpeeds;
+    double xSpeeds, ySpeeds;
 
     public VisionSubsystem(SwerveDriveSubsystem drivetrain) {
         this.drivetrain = drivetrain;
@@ -56,110 +59,112 @@ public class VisionSubsystem extends SubsystemBase {
             return false;
     }
 
-    public enum AutoAlignTrap {
-        rotateTrap, XTrap, YTrap
+    public enum AutoAlign {
+        TrapR, TrapX, TrapY, AmpR, AmpY, AmpX, none
     }
 
-    public enum AutoAlignAmp {
-        rotateAmp, XAmp, YAmp
-    }
+    public AutoAlign Curentstate, Curentstate2;
 
-    public AutoAlignTrap CurentstateTrap = AutoAlignTrap.rotateTrap;
-
-    public AutoAlignAmp CurentstateAmp = AutoAlignAmp.rotateAmp;
-
-    public void AlignTrap() {
-        if (tid == 11 || tid == 12 || tid == 13 || tid == 14 || tid == 15 || tid == 16) {
-            switch (CurentstateTrap) {
-                default:
-                case rotateTrap:
-                    RotateAlign();
-                    break;
-                case YTrap:
-                    YAlignTrap();
-                    break;
-            }
+    public void AutoAlign() {
+        switch (Curentstate) {
+            default:
+            case TrapR:
+                RotateAlign();
+                break;
+            case TrapX:
+                XAlign();
+                break;
+            case TrapY:
+                YAlign();
+                break;
         }
-    }
-
-    public void AlignAmp() {
-        if (tid == 6 || tid == 3) {
-            switch (CurentstateAmp) {
-                default:
-                case rotateAmp:
-                    RotateAlign();
-                    break;
-                case YAmp:
-                    YAlignAmp();
-                    break;
-            }
+        switch (Curentstate2) {
+            default:
+            case AmpR:
+                RotateAlign2();
+                break;
+            case AmpX:
+                XAlign2();
+                break;
+            case AmpY:
+                YAlign2();
+                break;
         }
+
     }
 
-    public void resetStateTrap() {
-        CurentstateTrap = AutoAlignTrap.rotateTrap;
+    public void resetState() {
+        Curentstate = AutoAlign.TrapR;
+        Curentstate2 = AutoAlign.AmpR;
     }
 
-    public void resetStateAmp() {
-        CurentstateAmp = AutoAlignAmp.rotateAmp;
-    }
-
-    public void XAlignTrap() {
-        if (hasTargets()) {
-            if (xTrapSpeed <= 0.2 && xTrapSpeed >= -0.2) {
-                CurentstateTrap = AutoAlignTrap.YTrap;
-            } else
-                drivetrain.driveRobotRelative(xAlignTrapSpeeds);
-        } else {
-            drivetrain.driveRobotRelative(BlankSpeeds);
-        }
-    }
-
-    public void YAlignTrap() {
-        if (hasTargets()) {
-            if (yTrapSpeed <= 0.2 && yTrapSpeed >= -0.2) {
-                CurentstateTrap = AutoAlignTrap.rotateTrap;
-            } else {
-                drivetrain.driveRobotRelative(yAlignTrapSpeeds);
-            }
-        } else {
-            drivetrain.driveRobotRelative(BlankSpeeds);
-        }
-    }
-
-    public void XAlignAmp() {
+    public void XAlign() {
         if (hasTargets()) {
             if (xAmpSpeed <= 0.2 && xAmpSpeed >= -0.2) {
-                CurentstateAmp = AutoAlignAmp.YAmp;
+                Curentstate = AutoAlign.TrapY;
             } else
-                drivetrain.driveRobotRelative(xAlignAmpSpeeds);
+                drivetrain.driveRobotRelative(xAlignSpeeds);
         } else {
-            drivetrain.driveRobotRelative(BlankSpeeds);
+            drivetrain.driveRobotRelative(blankSpeeds);
         }
     }
 
-    public void YAlignAmp() {
+    public void YAlign() {
         if (hasTargets()) {
             if (yAmpSpeed <= 0.2 && yAmpSpeed >= -0.2) {
-                CurentstateAmp = AutoAlignAmp.rotateAmp;
+                Curentstate = AutoAlign.TrapR;
             } else {
-                drivetrain.driveRobotRelative(yAlignAmpSpeeds);
+                drivetrain.driveRobotRelative(yAlignSpeeds);
             }
         } else {
-            drivetrain.driveRobotRelative(BlankSpeeds);
+            drivetrain.driveRobotRelative(blankSpeeds);
         }
     }
 
     public void RotateAlign() {
         if (hasTargets()) {
             if (arcSpeed <= 0.2 && arcSpeed >= -0.2) {
-                CurentstateTrap = AutoAlignTrap.YTrap;
-                CurentstateAmp = AutoAlignAmp.YAmp;
+                Curentstate = AutoAlign.TrapX;
             } else {
                 drivetrain.driveRobotRelative(rotateAlignSpeeds);
             }
         } else {
-            drivetrain.driveRobotRelative(BlankSpeeds);
+            drivetrain.driveRobotRelative(blankSpeeds);
+        }
+    }
+
+    public void XAlign2() {
+        if (hasTargets()) {
+            if (xAmpSpeed <= 0.2 && xAmpSpeed >= -0.2) {
+                Curentstate = AutoAlign.AmpY;
+            } else
+                drivetrain.driveRobotRelative(xAlignSpeeds);
+        } else {
+            drivetrain.driveRobotRelative(blankSpeeds);
+        }
+    }
+
+    public void YAlign2() {
+        if (hasTargets()) {
+            if (yAmpSpeed <= 0.2 && yAmpSpeed >= -0.2) {
+                Curentstate = AutoAlign.AmpR;
+            } else {
+                drivetrain.driveRobotRelative(yAlignSpeeds);
+            }
+        } else {
+            drivetrain.driveRobotRelative(blankSpeeds);
+        }
+    }
+
+    public void RotateAlign2() {
+        if (hasTargets()) {
+            if (arcSpeed <= 0.2 && arcSpeed >= -0.2) {
+                Curentstate = AutoAlign.AmpX;
+            } else {
+                drivetrain.driveRobotRelative(rotateAlignSpeeds);
+            }
+        } else {
+            drivetrain.driveRobotRelative(blankSpeeds);
         }
     }
 
@@ -171,41 +176,40 @@ public class VisionSubsystem extends SubsystemBase {
             arcSpeed = -MathUtil.clamp((AlignRotate.calculate(ts, AlignRotateSetpoint)), -MaxAngularRate,
                     MaxAngularRate);
         }
-        if (tid == 11 || tid == 12 || tid == 13 || tid == 14 || tid == 15 || tid == 16){
+        if (tid == 11 || tid == 12 || tid == 13 || tid == 14 || tid == 15 || tid == 16) {
             xSpeeds = -MathUtil.clamp((AlignPIDX.calculate(tx, TrapAlignSetpointX)), -MaxSpeed / 3, MaxSpeed / 3);
-        } else if(tid == 6 || tid ==5){
+        } else if (tid == 6 || tid == 5) {
             xSpeeds = -MathUtil.clamp((AlignPIDX.calculate(tx, AmpAlignSetpointX)), -MaxSpeed / 4, MaxSpeed / 4);
         } else {
             xSpeeds = 0;
         }
+        if (tid == 11 || tid == 12 || tid == 13 || tid == 14 || tid == 15 || tid == 16) {
+            ySpeeds = -MathUtil.clamp((AlignPIDY.calculate(ty, TrapAlignSetpointY)), -MaxSpeed / 3, MaxSpeed / 3);
+        } else if (tid == 6 || tid == 5) {
+            ySpeeds = -MathUtil.clamp((AlignPIDY.calculate(ty, AmpAlignSetpointY)), -MaxSpeed / 3, MaxSpeed / 3);
+        } else {
+            ySpeeds = 0;
+        }
+        xTrapSpeed = xSpeeds;
+        yTrapSpeed = xSpeeds;
+        xAmpSpeed = ySpeeds;
+        yAmpSpeed = ySpeeds;
         rotateAlignSpeeds = new ChassisSpeeds(
                 (0),
-                (xSpeeds),
+                (0),
                 (arcSpeed));
-        xAlignTrapSpeeds = new ChassisSpeeds(
-                (0),
-                (-MathUtil.clamp((AlignPIDX.calculate(tx, TrapAlignSetpointX)), -MaxSpeed / 3, MaxSpeed / 3)),
-                (0));
-        yAlignTrapSpeeds = new ChassisSpeeds(
-                (-MathUtil.clamp((AlignPIDY.calculate(ty, TrapAlignSetpointY)), -MaxSpeed / 3, MaxSpeed / 3)),
+        yAlignSpeeds = new ChassisSpeeds(
+                (ySpeeds),
                 (0),
                 (0));
-        xAlignAmpSpeeds = new ChassisSpeeds(
+        xAlignSpeeds = new ChassisSpeeds(
                 (0),
-                (-MathUtil.clamp((AlignPIDX.calculate(tx, AmpAlignSetpointX)), -MaxSpeed / 4, MaxSpeed / 4)),
+                (xSpeeds),
                 (0));
-        yAlignAmpSpeeds = new ChassisSpeeds(
-                (-MathUtil.clamp((AlignPIDY.calculate(ty, AmpAlignSetpointY)), -MaxSpeed / 3, MaxSpeed / 3)),
-                (0),
-                (0));
-        BlankSpeeds = new ChassisSpeeds(
+        blankSpeeds = new ChassisSpeeds(
                 (0),
                 (0),
                 (0));
-        xTrapSpeed = -MathUtil.clamp((AlignPIDX.calculate(tx, TrapAlignSetpointX)), -MaxSpeed / 3, MaxSpeed / 3);
-        yTrapSpeed = -MathUtil.clamp((AlignPIDY.calculate(ty, TrapAlignSetpointY)), -MaxSpeed / 3, MaxSpeed / 3);
-        xAmpSpeed = -MathUtil.clamp((AlignPIDX.calculate(tx, AmpAlignSetpointX)), -MaxSpeed / 3, MaxSpeed / 3);
-        yAmpSpeed = -MathUtil.clamp((AlignPIDY.calculate(ty, AmpAlignSetpointY)), -MaxSpeed / 4, MaxSpeed / 4);
     }
 
     public void LimeLightOn() {

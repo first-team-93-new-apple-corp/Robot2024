@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.LEDCommand;
 import frc.robot.commands.VisionCommand;
 // import frc.robot.commands.ShooterCommand;
 // import frc.robot.commands.ClimberCommand;
@@ -24,7 +25,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-
+  private LEDCommand m_LED;
   // private ShooterCommand m_Shooter = new ShooterCommand();
   // private IntakeCommand m_Intake = new IntakeCommand();
   // private ElevatorCommand m_Elevator = new ElevatorCommand(op);
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer();
     m_Vision = new VisionCommand(m_robotContainer.getDrivetrain());
+    m_LED = new LEDCommand();
     // m_cam.register();
   }
 
@@ -86,6 +88,7 @@ public class Robot extends TimedRobot {
     // m_Elevator.schedule();
     // m_Climber.schedule();
       // m_Camera.schedule();
+    m_LED.schedule();
     m_Vision.schedule();
     m_robotContainer.updateValues();
     m_robotContainer.configureBindings();

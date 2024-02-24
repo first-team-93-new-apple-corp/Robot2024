@@ -20,12 +20,11 @@ public class VisionCommand extends Command {
     public void execute() {
         Vision.periodic();
         if (m_joystick1.getRawButton(Constants.Thrustmaster.Center_Button)) {
-            Vision.AlignAmp();
+            Vision.AutoAlign();
         } else if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Button)) {
-            Vision.AlignTrap();
+            Vision.AutoAlign();
         } else {
-            Vision.resetStateTrap();
-            Vision.resetStateAmp();
+            Vision.resetState();
         }
         if (m_joystick1.getRawButtonPressed(Constants.Thrustmaster.Right_Buttons.Top_Left)) {
             Vision.LimeLightOn();
