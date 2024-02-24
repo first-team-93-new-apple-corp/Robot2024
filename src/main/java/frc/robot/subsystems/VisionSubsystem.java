@@ -91,7 +91,7 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public void AlignAmp() {
-        if (tid == 6 || tid == 3) {
+        if (tid == 6 || tid == 5) {
             switch (CurentstateAmp) {
                 default:
                 case rotateAmp:
