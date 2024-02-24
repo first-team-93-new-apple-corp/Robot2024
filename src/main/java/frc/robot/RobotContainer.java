@@ -45,8 +45,8 @@ public class RobotContainer extends TimedRobot {
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private final SendableChooser<Command> autoChooser;
-  public final double MaxSpeed = DriveConstants.MaxSpeed/5;
-  public final double MaxAngularRate = DriveConstants.MaxAngularRate/3;
+  public final double MaxSpeed = DriveConstants.MaxSpeed;
+  public final double MaxAngularRate = DriveConstants.MaxAngularRate;
   private double angle;
   private double deadzone = DriveConstants.JoystickDeadzone;
   private Joystick m_Joystick1;
