@@ -160,8 +160,8 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void configureBindings() {
-    m_TrapAlignButton.whileTrue(m_AutoAlignSubsystem.AutoAimTrap());
-    m_AmpAlignButton.whileTrue(m_AutoAlignSubsystem.AutoAimAmp());
+    m_TrapAlignButton.whileTrue(m_AutoAlignCommand);
+    m_AmpAlignButton.whileTrue(m_AutoAlignCommand);
     
     // m_AmpAlignButton.whileTrue(drivetrain.applyRequest(() -> m_swerveRequest
     // .withCenterOfRotation(DriveConstants.dCenter)
