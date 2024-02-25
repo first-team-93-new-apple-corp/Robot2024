@@ -20,9 +20,9 @@ public class AutoAlignSubsystem extends SubsystemBase {
     ChassisSpeeds alignSpeeds; // Chassis Speeds which robot uses for auto align
 
     ChassisSpeeds fieldSpeeds;
-    PIDController AlignPIDTheta = new PIDController(0.001, 0, 0.0015); // Rotationly PID
-    PIDController AlignPIDY = new PIDController(1, 0, 0.005);
-    PIDController AlignPIDX = new PIDController(1, 0, 0.005);
+    PIDController AlignPIDTheta = new PIDController(.5, 0, 0.01); // Rotationly PID
+    PIDController AlignPIDY = new PIDController(2.5, 0.05, 0);
+    PIDController AlignPIDX = new PIDController(2.5, 0.05, 0);
 
     double X, Y, Theta;
 
@@ -31,36 +31,35 @@ public class AutoAlignSubsystem extends SubsystemBase {
     double TrapSetpoint2X = 4, TrapSetpoint2Y = 5.2, TrapSetpoint2Theta = 120;
     double TrapSetpoint3X = 6.2, TrapSetpoint3Y = 4, TrapSetpoint3Theta = 0;
 
-    double toleranceX = .00001, toleranceY = .00001, toleranceTheta = 0.2;
+    double toleranceX = .13, toleranceY = .13, toleranceTheta = Math.toRadians(5);
 
     boolean red;
 
     // Optional<Alliance> ally = DriverStation.getAlliance();
     public AutoAlignSubsystem(SwerveDriveSubsystem drivetrain) {
         this.drivetrain = drivetrain;
-        AlignPIDTheta.enableContinuousInput(-180, 180);
+        AlignPIDTheta.enableContinuousInput(-Math.PI, Math.PI);
         AlignPIDTheta.setIntegratorRange(-0.3, 0.3);
         AlignPIDX.setIntegratorRange(-0.3, 0.3);
         AlignPIDY.setIntegratorRange(-0.3, 0.3);
         if (true) {
-            if (false) {
+            if (true) {
                 AmpSetpointX = 14.6;
                 AmpSetpointY = 7.6;
-                AmpSetpointTheta = -90;
+                AmpSetpointTheta = Math.toRadians(-90);
 
                 TrapSetpoint1X = 12.5;
                 TrapSetpoint1Y = 2.8;
-                TrapSetpoint1Theta = -60;
+                TrapSetpoint1Theta = Math.toRadians(-60);
 
                 TrapSetpoint2X = 12.258;
                 TrapSetpoint2Y = 5.038;
-                TrapSetpoint2Theta = 60;
+                TrapSetpoint2Theta = Math.toRadians(60);
 
                 TrapSetpoint3X = 10.4;
                 TrapSetpoint3Y = 4;
-                TrapSetpoint3Theta = 0;
-            }
-            if (true) {
+                TrapSetpoint3Theta = Math.toRadians(180);
+            } else if (true) {
                 AmpSetpointX = 1.75;
                 AmpSetpointY = 7.6;
                 AmpSetpointTheta = -90;
@@ -116,18 +115,18 @@ public class AutoAlignSubsystem extends SubsystemBase {
         // }
     }
 
-    public void updateValues(double PIDSetpointX, double PIDSetpointY, Double PIDSetpointTheta) {
+    public void updateValues(double PIDSetpointX, double PIDSetpointY, double PIDSetpointTheta) {
         drivetrain.updateOdometry();
         X = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getX();
         Y = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getY();
-        Theta = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getRotation().getDegrees();
+        Theta = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getRotation().getRadians();
 
         alignSpeeds = new ChassisSpeeds(
-                ((MathUtil.clamp((AlignPIDX.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * -1), // Velocity X
+                ((MathUtil.clamp((AlignPIDX.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * 1), // Velocity X
                                                                                                       // Sawyer
-                ((MathUtil.clamp((AlignPIDY.calculate(Y, PIDSetpointY)), -MaxSpeed, MaxSpeed)) * -1), // Velocity Y
+                ((MathUtil.clamp((AlignPIDY.calculate(Y, PIDSetpointY)), -MaxSpeed, MaxSpeed)) * 1), // Velocity Y
                                                                                                       // Sawyer
-                (-MathUtil.clamp((AlignPIDTheta.calculate(Theta, PIDSetpointTheta)), -MaxAngularRate, MaxAngularRate))); // Rotational
+                (-MathUtil.clamp((AlignPIDTheta.calculate(Theta, (PIDSetpointTheta))), -MaxAngularRate, MaxAngularRate))); // Rotational
                                                                                                                          // Speeds
         // (-MathUtil.clamp((AlignPIDTheta.calculate(Math.toRadians(Theta),
         // Math.toRadians(PIDSetpointTheta))), -MaxAngularRate, MaxAngularRate))); //
@@ -172,15 +171,17 @@ public class AutoAlignSubsystem extends SubsystemBase {
         }
     }
 
-    public void AutoAim(double SetpointX, double SetpointY, Double SetpointTheta) {
+    public void AutoAim(double SetpointX, double SetpointY, double SetpointTheta) {
         updateValues(SetpointX, SetpointY, SetpointTheta);
 
         if (!((Math.abs(X - SetpointX) < toleranceX)
                 &&
-                (Math.abs(Y - SetpointY) < toleranceY)
+                ((Math.abs(Y - SetpointY) < toleranceY)
                 &&
-                (Math.abs(-180 + Math.abs(Theta) + Math.abs(SetpointTheta)) < toleranceTheta))) {
-            drivetrain.driveRobotRelative(fieldSpeeds);
+                (Math.abs((-1*Math.PI) + Math.abs(Theta) + Math.abs(SetpointTheta)) < toleranceTheta)))) {
+            
+                    drivetrain.driveRobotRelative(fieldSpeeds);
+
         } else {
         }
 
