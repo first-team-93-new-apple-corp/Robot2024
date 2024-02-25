@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.Preflight;
 
 public class ElevatorSubsystem extends SubsystemBase {
     static DigitalInput topLimit;
@@ -36,7 +37,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         ToSetpoint,
         Zeroing,
         TempState,
-        Init
+        Init,
+        Disabled
     }
 
     public elevatorState currentState;
@@ -86,7 +88,13 @@ public class ElevatorSubsystem extends SubsystemBase {
         switch (currentState) {
             default:
             case HoldState:
-                m_motor.set(0);
+                if (Preflight.isPreflightDone()) {
+                    m_motor.set(0);
+                    m_motor.setNeutralMode(NeutralModeValue.Brake);
+                } else {
+                    System.out.println("Preflight not completed. Disabling elevator.");
+                    currentState = elevatorState.Disabled;
+                }
                 break;
 
             case TempState:
@@ -128,17 +136,30 @@ public class ElevatorSubsystem extends SubsystemBase {
             case Init:
                 initOnce();
                 break;
+
+            case Disabled:
+                m_motor.set(0);
+                m_motor.setNeutralMode(NeutralModeValue.Coast);
+                break;
         }
     }
 
     public void toSetpoint(double newSetpoint) {
         setpoint = newSetpoint;
         setpoint = MathUtil.clamp(setpoint, highSetpoint, lowSetpoint);
-        currentState = elevatorState.ToSetpoint;
+        if (!(currentState == elevatorState.Disabled)) {
+            currentState = elevatorState.ToSetpoint;
+        } else {
+            System.out.println("Elevator is disabled!");
+        }
     }
 
     public void zero() {
-        currentState = elevatorState.Zeroing;
+        if (!(currentState == elevatorState.Disabled)) {
+            currentState = elevatorState.Zeroing;
+        } else {
+            System.out.println("Elevator is disabled!");
+        }
     }
 
     public TalonFX getMotor() {
