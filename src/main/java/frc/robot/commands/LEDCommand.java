@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -7,7 +8,7 @@ import frc.robot.subsystems.LEDSubsystem;
 
 public class LEDCommand extends Command {
     LEDSubsystem LEDSubsystem;
-    XboxController op = new XboxController(2);
+    Joystick op = new Joystick(1);
 
     public LEDCommand() {
         LEDSubsystem = new LEDSubsystem();
@@ -15,23 +16,13 @@ public class LEDCommand extends Command {
 
     @Override
     public void execute() {
-        if (op.getRawButton(Constants.F310_D.LeftTrigger)) {
-            // LEDSubsystem.noteInBot();
-        } else if (op.getRawButton(Constants.F310_D.RightTrigger)) {
+        if (op.getRawButton(Constants.Thrustmaster.Right_Buttons.Top_Left)) { //Change VERY SOON
+            LEDSubsystem.noteInBot();
+        } else if (op.getRawButton(Constants.Thrustmaster.Right_Buttons.Top_Middle)) { //CHANGER VERY SOON
             LEDSubsystem.turnLEDSOff();
-        } else if (op.getRawButton(Constants.F310_D.Y)) {
-            LEDSubsystem.Y();
-        } else if (op.getRawButton(Constants.F310_D.X)) {
-            LEDSubsystem.X();
-        } else if (op.getRawButton(Constants.F310_D.A)) {
-            LEDSubsystem.A();
-        } else if (op.getRawButton(Constants.F310_D.B)) {
-            LEDSubsystem.B();
         }
     }
-
-    @Override
     public void initialize() {
-        // LEDSubsystem.Startup();
+        LEDSubsystem.Startup();
     }
 }

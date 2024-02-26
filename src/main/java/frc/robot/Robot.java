@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.LEDCommand;
-import frc.robot.commands.VisionCommand;
+// import frc.robot.commands.VisionCommand;
 // import frc.robot.commands.ShooterCommand;
 // import frc.robot.commands.ClimberCommand;
 // import frc.robot.commands.ElevatorCommand;
@@ -20,12 +20,12 @@ import frc.robot.commands.VisionCommand;
 public class Robot extends TimedRobot {
   // CameraSubsystem m_cam = new CameraSubsystem();
 
-  VisionCommand m_Vision;
+  // VisionCommand m_Vision;
 
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  private LEDCommand m_LED;
+  private LEDCommand m_LED = new LEDCommand();
   // private ShooterCommand m_Shooter = new ShooterCommand();
   // private IntakeCommand m_Intake = new IntakeCommand();
   // private ElevatorCommand m_Elevator = new ElevatorCommand(op);
@@ -34,8 +34,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    m_Vision = new VisionCommand(m_robotContainer.getDrivetrain());
-    m_LED = new LEDCommand();
+    // m_Vision = new VisionCommand(m_robotContainer.getDrivetrain());
+    
+
     // m_cam.register();
   }
 
@@ -59,7 +60,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
@@ -78,7 +78,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    
+
   }
 
   @Override
@@ -87,9 +87,9 @@ public class Robot extends TimedRobot {
     // m_Shooter.schedule();
     // m_Elevator.schedule();
     // m_Climber.schedule();
-      // m_Camera.schedule();
+    // m_Camera.schedule();
     m_LED.schedule();
-    m_Vision.schedule();
+    // m_Vision.schedule();
     m_robotContainer.updateValues();
     m_robotContainer.configureBindings();
   }
@@ -100,6 +100,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
+    m_LED.initialize();
     CommandScheduler.getInstance().cancelAll();
   }
 

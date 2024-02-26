@@ -19,12 +19,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.commands.VisionCommand;
+// import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
-import frc.robot.subsystems.VisionSubsystem;
+// import frc.robot.subsystems.VisionSubsystem;
 
 public class RobotContainer extends TimedRobot {
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
@@ -56,7 +56,7 @@ public class RobotContainer extends TimedRobot {
 
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-  VisionCommand m_Vision = new VisionCommand(drivetrain);
+  // VisionCommand m_Vision = new VisionCommand(drivetrain);
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
   POVButton pov0; // front
@@ -132,9 +132,9 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void configureBindings() {
-    m_TrapAlignButton.whileTrue(m_Vision);
-    m_AmpAlignButton.whileTrue(m_Vision);
-    m_LimelightFlashButton.whileTrue(m_Vision);
+    // m_TrapAlignButton.whileTrue(m_Vision);
+    // m_AmpAlignButton.whileTrue(m_Vision);
+    // m_LimelightFlashButton.whileTrue(m_Vision);
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> m_swerveRequest
             .withCenterOfRotation(DriveConstants.dCenter)
@@ -190,7 +190,7 @@ public class RobotContainer extends TimedRobot {
     m_CameraRelButton = new JoystickButton(m_Joystick1,
         Constants.Thrustmaster.Trigger);
     m_AmpAlignButton = new JoystickButton(m_Joystick1,
-        Constants.Thrustmaster.Center_Button);
+        Constants.Thrustmaster.Left_Button);
     m_TrapAlignButton = new JoystickButton(m_Joystick1,
         Constants.Thrustmaster.Right_Button);
     m_LimelightFlashButton = new JoystickButton(m_Joystick1,
