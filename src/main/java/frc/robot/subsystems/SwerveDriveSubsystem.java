@@ -17,7 +17,6 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -32,7 +31,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
-public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
+public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem {
     public XboxController opController = new XboxController(2);
     // public ShooterCommand m_ShooterCommand = new ShooterCommand();
     public VisionSubsystem m_VisionSubsystem = new VisionSubsystem(TunerConstants.DriveTrain);
@@ -50,32 +49,31 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
     private Telemetry m_Telemetry = new Telemetry(MaxSpeed);
-    public SwerveDrivePoseEstimator m_SwerveDrivePoseEstimator =
-        new SwerveDrivePoseEstimator(
+    public SwerveDrivePoseEstimator m_SwerveDrivePoseEstimator = new SwerveDrivePoseEstimator(
             m_kinematics,
             m_pigeon2.getRotation2d(),
             m_modulePositions,
-            new Pose2d()
-        );
+            new Pose2d());
+
     public void configAuto() {
         // AutoBuilder.configureHolonomic(
         // this::getPose, // Robot pose supplier
         // this::resetPose, // Method to reset odometry (will be called if your auto has
-        // a starting pose)
+        // // a starting pose)
         // this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT
-        // RELATIVE
+        // // RELATIVE
         // this::driveRobotRelative, // Method that will drive the robot given ROBOT
-        // RELATIVE ChassisSpeeds
+        // // RELATIVE ChassisSpeeds
         // new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should
-        // likely live in your
+        // // likely live in your
         // // Constants class
         // new PIDConstants(0.25, 0.0, 0.0), // Translation PID constants
         // new PIDConstants(0.25, 0.0, 0.0), // Rotation PID constants
         // 4.5, // Max module speed, in m/s
         // 0.4, // Drive base radius in meters. Distance from robot center to furthest
-        // module.
+        // // module.
         // new ReplanningConfig() // Default path replanning config. See the API for the
-        // options here
+        // // options here
         // ),
         // () -> {
         // // Boolean supplier that controls when the path will be mirrored for the red
@@ -102,17 +100,21 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
                 this::getCurrentRobotChassisSpeeds,
                 (speeds) -> this.setControl(autoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the
                                                                              // robot
-                new HolonomicPathFollowerConfig(new PIDConstants(.01, 0, 0),
-                        new PIDConstants(.002, 0, 0),
+                new HolonomicPathFollowerConfig(new PIDConstants(5, 0, 0),
+                        new PIDConstants(3, 0, 0.05),
+                        // new HolonomicPathFollowerConfig(new PIDConstants(.1, 0, 0),
+                        // new PIDConstants(.25, 0, 0),
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius,
                         new ReplanningConfig()),
-                        () -> {
-                            var alliance = DriverStation.getAlliance();
-                            if (alliance.isPresent()) {return alliance.get() == DriverStation.Alliance.Red;}
-                            return false; // Change this if the path needs to be flipped on red vs blue
-                        },
-                        this); // Subsystem for requirements
+                () -> {
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false; // Change this if the path needs to be flipped on red vs blue
+                },
+                this); // Subsystem for requirements
     }
 
     public Command getAutoPath(String pathName) {
@@ -122,17 +124,19 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
     public void applyConfig(TalonFXConfiguration config, TalonFXConfigurator configurator) {
 
     }
+
     public TalonFX getTurn(int module) {
         return Modules[module].getSteerMotor();
     }
+
     public TalonFX getDrive(int module) {
         return Modules[module].getDriveMotor();
     }
+
     public SwerveDriveSubsystem(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
             SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
-        if (Utils.isSimulation()) {
-            startSimThread();
+        if (Utils.isSimulation()) {            startSimThread();
         }
     }
 
@@ -152,10 +156,11 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem{
         }
     }
 
-    public void updateOdometry (){
+    public void updateOdometry() {
         m_SwerveDrivePoseEstimator.update(m_pigeon2.getRotation2d(), m_modulePositions);
         if (m_VisionSubsystem.hasTargets()) {
-            m_SwerveDrivePoseEstimator.addVisionMeasurement(m_VisionSubsystem.getPose(), Timer.getFPGATimestamp()-( m_VisionSubsystem.tl + m_VisionSubsystem.cl ));
+            m_SwerveDrivePoseEstimator.addVisionMeasurement(m_VisionSubsystem.getPose(),
+                    Timer.getFPGATimestamp() - (m_VisionSubsystem.tl + m_VisionSubsystem.cl));
         }
     }
 

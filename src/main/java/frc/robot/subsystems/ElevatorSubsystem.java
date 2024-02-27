@@ -53,7 +53,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_motor.getConfigurator().apply(config);
         currentState = elevatorState.Init;
     }
-
+    public void disable() {
+        // currentState = elevatorState.Disabled;
+    }
     public void initOnce() {
         if (currentState == elevatorState.Init) {
             if (topLimit == null) {
@@ -147,19 +149,19 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void toSetpoint(double newSetpoint) {
         setpoint = newSetpoint;
         setpoint = MathUtil.clamp(setpoint, highSetpoint, lowSetpoint);
-        if (!(currentState == elevatorState.Disabled)) {
+        // if (!(currentState == elevatorState.Disabled)) {
             currentState = elevatorState.ToSetpoint;
-        } else {
-            System.out.println("Elevator is disabled!");
-        }
+        // } else {
+            // System.out.println("Elevator is disabled!");
+        // }
     }
 
     public void zero() {
-        if (!(currentState == elevatorState.Disabled)) {
+        // if (!(currentState == elevatorState.Disabled)) {
             currentState = elevatorState.Zeroing;
-        } else {
-            System.out.println("Elevator is disabled!");
-        }
+        // } else {
+        //     System.out.println("Elevator is disabled!");
+        // }
     }
 
     public TalonFX getMotor() {

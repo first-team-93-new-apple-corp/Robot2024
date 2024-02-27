@@ -18,9 +18,9 @@ public class ElevatorCommand extends Command {
         this.op = op;
     }
 
-    // public void initOnce() {
-    //     m_elevator.initOnce();
-    // }
+    public void initOnce() {
+        m_elevator.initOnce();
+    }
 
     public void preflight() {
         m_elevator.zero();
@@ -30,6 +30,9 @@ public class ElevatorCommand extends Command {
         return m_elevator.getMotor();
     }
 
+    public void disable() {
+        m_elevator.disable();
+    }
     @Override
     public void execute() {
         // if (op.getPOV() == 0) {
@@ -37,7 +40,7 @@ public class ElevatorCommand extends Command {
         // } else if (op.getPOV() == 90) {
         //     m_elevator.toSetpoint(-40);
         // } else if (op.getPOV() == 180) {
-        //     m_elevator.toSetpoint(-3);
+    //     m_elevator.toSetpoint(-3);
         // } else if (op.getPOV() == 270) {
         //     m_elevator.toSetpoint(-25);
         // } else {

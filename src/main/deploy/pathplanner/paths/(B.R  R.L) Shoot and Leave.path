@@ -3,54 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7218158264581296,
-        "y": 4.229476509042464
+        "x": 0.85,
+        "y": 4.4
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3386144840268221,
-        "y": 4.2147908267194
+        "x": 1.040478444593253,
+        "y": 3.358348534878888
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.3679858486729504,
-        "y": 4.758161072672772
+        "x": 3.75,
+        "y": 2.7
       },
       "prevControl": {
-        "x": 1.3549212463862237,
-        "y": 4.872113437062554
-      },
-      "nextControl": {
-        "x": 1.6323281304881043,
-        "y": 2.4525089479517073
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 4.4,
-        "y": 2.0
-      },
-      "prevControl": {
-        "x": 2.4694120229027585,
-        "y": 2.085366889875104
+        "x": 2.695851709885238,
+        "y": 2.7186574918604376
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 145.0,
-      "rotateFast": true
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
@@ -69,11 +47,28 @@
           ]
         }
       }
+    },
+    {
+      "name": "End Shooter",
+      "waypointRelativePos": 0.35,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "StopShooter"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -85,7 +80,7 @@
   "reversed": false,
   "folder": "(B.R   R.L)",
   "previewStartingState": {
-    "rotation": 30.0,
+    "rotation": 122.5780625755787,
     "velocity": 0
   },
   "useDefaultConstraints": true

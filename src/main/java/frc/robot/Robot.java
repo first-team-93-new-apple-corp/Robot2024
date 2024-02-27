@@ -13,12 +13,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 // import frc.robot.subsystems.USBCameraSubsystem;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.LEDCommand;
 import frc.robot.commands.Preflight;
 import com.ctre.phoenix6.hardware.*;
 public class Robot extends TimedRobot {
@@ -35,6 +37,7 @@ public class Robot extends TimedRobot {
   private IntakeCommand m_Intake = new IntakeCommand(m_ShooterSubsystem, m_IntakeSubsystem);
   private ElevatorCommand m_Elevator = new ElevatorCommand(op);
   private ClimberCommand m_Climber = new ClimberCommand(op);
+  private LEDCommand m_LED = new LEDCommand(op);
   private Preflight m_Preflight = new Preflight(op, m_Elevator, m_Intake, m_Climber);
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
   public Pigeon2 getPigeon() {
@@ -44,7 +47,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer(m_Joystick1, m_Joystick2, op, m_ShooterSubsystem, m_IntakeSubsystem);
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
-    // m_Elevator.initOnce();
+    m_Elevator.initOnce();
     m_SwerveDriveSubsystem.configAuto();
     // m_UsbCameraSubsystem.register();
     SmartDashboard.putBoolean("Preflight Done?", false);
@@ -70,6 +73,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    // m_Elevator.disable();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -79,6 +83,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     m_robotContainer.m_Field2d.setRobotPose(m_SwerveDriveSubsystem.getPose());
+    // m_Elevator.disable();
   }
 
   @Override
@@ -87,6 +92,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    //THIS SHOULDN'T BE RAN PERIODIC!!!!!!!!!!!!!
+    m_robotContainer.configureBindings();
+    // ^^^
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -98,8 +106,8 @@ public class Robot extends TimedRobot {
     m_Shooter.schedule();
     m_Elevator.schedule();
     m_Climber.schedule();
+    // m_LED.schedule();
     m_robotContainer.updateValues();
-    m_robotContainer.configureBindings();
   }
 
   @Override

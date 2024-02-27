@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.25,
-        "y": 6.45
+        "x": 0.85,
+        "y": 6.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.25321541552174,
-        "y": 7.313736809291801
+        "x": 1.8532154155217446,
+        "y": 7.563736809291801
       },
       "isLocked": false,
       "linkedName": null
@@ -35,9 +35,16 @@
       "name": "Shoot Note",
       "waypointRelativePos": 0,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Shooter"
+              }
+            }
+          ]
         }
       }
     },
@@ -45,16 +52,23 @@
       "name": "End Shooter",
       "waypointRelativePos": 0.4,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "StopShooter"
+              }
+            }
+          ]
         }
       }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.25,
-        "y": 4.6
+        "x": 0.85,
+        "y": 4.4
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1897383794767589,
-        "y": 3.4109647401112984
+        "x": 1.0124922068025954,
+        "y": 2.033666612787772
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 0.8
       },
       "prevControl": {
-        "x": 3.1860900085436534,
-        "y": 0.8489158796499418
+        "x": 2.9528713602881753,
+        "y": 0.7276421825570925
       },
       "nextControl": null,
       "isLocked": false,
@@ -52,23 +52,30 @@
       "name": "End Shoot",
       "waypointRelativePos": 0.25,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "StopShooter"
+              }
+            }
+          ]
         }
       }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
     "rotation": 180.0,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "(B.R   R.L)",

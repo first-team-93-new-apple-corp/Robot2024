@@ -52,7 +52,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command AutonStopIntake() {
-        return this.run(() -> stop());
+        return this.runOnce(() -> stop());
     }
 
     public void Intake() {
@@ -98,7 +98,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command AutoIntake() {
-        return this.run(() -> Intake());
+        return this.runOnce(() -> Intake());
     }
 
     public void passthrough() {
