@@ -6,23 +6,24 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class AutoAlignSubsystem extends SubsystemBase {
     public final double MaxSpeed = DriveConstants.MaxSpeed;
     public final double MaxAngularRate = DriveConstants.MaxAngularRate;
-    // private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new
-    // SwerveRequest.ApplyChassisSpeeds();
-    // private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; //
-    // My drivetrain
+
     ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
     // ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
     SwerveDriveSubsystem drivetrain;
     ChassisSpeeds alignSpeeds; // Chassis Speeds which robot uses for auto align
 
     ChassisSpeeds fieldSpeeds;
-    PIDController AlignPIDTheta = new PIDController(.5, 0, 0.01); // Rotationly PID
-    PIDController AlignPIDY = new PIDController(2.5, 0.05, 0);
-    PIDController AlignPIDX = new PIDController(2.5, 0.05, 0);
+    PIDController AlignPIDTheta = new PIDController(0, 0, 0); // Rotationly PID
+    PIDController AlignPIDY = new PIDController(2, 0, 0.1);
+    PIDController AlignPIDX = new PIDController(2, 0, 0.1);
+
+
+    // SysIdRoutine test = new SysIdRoutine(new SysIdRoutine.Config(), new SysIdRoutine.Mechanism(, null, this));
 
     double X, Y, Theta;
 
@@ -42,8 +43,9 @@ public class AutoAlignSubsystem extends SubsystemBase {
         AlignPIDTheta.setIntegratorRange(-0.3, 0.3);
         AlignPIDX.setIntegratorRange(-0.3, 0.3);
         AlignPIDY.setIntegratorRange(-0.3, 0.3);
+        
         if (true) {
-            if (true) {
+            if (false) {
                 AmpSetpointX = 14.6;
                 AmpSetpointY = 7.6;
                 AmpSetpointTheta = Math.toRadians(-90);
