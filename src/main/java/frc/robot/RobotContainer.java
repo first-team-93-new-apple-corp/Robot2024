@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.AutoAlignCommand;
 // import frc.robot.commands.ClimberCommand;
 // import frc.robot.commands.ClimbingLevel;
-// import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 // import frc.robot.subsystems.AutoAlignSubsystem;
@@ -45,8 +45,8 @@ public class RobotContainer extends TimedRobot {
   // public ClimbingLevel m_ClimbingLevel;
   public ShooterCommand m_ShooterCommand;
   public IntakeCommand m_IntakeCommand;
-  // public AutoAlignSubsystem m_AutoAlignSubsystem;
-  // public ElevatorCommand m_ElevatorCommand;  
+  public AutoAlignSubsystem m_AutoAlignSubsystem;
+  public ElevatorCommand m_ElevatorCommand;  
   public ShooterSubsystem m_ShooterSubsystem;
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
@@ -160,8 +160,8 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void configureBindings() {
-    // m_TrapAlignButton.whileTrue(m_AutoAlignSubsystem.AutoAimTrap());
-    // m_AmpAlignButton.whileTrue(m_AutoAlignSubsystem.AutoAimAmp());
+    m_TrapAlignButton.whileTrue(m_AutoAlignCommand);
+    m_AmpAlignButton.whileTrue(m_AutoAlignCommand);
     
     // m_AmpAlignButton.whileTrue(drivetrain.applyRequest(() -> m_swerveRequest
     // .withCenterOfRotation(DriveConstants.dCenter)

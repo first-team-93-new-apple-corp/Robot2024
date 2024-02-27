@@ -55,9 +55,6 @@
     "Persistent Values": {
       "open": false
     },
-    "Retained Values": {
-      "open": false
-    },
     "transitory": {
       "Drive": {
         "open": true
@@ -83,11 +80,11 @@
     }
   },
   "NetworkTables Info": {
-    "Clients": {
+    "Connections": {
       "open": true
     },
     "Server": {
-      "Subscribers": {
+      "Publishers": {
         "open": true
       },
       "open": true
@@ -105,9 +102,6 @@
       "open": true
     },
     "visible": true
-  },
-  "NetworkTables View": {
-    "visible": false
   },
   "Plot": {
     "Plot <0>": {
