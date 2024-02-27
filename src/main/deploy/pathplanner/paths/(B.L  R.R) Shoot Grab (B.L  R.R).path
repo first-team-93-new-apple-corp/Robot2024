@@ -43,11 +43,22 @@
               "data": {
                 "name": "Shooter"
               }
-            },
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "End Shooter",
+      "waypointRelativePos": 0.6,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
             {
               "type": "named",
               "data": {
-                "name": "PrimeShooter"
+                "name": "StopShooter"
               }
             }
           ]
@@ -55,8 +66,8 @@
       }
     },
     {
-      "name": "Start Ground Intake",
-      "waypointRelativePos": 0.75,
+      "name": "Start Intake",
+      "waypointRelativePos": 0.85,
       "command": {
         "type": "sequential",
         "data": {

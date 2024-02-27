@@ -70,7 +70,8 @@ public class ShooterSubsystem extends SubsystemBase {
         KickerR.set(0);
     }
     public void AmpForAuton(){
-        
+        shootAmp();
+        kicker(KickerSpeed);
     }
     public void ShootingforAuton() {
         prime();
@@ -78,7 +79,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public Command AutonAmp() {
-        return this.run(() -> shootAmp());
+        return this.runOnce(() -> AmpForAuton());
     }
 
     public Command AutonShooter() {
