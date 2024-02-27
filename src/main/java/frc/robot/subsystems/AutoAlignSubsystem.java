@@ -2,10 +2,12 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class AutoAlignSubsystem extends SubsystemBase {
     public final double MaxSpeed = DriveConstants.MaxSpeed;
@@ -20,9 +22,10 @@ public class AutoAlignSubsystem extends SubsystemBase {
     ChassisSpeeds alignSpeeds; // Chassis Speeds which robot uses for auto align
 
     ChassisSpeeds fieldSpeeds;
-    PIDController AlignPIDTheta = new PIDController(.5, 0, 0.01); // Rotationly PID
-    PIDController AlignPIDY = new PIDController(2.5, 0.05, 0);
-    PIDController AlignPIDX = new PIDController(2.5, 0.05, 0);
+    PIDController AlignPIDTheta = new PIDController(.15, 0, 0.01); // Rotationly PID
+    PIDController AlignPIDY = new PIDController(1, 0, 0);
+    PIDController AlignPIDX = new PIDController(1, 0, 0);
+    ProfiledPIDController AlignPIDTheta2 = new ProfiledPIDController(.15, 0, 0.01, new TrapezoidProfile.Constraints(DriveConstants.MaxAngularRate, 12));
 
     double X, Y, Theta;
 
@@ -31,7 +34,7 @@ public class AutoAlignSubsystem extends SubsystemBase {
     double TrapSetpoint2X = 4, TrapSetpoint2Y = 5.2, TrapSetpoint2Theta = 120;
     double TrapSetpoint3X = 6.2, TrapSetpoint3Y = 4, TrapSetpoint3Theta = 0;
 
-    double toleranceX = .13, toleranceY = .13, toleranceTheta = Math.toRadians(5);
+    double toleranceX = .04, toleranceY = .04, toleranceTheta = Math.toRadians(3);
 
     boolean red;
 
@@ -39,7 +42,9 @@ public class AutoAlignSubsystem extends SubsystemBase {
     public AutoAlignSubsystem(SwerveDriveSubsystem drivetrain) {
         this.drivetrain = drivetrain;
         AlignPIDTheta.enableContinuousInput(-Math.PI, Math.PI);
+        AlignPIDTheta2.enableContinuousInput(-Math.PI, Math.PI);
         AlignPIDTheta.setIntegratorRange(-0.3, 0.3);
+        AlignPIDTheta2.setIntegratorRange(-0.3, 0.3);
         AlignPIDX.setIntegratorRange(-0.3, 0.3);
         AlignPIDY.setIntegratorRange(-0.3, 0.3);
         if (true) {
@@ -122,11 +127,11 @@ public class AutoAlignSubsystem extends SubsystemBase {
         Theta = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getRotation().getRadians();
 
         alignSpeeds = new ChassisSpeeds(
-                ((MathUtil.clamp((AlignPIDX.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * 1), // Velocity X
+                ((MathUtil.clamp((AlignPIDX.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * -1), // Velocity X
                                                                                                       // Sawyer
-                ((MathUtil.clamp((AlignPIDY.calculate(Y, PIDSetpointY)), -MaxSpeed, MaxSpeed)) * 1), // Velocity Y
+                ((MathUtil.clamp((AlignPIDY.calculate(Y, PIDSetpointY)), -MaxSpeed, MaxSpeed)) * -1), // Velocity Y
                                                                                                       // Sawyer
-                (-MathUtil.clamp((AlignPIDTheta.calculate(Theta, (PIDSetpointTheta))), -MaxAngularRate, MaxAngularRate))); // Rotational
+                (-MathUtil.clamp((AlignPIDTheta2.calculate(Theta, (PIDSetpointTheta))), -MaxAngularRate, MaxAngularRate))); // Rotational
                                                                                                                          // Speeds
         // (-MathUtil.clamp((AlignPIDTheta.calculate(Math.toRadians(Theta),
         // Math.toRadians(PIDSetpointTheta))), -MaxAngularRate, MaxAngularRate))); //
@@ -175,9 +180,9 @@ public class AutoAlignSubsystem extends SubsystemBase {
         updateValues(SetpointX, SetpointY, SetpointTheta);
 
         if (!((Math.abs(X - SetpointX) < toleranceX)
-                &&
+                &
                 ((Math.abs(Y - SetpointY) < toleranceY)
-                &&
+                &
                 (Math.abs((-1*Math.PI) + Math.abs(Theta) + Math.abs(SetpointTheta)) < toleranceTheta)))) {
             
                     drivetrain.driveRobotRelative(fieldSpeeds);
