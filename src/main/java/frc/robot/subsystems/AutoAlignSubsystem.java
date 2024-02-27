@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -20,9 +21,9 @@ public class AutoAlignSubsystem extends SubsystemBase {
     ChassisSpeeds alignSpeeds; // Chassis Speeds which robot uses for auto align
 
     ChassisSpeeds fieldSpeeds;
-    PIDController AlignPIDTheta = new PIDController(0, 0, 0); // Rotationly PID
-    PIDController AlignPIDY = new PIDController(2, 0, 0.1);
-    PIDController AlignPIDX = new PIDController(2, 0, 0.1);
+    PIDController AlignPIDTheta = new PIDController(.17, 0, 0.1); // Rotationly PID
+    PIDController AlignPIDY = new PIDController(2.25, 0.4, 0.2); //Drive PIDs should be the same
+    PIDController AlignPIDX = new PIDController(3.2, 2.3, 0.35);
     ProfiledPIDController AlignPIDTheta2 = new ProfiledPIDController(.15, 0, 0.01, new TrapezoidProfile.Constraints(DriveConstants.MaxAngularRate, 12));
 
     double X, Y, Theta;
@@ -32,7 +33,7 @@ public class AutoAlignSubsystem extends SubsystemBase {
     double TrapSetpoint2X = 4, TrapSetpoint2Y = 5.2, TrapSetpoint2Theta = 120;
     double TrapSetpoint3X = 6.2, TrapSetpoint3Y = 4, TrapSetpoint3Theta = 0;
 
-    double toleranceX = .04, toleranceY = .04, toleranceTheta = Math.toRadians(3);
+    double toleranceX = .02, toleranceY = .02, toleranceTheta = Math.toRadians(3);
 
     boolean red;
 
@@ -43,8 +44,8 @@ public class AutoAlignSubsystem extends SubsystemBase {
         AlignPIDTheta2.enableContinuousInput(-Math.PI, Math.PI);
         AlignPIDTheta.setIntegratorRange(-0.3, 0.3);
         AlignPIDTheta2.setIntegratorRange(-0.3, 0.3);
-        AlignPIDX.setIntegratorRange(-0.3, 0.3);
-        AlignPIDY.setIntegratorRange(-0.3, 0.3);
+        AlignPIDX.setIntegratorRange(-0.45, 0.45);
+        AlignPIDY.setIntegratorRange(-0.45, 0.45);
         
         if (true) {
             if (false) {
@@ -64,21 +65,22 @@ public class AutoAlignSubsystem extends SubsystemBase {
                 TrapSetpoint3Y = 4;
                 TrapSetpoint3Theta = Math.toRadians(180);
             } else if (true) {
-                AmpSetpointX = 1.75;
-                AmpSetpointY = 7.6;
-                AmpSetpointTheta = -90;
+                //[1.8668397151100247, 7.570062436206427, 92.40526427834128]
+                AmpSetpointX = 1.8668397151100247;
+                AmpSetpointY = 7.570062436206427;
+                AmpSetpointTheta = Math.toRadians(-90);
 
-//                 TrapSetpoint1X = 4.1;
-//                 TrapSetpoint1Y = 2.8;
-//                 TrapSetpoint1Theta = -120;
+                TrapSetpoint1X = 4.1;
+                TrapSetpoint1Y = 2.8;
+                TrapSetpoint1Theta = Math.toRadians(-120);
 
-//                 TrapSetpoint2X = 4;
-//                 TrapSetpoint2Y = 5.2;
-//                 TrapSetpoint2Theta = 120;
+                TrapSetpoint2X = 4;
+                TrapSetpoint2Y = 5.2;
+                TrapSetpoint2Theta = Math.toRadians(120);
 
                 TrapSetpoint3X = 6.2;
                 TrapSetpoint3Y = 4;
-                TrapSetpoint3Theta = 180;
+                TrapSetpoint3Theta = Math.toRadians(180);
             }
         }
     }
@@ -126,16 +128,9 @@ public class AutoAlignSubsystem extends SubsystemBase {
         Theta = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getRotation().getRadians();
 
         alignSpeeds = new ChassisSpeeds(
-                ((MathUtil.clamp((AlignPIDX.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * -1), // Velocity X
-                                                                                                      // Sawyer
-                ((MathUtil.clamp((AlignPIDY.calculate(Y, PIDSetpointY)), -MaxSpeed, MaxSpeed)) * -1), // Velocity Y
-                                                                                                      // Sawyer
-                (-MathUtil.clamp((AlignPIDTheta2.calculate(Theta, (PIDSetpointTheta))), -MaxAngularRate, MaxAngularRate))); // Rotational
-                                                                                                                         // Speeds
-        // (-MathUtil.clamp((AlignPIDTheta.calculate(Math.toRadians(Theta),
-        // Math.toRadians(PIDSetpointTheta))), -MaxAngularRate, MaxAngularRate))); //
-        // Rotational Speeds
-
+                ((MathUtil.clamp((AlignPIDY.calculate(Y, PIDSetpointY)), -MaxSpeed, MaxSpeed)) * 1), // Velocity X
+                ((MathUtil.clamp((AlignPIDX.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * -1), // Velocity Y
+                (-MathUtil.clamp((AlignPIDTheta.calculate(Theta, (PIDSetpointTheta))), -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
         fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(alignSpeeds,
                 new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
                         .rotateBy(new Rotation2d(0)));
@@ -143,7 +138,7 @@ public class AutoAlignSubsystem extends SubsystemBase {
     }
 
     public void AutoAimAmp() { // Works amp
-        AutoAim(AmpSetpointX, AmpSetpointY, AmpSetpointTheta);
+        AutoAim(AmpSetpointX, AmpSetpointY, AmpSetpointTheta, "Amp");
     }
 
     public void AutoAimTrap() { // Works with all trap locations
@@ -151,31 +146,31 @@ public class AutoAlignSubsystem extends SubsystemBase {
             // red
             if (Y < 4 && X > 10.75) {
                 // Trap 1
-                AutoAim(TrapSetpoint1X, TrapSetpoint1Y, TrapSetpoint1Theta);
+                AutoAim(TrapSetpoint1X, TrapSetpoint1Y, TrapSetpoint1Theta, "RedTrap1");
             } else if (Y > 4 && X > 10.75) {
                 // Trap 2
-                AutoAim(TrapSetpoint2X, TrapSetpoint2Y, TrapSetpoint2Theta);
+                AutoAim(TrapSetpoint2X, TrapSetpoint2Y, TrapSetpoint2Theta, "RedTrap2");
             } else if (X < 10.75) {
                 // Trap 3
-                AutoAim(TrapSetpoint3X, TrapSetpoint3Y, TrapSetpoint3Theta);
+                AutoAim(TrapSetpoint3X, TrapSetpoint3Y, TrapSetpoint3Theta, "RedTrap3");
             }
         } else {
             // blue
             if (Y < 4 && X < 5.3) {
                 // Trap 1
-                AutoAim(TrapSetpoint1X, TrapSetpoint1Y, TrapSetpoint1Theta);
+                AutoAim(TrapSetpoint1X, TrapSetpoint1Y, TrapSetpoint1Theta, "BlueTrap1");
             } else if (Y > 4 && X < 5.3) {
                 // Trap 2
-                AutoAim(TrapSetpoint2X, TrapSetpoint2Y, TrapSetpoint2Theta);
+                AutoAim(TrapSetpoint2X, TrapSetpoint2Y, TrapSetpoint2Theta, "BlueTrap2");
             } else if (X > 5.3) {
                 // Trap 3
-                AutoAim(TrapSetpoint3X, TrapSetpoint3Y, TrapSetpoint3Theta);
+                AutoAim(TrapSetpoint3X, TrapSetpoint3Y, TrapSetpoint3Theta, "BlueTrap3");
             } else {
             }
         }
     }
 
-    public void AutoAim(double SetpointX, double SetpointY, double SetpointTheta) {
+    public void AutoAim(double SetpointX, double SetpointY, double SetpointTheta, String location) {
         updateValues(SetpointX, SetpointY, SetpointTheta);
 
         if (!((Math.abs(X - SetpointX) < toleranceX)
