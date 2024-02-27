@@ -32,7 +32,7 @@ import frc.robot.commands.AutoAlignCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
-// import frc.robot.subsystems.AutoAlignSubsystem;
+import frc.robot.subsystems.AutoAlignSubsystem;
 import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
