@@ -70,6 +70,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    m_Elevator.disable();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -79,6 +80,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     m_robotContainer.m_Field2d.setRobotPose(m_SwerveDriveSubsystem.getPose());
+    m_Elevator.disable();
   }
 
   @Override
@@ -87,6 +89,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    //THIS SHOULDN'T BE RAN PERIODIC!!!!!!!!!!!!!
+    m_robotContainer.configureBindings();
+    // ^^^
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -99,7 +104,6 @@ public class Robot extends TimedRobot {
     m_Elevator.schedule();
     m_Climber.schedule();
     m_robotContainer.updateValues();
-    m_robotContainer.configureBindings();
   }
 
   @Override
