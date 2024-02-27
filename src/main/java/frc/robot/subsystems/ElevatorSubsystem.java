@@ -23,6 +23,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     double output;
     PIDController pid = new PIDController(0.075, 0, 0);
     TalonFXConfiguration config = new TalonFXConfiguration();
+    TalonFXConfiguration zeroConfig = new TalonFXConfiguration();
     // AnalogInput m_encoder;
     // AnalogEncoder m_encoder;
     double zeroPos;
@@ -52,6 +53,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         m_motor.getConfigurator().apply(config);
         currentState = elevatorState.Init;
+        zeroConfig.CurrentLimits.SupplyCurrentLimit = 5;
+        zeroConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     }
     public void disable() {
         // currentState = elevatorState.Disabled;
@@ -127,10 +130,12 @@ public class ElevatorSubsystem extends SubsystemBase {
                 break;
             case Zeroing:
                 if (!bottomLimitTriggered()) {
+                    m_motor.getConfigurator().apply(zeroConfig);
                     m_motor.set(0.05);
                 } else {
                     m_motor.set(0);
                     m_motor.setPosition(0);
+                    m_motor.getConfigurator().apply(config);
                     currentState = elevatorState.HoldState;
                 }
                 break;

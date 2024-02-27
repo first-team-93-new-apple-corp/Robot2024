@@ -21,20 +21,20 @@ public class AutoAlignSubsystem extends SubsystemBase {
     ChassisSpeeds alignSpeeds; // Chassis Speeds which robot uses for auto align
 
     ChassisSpeeds fieldSpeeds;
-    PIDController AlignPIDTheta = new PIDController(.17, 0, 0.1); // Rotationly PID
-    PIDController AlignPIDY = new PIDController(2.25, 0.4, 0.2); //Drive PIDs should be the same
-    PIDController AlignPIDX = new PIDController(3.2, 2.3, 0.35);
+    PIDController AlignPIDTheta = new PIDController(.2, 0, 0.1); // Rotationly PID
+    PIDController AlignPIDX = new PIDController(2.25, 0.4, 0.2); //Drive PIDs should be the same
+    PIDController AlignPIDY = new PIDController(3.2, 2.3, 0.35);
     ProfiledPIDController AlignPIDTheta2 = new ProfiledPIDController(.15, 0, 0.01, new TrapezoidProfile.Constraints(DriveConstants.MaxAngularRate, 12));
 
     double X, Y, Theta;
 
-    double AmpSetpointX = 1.75, AmpSetpointY = 7.6, AmpSetpointTheta = -90;
+    double AmpSetpointX = 1.75, AmpSetpointY = 7.593, AmpSetpointTheta = -90;
     double TrapSetpoint1X = 4.1, TrapSetpoint1Y = 2.8, TrapSetpoint1Theta = -120;
     double TrapSetpoint2X = 4, TrapSetpoint2Y = 5.2, TrapSetpoint2Theta = 120;
     double TrapSetpoint3X = 6.2, TrapSetpoint3Y = 4, TrapSetpoint3Theta = 0;
 
     double toleranceX = .02, toleranceY = .02, toleranceTheta = Math.toRadians(3);
-
+    double fieldRelativeOffset;
     boolean red;
 
     // Optional<Alliance> ally = DriverStation.getAlliance();
@@ -49,6 +49,8 @@ public class AutoAlignSubsystem extends SubsystemBase {
         
         if (true) {
             if (false) {
+                //red
+
                 AmpSetpointX = 14.6;
                 AmpSetpointY = 7.6;
                 AmpSetpointTheta = Math.toRadians(-90);
@@ -65,6 +67,8 @@ public class AutoAlignSubsystem extends SubsystemBase {
                 TrapSetpoint3Y = 4;
                 TrapSetpoint3Theta = Math.toRadians(180);
             } else if (true) {
+                //Blue
+
                 //[1.8668397151100247, 7.570062436206427, 92.40526427834128]
                 AmpSetpointX = 1.8668397151100247;
                 AmpSetpointY = 7.570062436206427;
@@ -125,11 +129,12 @@ public class AutoAlignSubsystem extends SubsystemBase {
         drivetrain.updateOdometry();
         X = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getX();
         Y = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getY();
+        // Theta = new Rotation2d(drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getRotation().getRadians()).rotateBy(new Rotation2d(fieldRelativeOffset)).getRadians();
         Theta = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getRotation().getRadians();
 
         alignSpeeds = new ChassisSpeeds(
-                ((MathUtil.clamp((AlignPIDY.calculate(Y, PIDSetpointY)), -MaxSpeed, MaxSpeed)) * 1), // Velocity X
-                ((MathUtil.clamp((AlignPIDX.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * -1), // Velocity Y
+                ((MathUtil.clamp((AlignPIDY.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * 1), // Velocity X
+                ((MathUtil.clamp((AlignPIDX.calculate(Y, PIDSetpointY)), -MaxSpeed, MaxSpeed)) * 1), // Velocity Y
                 (-MathUtil.clamp((AlignPIDTheta.calculate(Theta, (PIDSetpointTheta))), -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
         fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(alignSpeeds,
                 new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
@@ -184,6 +189,9 @@ public class AutoAlignSubsystem extends SubsystemBase {
         } else {
         }
 
+    }
+    public void updateOffset(double fieldRelativeOffset) {
+        this.fieldRelativeOffset = fieldRelativeOffset;
     }
 }
 //     @Override

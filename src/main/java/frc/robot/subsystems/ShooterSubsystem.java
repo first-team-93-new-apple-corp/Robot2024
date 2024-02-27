@@ -17,7 +17,7 @@ public class ShooterSubsystem extends SubsystemBase {
     double SpeakerShooterSpeed = 0.55;
     double currentspeed;
     final double MuzzleIntake = -0.30;
-    final double AmpShooterSpeed = 0.1;
+    final double AmpShooterSpeed = 0.15;
     final double KickerSpeed = 1;
     double StartTime;
 
