@@ -21,14 +21,19 @@ public class AutoAlignSubsystem extends SubsystemBase {
     ChassisSpeeds alignSpeeds; // Chassis Speeds which robot uses for auto align
 
     ChassisSpeeds fieldSpeeds;
-    PIDController AlignPIDTheta = new PIDController(.2, 0, 0.1); // Rotationly PID
-    PIDController AlignPIDX = new PIDController(2.25, 0.4, 0.2); //Drive PIDs should be the same
-    PIDController AlignPIDY = new PIDController(3.2, 2.3, 0.35);
-    ProfiledPIDController AlignPIDTheta2 = new ProfiledPIDController(.15, 0, 0.01, new TrapezoidProfile.Constraints(DriveConstants.MaxAngularRate, 12));
+    PIDController AlignPIDTheta = new PIDController(.19, 0, 0.15); // Rotationly PID
+    PIDController AlignPIDX = new PIDController(2.1, 0.14, 0.2); //Drive PIDs should be the same
+    PIDController AlignPIDY = new PIDController(3.4, 2, 0.35);
+    // ProfiledPIDController AlignPIDTheta2 = new ProfiledPIDController(.15, 0, 0.01, new TrapezoidProfile.Constraints(DriveConstants.MaxAngularRate, 12));
+    double rateLimit = 9.5;
+    SlewRateLimiter xlimit = new SlewRateLimiter(rateLimit);
+    SlewRateLimiter ylimit = new SlewRateLimiter(rateLimit);
+    SlewRateLimiter thetalimit = new SlewRateLimiter(rateLimit);
+
 
     double X, Y, Theta;
 
-    double AmpSetpointX = 1.75, AmpSetpointY = 7.593, AmpSetpointTheta = -90;
+    double AmpSetpointX = 1.73, AmpSetpointY = 7.23, AmpSetpointTheta = -90;
     double TrapSetpoint1X = 4.1, TrapSetpoint1Y = 2.8, TrapSetpoint1Theta = -120;
     double TrapSetpoint2X = 4, TrapSetpoint2Y = 5.2, TrapSetpoint2Theta = 120;
     double TrapSetpoint3X = 6.2, TrapSetpoint3Y = 4, TrapSetpoint3Theta = 0;
@@ -41,9 +46,9 @@ public class AutoAlignSubsystem extends SubsystemBase {
     public AutoAlignSubsystem(SwerveDriveSubsystem drivetrain) {
         this.drivetrain = drivetrain;
         AlignPIDTheta.enableContinuousInput(-Math.PI, Math.PI);
-        AlignPIDTheta2.enableContinuousInput(-Math.PI, Math.PI);
+        // AlignPIDTheta2.enableContinuousInput(-Math.PI, Math.PI);
         AlignPIDTheta.setIntegratorRange(-0.3, 0.3);
-        AlignPIDTheta2.setIntegratorRange(-0.3, 0.3);
+        // AlignPIDTheta2.setIntegratorRange(-0.3, 0.3);
         AlignPIDX.setIntegratorRange(-0.45, 0.45);
         AlignPIDY.setIntegratorRange(-0.45, 0.45);
         
@@ -133,9 +138,9 @@ public class AutoAlignSubsystem extends SubsystemBase {
         Theta = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getRotation().getRadians();
 
         alignSpeeds = new ChassisSpeeds(
-                ((MathUtil.clamp((AlignPIDY.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * 1), // Velocity X
-                ((MathUtil.clamp((AlignPIDX.calculate(Y, PIDSetpointY)), -MaxSpeed, MaxSpeed)) * 1), // Velocity Y
-                (-MathUtil.clamp((AlignPIDTheta.calculate(Theta, (PIDSetpointTheta))), -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
+                xlimit.calculate((MathUtil.clamp((AlignPIDY.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * 1), // Velocity X
+                ylimit.calculate((MathUtil.clamp((AlignPIDX.calculate(Y, PIDSetpointY)), -MaxSpeed, MaxSpeed)) * 1), // Velocity Y
+                thetalimit.calculate(-MathUtil.clamp((AlignPIDTheta.calculate(Theta, (PIDSetpointTheta))), -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
         fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(alignSpeeds,
                 new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
                         .rotateBy(new Rotation2d(0)));
