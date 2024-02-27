@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_Elevator.disable();
+    // m_Elevator.disable();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     m_robotContainer.m_Field2d.setRobotPose(m_SwerveDriveSubsystem.getPose());
-    m_Elevator.disable();
+    // m_Elevator.disable();
   }
 
   @Override

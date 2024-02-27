@@ -75,11 +75,6 @@ public class ShooterSubsystem extends SubsystemBase {
     public void ShootingforAuton() {
         prime();
         kicker(KickerSpeed);
-        StartTime = Timer.getFPGATimestamp();
-        while (Timer.getFPGATimestamp() < (StartTime+1)) {
-            
-        }
-        shooterStop();
     }
 
     public Command AutonAmp() {
@@ -87,7 +82,11 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public Command AutonShooter() {
-        return this.run(() -> ShootingforAuton());
+        return this.runOnce(() -> ShootingforAuton());
+    }
+
+    public Command AutonStopShooter() {
+        return this.runOnce(() -> shooterStop());
     }
 
     public void increaseSpeed() {

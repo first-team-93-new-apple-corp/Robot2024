@@ -32,7 +32,7 @@ import frc.robot.commands.AutoAlignCommand;
 // import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
-import frc.robot.subsystems.AutoAlignSubsystem;
+// import frc.robot.subsystems.AutoAlignSubsystem;
 import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -45,12 +45,12 @@ public class RobotContainer extends TimedRobot {
   // public ClimbingLevel m_ClimbingLevel;
   public ShooterCommand m_ShooterCommand;
   public IntakeCommand m_IntakeCommand;
-  public AutoAlignSubsystem m_AutoAlignSubsystem;
+  // public AutoAlignSubsystem m_AutoAlignSubsystem;
   // public ElevatorCommand m_ElevatorCommand;  
   public ShooterSubsystem m_ShooterSubsystem;
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
-  private final SendableChooser<Command> autoChooser;
+  private SendableChooser<Command> autoChooser;
   public final double MaxSpeed = DriveConstants.MaxSpeed;
   public final double MaxAngularRate = DriveConstants.MaxAngularRate;
   private double angle;
@@ -68,8 +68,8 @@ public class RobotContainer extends TimedRobot {
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
-  private JoystickButton m_AmpAlignButton;
-  private JoystickButton m_TrapAlignButton;
+  JoystickButton m_AmpAlignButton;
+  JoystickButton m_TrapAlignButton;
   private final JoystickButton m_BrakeButton;
   private final JoystickButton m_fieldRelButton;
   private final JoystickButton m_RobotRelButton;
@@ -160,8 +160,8 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void configureBindings() {
-    m_TrapAlignButton.whileTrue(m_AutoAlignSubsystem.AutoAimTrap());
-    m_AmpAlignButton.whileTrue(m_AutoAlignSubsystem.AutoAimAmp());
+    // m_TrapAlignButton.whileTrue(m_AutoAlignSubsystem.AutoAimTrap());
+    // m_AmpAlignButton.whileTrue(m_AutoAlignSubsystem.AutoAimAmp());
     
     // m_AmpAlignButton.whileTrue(drivetrain.applyRequest(() -> m_swerveRequest
     // .withCenterOfRotation(DriveConstants.dCenter)
@@ -215,7 +215,7 @@ public class RobotContainer extends TimedRobot {
     // reset the field-centric heading on left bumper press
 
     if (Utils.isSimulation()) {
-      drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+      drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
     }
     drivetrain.registerTelemetry(logger::telemeterize);
   }
@@ -247,11 +247,11 @@ public class RobotContainer extends TimedRobot {
     m_TrapAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Button);
     //ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
     //IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
-    m_AutoAlignSubsystem = new AutoAlignSubsystem(drivetrain);
+    // m_AutoAlignSubsystem = new AutoAlignSubsystem(drivetrain);
     // m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);
     NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
     NamedCommands.registerCommand("Shooter", m_ShooterSubsystem.AutonShooter());
-    // NamedCommands.registerCommand("StopShooter", m_ShooterSubsystem.AutonShooterStop());
+    NamedCommands.registerCommand("StopShooter", m_ShooterSubsystem.AutonStopShooter());
     // NamedCommands.registerCommand("StopKicker", m_ShooterSubsystem.AutonKickerStop());
     NamedCommands.registerCommand("StopIntake", m_IntakeSubsystem.AutonStopIntake());
     SignalLogger.start();

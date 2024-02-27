@@ -30,6 +30,9 @@ public class ElevatorCommand extends Command {
         return m_elevator.getMotor();
     }
 
+    public void disable() {
+        m_elevator.disable();
+    }
     @Override
     public void execute() {
         // if (op.getPOV() == 0) {

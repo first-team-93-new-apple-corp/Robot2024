@@ -5,23 +5,16 @@
       "x": 2.0,
       "y": 7.0
     },
-    "rotation": 0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Test"
-                }
-              }
-            ]
+            "pathName": "Copy of Test"
           }
         }
       ]

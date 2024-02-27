@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7218158264581296,
-      "y": 4.229476509042464
+      "x": 0.85,
+      "y": 4.4
     },
-    "rotation": 30.0
+    "rotation": 120.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(B.R  R.L) Shoot and Leave"
+            "pathName": "New Path"
           }
         }
       ]
