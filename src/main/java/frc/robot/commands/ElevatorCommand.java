@@ -11,7 +11,7 @@ public class ElevatorCommand extends Command {
     XboxController op;
     ElevatorSubsystem m_elevator = new ElevatorSubsystem();
     double setpoint = 0;
-    double ampSetpoint = -70;
+    double ampSetpoint = -50;
     double sourceSetpoint = -70;
 
     public ElevatorCommand(XboxController op) {
@@ -35,17 +35,20 @@ public class ElevatorCommand extends Command {
     }
     @Override
     public void execute() {
+        
         // if (op.getPOV() == 0) {
-        //     m_elevator.toSetpoint(-75);
+        //     // m_elevator.toSetpoint(-75);
+        //     setpoint -= 5;
         // } else if (op.getPOV() == 90) {
-        //     m_elevator.toSetpoint(-40);
+        //     // m_elevator.toSetpoint(-40);
         // } else if (op.getPOV() == 180) {
-    //     m_elevator.toSetpoint(-3);
+        // // m_elevator.toSetpoint(-3);
+        //     setpoint += 5;
         // } else if (op.getPOV() == 270) {
-        //     m_elevator.toSetpoint(-25);
-        // } else {
-
+        //     // m_elevator.toSetpoint(-25);
         // }
+
+        // m_elevator.toSetpoint(setpoint);
 
         if (op.getRawButton(Constants.xbox.RightShoulderButton)) {
             m_elevator.toSetpoint(ampSetpoint);

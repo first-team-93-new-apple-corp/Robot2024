@@ -22,8 +22,8 @@ public class AutoAlignSubsystem extends SubsystemBase {
 
     ChassisSpeeds fieldSpeeds;
     PIDController AlignPIDTheta = new PIDController(.19, 0, 0.15); // Rotationly PID
-    PIDController AlignPIDX = new PIDController(2.1, 0.14, 0.2); //Drive PIDs should be the same
-    PIDController AlignPIDY = new PIDController(3.4, 2, 0.35);
+    PIDController AlignPIDX = new PIDController(2.1, 0.12, 0.2); //Drive PIDs should be the same
+    PIDController AlignPIDY = new PIDController(3.4, 2.1, 0.35);
     // ProfiledPIDController AlignPIDTheta2 = new ProfiledPIDController(.15, 0, 0.01, new TrapezoidProfile.Constraints(DriveConstants.MaxAngularRate, 12));
     double rateLimit = 9.5;
     SlewRateLimiter xlimit = new SlewRateLimiter(rateLimit);
@@ -74,9 +74,9 @@ public class AutoAlignSubsystem extends SubsystemBase {
             } else if (true) {
                 //Blue
 
-                //[1.8668397151100247, 7.570062436206427, 92.40526427834128]
+                //[1.853897995668131, 7.628754042404275, 94.1111881329313]
                 AmpSetpointX = 1.8668397151100247;
-                AmpSetpointY = 7.570062436206427;
+                AmpSetpointY = 7.62;
                 AmpSetpointTheta = Math.toRadians(-90);
 
                 TrapSetpoint1X = 4.1;

@@ -17,7 +17,7 @@ public class ShooterSubsystem extends SubsystemBase {
     double SpeakerShooterSpeed = 0.55;
     double currentspeed;
     final double MuzzleIntake = -0.30;
-    final double AmpShooterSpeed = 0.15;
+    final double AmpShooterSpeed = 0.1;
     final double KickerSpeed = 1;
     double StartTime;
 
@@ -68,6 +68,10 @@ public class ShooterSubsystem extends SubsystemBase {
     public void kickerStop() {
         KickerL.set(0);
         KickerR.set(0);
+    }
+    public void ampKicker() {
+        KickerL.set(0.25);
+        KickerR.set(0.25);
     }
     public void AmpForAuton(){
         shootAmp();

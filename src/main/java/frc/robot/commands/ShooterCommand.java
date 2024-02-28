@@ -35,8 +35,10 @@ public class ShooterCommand extends Command {
         }
 
         // For the Kicker
-        if (driver2.getRawButton(Constants.Thrustmaster.Trigger)) { // B
+        if (driver2.getRawButton(Constants.Thrustmaster.Trigger) && !opController.getRawButton(Constants.xbox.RightShoulderButton)) { // B
             m_ShooterSubsystem.kicker(1);
+        } else if (driver2.getRawButton(Constants.Thrustmaster.Trigger) && opController.getRawButton(Constants.xbox.RightShoulderButton)) { // B
+            m_ShooterSubsystem.ampKicker();
         } else if (!opController.getRawButton(Constants.xbox.LeftShoulderButton) && !opController.getRawButton(Constants.xbox.X)) {
             m_ShooterSubsystem.kickerStop();
         }
