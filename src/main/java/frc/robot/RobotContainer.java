@@ -123,28 +123,44 @@ public class RobotContainer extends TimedRobot {
         // SmartDashboard.putNumber("Limit", Limit);
         if (pov0.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Front
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading())
+              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
+              );
         } else if (pov45.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Location_FR
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading())
+              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
+              );
         } else if (pov90.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Right
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading())
+              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
+              );
         } else if (pov135.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Location_BR
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading())
+              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
+              );
         } else if (pov180.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Back
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading())
+              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
+              );
         } else if (pov225.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Location_BL
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading())
+              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
+              );
         } else if (pov270.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Left
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading())
+              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
+              );
         } else if (pov315.getAsBoolean()) {
           DriveConstants.dCenter = DriveConstants.Location_FL
-              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading()).rotateBy(new Rotation2d(-fieldRelativeOffset)));
+              .rotateBy(Rotation2d.fromDegrees(-1 * drivetrain.getHeading())
+              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
+              );
         } else {
           DriveConstants.dCenter = DriveConstants.Center;
         }
@@ -271,6 +287,7 @@ public class RobotContainer extends TimedRobot {
     SmartDashboard.putNumber("PigeonAngle", angle);
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
       fieldRelativeOffset = drivetrain.getPigeon2().getRotation2d().getRadians();
+      drivetrain.getPigeon2().reset();
     }
     speeds = new ChassisSpeeds(
         (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * MaxSpeed),
@@ -278,7 +295,8 @@ public class RobotContainer extends TimedRobot {
         (checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxAngularRate));
     fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
         new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
-            .rotateBy(new Rotation2d(-fieldRelativeOffset)));
+            // .rotateBy(new Rotation2d(-fieldRelativeOffset))
+            );
     RotationPoints(m_Joystick2);
     POVButton();
     // m_AutoAlignSubsystem.Alliance();
