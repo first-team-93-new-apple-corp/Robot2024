@@ -19,6 +19,7 @@ public class ShooterSubsystem extends SubsystemBase {
     final double MuzzleIntake = -0.30;
     final double AmpShooterSpeed = 0.1;
     final double KickerSpeed = 1;
+    final double DribbleSpeed = .25;
     double StartTime;
 
     public ShooterSubsystem() {
@@ -82,6 +83,11 @@ public class ShooterSubsystem extends SubsystemBase {
         kicker(KickerSpeed);
     }
 
+    public void DribbleOutNote() {
+        shoot(DribbleSpeed);
+        kicker(DribbleSpeed);
+    }
+
     public Command AutonAmp() {
         return this.runOnce(() -> AmpForAuton());
     }
@@ -92,6 +98,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public Command AutonStopShooter() {
         return this.runOnce(() -> shooterStop());
+    }
+
+    public Command AutonDribbleNote(){
+        return this.runOnce(() -> DribbleOutNote());
     }
 
     public void increaseSpeed() {

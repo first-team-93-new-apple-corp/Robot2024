@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+// import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,7 +11,7 @@ public class ShooterCommand extends Command {
     XboxController opController = new XboxController(2);
     Joystick driver2 = new Joystick(1);
     ShooterSubsystem m_ShooterSubsystem;
-
+    // LEDSubsystem m_LED;
     public ShooterCommand(ShooterSubsystem m_ShooterSubsystem) {
         this.m_ShooterSubsystem = m_ShooterSubsystem;
     }
@@ -41,6 +42,8 @@ public class ShooterCommand extends Command {
             m_ShooterSubsystem.ampKicker();
         } else if (!opController.getRawButton(Constants.xbox.LeftShoulderButton) && !opController.getRawButton(Constants.xbox.X)) {
             m_ShooterSubsystem.kickerStop();
+            
+            // m_LED.turnLEDSOff();
         }
     }
 }

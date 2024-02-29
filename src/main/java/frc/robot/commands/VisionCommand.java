@@ -1,36 +1,36 @@
-package frc.robot.commands;
+//package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.Command;
+//import edu.wpi.first.wpilibj.Joystick;
+//import edu.wpi.first.wpilibj2.command.Command;
 
-import frc.robot.Constants;
-import frc.robot.subsystems.SwerveDriveSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+//import frc.robot.Constants;
+//import frc.robot.subsystems.SwerveDriveSubsystem;
+//import frc.robot.subsystems.VisionSubsystem;
 
-public class VisionCommand extends Command {
-    Joystick m_joystick1 = new Joystick(0);
+//public class VisionCommand extends Command {
+    //Joystick m_joystick1 = new Joystick(0);
 
-    VisionSubsystem Vision;
+    //VisionSubsystem Vision;
 
-    public VisionCommand(SwerveDriveSubsystem drivetrain) {
-        Vision = new VisionSubsystem(drivetrain);
-    }
+    //public VisionCommand(SwerveDriveSubsystem drivetrain) {
+      //  Vision = new VisionSubsystem(drivetrain);
+    //}
 
-    @Override
-    public void execute() {
-        Vision.periodic();
-        if (m_joystick1.getRawButton(Constants.Thrustmaster.Center_Button)) {
-            Vision.AlignAmp();
-        } else if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Button)) {
-            Vision.AlignTrap();
-        } else {
-            Vision.resetStateTrap();
-            Vision.resetStateAmp();
-        }
-        if (m_joystick1.getRawButtonPressed(Constants.Thrustmaster.Right_Buttons.Top_Left)) {
-            Vision.LimeLightOn();
-        } else if (m_joystick1.getRawButtonReleased(Constants.Thrustmaster.Right_Buttons.Top_Left)) {
-            Vision.LimeLightOff();
-        }
-    }
-}
+    //@Override
+    //public void execute() {
+        //Vision.periodic();
+        //if (m_joystick1.getRawButton(Constants.Thrustmaster.Center_Button)) {
+          //  Vision.AlignAmp();
+        //} else if (m_joystick1.getRawButton(Constants.Thrustmaster.Right_Button)) {
+          //  Vision.AlignTrap();
+        //} else {
+            //Vision.resetStateTrap();
+          //  Vision.resetStateAmp();
+        //}
+       // if (m_joystick1.getRawButtonPressed(Constants.Thrustmaster.Right_Buttons.Top_Left)) {
+          //  Vision.LimeLightOn();
+        //} else if (m_joystick1.getRawButtonReleased(Constants.Thrustmaster.Right_Buttons.Top_Left)) {
+      //      Vision.LimeLightOff();
+    //    }
+  //  }
+//}

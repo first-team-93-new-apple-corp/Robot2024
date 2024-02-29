@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+// import frc.robot.commands.LEDCommand;
 
 public class IntakeSubsystem extends SubsystemBase {
     private TalonFX frontIntake;
@@ -21,6 +22,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private double IntakeSpeed = 0.75;
     private double PassoverSpeed = 0.5;
     private ShooterSubsystem m_shooter;
+    // private LEDSubsystem m_LED;
     XboxController op;
 
     public enum intakeState {
@@ -31,7 +33,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private intakeState state = intakeState.Stage1;
 
-    public IntakeSubsystem(ShooterSubsystem m_shooter, XboxController op) {
+    public IntakeSubsystem( ShooterSubsystem m_shooter, XboxController op) {
         this.m_shooter = m_shooter;
         this.op = op;
         config = new TalonFXConfiguration();
@@ -81,12 +83,14 @@ public class IntakeSubsystem extends SubsystemBase {
                 if (upperTOF.getRange() < 130) {
                     state = intakeState.Stage1;
                 } else {
+                    
                     m_shooter.kicker(0);
                     m_shooter.shoot(0);
                     frontIntake.set(0);
                     backIntake.set(0);
                     bumperIntake.set(0);
                     op.setRumble(RumbleType.kBothRumble, 0);
+                    // m_LED.noteInBot();
                 }
                 break;
         }

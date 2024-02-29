@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
@@ -94,8 +95,8 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         }
 
         AutoBuilder.configureHolonomic(
-                () -> this.getState().Pose, // Supplier of current robot pose
-                // () -> this.m_SwerveDrivePoseEstimator.getEstimatedPosition(),
+                // () -> this.getState().Pose, // Supplier of current robot pose
+                () -> this.m_SwerveDrivePoseEstimator.getEstimatedPosition(),
                 this::seedFieldRelative, // Consumer for seeding pose against auto
                 this::getCurrentRobotChassisSpeeds,
                 (speeds) -> this.setControl(autoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the
@@ -106,7 +107,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
                         // new PIDConstants(.25, 0, 0),
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius,
-                        new ReplanningConfig()),
+                        new ReplanningConfig(true, true)),
                 () -> {
                     var alliance = DriverStation.getAlliance();
                     if (alliance.isPresent()) {
@@ -154,6 +155,10 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         if (Utils.isSimulation()) {
             startSimThread();
         }
+    }
+
+    public SwerveModulePosition[] getModulePositions () {
+        return m_modulePositions;
     }
 
     public void updateOdometry() {
