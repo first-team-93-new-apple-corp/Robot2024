@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.85,
+      "y": 4.4
+    },
+    "rotation": 120.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooter"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(B.R  R.L) Shoot and Leave to Stageline"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Shoot and Leave",
+  "choreoAuto": false
+}
