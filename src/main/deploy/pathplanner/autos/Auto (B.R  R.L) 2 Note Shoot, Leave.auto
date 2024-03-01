@@ -62,7 +62,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(B.R  R.L) Shoot and Leave to Stageline"
+            "pathName": "(B.R  R.L) Shoot and Leave to Midline"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ResetField"
           }
         }
       ]
