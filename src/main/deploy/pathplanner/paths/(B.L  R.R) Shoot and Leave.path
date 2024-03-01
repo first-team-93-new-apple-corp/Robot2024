@@ -3,71 +3,58 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.85,
-        "y": 6.7
+        "x": 0.8072597963377744,
+        "y": 6.716697069757776
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8532154155217446,
-        "y": 7.563736809291801
+        "x": 1.1337659038954446,
+        "y": 7.164476874408296
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.45,
-        "y": 7.45
+        "x": 1.7681206271503453,
+        "y": 7.621585424989032
       },
       "prevControl": {
-        "x": 5.770825732560556,
-        "y": 7.55261620523241
+        "x": 0.9140315996123508,
+        "y": 7.560579065879175
+      },
+      "nextControl": {
+        "x": 2.551735285288752,
+        "y": 7.677557900570347
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.258895790518853,
+        "y": 7.621585424989032
+      },
+      "prevControl": {
+        "x": 3.2513912300551873,
+        "y": 7.640242916849471
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [],
-  "eventMarkers": [
+  "rotationTargets": [
     {
-      "name": "Shoot Note",
-      "waypointRelativePos": 0,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Shooter"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "End Shooter",
-      "waypointRelativePos": 0.4,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "StopShooter"
-              }
-            }
-          ]
-        }
-      }
+      "waypointRelativePos": 1,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
     }
   ],
+  "constraintZones": [],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.0,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
@@ -80,8 +67,8 @@
   "reversed": false,
   "folder": "(B.L   R.R)",
   "previewStartingState": {
-    "rotation": -179.69812616147652,
+    "rotation": -127.47617956136143,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
