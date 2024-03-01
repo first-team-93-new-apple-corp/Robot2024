@@ -174,7 +174,6 @@ public class RobotContainer extends TimedRobot {
       Limit = true;
     }
   }
-
   public void configureBindings() {
     m_TrapAlignButton.whileTrue(m_AutoAlignCommand);
     m_AmpAlignButton.whileTrue(m_AutoAlignCommand);
@@ -272,6 +271,7 @@ public class RobotContainer extends TimedRobot {
     NamedCommands.registerCommand("DribbleNote", m_ShooterSubsystem.AutonDribbleNote());
     // NamedCommands.registerCommand("StopKicker", m_ShooterSubsystem.AutonKickerStop());
     NamedCommands.registerCommand("StopIntake", m_IntakeSubsystem.AutonStopIntake());
+    NamedCommands.registerCommand("ResetField", drivetrain.resetPigeonAuton());
     SignalLogger.start();
     drivetrain.configAuto();
 
@@ -282,7 +282,11 @@ public class RobotContainer extends TimedRobot {
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
-
+  public void updateVision() {
+    drivetrain.updateOdometry();
+    pose = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition();
+    m_Field2d.setRobotPose(pose);
+  }
   public void updateValues() {
     angle = drivetrain.getHeading();
     SmartDashboard.putNumber("PigeonAngle", angle);

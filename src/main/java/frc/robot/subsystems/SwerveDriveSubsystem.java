@@ -96,8 +96,8 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         }
 
         AutoBuilder.configureHolonomic(
-                // () -> this.getState().Pose, // Supplier of current robot pose
-                () -> this.m_SwerveDrivePoseEstimator.getEstimatedPosition(),
+                () -> this.getState().Pose, // Supplier of current robot pose
+                // () -> this.m_SwerveDrivePoseEstimator.getEstimatedPosition(),
                 this::seedFieldRelative, // Consumer for seeding pose against auto
                 this::getCurrentRobotChassisSpeeds,
                 (speeds) -> this.setControl(autoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the
@@ -150,7 +150,9 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         }
         return yaw;
     }
-
+    public Command resetPigeonAuton() {
+        return this.runOnce(() -> m_pigeon2.reset());
+    }
     public SwerveDriveSubsystem(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         if (Utils.isSimulation()) {
