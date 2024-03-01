@@ -12,6 +12,24 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Shooter"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "(B.R  R.L) Shoot (B.R  R.L) Grab"
@@ -24,9 +42,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Shooter"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "(B.R  R.L) Shoot and Leave to Midline"
+            "pathName": "(B.R  R.L) Shoot and Leave to Stageline"
           }
         }
       ]

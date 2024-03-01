@@ -32,28 +32,25 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Shoot Preload",
-      "waypointRelativePos": 0.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
-        }
-      }
-    },
-    {
       "name": "Start Ground Intake",
       "waypointRelativePos": 0.5,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
         }
       }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0

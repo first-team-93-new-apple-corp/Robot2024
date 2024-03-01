@@ -12,7 +12,7 @@
     "2 Note Shoot",
     "Shoot and Leave"
   ],
-  "defaultMaxVel": 5.0,
+  "defaultMaxVel": 2.0,
   "defaultMaxAccel": 3.5,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,

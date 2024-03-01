@@ -34,6 +34,12 @@
           "data": {
             "pathName": "(A.F.N) Drop Note, Leave to Stageline"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ResetField"
+          }
         }
       ]
     }

@@ -34,6 +34,12 @@
           "data": {
             "pathName": "(B.R  R.L) Shoot and Leave to Stageline"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ResetField"
+          }
         }
       ]
     }
