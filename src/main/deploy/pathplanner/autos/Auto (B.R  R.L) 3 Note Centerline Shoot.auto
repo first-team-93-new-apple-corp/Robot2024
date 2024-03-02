@@ -5,42 +5,12 @@
       "x": 0.85,
       "y": 4.4
     },
-    "rotation": 120.65066795705289
+    "rotation": 120.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "Shooter"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(B.R  R.L) Shoot (B.R  R.L) Grab"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Start (B.L  R.R) Shoot 4 Note End (B.R  R.L)"
-          }
-        },
         {
           "type": "named",
           "data": {
@@ -70,10 +40,64 @@
           "data": {
             "pathName": "(B.R R.L) Centerline to Speaker"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooter"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(B.R  R.L) Speaker to Centerline [New]"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(B.R  R.L) Centerline to Speaker [New]"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooter"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ResetField"
+          }
         }
       ]
     }
   },
-  "folder": "2 Note Shoot",
+  "folder": "3 Note",
   "choreoAuto": false
 }

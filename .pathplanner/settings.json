@@ -10,10 +10,11 @@
   ],
   "autoFolders": [
     "2 Note Shoot",
+    "3 Note",
     "Shoot and Leave"
   ],
-  "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 3.5,
+  "defaultMaxVel": 2.0,
+  "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 5.21
