@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 0.85,
-      "y": 6.7
+      "y": 4.4
     },
-    "rotation": -120.0
+    "rotation": 120.65066795705289
   },
   "command": {
     "type": "sequential",
@@ -32,13 +32,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(B.L  R.R) Shoot Grab (B.L  R.R)"
+            "pathName": "(B.R  R.L) Shoot (B.R  R.L) Grab"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "4 Note Shoot End (B.L  R.R)"
+            "pathName": "Start (B.L  R.R) Shoot 4 Note End (B.R  R.L)"
           }
         },
         {
@@ -62,7 +62,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(B.L  R.R) Shoot and Leave"
+            "pathName": "(B.R R.L) Speaker to Centerline"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(B.R R.L) Centerline to Speaker"
           }
         }
       ]

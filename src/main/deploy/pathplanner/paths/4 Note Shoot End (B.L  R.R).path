@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Shoot Note",
-      "waypointRelativePos": 1.0,
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.35,
       "command": {
         "type": "sequential",
         "data": {
@@ -41,30 +41,10 @@
             {
               "type": "named",
               "data": {
-                "name": "Shooter"
+                "name": "StopIntake"
               }
             }
           ]
-        }
-      }
-    },
-    {
-      "name": "Stop Ground Intake",
-      "waypointRelativePos": 0.3,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
-        }
-      }
-    },
-    {
-      "name": "Prime Shooter",
-      "waypointRelativePos": 0.3,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
         }
       }
     }

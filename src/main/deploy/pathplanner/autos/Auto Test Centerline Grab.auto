@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 0.85,
-      "y": 6.7
-    },
-    "rotation": -120.0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -32,13 +26,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(B.L  R.R) Shoot Grab (B.L  R.R)"
+            "pathName": "(B.R R.L) Speaker to Centerline"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "4 Note Shoot End (B.L  R.R)"
+            "pathName": "(B.R R.L) Centerline to Speaker"
           }
         },
         {
@@ -62,12 +56,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(B.L  R.R) Shoot and Leave"
+            "pathName": "(B.R  R.L) Shoot and Leave to Stageline"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ResetField"
           }
         }
       ]
     }
   },
-  "folder": "2 Note Shoot",
+  "folder": null,
   "choreoAuto": false
 }

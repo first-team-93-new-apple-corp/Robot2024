@@ -3,28 +3,76 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 0.5553836562218579,
+        "y": 4.253908144179926
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.12,
-        "y": 7.0
+        "x": 1.6753836562218565,
+        "y": 4.253908144179926
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.5,
-        "y": 7.0
+        "x": 7.841134227723001,
+        "y": 0.6716697069757778
       },
       "prevControl": {
-        "x": 3.32,
-        "y": 7.0
+        "x": 7.661134227723,
+        "y": 0.6716697069757778
+      },
+      "nextControl": {
+        "x": 8.021134227723001,
+        "y": 0.6716697069757778
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.7046435911053639,
+        "y": 4.599071743598033
+      },
+      "prevControl": {
+        "x": 0.6389749569365355,
+        "y": 4.613664773413329
+      },
+      "nextControl": {
+        "x": 0.8725610178493084,
+        "y": 4.561756759877157
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.7196527120342777,
+        "y": 4.132634447090081
+      },
+      "prevControl": {
+        "x": 2.1879141940133677,
+        "y": 4.1886069226744
+      },
+      "nextControl": {
+        "x": 3.0607818208613944,
+        "y": 4.096726119843087
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.7046435911053639,
+        "y": 4.253908144179926
+      },
+      "prevControl": {
+        "x": 0.9751772230817185,
+        "y": 4.10464820929642
       },
       "nextControl": null,
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": null
     }
   ],
@@ -67,7 +115,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
