@@ -105,9 +105,9 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void noteLED(){
-        if (midTOF.getRange() < 130 || upperTOF.getRange() < 130){
+        if ((midTOF.getRange() > 130 && upperTOF.getRange() < 130)){
             m_LED.noteInBot();
-        } else if (midTOF.getRange() > 130 && upperTOF.getRange() > 130){
+        } else if ((midTOF.getRange() > 130 && upperTOF.getRange() > 130) || (midTOF.getRange() < 130 && upperTOF.getRange() > 130)){
             m_LED.noteAlmostInBot();
         }
     }
