@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,10 +11,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class IntakeCommand extends Command {
     private static XboxController opController = new XboxController(2);
     IntakeSubsystem m_IntakeSubsystem;
+    LEDSubsystem m_LED;
     public int IntakeSpeed;
 
-    public IntakeCommand(ShooterSubsystem m_shooter, IntakeSubsystem m_IntakeSubsystem) {
+    public IntakeCommand(ShooterSubsystem m_shooter, IntakeSubsystem m_IntakeSubsystem, LEDSubsystem m_LED) {
         this.m_IntakeSubsystem = m_IntakeSubsystem;
+        this.m_LED = m_LED;
     }
 
     @Override
@@ -27,6 +30,7 @@ public class IntakeCommand extends Command {
             m_IntakeSubsystem.stop();
             m_IntakeSubsystem.resetIntakeState();
             opController.setRumble(RumbleType.kBothRumble, 0);
+            m_LED.turnLEDSOff();
         }
     }
 }
