@@ -20,17 +20,14 @@ public class AutoAlignSubsystem extends SubsystemBase {
     // ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
     SwerveDriveSubsystem drivetrain;
     ChassisSpeeds alignSpeeds; // Chassis Speeds which robot uses for auto align
-
     ChassisSpeeds fieldSpeeds;
-    PIDController AlignPIDTheta = new PIDController(.19, 0, 0.15); // Rotationly PID
-    PIDController AlignPIDX = new PIDController(2.1, 0.12, 0.2); // Drive PIDs should be the same
-    PIDController AlignPIDY = new PIDController(3.4, 2.1, 0.35);
-    // ProfiledPIDController AlignPIDTheta2 = new ProfiledPIDController(.15, 0,
-    // 0.01, new TrapezoidProfile.Constraints(DriveConstants.MaxAngularRate, 12));
-    double rateLimit = 9.5;
+    PIDController AlignPIDTheta = new PIDController(.25, 0, 0.13); // Rotationly PID
+    PIDController AlignPIDX = new PIDController(2, 0.5, 0); // Drive PIDs should be the same
+    PIDController AlignPIDY = new PIDController(2, 1.5, 0);
+    double rateLimit = 12;
     SlewRateLimiter xlimit = new SlewRateLimiter(rateLimit);
     SlewRateLimiter ylimit = new SlewRateLimiter(rateLimit);
-    SlewRateLimiter thetalimit = new SlewRateLimiter(rateLimit);
+    // SlewRateLimiter thetalimit = new SlewRateLimiter(rateLimit);
 
     double X, Y, Theta;
 
@@ -50,8 +47,8 @@ public class AutoAlignSubsystem extends SubsystemBase {
         // AlignPIDTheta2.enableContinuousInput(-Math.PI, Math.PI);
         AlignPIDTheta.setIntegratorRange(-0.3, 0.3);
         // AlignPIDTheta2.setIntegratorRange(-0.3, 0.3);
-        AlignPIDX.setIntegratorRange(-0.45, 0.45);
-        AlignPIDY.setIntegratorRange(-0.45, 0.45);
+        AlignPIDX.setIntegratorRange(-0.4 , 0.4);
+        AlignPIDY.setIntegratorRange(-0.4, 0.4);
 
         if (DriverStation.getAlliance().isPresent()) {
             if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
@@ -75,10 +72,10 @@ public class AutoAlignSubsystem extends SubsystemBase {
             } else {
                 // Blue
 
-                // [1.853897995668131, 7.628754042404275, 94.1111881329313]
-                AmpSetpointX = 1.8668397151100247;
-                AmpSetpointY = 7.62;
-                AmpSetpointTheta = Math.toRadians(-90);
+                //[1.8947558534630007, 7.425, 92.89807991692113]
+                AmpSetpointX = 1.8947558534630007;
+                AmpSetpointY = 7.425;
+                AmpSetpointTheta = -Math.PI/2;
 
                 TrapSetpoint1X = 4.1;
                 TrapSetpoint1Y = 2.8;
@@ -145,7 +142,7 @@ public class AutoAlignSubsystem extends SubsystemBase {
                                                                                                                      // X
                 ylimit.calculate((MathUtil.clamp((AlignPIDX.calculate(Y, PIDSetpointY)), -MaxSpeed, MaxSpeed)) * 1), // Velocity
                                                                                                                      // Y
-                thetalimit.calculate(-MathUtil.clamp((AlignPIDTheta.calculate(Theta, (PIDSetpointTheta))),
+                (-MathUtil.clamp((AlignPIDTheta.calculate(Theta, (PIDSetpointTheta))),
                         -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
         fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(alignSpeeds,
                 new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
