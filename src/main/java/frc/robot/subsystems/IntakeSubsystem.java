@@ -6,8 +6,10 @@ import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 import edu.wpi.first.networktables.Topic;
+import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -25,6 +27,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private ShooterSubsystem m_shooter;
     private LEDSubsystem m_LED;
     XboxController op;
+    boolean noteInIntake;
 
     public enum intakeState {
         Stage1,
@@ -107,8 +110,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public void noteLED(){
         if ((midTOF.getRange() > 130 && upperTOF.getRange() < 130)){
             m_LED.noteInBot();
+            noteInIntake = true;
         } else if ((midTOF.getRange() > 130 && upperTOF.getRange() > 130) || (midTOF.getRange() < 130 && upperTOF.getRange() > 130)){
             m_LED.noteAlmostInBot();
+            noteInIntake = false;
         }
     }
 
@@ -126,5 +131,10 @@ public class IntakeSubsystem extends SubsystemBase {
         frontIntake.set(0);
         backIntake.set(0);
         bumperIntake.set(0);
+    }
+    
+    @Override
+    public void periodic(){
+        SmartDashboard.putBoolean("Note In Intake?", noteInIntake);
     }
 }
