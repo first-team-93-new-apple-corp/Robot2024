@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
 
+import edu.wpi.first.networktables.Topic;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -68,7 +69,7 @@ public class IntakeSubsystem extends SubsystemBase {
                     bumperIntake.set(-IntakeSpeed * 1.27);
                     m_shooter.shoot(-0.3);
                     op.setRumble(RumbleType.kBothRumble, 0.5);
-                    m_LED.turnLEDSOff();
+                    noteLED();
                 } else {
                     state = intakeState.Stage2;
                 }
@@ -77,7 +78,7 @@ public class IntakeSubsystem extends SubsystemBase {
                 if (midTOF.getRange() < 130) {
                     m_shooter.kicker(-0.1);
                     op.setRumble(RumbleType.kBothRumble, 0.5);
-                    m_LED.turnLEDSOff();
+                    noteLED();
                 } else {
                     state = intakeState.Stage3;
                 }
@@ -92,7 +93,7 @@ public class IntakeSubsystem extends SubsystemBase {
                     backIntake.set(0);
                     bumperIntake.set(0);
                     op.setRumble(RumbleType.kBothRumble, 0);
-                    m_LED.noteInBot();
+                    noteLED();
                 }
                 break;
         }
@@ -101,6 +102,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void resetIntakeState() {
         state = intakeState.Stage1;
+    }
+
+    public void noteLED(){
+        if (midTOF.getRange() < 130 || upperTOF.getRange() < 130){
+            m_LED.noteInBot();
+        } else if (midTOF.getRange() > 130 && upperTOF.getRange() > 130){
+            m_LED.noteAlmostInBot();
+        }
     }
 
     public Command AutoIntake() {
