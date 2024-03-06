@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -131,6 +132,14 @@ public class AutoAlignSubsystem extends SubsystemBase {
         // }
     }
 
+     /**
+     * Updates the values using the imported Setpoint,
+     * Setpoints are in the global space.
+     *
+     * @param PIDSetpointX The Setpoint in the X direction
+     * @param PIDSetpointY The Setpoint in the Y direction
+     * @param PIDSetpointTheta The Angular Setpoint in Radians
+     */
     public void updateValues(double PIDSetpointX, double PIDSetpointY, double PIDSetpointTheta) {
         drivetrain.updateOdometry();
         X = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getX();
@@ -188,6 +197,15 @@ public class AutoAlignSubsystem extends SubsystemBase {
         }
     }
 
+     /**
+     * AutoAims to the given Setpoint,
+     * Setpoints are in the global space.
+     *
+     * @param SetpointX The Setpoint in the X direction
+     * @param SetpointY The Setpoint in the Y direction
+     * @param SetpointTheta The Angular Setpoint in Radians 
+     * @param location Whatever we are curently Aiming towards
+     */
     public void AutoAim(double SetpointX, double SetpointY, double SetpointTheta, String location) {
         updateValues(SetpointX, SetpointY, SetpointTheta);
 
@@ -208,7 +226,3 @@ public class AutoAlignSubsystem extends SubsystemBase {
         this.fieldRelativeOffset = fieldRelativeOffset;
     }
 }
-// @Override
-// public void periodic() {
-// }
-// }

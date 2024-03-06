@@ -64,6 +64,8 @@ public class RobotContainer extends TimedRobot {
   // delete this and use the constants file for the button
   // (just so that the logic works for now)
   // private int climbingLevelButton;
+  private SendableChooser<String> Startinglocation = new SendableChooser<String>();
+  private SendableChooser<String> NoteAmount = new SendableChooser<String>();
 
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
@@ -275,12 +277,22 @@ public class RobotContainer extends TimedRobot {
     SignalLogger.start();
     drivetrain.configAuto();
 
+    Startinglocation.addOption("Blue Right/Red Left", "(B.R  R.L)");
+    Startinglocation.addOption("Blue Left/Red Right", "(B.L  R.R)");
+    Startinglocation.addOption("Away From Notes", "(A.F.N)");
+    SmartDashboard.putData("Starting Location",Startinglocation);
+    
+    NoteAmount.addOption("1 Note", "Shoot And");
+    NoteAmount.addOption("2 Notes", "2 Note Shoot,");
+    SmartDashboard.putData("Note Amount", NoteAmount);
+
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return AutoBuilder.buildAuto("Auto" + " " + Startinglocation.getSelected() + " " + NoteAmount.getSelected() + " Leave");
+    // return autoChooser.getSelected();
   }
   public void updateVision() {
     drivetrain.updateOdometry();
