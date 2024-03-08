@@ -1,17 +1,16 @@
 package frc.robot.subsystems;
 
+import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class AutoAlignSubsystem extends SubsystemBase {
     public final double MaxSpeed = DriveConstants.MaxSpeed;
@@ -23,36 +22,42 @@ public class AutoAlignSubsystem extends SubsystemBase {
     ChassisSpeeds alignSpeeds; // Chassis Speeds which robot uses for auto align
     ChassisSpeeds fieldSpeeds;
     PIDController AlignPIDTheta = new PIDController(.25, 0, 0.13); // Rotationly PID
-    PIDController AlignPIDX = new PIDController(2, 0.5, 0); // Drive PIDs should be the same
+    PIDController AlignPIDX = new PIDController(3.25, 1.5, 0.5); // Drive PIDs should be the same
     PIDController AlignPIDY = new PIDController(2, 1.5, 0);
+    PIDController tofPID = new PIDController(0.01, 0, 0.0015);
+    double tofpos, tofposAngle;
+    TimeOfFlight tof = new TimeOfFlight(23);
     double rateLimit = 12;
     SlewRateLimiter xlimit = new SlewRateLimiter(rateLimit);
     SlewRateLimiter ylimit = new SlewRateLimiter(rateLimit);
     // SlewRateLimiter thetalimit = new SlewRateLimiter(rateLimit);
 
     double X, Y, Theta;
-
+    double calculatedX, calculatedY, calculatedTheta;
     double AmpSetpointX = 1.73, AmpSetpointY = 7.23, AmpSetpointTheta = -90;
     double TrapSetpoint1X = 4.1, TrapSetpoint1Y = 2.8, TrapSetpoint1Theta = -120;
     double TrapSetpoint2X = 4, TrapSetpoint2Y = 5.2, TrapSetpoint2Theta = 120;
     double TrapSetpoint3X = 6.2, TrapSetpoint3Y = 4, TrapSetpoint3Theta = 0;
 
-    double toleranceX = .02, toleranceY = .02, toleranceTheta = Math.toRadians(3);
+    double toleranceX = .2, toleranceY = .025, toleranceTheta = Math.toRadians(5);
     double fieldRelativeOffset;
     boolean red;
-
-    // Optional<Alliance> ally = DriverStation.getAlliance();
+    double tofSetpoint = 295;
     public AutoAlignSubsystem(SwerveDriveSubsystem drivetrain) {
         this.drivetrain = drivetrain;
         AlignPIDTheta.enableContinuousInput(-Math.PI, Math.PI);
         // AlignPIDTheta2.enableContinuousInput(-Math.PI, Math.PI);
         AlignPIDTheta.setIntegratorRange(-0.3, 0.3);
         // AlignPIDTheta2.setIntegratorRange(-0.3, 0.3);
-        AlignPIDX.setIntegratorRange(-0.4 , 0.4);
+        AlignPIDX.setIntegratorRange(-0.4, 0.4);
         AlignPIDY.setIntegratorRange(-0.4, 0.4);
         SmartDashboard.putData("AlignPIDX", AlignPIDX);
         SmartDashboard.putData("AlignPIDY", AlignPIDY);
-        SmartDashboard.putData("AlignPIDTheta", AlignPIDTheta);
+        SmartDashboard.putData("AlignPIDTheta", AlignPIDTheta); 
+        tof.setRangingMode(RangingMode.Medium, 24);
+        AlignPIDTheta.setTolerance(toleranceTheta);
+        AlignPIDX.setTolerance(toleranceX);
+        AlignPIDY.setTolerance(toleranceY);
 
         if (DriverStation.getAlliance().isPresent()) {
             if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
@@ -76,10 +81,10 @@ public class AutoAlignSubsystem extends SubsystemBase {
             } else {
                 // Blue
 
-                //[1.8947558534630007, 7.425, 92.89807991692113]
+                // [1.8947558534630007, 7.425, 92.89807991692113]
                 AmpSetpointX = 1.8947558534630007;
                 AmpSetpointY = 7.425;
-                AmpSetpointTheta = -Math.PI/2;
+                AmpSetpointTheta = -Math.PI / 2;
 
                 TrapSetpoint1X = 4.1;
                 TrapSetpoint1Y = 2.8;
@@ -133,21 +138,36 @@ public class AutoAlignSubsystem extends SubsystemBase {
     }
 
     public void updateValues(double PIDSetpointX, double PIDSetpointY, double PIDSetpointTheta) {
+        
         drivetrain.updateOdometry();
         X = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getX();
         Y = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getY();
-        // Theta = new
-        // Rotation2d(drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getRotation().getRadians()).rotateBy(new
-        // Rotation2d(fieldRelativeOffset)).getRadians();
         Theta = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition().getRotation().getRadians();
+        tofpos = tof.getRange();
+        if (Theta > 90) {
+            tofposAngle = 90-(Theta-90);
+        } else {
+            tofposAngle = Theta;
+        }
+        tofpos = tofpos*Math.sin(tofposAngle);
+        calculatedX = xlimit
+                .calculate((MathUtil.clamp((AlignPIDY.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * 1);
+        // calculatedY = ylimit
+        //         .calculate((MathUtil.clamp((AlignPIDX.calculate(Y, PIDSetpointY)), -MaxSpeed, MaxSpeed)) * 1);
+        calculatedTheta = (-MathUtil.clamp((AlignPIDTheta.calculate(Theta, (PIDSetpointTheta))),
+                -MaxAngularRate, MaxAngularRate));
+        // if ((calculatedX < toleranceX && calculatedX > -toleranceX)
+        //         && (calculatedTheta < toleranceTheta && calculatedTheta > -toleranceTheta)) {
+            // calculatedTheta = 0;
+            // calculatedX = 0;
+            calculatedY = MathUtil.clamp(-tofPID.calculate(tofpos, tofSetpoint), -MaxSpeed, MaxSpeed);
+        // }
+        // if (AlignPIDX.atSetpoint() && AlignPIDTheta.atSetpoint()) {
+            alignSpeeds = new ChassisSpeeds(calculatedX, calculatedY, calculatedTheta);
+        // }  else {
+        //     alignSpeeds = new ChassisSpeeds(calculatedX, 0, calculatedTheta);
+        // }
 
-        alignSpeeds = new ChassisSpeeds(
-                xlimit.calculate((MathUtil.clamp((AlignPIDY.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * 1), // Velocity
-                                                                                                                     // X
-                ylimit.calculate((MathUtil.clamp((AlignPIDX.calculate(Y, PIDSetpointY)), -MaxSpeed, MaxSpeed)) * 1), // Velocity
-                                                                                                                     // Y
-                (-MathUtil.clamp((AlignPIDTheta.calculate(Theta, (PIDSetpointTheta))),
-                        -MaxAngularRate, MaxAngularRate))); // Rotational Speeds
         fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(alignSpeeds,
                 new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
                         .rotateBy(new Rotation2d(0)));
@@ -192,12 +212,11 @@ public class AutoAlignSubsystem extends SubsystemBase {
     public void AutoAim(double SetpointX, double SetpointY, double SetpointTheta, String location) {
         updateValues(SetpointX, SetpointY, SetpointTheta);
 
-        if (!((Math.abs(X - SetpointX) < toleranceX)
+        if (!((AlignPIDX.atSetpoint())
                 &
                 ((Math.abs(Y - SetpointY) < toleranceY)
                         &
-                        (Math.abs((-1 * Math.PI) + Math.abs(Theta) + Math.abs(SetpointTheta)) < toleranceTheta)))) {
-
+                        (AlignPIDTheta.atSetpoint())))) {
             drivetrain.driveRobotRelative(fieldSpeeds);
 
         } else {
@@ -211,5 +230,8 @@ public class AutoAlignSubsystem extends SubsystemBase {
 }
 // @Override
 // public void periodic() {
+//     SmartDashboard.putNumber("tof distance front bumper", tof.getRange());
+
+
 // }
 // }

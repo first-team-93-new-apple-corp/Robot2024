@@ -72,7 +72,7 @@ public class IntakeSubsystem extends SubsystemBase {
                     bumperIntake.set(-IntakeSpeed * 1.27);
                     m_shooter.shoot(-0.3);
                     op.setRumble(RumbleType.kBothRumble, 0.5);
-                    noteLED();
+                    m_LED.noteAlmostInBot();
                 } else {
                     state = intakeState.Stage2;
                 }
@@ -81,7 +81,7 @@ public class IntakeSubsystem extends SubsystemBase {
                 if (midTOF.getRange() < 130) {
                     m_shooter.kicker(-0.1);
                     op.setRumble(RumbleType.kBothRumble, 0.5);
-                    noteLED();
+                    m_LED.noteAlmostInBot();
                 } else {
                     state = intakeState.Stage3;
                 }
@@ -96,7 +96,7 @@ public class IntakeSubsystem extends SubsystemBase {
                     backIntake.set(0);
                     bumperIntake.set(0);
                     op.setRumble(RumbleType.kBothRumble, 0);
-                    noteLED();
+                    m_LED.noteInBot();
                 }
                 break;
         }
@@ -105,16 +105,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void resetIntakeState() {
         state = intakeState.Stage1;
-    }
-
-    public void noteLED(){
-        if ((midTOF.getRange() > 130 && upperTOF.getRange() < 130)){
-            m_LED.noteInBot();
-            noteInIntake = true;
-        } else if ((midTOF.getRange() > 130 && upperTOF.getRange() > 130) || (midTOF.getRange() < 130 && upperTOF.getRange() > 130)){
-            m_LED.noteAlmostInBot();
-            noteInIntake = false;
-        }
     }
 
     public Command AutoIntake() {
