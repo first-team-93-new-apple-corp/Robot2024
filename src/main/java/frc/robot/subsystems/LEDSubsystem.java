@@ -53,7 +53,7 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     public void noteAlmostInBot(){
-        setColor(Color.kRed);
+        setColor(Color.kWhite);
     }
 
     public void noteInBot() {

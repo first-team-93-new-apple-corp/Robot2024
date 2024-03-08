@@ -22,9 +22,9 @@ public class AutoAlignSubsystem extends SubsystemBase {
     ChassisSpeeds alignSpeeds; // Chassis Speeds which robot uses for auto align
     ChassisSpeeds fieldSpeeds;
     PIDController AlignPIDTheta = new PIDController(.25, 0, 0.13); // Rotationly PID
-    PIDController AlignPIDX = new PIDController(3.25, 1.5, 0.5); // Drive PIDs should be the same
+    PIDController AlignPIDX = new PIDController(3.25, 2, 0.4); // Drive PIDs should be the same
     PIDController AlignPIDY = new PIDController(2, 1.5, 0);
-    PIDController tofPID = new PIDController(0.01, 0, 0.0015);
+    PIDController tofPID = new PIDController(0.008, 0, 0.00125);
     double tofpos, tofposAngle;
     TimeOfFlight tof = new TimeOfFlight(23);
     double rateLimit = 12;
@@ -54,6 +54,7 @@ public class AutoAlignSubsystem extends SubsystemBase {
         SmartDashboard.putData("AlignPIDX", AlignPIDX);
         SmartDashboard.putData("AlignPIDY", AlignPIDY);
         SmartDashboard.putData("AlignPIDTheta", AlignPIDTheta); 
+        SmartDashboard.putData("tofPID", tofPID);
         tof.setRangingMode(RangingMode.Medium, 24);
         AlignPIDTheta.setTolerance(toleranceTheta);
         AlignPIDX.setTolerance(toleranceX);
