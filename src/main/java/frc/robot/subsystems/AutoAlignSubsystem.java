@@ -42,7 +42,7 @@ public class AutoAlignSubsystem extends SubsystemBase {
     double toleranceX = .2, toleranceY = .025, toleranceTheta = Math.toRadians(5);
     double fieldRelativeOffset;
     boolean red;
-    double tofSetpoint = 295;
+    double tofSetpoint = 293;
     public AutoAlignSubsystem(SwerveDriveSubsystem drivetrain) {
         this.drivetrain = drivetrain;
         AlignPIDTheta.enableContinuousInput(-Math.PI, Math.PI);

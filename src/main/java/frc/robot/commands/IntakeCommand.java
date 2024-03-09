@@ -30,7 +30,7 @@ public class IntakeCommand extends Command {
             m_IntakeSubsystem.stop();
             m_IntakeSubsystem.resetIntakeState();
             opController.setRumble(RumbleType.kBothRumble, 0);
-            m_LED.turnLEDSOff();
+            m_IntakeSubsystem.LED();
         }
     }
 }

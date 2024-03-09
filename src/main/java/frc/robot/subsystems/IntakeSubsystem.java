@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 // import frc.robot.commands.LEDCommand;
+import frc.robot.subsystems.ElevatorSubsystem.elevatorState;
 
 public class IntakeSubsystem extends SubsystemBase {
     private TalonFX frontIntake;
@@ -66,22 +67,22 @@ public class IntakeSubsystem extends SubsystemBase {
         switch (state) {
             case Stage1:
                 if (midTOF.getRange() > 150) {
+                    m_LED.noteAlmostInBot();
                     m_shooter.kicker(0.5);
                     frontIntake.set(-IntakeSpeed);
                     backIntake.set(-IntakeSpeed);
                     bumperIntake.set(-IntakeSpeed * 1.27);
                     m_shooter.shoot(-0.3);
                     op.setRumble(RumbleType.kBothRumble, 0.5);
-                    m_LED.noteAlmostInBot();
                 } else {
                     state = intakeState.Stage2;
                 }
                 break;
             case Stage2:
                 if (midTOF.getRange() < 130) {
+                    m_LED.noteAlmostInBot();
                     m_shooter.kicker(-0.1);
                     op.setRumble(RumbleType.kBothRumble, 0.5);
-                    m_LED.noteAlmostInBot();
                 } else {
                     state = intakeState.Stage3;
                 }
@@ -90,17 +91,33 @@ public class IntakeSubsystem extends SubsystemBase {
                 if (upperTOF.getRange() < 130) {
                     state = intakeState.Stage1;
                 } else {
+                    m_LED.noteInBot();
                     m_shooter.kicker(0);
                     m_shooter.shoot(0);
                     frontIntake.set(0);
                     backIntake.set(0);
                     bumperIntake.set(0);
                     op.setRumble(RumbleType.kBothRumble, 0);
-                    m_LED.noteInBot();
                 }
                 break;
         }
 
+    }
+
+    public void LED(){
+        if (!ifNote()){
+            m_LED.turnLEDSOff();
+        } else {
+            return;
+        }
+    }
+
+    public boolean ifNote(){
+        if (upperTOF.getRange() < 130 && midTOF.getRange() < 130){
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public void resetIntakeState() {

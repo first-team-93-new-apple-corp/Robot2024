@@ -104,7 +104,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
                                                                              // robot
                 new HolonomicPathFollowerConfig(new PIDConstants(5.5
                 , 0.1, 0),
-                        new PIDConstants(2, 0, 0.7),
+                        new PIDConstants(1.3, 0, .8),
                         // new HolonomicPathFollowerConfig(new PIDConstants(.1, 0, 0),
                         // new PIDConstants(.25, 0, 0),
                         TunerConstants.kSpeedAt12VoltsMps,
