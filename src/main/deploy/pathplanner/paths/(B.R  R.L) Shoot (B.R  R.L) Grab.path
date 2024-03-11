@@ -3,24 +3,24 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.85,
-        "y": 4.4
+        "x": 0.7,
+        "y": 4.397367068047131
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6470138128111684,
-        "y": 4.258847873688592
+        "x": 1.497595889823546,
+        "y": 4.256155182794559
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.67,
+        "x": 2.7,
         "y": 4.0953194633662
       },
       "prevControl": {
-        "x": 1.9226133653340658,
+        "x": 1.952613365334066,
         "y": 4.185419462073272
       },
       "nextControl": null,
@@ -28,12 +28,18 @@
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.1,
+      "rotationDegrees": 120.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "Start Ground Intake",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "sequential",
         "data": {
@@ -62,6 +68,9 @@
   },
   "reversed": false,
   "folder": "(B.R   R.L)",
-  "previewStartingState": null,
+  "previewStartingState": {
+    "rotation": 120.0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }

@@ -76,6 +76,7 @@ public class IntakeSubsystem extends SubsystemBase {
                     op.setRumble(RumbleType.kBothRumble, 0.5);
                 } else {
                     state = intakeState.Stage2;
+                    m_LED.noteAlmostInBot();
                 }
                 break;
             case Stage2:
@@ -85,11 +86,13 @@ public class IntakeSubsystem extends SubsystemBase {
                     op.setRumble(RumbleType.kBothRumble, 0.5);
                 } else {
                     state = intakeState.Stage3;
+                    m_LED.noteInBot();
                 }
                 break;
             case Stage3:
                 if (upperTOF.getRange() < 130) {
                     state = intakeState.Stage1;
+                    m_LED.noteAlmostInBot();
                 } else {
                     m_LED.noteInBot();
                     m_shooter.kicker(0);
@@ -100,23 +103,6 @@ public class IntakeSubsystem extends SubsystemBase {
                     op.setRumble(RumbleType.kBothRumble, 0);
                 }
                 break;
-        }
-
-    }
-
-    public void LED(){
-        if (!ifNote()){
-            m_LED.turnLEDSOff();
-        } else {
-            return;
-        }
-    }
-
-    public boolean ifNote(){
-        if (upperTOF.getRange() < 130 && midTOF.getRange() < 130){
-            return false;
-        } else {
-            return true;
         }
     }
 

@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class AutoAlignSubsystem extends SubsystemBase {
     public final double MaxSpeed = DriveConstants.MaxSpeed;
     public final double MaxAngularRate = DriveConstants.MaxAngularRate;
-
-    ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+    LEDSubsystem m_LED;
+    ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_LED);
     // ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
     SwerveDriveSubsystem drivetrain;
     ChassisSpeeds alignSpeeds; // Chassis Speeds which robot uses for auto align
@@ -168,11 +168,19 @@ public class AutoAlignSubsystem extends SubsystemBase {
         // }  else {
         //     alignSpeeds = new ChassisSpeeds(calculatedX, 0, calculatedTheta);
         // }
-
-        fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(alignSpeeds,
+        if (DriverStation.getAlliance().isPresent()) {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+                // red
+                fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(alignSpeeds,
+                new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
+                        .rotateBy(new Rotation2d(Math.PI)));
+            } else {
+                // Blue
+                fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(alignSpeeds,
                 new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
                         .rotateBy(new Rotation2d(0)));
-
+            }
+        }
     }
 
     public void AutoAimAmp() { // Works amp

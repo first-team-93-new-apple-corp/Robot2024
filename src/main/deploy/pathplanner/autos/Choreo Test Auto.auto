@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3883036375045776,
-      "y": 5.549376010894775
+      "x": 1.3447668552398682,
+      "y": 5.571144104003906
     },
-    "rotation": -2.7818259550831936e-24
+    "rotation": 179.99469134034814
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(Choreo) Test Path.1"
+            "pathName": "(Choreo) Test Path"
           }
         }
       ]

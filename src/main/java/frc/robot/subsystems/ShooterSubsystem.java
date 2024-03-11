@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class ShooterSubsystem extends SubsystemBase {
+    LEDSubsystem m_LED;
     TalonFX ShooterR = new TalonFX(Constants.CTRE.RIO.R_Shoot, "rio");
     TalonFX ShooterL = new TalonFX(Constants.CTRE.RIO.L_Shoot, "rio");
     static CANSparkMax KickerL;
@@ -22,7 +23,8 @@ public class ShooterSubsystem extends SubsystemBase {
     final double DribbleSpeed = .25;
     double StartTime;
 
-    public ShooterSubsystem() {
+    public ShooterSubsystem(LEDSubsystem m_LED) {
+        this.m_LED = m_LED;
         if (KickerL == null || KickerR == null) {
             KickerL = new CANSparkMax(Constants.REV.L_Kicker, MotorType.kBrushless);
             KickerR = new CANSparkMax(Constants.REV.R_Kicker, MotorType.kBrushless);
@@ -40,6 +42,11 @@ public class ShooterSubsystem extends SubsystemBase {
     public void prime() {
         ShooterR.set(SpeakerShooterSpeed);
         ShooterL.set(SpeakerShooterSpeed);
+    }
+
+    public void AutonPrime(){
+        ShooterL.set(.60);
+        ShooterR.set(.60);
     }
 
     public void shootAmp() {
@@ -77,10 +84,12 @@ public class ShooterSubsystem extends SubsystemBase {
     public void AmpForAuton(){
         shootAmp();
         kicker(KickerSpeed);
+        m_LED.turnLEDSOff();
     }
     public void ShootingforAuton() {
-        prime();
+        AutonPrime();
         kicker(KickerSpeed);
+        m_LED.turnLEDSOff();
     }
 
     public void DribbleOutNote() {

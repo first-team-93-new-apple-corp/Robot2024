@@ -24,7 +24,7 @@ public class LEDSubsystem extends SubsystemBase {
             red1 = new DigitalOutput(7);
             green1 = new DigitalOutput(5);
             blue1 = new DigitalOutput(3);
-            setColor(Color.kWhite);
+            setColor(Color.kBlack);
         }
         
     }
@@ -72,13 +72,5 @@ public class LEDSubsystem extends SubsystemBase {
         red1.enablePWM(0);
         green1.enablePWM(191.25);
         blue1.enablePWM(0);
-    }
-
-    public Command LEDoff() {
-        return this.runOnce(() -> turnLEDSOff());
-    }
-
-    public Command LEDGreen() {
-        return this.runOnce(() -> noteInBot());
     }
 }

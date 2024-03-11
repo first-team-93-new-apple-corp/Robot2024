@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.85,
-      "y": 4.4
+      "x": 0.7,
+      "y": 4.397367068047131
     },
     "rotation": 120.0
   },
@@ -63,6 +63,12 @@
           "type": "path",
           "data": {
             "pathName": "(B.R  R.L) Shoot and Leave to Midline"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopIntake"
           }
         },
         {

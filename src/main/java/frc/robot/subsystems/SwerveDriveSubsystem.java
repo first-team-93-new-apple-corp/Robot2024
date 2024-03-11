@@ -98,18 +98,18 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         AutoBuilder.configureHolonomic(
                 () -> this.getState().Pose, // Supplier of current robot pose
                 // () -> this.m_SwerveDrivePoseEstimator.getEstimatedPosition(),
-                this::seedFieldRelative, // Consumer for seeding pose against auto
+                this::resetOdometry, // Consumer for seeding pose against auto
                 this::getCurrentRobotChassisSpeeds,
                 (speeds) -> this.setControl(autoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the
                                                                              // robot
                 new HolonomicPathFollowerConfig(new PIDConstants(5.5
                 , 0.1, 0),
-                        new PIDConstants(1.3, 0, .8),
+                        new PIDConstants(1.4, 0, .8),
                         // new HolonomicPathFollowerConfig(new PIDConstants(.1, 0, 0),
                         // new PIDConstants(.25, 0, 0),
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius,                                                                                        //These values are deadzones, so to speak
-                        new ReplanningConfig(true, true, 0.1, 0.5)),
+                        new ReplanningConfig(true, true)),
                 () -> {
                     var alliance = DriverStation.getAlliance();
                     if (alliance.isPresent()) {
@@ -118,6 +118,12 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
                     return false; // Change this if the path needs to be flipped on red vs blue
                 },
                 this); // Subsystem for requirements
+    }
+
+    public void resetOdometry(Pose2d Pose) {
+        seedFieldRelative(Pose);
+        m_SwerveDrivePoseEstimator.resetPosition(new Rotation2d(Math.toRadians(getHeading())), m_modulePositions, Pose);
+        
     }
 
     public Command getAutoPath(String pathName) {

@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -22,7 +21,6 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.LEDCommand;
 import frc.robot.commands.Preflight;
 import com.ctre.phoenix6.hardware.*;
 
@@ -35,9 +33,8 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   // private USBCameraSubsystem m_UsbCameraSubsystem = new USBCameraSubsystem();
   private LEDSubsystem m_LED = new LEDSubsystem();
-  private LEDCommand m_LEDCommand = new LEDCommand(op,m_LED);
-  private ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-  private ShooterCommand m_Shooter = new ShooterCommand(m_ShooterSubsystem);
+  private ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_LED);
+  private ShooterCommand m_Shooter = new ShooterCommand(m_ShooterSubsystem, m_LED);
   private IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem, op, m_LED);
   private IntakeCommand m_Intake = new IntakeCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_LED);
   private ElevatorCommand m_Elevator = new ElevatorCommand(op);
@@ -92,9 +89,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    m_SwerveDriveSubsystem.updateOdometry();
-    m_robotContainer.m_Field2d.setRobotPose(m_SwerveDriveSubsystem.m_SwerveDrivePoseEstimator.getEstimatedPosition());
+    // m_SwerveDriveSubsystem.m_SwerveDrivePoseEstimator.update(new Rotation2d(Math.toRadians(m_SwerveDriveSubsystem.getHeading())), m_SwerveDriveSubsystem.getModulePositions());
+    // m_robotContainer.m_Field2d.setRobotPose(m_SwerveDriveSubsystem.m_SwerveDrivePoseEstimator.getEstimatedPosition());
     // m_Elevator.disable();
+    m_robotContainer.updateVision();
   }
 
   @Override
