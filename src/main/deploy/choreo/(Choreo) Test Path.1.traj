@@ -217,24 +217,5 @@
       "timestamp": 1.1525193053864573
     }
   ],
-  "eventMarkers": [
-    {
-      "timestamp": 0,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Shooter"
-        }
-      }
-    },
-    {
-      "timestamp": 0.5,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "StopShooter"
-        }
-      }
-    }
-  ]
+  "eventMarkers": []
 }

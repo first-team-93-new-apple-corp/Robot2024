@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer(m_Joystick1, m_Joystick2, op, m_ShooterSubsystem, m_IntakeSubsystem);
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
     m_Elevator.initOnce();
-    m_SwerveDriveSubsystem.configAuto();
+    // m_SwerveDriveSubsystem.configAuto();
     // m_UsbCameraSubsystem.register();
     SmartDashboard.putBoolean("Preflight Done?", false);
     m_LED.startup();

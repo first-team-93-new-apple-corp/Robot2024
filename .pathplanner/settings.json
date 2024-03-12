@@ -14,8 +14,8 @@
     "Choreo",
     "Shoot and Leave"
   ],
-  "defaultMaxVel": 5.0,
-  "defaultMaxAccel": 3.0,
+  "defaultMaxVel": 2.0,
+  "defaultMaxAccel": 2.0,
   "defaultMaxAngVel": 1080.0,
   "defaultMaxAngAccel": 1080.0,
   "maxModuleSpeed": 5.21

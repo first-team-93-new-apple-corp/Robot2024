@@ -235,9 +235,9 @@ public class RobotContainer extends TimedRobot {
     drivetrain.registerTelemetry(logger::telemeterize);
   }
 
-  public void configAuto() {
-    drivetrain.configAuto();
-  }
+  // public void configAuto() {
+  //   drivetrain.configAuto();
+  // }
 
   public RobotContainer(Joystick m_Joystick1, Joystick m_Joystick2, XboxController op, ShooterSubsystem m_ShooterSubsystem, IntakeSubsystem m_IntakeSubsystem) {
     this.m_ShooterSubsystem = m_ShooterSubsystem;

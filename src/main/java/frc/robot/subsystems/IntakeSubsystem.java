@@ -23,7 +23,7 @@ public class IntakeSubsystem extends SubsystemBase {
     TalonFXConfiguration config;
     TimeOfFlight midTOF;
     TimeOfFlight upperTOF;
-    private double IntakeSpeed = 0.75;
+    private double IntakeSpeed = 1;
     private double PassoverSpeed = 0.5;
     private ShooterSubsystem m_shooter;
     private LEDSubsystem m_LED;
@@ -43,7 +43,9 @@ public class IntakeSubsystem extends SubsystemBase {
         this.op = op;
         this.m_LED = m_LED;
         config = new TalonFXConfiguration();
-        config.CurrentLimits.SupplyCurrentLimit = 50;
+        config.CurrentLimits.SupplyCurrentLimit = 25;
+        config.CurrentLimits.SupplyCurrentThreshold = 25;
+        config.CurrentLimits.SupplyTimeThreshold = 0;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
         frontIntake = new TalonFX(Constants.CTRE.RIO.F_Intake, "rio");
         backIntake = new TalonFX(Constants.CTRE.RIO.B_Intake, "rio");
@@ -52,11 +54,11 @@ public class IntakeSubsystem extends SubsystemBase {
         backIntake.getConfigurator().apply(config);
         bumperIntake.getConfigurator().apply(config);
         backIntake.setInverted(false);
+        bumperIntake.setInverted(true);
         midTOF = new TimeOfFlight(22);
         midTOF.setRangingMode(RangingMode.Short, 24);
         upperTOF = new TimeOfFlight(25);
         upperTOF.setRangingMode(RangingMode.Short, 24);
-        bumperIntake.setInverted(true);
     }
 
     public Command AutonStopIntake() {
@@ -68,11 +70,11 @@ public class IntakeSubsystem extends SubsystemBase {
             case Stage1:
                 if (midTOF.getRange() > 150) {
                     m_LED.noteAlmostInBot();
-                    m_shooter.kicker(0.5);
+                    m_shooter.kicker(1);
                     frontIntake.set(-IntakeSpeed);
                     backIntake.set(-IntakeSpeed);
                     bumperIntake.set(-IntakeSpeed * 1.27);
-                    m_shooter.shoot(-0.3);
+                    m_shooter.shoot(-0.5);
                     op.setRumble(RumbleType.kBothRumble, 0.5);
                 } else {
                     state = intakeState.Stage2;
@@ -83,6 +85,7 @@ public class IntakeSubsystem extends SubsystemBase {
                 if (midTOF.getRange() < 130) {
                     m_LED.noteAlmostInBot();
                     m_shooter.kicker(-0.1);
+                    m_shooter.shoot(-0.3);
                     op.setRumble(RumbleType.kBothRumble, 0.5);
                 } else {
                     state = intakeState.Stage3;
