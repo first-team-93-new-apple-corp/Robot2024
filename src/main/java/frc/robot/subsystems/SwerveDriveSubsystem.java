@@ -32,11 +32,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystems.Vision.VisionSubsystem;
+import frc.robot.subsystems.Vision.VisionSubsystemFactory;
 
 public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem {
     public XboxController opController = new XboxController(2);
     // public ShooterCommand m_ShooterCommand = new ShooterCommand();
-    public VisionSubsystem m_VisionSubsystem = new VisionSubsystem(TunerConstants.DriveTrain);
+    public VisionSubsystem m_VisionSubsystem = VisionSubsystemFactory.build();
     // public ShooterSubsystem m_shooter = new ShooterSubsystem();
     // public IntakeCommand m_IntakeCommand = new IntakeCommand(m_shooter);
     // public ElevatorCommand m_ElevatorCommand = new ElevatorCommand(opController);
@@ -175,7 +177,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         m_SwerveDrivePoseEstimator.update(m_pigeon2.getRotation2d(), m_modulePositions);
         if (m_VisionSubsystem.hasTargets()) {
             m_SwerveDrivePoseEstimator.addVisionMeasurement(m_VisionSubsystem.getPose(),
-                    Timer.getFPGATimestamp() - (m_VisionSubsystem.tl + m_VisionSubsystem.cl));
+                    Timer.getFPGATimestamp() - (m_VisionSubsystem.getLatency()));
         }
     }
 
