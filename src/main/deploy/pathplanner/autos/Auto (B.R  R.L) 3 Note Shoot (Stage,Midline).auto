@@ -66,9 +66,33 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ResetField"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "(B.R R.L) Centerline to Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooter"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
           }
         }
       ]
