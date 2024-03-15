@@ -101,7 +101,48 @@ public class AutoAlignSubsystem extends SubsystemBase {
             }
         }
     }
+    public void checkSetpoints() {
+        if (DriverStation.getAlliance().isPresent()) {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+                // red
 
+                AmpSetpointX = 14.6;
+                AmpSetpointY = 7.6;
+                AmpSetpointTheta = Math.toRadians(-90);
+
+                TrapSetpoint1X = 12.5;
+                TrapSetpoint1Y = 2.8;
+                TrapSetpoint1Theta = Math.toRadians(-60);
+
+                TrapSetpoint2X = 12.258;
+                TrapSetpoint2Y = 5.038;
+                TrapSetpoint2Theta = Math.toRadians(60);
+
+                TrapSetpoint3X = 10.4;
+                TrapSetpoint3Y = 4;
+                TrapSetpoint3Theta = Math.toRadians(180);
+            } else {
+                // Blue
+
+                // [1.8947558534630007, 7.425, 92.89807991692113]
+                AmpSetpointX = 1.8947558534630007;
+                AmpSetpointY = 7.425;
+                AmpSetpointTheta = -Math.PI / 2;
+
+                TrapSetpoint1X = 4.1;
+                TrapSetpoint1Y = 2.8;
+                TrapSetpoint1Theta = Math.toRadians(-120);
+
+                TrapSetpoint2X = 4;
+                TrapSetpoint2Y = 5.2;
+                TrapSetpoint2Theta = Math.toRadians(120);
+
+                TrapSetpoint3X = 6.2;
+                TrapSetpoint3Y = 4;
+                TrapSetpoint3Theta = Math.toRadians(180);
+            }
+        }
+    }
     public void Alliance() {
         // if (SmartDashboard.getBoolean("Red?", red)) {
         // AmpSetpointX = 14.6;
@@ -173,7 +214,8 @@ public class AutoAlignSubsystem extends SubsystemBase {
                 // red
                 fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(alignSpeeds,
                 new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
-                        .rotateBy(new Rotation2d(Math.PI)));
+                        .rotateBy(new Rotation2d(Math.PI))
+                        );
             } else {
                 // Blue
                 fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(alignSpeeds,

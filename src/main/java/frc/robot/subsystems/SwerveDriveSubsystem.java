@@ -175,7 +175,9 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         m_SwerveDrivePoseEstimator.update(m_pigeon2.getRotation2d(), m_modulePositions);
         if (m_VisionSubsystem.hasTargets()) {
             m_SwerveDrivePoseEstimator.addVisionMeasurement(m_VisionSubsystem.getPose(),
-                    Timer.getFPGATimestamp() - (m_VisionSubsystem.tl + m_VisionSubsystem.cl));
+                    Timer.getFPGATimestamp()
+                     - ((m_VisionSubsystem.tl + m_VisionSubsystem.cl)/1000)
+                     );
         }
     }
 

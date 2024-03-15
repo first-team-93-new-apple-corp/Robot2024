@@ -27,7 +27,7 @@ public class VisionSubsystem extends SubsystemBase {
     PIDController AlignPIDY = new PIDController(.1, 0, 0);
     PIDController AlignRotate = new PIDController(.05, 0, 0.029);
 
-    double tx, ty, tl, ta, tid, ts, cl;
+    double tx, ty, ta, tid, ts, tl, cl;
     double[] targetpose_robotspace, botpose, botpose_wpiblue;
     double x, y, z;
     double TrapAlignSetpointY = 3.3;
