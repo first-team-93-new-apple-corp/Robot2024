@@ -6,6 +6,7 @@ package frc.robot.subsystems.Vision.IO;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.PhotonUtils;
 import org.photonvision.simulation.PhotonCameraSim;
 import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
@@ -15,6 +16,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -63,26 +65,45 @@ public class VisionIOSim implements VisionIO {
     visionSim.addCamera(cameraSim, robotToCamera);
     photonPoseEstimator = new PhotonPoseEstimator(tagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, robotToCamera);
     m_limelight = NetworkTableInstance.getDefault().getTable("limelight");
-    pose = new Pose2d();
+    pose = new Pose2d(0,0, Rotation2d.fromDegrees(0));
   }
+
 
   
     /**
     * Updates our Vision values
     */
-    public void updateValues(VisionIOInputs inputs) {
-        result = camera.getLatestResult();
-        target = result.getBestTarget();
-        inputs.tx = target.getYaw();
-        inputs.ty = target.getPitch();
-        inputs.ta = target.getArea();
-        inputs.tid = target.getFiducialId();
-        inputs.targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
-        inputs.latency = result.getLatencyMillis() / 1000.0;
-        pose = photonPoseEstimator.update().get().estimatedPose.toPose2d();
+    @Override
+    public void updateValues(VisionIOInputs inputs, SwerveDriveSubsystem m_DriveSubsystem, Pose2d lastpose) {
+      visionSim.update(m_DriveSubsystem.m_SwerveDrivePoseEstimator.getEstimatedPosition());
+      result = camera.getLatestResult();
+        if (result.hasTargets()) {
+          target = result.getBestTarget();
+          inputs.tx = target.getYaw();
+          inputs.ty = target.getPitch();
+          inputs.ta = target.getArea();
+          inputs.tid = target.getFiducialId();
+          inputs.targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
+          inputs.latency = result.getLatencyMillis() / 1000.0;
+          // pose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), tagLayout.getTagPose(target.getFiducialId()).get(), robotToCamera).toPose2d(); 
+          // pose = photonPoseEstimator.update().get().estimatedPose.toPose2d();
+          try {
+            pose = photonPoseEstimator.update(result).get().estimatedPose.toPose2d();
+          } catch (Exception e) {
+            pose = lastpose;
+          }
+        }
     }
 
-
+    @Override
+    public Pose2d getPose(Pose2d pose) {
+      // return PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), tagLayout.getTagPose(target.getFiducialId()).get(), robotToCamera).toPose2d();
+      // if (photonPoseEstimator.update().isPresent()) {
+        return pose;
+      // } else {
+      //   return new Pose2d();
+      // }
+    }
     /** 
      * Updates the Camera sim
      * You must call this every Loop in Sim

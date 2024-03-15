@@ -1,5 +1,6 @@
 package frc.robot.subsystems.Vision.IO;
 import edu.wpi.first.math.geometry.Pose2d;
+import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /**
  * arm subsystem hardware interface.
@@ -24,7 +25,7 @@ public interface VisionIO {
     /**
      * Updates the set vision data.
      */
-    public void updateValues(VisionIOInputs inputs);
+    public void updateValues(VisionIOInputs inputs, SwerveDriveSubsystem m_DriveSubsystem, Pose2d lastpose);
     
     public default Pose2d getPose(Pose2d pose) {
       return pose;

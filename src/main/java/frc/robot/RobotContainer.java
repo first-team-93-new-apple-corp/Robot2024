@@ -34,11 +34,11 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.AutoAlignSubsystem;
 import frc.robot.subsystems.DriveConstants;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
+import frc.robot.subsystems.Intake.IntakeSubsystem;
 
 public class RobotContainer extends TimedRobot {
 

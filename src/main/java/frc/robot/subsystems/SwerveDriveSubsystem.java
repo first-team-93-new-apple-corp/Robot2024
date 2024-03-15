@@ -38,7 +38,6 @@ import frc.robot.subsystems.Vision.VisionSubsystemFactory;
 public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem {
     public XboxController opController = new XboxController(2);
     // public ShooterCommand m_ShooterCommand = new ShooterCommand();
-    public VisionSubsystem m_VisionSubsystem = VisionSubsystemFactory.build();
     // public ShooterSubsystem m_shooter = new ShooterSubsystem();
     // public IntakeCommand m_IntakeCommand = new IntakeCommand(m_shooter);
     // public ElevatorCommand m_ElevatorCommand = new ElevatorCommand(opController);
@@ -58,7 +57,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
             m_pigeon2.getRotation2d(),
             m_modulePositions,
             new Pose2d());
-
+    public VisionSubsystem m_VisionSubsystem = VisionSubsystemFactory.build(this);
     public void configAuto() {
         // AutoBuilder.configureHolonomic(
         // this::getPose, // Robot pose supplier
@@ -175,10 +174,14 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
 
     public void updateOdometry() {
         m_SwerveDrivePoseEstimator.update(m_pigeon2.getRotation2d(), m_modulePositions);
-        if (m_VisionSubsystem.hasTargets()) {
-            m_SwerveDrivePoseEstimator.addVisionMeasurement(m_VisionSubsystem.getPose(),
-                    Timer.getFPGATimestamp() - (m_VisionSubsystem.getLatency()));
+        try {
+            if (m_VisionSubsystem.hasTargets()) {
+                m_SwerveDrivePoseEstimator.addVisionMeasurement(m_VisionSubsystem.getPose(),
+                        Timer.getFPGATimestamp() - (m_VisionSubsystem.getLatency()));
+            }
+        } catch (Exception e) {
         }
+        
     }
 
     public Pose2d getPose() {

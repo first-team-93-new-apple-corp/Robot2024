@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants;
+import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class VisionIOReal implements VisionIO {
     private final NetworkTable m_limelight;
@@ -15,7 +16,7 @@ public class VisionIOReal implements VisionIO {
     double tv;
 
   public VisionIOReal() {
-    m_limelight = NetworkTableInstance.getDefault().getTable("limelight");
+    m_limelight = NetworkTableInstance.getDefault().getTable(Constants.VisionConstants.LimeLightName);
     pose = new Pose2d();
 
   }
@@ -24,7 +25,7 @@ public class VisionIOReal implements VisionIO {
   /**
    * Updates the set of loggable inputs.
    */
-    public void updateValues(VisionIOInputs inputs) {
+    public void updateValues(VisionIOInputs inputs, SwerveDriveSubsystem m_DriveSubsystem, Pose2d lastpose) {
         inputs.tx = m_limelight.getEntry("tx").getDouble(0);
         inputs.ty = m_limelight.getEntry("ty").getDouble(0);
         inputs.tv = m_limelight.getEntry("tv").getDouble(0);

@@ -1,6 +1,14 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+
 public class Constants {
+    public class VisionConstants{
+        public static final boolean SimEnabled = false;
+        public static final String LimeLightName = "limelight";
+        public static final Pose3d RobotToCamera = new Pose3d(0.321, 0.244354, 0.548, new Rotation3d(0, 30, 0));
+    }
     public class REV {
         public static final int L_Kicker = 2;
         public static final int R_Kicker = 3;
