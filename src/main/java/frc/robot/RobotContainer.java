@@ -5,7 +5,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -28,8 +27,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.AutoAlignCommand;
-// import frc.robot.commands.ClimberCommand;
-// import frc.robot.commands.ClimbingLevel;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
@@ -45,7 +42,6 @@ import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystemFactory;
 import frc.robot.subsystems.Intake.IntakeSubsystem;
 import frc.robot.subsystems.Intake.IntakeSubsystemFactory;
-import frc.robot.subsystems.Intake.IO.IntakeIOReal.intakeState;
 
 public class RobotContainer extends TimedRobot {
 
@@ -57,6 +53,7 @@ public class RobotContainer extends TimedRobot {
   public IntakeSubsystem m_IntakeSubsystem;
   public ElevatorSubsystem m_ElevatorSubsystem;
   public ClimberSubsystem m_ClimberSubsystem;
+  public Mechanisms m_Mechanisms;
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private SendableChooser<Command> autoChooser;
@@ -262,6 +259,7 @@ public class RobotContainer extends TimedRobot {
 
     SmartDashboard.putData("Field",m_Field2d);
 
+    m_Mechanisms = new Mechanisms(m_ElevatorSubsystem, m_ClimberSubsystem);
 
     m_AutoAlignCommand = new AutoAlignCommand(drivetrain, m_Joystick1);
     m_fieldRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Top_Middle);
@@ -298,6 +296,7 @@ public class RobotContainer extends TimedRobot {
     m_Field2d.setRobotPose(pose);
   }
   public void updateValues() {
+    m_Mechanisms.periodic();
     angle = drivetrain.getHeading();
     SmartDashboard.putNumber("PigeonAngle", angle);
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {

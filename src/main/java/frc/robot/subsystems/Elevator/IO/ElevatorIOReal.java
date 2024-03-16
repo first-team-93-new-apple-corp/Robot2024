@@ -6,15 +6,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.Preflight;
-import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.Elevator.IO.ElevatorIO.ElevatorIOInputs;
 
 public class ElevatorIOReal implements ElevatorIO {
     static DigitalInput topLimit;

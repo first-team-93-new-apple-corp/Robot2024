@@ -16,10 +16,6 @@ import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
-import frc.robot.subsystems.Climber.ClimberSubsystem;
-import frc.robot.subsystems.Intake.IntakeSubsystem;
-import frc.robot.subsystems.Intake.IntakeSubsystemFactory;
-import frc.robot.Constants.IntakeConstants;
 // import frc.robot.subsystems.USBCameraSubsystem;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ElevatorCommand;
@@ -34,7 +30,6 @@ public class Robot extends TimedRobot {
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  // private USBCameraSubsystem m_UsbCameraSubsystem = new USBCameraSubsystem();
   private LEDSubsystem m_LED = new LEDSubsystem();
   private ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_LED);
   private ShooterCommand m_Shooter = new ShooterCommand(m_ShooterSubsystem, m_LED);

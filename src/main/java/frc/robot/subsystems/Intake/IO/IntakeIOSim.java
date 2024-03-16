@@ -5,7 +5,6 @@ package frc.robot.subsystems.Intake.IO;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.sim.TalonFXSimState;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
 import edu.wpi.first.wpilibj.XboxController;
@@ -26,9 +25,6 @@ public class IntakeIOSim implements IntakeIO {
     private LEDSubsystem m_LED;
     private ShooterSubsystem m_shooter;
     private XboxController op;
-    private TalonFXSimState frontIntakeSimState;
-    private TalonFXSimState backIntakeSimState;
-    private TalonFXSimState BumperIntakeSimState;
 
     public enum intakeState {
         Stage1,
@@ -60,9 +56,6 @@ public class IntakeIOSim implements IntakeIO {
         bumperIntake.setInverted(true);
         midTOF.setRangingMode(RangingMode.Short, 24);
         upperTOF.setRangingMode(RangingMode.Short, 24);
-        frontIntakeSimState = frontIntake.getSimState(); 
-        backIntakeSimState = backIntake.getSimState();
-        BumperIntakeSimState = bumperIntake.getSimState();
     }
 
     @Override

@@ -1,13 +1,8 @@
 package frc.robot.subsystems.Climber;
 
 import com.ctre.phoenix6.SignalLogger;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.Climber.IO.ClimberIO;
 import frc.robot.subsystems.Climber.IO.ClimberIO.ClimberIOInputs;
 
@@ -53,6 +48,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
     @Override
     public void periodic() {
+        m_io.updateValues(m_Inputs);
         SignalLogger.writeDouble("Climber:Left Position", leftPosition());
         SignalLogger.writeDouble("Climber:Right Position", rightPosition());
 

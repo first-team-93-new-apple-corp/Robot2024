@@ -1,11 +1,6 @@
 package frc.robot.subsystems.Elevator.IO;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
-
 public interface ElevatorIO {
 
   public static class ElevatorIOInputs {

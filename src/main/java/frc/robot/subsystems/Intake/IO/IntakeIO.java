@@ -1,8 +1,4 @@
 package frc.robot.subsystems.Intake.IO;
-import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 
 public interface IntakeIO {
 
