@@ -9,6 +9,7 @@ import com.pathplanner.lib.util.GeometryUtil;
 public class Constants {
     public IntakeConstants Intake = new IntakeConstants();
     public ElevatorConstants Elevator = new ElevatorConstants();
+    public ClimberConstants Climber = new ClimberConstants();
     public GyroType Gyro = GyroType.SIM;
 
     public enum GyroType {
@@ -17,19 +18,47 @@ public class Constants {
     }
     public final class AprilTagPoseConstants {
 
-        public static final Pose2d RedAmp = new Pose2d(14.6, 7.6, Rotation2d.fromDegrees(-90));
+        public static final Pose2d RedAmp = new Pose2d(14.6, 7.6, new Rotation2d(Math.PI/2));
         public static final Pose2d BlueAmp = GeometryUtil.flipFieldPose(RedAmp);
         
     }
 
     public Constants(String robotName) {
-            if (robotName.equals("2024")) {
-                Elevator = new ElevatorConstants(18);
-                Intake = new IntakeConstants(25, 14, 15, 22,25);
-                Gyro = GyroType.PIGEON2;
-            } else if (robotName.equals("2023")) {
+        if (robotName.equals("2024")) {
+            Elevator = new ElevatorConstants(18);
+            Intake = new IntakeConstants(25, 14, 15, 22,25);
+            Climber = new ClimberConstants(19,20);
+            Gyro = GyroType.PIGEON2;
+        } else if (robotName.equals("2023")) {
 
-            }
+        }
+    }
+
+    public final class ClimberConstants {
+        public final boolean ENABLED;
+        public final int leftClimber;
+        public final int rightClimber;
+        public final int maxHeight = 155;
+        
+        /*
+         * Default constructor sets disabled
+         */
+        public ClimberConstants() {
+            ENABLED = false;
+            leftClimber = -1;
+            rightClimber = -1;
+        }
+        /**
+         * Sets the Ids of our Elevator Motor
+         *
+         * @param leftClimberID The Id of the Left Climber Motor
+         * @param rightClimberID The ID of the Right Climber Motor
+         */
+        public ClimberConstants(int leftClimberID, int rightClimberID) {
+            ENABLED = true;
+            this.leftClimber = leftClimberID;
+            this.rightClimber = rightClimberID;
+        }
     }
     public final class ElevatorConstants {
         public final boolean ENABLED;

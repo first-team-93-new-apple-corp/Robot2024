@@ -237,7 +237,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         calculatedX = xlimit
                 .calculate((MathUtil.clamp((AlignPIDX.calculate(X, pose.getX())), -MaxSpeed, MaxSpeed)) * 1);
 
-        calculatedTheta = (-MathUtil.clamp((AlignPIDTheta.calculate(Theta, (pose.getRotation().getRadians()))),
+        calculatedTheta = (MathUtil.clamp((AlignPIDTheta.calculate(Theta, (pose.getRotation().getRadians()))),
                 -MaxAngularRate, MaxAngularRate));
         if (Utils.isSimulation()) {
             calculatedY = ylimit.calculate((MathUtil.clamp((AlignPIDY.calculate(Y, pose.getY())), -MaxSpeed, MaxSpeed)) * 1);

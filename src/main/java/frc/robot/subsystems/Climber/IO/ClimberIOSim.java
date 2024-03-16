@@ -1,56 +1,69 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Climber.IO;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.ClimberConstants;
 
-public class ClimberSubsystem extends SubsystemBase {
+
+public class ClimberIOSim implements ClimberIO {
     public TalonFX climberLeft;
     public TalonFX climberRight;
     public XboxController op;
-    public double maxHeight = 155;
-    public ClimberSubsystem(XboxController op) {
+    public double maxHeight;
+
+    public ClimberIOSim(ClimberConstants constants, XboxController op) {
+        climberLeft = new TalonFX(constants.leftClimber);
+        climberRight = new TalonFX(constants.rightClimber);
         this.op = op;
-        climberLeft = new TalonFX(Constants.CTRE.RIO.L_Climber, "drivetrain");
-        climberRight = new TalonFX(Constants.CTRE.RIO.R_Climber, "drivetrain");
-        climberLeft.setNeutralMode(NeutralModeValue.Brake);
-        climberRight.setNeutralMode(NeutralModeValue.Brake);
+        maxHeight = constants.maxHeight;
     }
-    
-    public void leftSpeed(double speed) {
+    @Override
+    public void updateValues(ClimberIOInputs inputs){
+
+    }
+
+    @Override
+    public void leftSpeed(double speed){
         climberLeft.set(speed);
     }
-    public void rightSpeed(double speed) {
+
+    @Override
+    public void rightSpeed(double speed){
         climberRight.set(speed);
     }
-    public void zeroLeft() {
+
+    @Override
+    public void zeroLeft(){
         climberLeft.setPosition(0);
     }
-    public void zeroRight() {
+
+    @Override
+    public void zeroRight(){
         climberRight.setPosition(0);
     }
+
+    @Override
     public double getLeftDraw() {
         return climberLeft.getSupplyCurrent().getValueAsDouble();
     }
+    
+    @Override
     public double getRightDraw() {
         return climberRight.getSupplyCurrent().getValueAsDouble();
     }
+
+    @Override
     public double leftPosition() {
         return climberLeft.getPosition().getValueAsDouble();
     }
+
+    @Override
     public double rightPosition() {
         return climberRight.getPosition().getValueAsDouble();
     }
-    public TalonFX getLeft() {
-        return climberLeft;
-    }
-    public TalonFX getRight() {
-        return climberRight;
-    }
+
+    @Override
     public double checkLeftBound(double output) {
         if(output < 0 && climberLeft.getPosition().getValueAsDouble() < -maxHeight) {
             output = 0;
@@ -59,6 +72,8 @@ public class ClimberSubsystem extends SubsystemBase {
         }
         return output;
     }
+
+    @Override
     public double checkRightBound(double output) {
         if(output < 0 && climberRight.getPosition().getValueAsDouble() < -maxHeight) {
             output = 0;
@@ -67,9 +82,5 @@ public class ClimberSubsystem extends SubsystemBase {
         }
         return output;
     }
-    @Override
-    public void periodic() {
-        SmartDashboard.putNumber("L_POS", climberLeft.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("R_POS", climberRight.getPosition().getValueAsDouble());
-    }
+
 }

@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.Climber.ClimberSubsystem;
 
 public class ClimberCommand extends Command {
     XboxController op;
@@ -15,9 +15,9 @@ public class ClimberCommand extends Command {
     PIDController leftClimberPID = new PIDController(0.05, 0, 0);
     PIDController rightClimberPID = new PIDController(0.05, 0, 0);
 
-    public ClimberCommand(XboxController op) {
+    public ClimberCommand(XboxController op, ClimberSubsystem m_ClimberSubsystem) {
         this.op = op;
-        m_climber = new ClimberSubsystem(op);
+        m_climber = m_ClimberSubsystem;
     }
 
     // public void leftToSetpoint(double setpoint) {

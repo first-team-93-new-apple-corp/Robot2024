@@ -16,6 +16,7 @@ import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.subsystems.Climber.ClimberSubsystem;
 import frc.robot.subsystems.Intake.IntakeSubsystem;
 import frc.robot.subsystems.Intake.IntakeSubsystemFactory;
 import frc.robot.Constants.IntakeConstants;
@@ -40,7 +41,7 @@ public class Robot extends TimedRobot {
   Constants constants = new Constants("2024");
   // private IntakeSubsystem m_IntakeSubsystem = IntakeSubsystemFactory.build(constants.Intake, m_LED, m_ShooterSubsystem, op);
   private ElevatorCommand m_Elevator;
-  private ClimberCommand m_Climber = new ClimberCommand(op);
+  private ClimberCommand m_Climber;
   public Preflight m_Preflight;
   public IntakeCommand m_IntakeCommand;
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
@@ -53,8 +54,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer(constants, m_Joystick1, m_Joystick2, op, m_ShooterSubsystem, m_LED);
     m_IntakeCommand = new IntakeCommand(m_ShooterSubsystem, m_robotContainer.m_IntakeSubsystem, m_LED);
-    m_Preflight = new Preflight(op, m_Elevator, m_IntakeCommand, m_Climber);
+    m_Climber = new ClimberCommand(op, m_robotContainer.m_ClimberSubsystem);
     m_Elevator = new ElevatorCommand(op, m_robotContainer.m_ElevatorSubsystem);
+    m_Preflight = new Preflight(op, m_Elevator, m_IntakeCommand, m_Climber);
 
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
     m_Elevator.initOnce();
