@@ -21,7 +21,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 
 public class VisionIOSim implements VisionIO {
     private final NetworkTable m_limelight;

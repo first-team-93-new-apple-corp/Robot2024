@@ -1,26 +1,25 @@
 package frc.robot.subsystems.Climber.IO;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-
-import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.SimUtilities.MotorSim;
 
 
 public class ClimberIOSim implements ClimberIO {
-    public TalonFX climberLeft;
-    public TalonFX climberRight;
-    public XboxController op;
-    public double maxHeight;
+    private MotorSim climberLeft;
+    private MotorSim climberRight;
+    private double maxHeight;
 
-    public ClimberIOSim(ClimberConstants constants, XboxController op) {
-        climberLeft = new TalonFX(constants.leftClimber);
-        climberRight = new TalonFX(constants.rightClimber);
-        this.op = op;
+    public ClimberIOSim(ClimberConstants constants) {
+        //Revolutions per second
+        climberLeft = new MotorSim(100);
+        climberRight = new MotorSim(100);
         maxHeight = constants.maxHeight;
+        
     }
     @Override
     public void updateValues(ClimberIOInputs inputs){
-
+        climberLeft.periodic();
+        climberRight.periodic();
     }
 
     @Override
@@ -45,29 +44,29 @@ public class ClimberIOSim implements ClimberIO {
 
     @Override
     public double getLeftDraw() {
-        return climberLeft.getSupplyCurrent().getValueAsDouble();
+        return climberLeft.getVelocity() + 300 * -0.5;
     }
     
     @Override
     public double getRightDraw() {
-        return climberRight.getSupplyCurrent().getValueAsDouble();
+        return climberRight.getVelocity() + 300 * -0.5;
     }
 
     @Override
     public double leftPosition() {
-        return climberLeft.getPosition().getValueAsDouble();
+        return climberLeft.getDistance();
     }
 
     @Override
     public double rightPosition() {
-        return climberRight.getPosition().getValueAsDouble();
+        return climberRight.getDistance();
     }
 
     @Override
     public double checkLeftBound(double output) {
-        if(output < 0 && climberLeft.getPosition().getValueAsDouble() < -maxHeight) {
+        if(output < 0 && climberLeft.getDistance() < -maxHeight) {
             output = 0;
-        } else if(output > 0 && climberLeft.getPosition().getValueAsDouble() > -3) {
+        } else if(output > 0 && climberLeft.getDistance() > -3) {
             output = 0;
         }
         return output;
@@ -75,9 +74,9 @@ public class ClimberIOSim implements ClimberIO {
 
     @Override
     public double checkRightBound(double output) {
-        if(output < 0 && climberRight.getPosition().getValueAsDouble() < -maxHeight) {
+        if(output < 0 && climberRight.getDistance() < -maxHeight) {
             output = 0;
-        } else if(output > 0 && climberRight.getPosition().getValueAsDouble() > -3) {
+        } else if(output > 0 && climberRight.getDistance() > -3) {
             output = 0;
         }
         return output;

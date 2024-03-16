@@ -1,6 +1,6 @@
 package frc.robot.subsystems.Vision.IO;
 import edu.wpi.first.math.geometry.Pose2d;
-import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 
 /**
  * arm subsystem hardware interface.

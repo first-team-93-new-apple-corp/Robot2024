@@ -33,6 +33,9 @@ public class Constants {
 
         }
     }
+    public final class DriveConstants {
+
+    }
 
     public final class ClimberConstants {
         public final boolean ENABLED;

@@ -1,21 +1,17 @@
 package frc.robot.subsystems.Climber.IO;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-
-import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.ClimberConstants;
 
 
 public class ClimberIOReal implements ClimberIO {
     public TalonFX climberLeft;
     public TalonFX climberRight;
-    public XboxController op;
     public double maxHeight;
 
-    public ClimberIOReal(ClimberConstants constants, XboxController op) {
+    public ClimberIOReal(ClimberConstants constants) {
         climberLeft = new TalonFX(constants.leftClimber);
         climberRight = new TalonFX(constants.rightClimber);
-        this.op = op;
         maxHeight = constants.maxHeight;
     }
     @Override

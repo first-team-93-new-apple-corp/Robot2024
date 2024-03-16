@@ -13,7 +13,11 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -30,18 +34,18 @@ import frc.robot.commands.AutoAlignCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
-import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.SwerveDriveSubsystem;
-import frc.robot.subsystems.Telemetry;
-import frc.robot.subsystems.TunerConstants;
 import frc.robot.subsystems.Climber.ClimberSubsystem;
 import frc.robot.subsystems.Climber.ClimberSubsystemFactory;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystemFactory;
 import frc.robot.subsystems.Intake.IntakeSubsystem;
 import frc.robot.subsystems.Intake.IntakeSubsystemFactory;
+import frc.robot.subsystems.Swerve.DriveConstants;
+import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
+import frc.robot.subsystems.Swerve.Telemetry;
+import frc.robot.subsystems.Swerve.TunerConstants;
 
 public class RobotContainer extends TimedRobot {
 
@@ -244,6 +248,9 @@ public class RobotContainer extends TimedRobot {
   public void configAuto() {
     drivetrain.configAuto();
   }
+  public Pose3d getTagPose(AprilTag tag){
+    return tag.pose;
+  }
 
   public RobotContainer(Constants constants, Joystick m_Joystick1, Joystick m_Joystick2, XboxController op, ShooterSubsystem m_ShooterSubsystem, LEDSubsystem m_LedSubsystem) {
     this.m_ShooterSubsystem = m_ShooterSubsystem;
@@ -253,10 +260,14 @@ public class RobotContainer extends TimedRobot {
 
     m_IntakeSubsystem = IntakeSubsystemFactory.build(constants.Intake,m_LedSubsystem, m_ShooterSubsystem, op);
     m_ElevatorSubsystem = ElevatorSubsystemFactory.build(constants.Elevator);
-    m_ClimberSubsystem = ClimberSubsystemFactory.build(constants.Climber, op);
+    m_ClimberSubsystem = ClimberSubsystemFactory.build(constants.Climber);
 
     m_IntakeCommand = new IntakeCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_LedSubsystem);
 
+    
+    AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
+    
+    Pose3d[] Tags = new Pose3d[]{tagLayout.getTags().iterator().next().pose};
     SmartDashboard.putData("Field",m_Field2d);
 
     m_Mechanisms = new Mechanisms(m_ElevatorSubsystem, m_ClimberSubsystem);

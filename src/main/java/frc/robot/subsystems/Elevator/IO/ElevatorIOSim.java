@@ -7,23 +7,22 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.SimUtilities.MotorSim;
 import frc.robot.commands.Preflight;
 
 public class ElevatorIOSim implements ElevatorIO {
     static DigitalInput topLimit;
     static DigitalInput bottomLimit;
-    TalonFX ElevatorMotor;
-    double output;
-    PIDController pid = new PIDController(0.075, 0, 0);
-    TalonFXConfiguration config = new TalonFXConfiguration();
-    TalonFXConfiguration zeroConfig = new TalonFXConfiguration();
+    private MotorSim ElevatorMotor;
+    private double output;
+    private PIDController pid = new PIDController(0.075, 0, 0);
 
-    double zeroPos;
-    double rawoutput;
-    double currentPos;
-    double setpoint;
-    double highSetpoint;
-    double lowSetpoint;
+    private double zeroPos;
+    private double rawoutput;
+    private double currentPos;
+    private double setpoint;
+    private double highSetpoint;
+    private double lowSetpoint;
 
     public enum elevatorState {
         HoldState,
@@ -38,23 +37,15 @@ public class ElevatorIOSim implements ElevatorIO {
 
 
     public ElevatorIOSim(ElevatorConstants constants) {
-        ElevatorMotor = new TalonFX(constants.ElevatorMotor, "rio");
-        config.CurrentLimits.SupplyCurrentLimit = 15;
-        config.CurrentLimits.SupplyCurrentThreshold = 0;
-        config.CurrentLimits.SupplyTimeThreshold = 0;
-        config.CurrentLimits.SupplyCurrentLimitEnable = true;
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        ElevatorMotor.getConfigurator().apply(config);
+        ElevatorMotor = new MotorSim(100);
         currentState = elevatorState.Init;
-        zeroConfig.CurrentLimits.SupplyCurrentLimit = 5;
-        zeroConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         setpoint = constants.setpoint;
         highSetpoint = constants.highSetpoint;
         lowSetpoint = constants.lowSetpoint;
     }
     @Override
     public void updateValues(ElevatorIOInputs inputs){
-        
+        ElevatorMotor.periodic();
     }
 
     public void disable(){
@@ -79,7 +70,7 @@ public class ElevatorIOSim implements ElevatorIO {
         if (!(topLimit == null)) {
             return topLimit.get();
         } else {
-            return true;
+            return false;
         }
     }
 
@@ -87,12 +78,12 @@ public class ElevatorIOSim implements ElevatorIO {
         if (!(bottomLimit == null)) {
             return bottomLimit.get();
         } else {
-            return true;
+            return false;
         }
     }
 
     public double ElevatorPosition(){
-        return ElevatorMotor.getPosition().getValueAsDouble();
+        return ElevatorMotor.getDistance();
     }
 
     public void runElevator(){
@@ -101,7 +92,6 @@ public class ElevatorIOSim implements ElevatorIO {
             case HoldState:
                 if (Preflight.isPreflightDone()) {
                     ElevatorMotor.set(0);
-                    ElevatorMotor.setNeutralMode(NeutralModeValue.Brake);
                 } else {
                     System.out.println("Preflight not completed. Disabling elevator.");
                     currentState = elevatorState.Disabled;
@@ -119,7 +109,7 @@ public class ElevatorIOSim implements ElevatorIO {
                 break;
 
             case ToSetpoint:
-                currentPos = ElevatorMotor.getPosition().getValueAsDouble();
+                currentPos = ElevatorMotor.getDistance();
                 output = pid.calculate(currentPos, setpoint);
                 // If we are hitting top/bottom limit and trying to break the robot, go to
                 // stopped state
@@ -136,12 +126,10 @@ public class ElevatorIOSim implements ElevatorIO {
                 break;
             case Zeroing:
                 if (!bottomLimitTriggered()) {
-                    ElevatorMotor.getConfigurator().apply(zeroConfig);
                     ElevatorMotor.set(0.05);
                 } else {
                     ElevatorMotor.set(0);
                     ElevatorMotor.setPosition(0);
-                    ElevatorMotor.getConfigurator().apply(config);
                     currentState = elevatorState.HoldState;
                 }
                 break;
@@ -152,7 +140,6 @@ public class ElevatorIOSim implements ElevatorIO {
 
             case Disabled:
                 ElevatorMotor.set(0);
-                ElevatorMotor.setNeutralMode(NeutralModeValue.Coast);
                 break;
         }
     }

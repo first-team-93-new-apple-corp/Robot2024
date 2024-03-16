@@ -3,7 +3,7 @@ package frc.robot.subsystems.Vision;
 import com.ctre.phoenix6.Utils;
 
 import frc.robot.Constants;
-import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 import frc.robot.subsystems.Vision.IO.VisionIOReal;
 import frc.robot.subsystems.Vision.IO.VisionIOSim;
 

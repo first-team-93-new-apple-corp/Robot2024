@@ -8,7 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants;
-import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 
 public class VisionIOReal implements VisionIO {
     private final NetworkTable m_limelight;

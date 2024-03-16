@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 
 import frc.robot.Constants;
-import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 
 public class AutoAlignCommand extends Command {
     Joystick m_joystick1;
