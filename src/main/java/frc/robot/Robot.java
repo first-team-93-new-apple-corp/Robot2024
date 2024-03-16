@@ -17,6 +17,8 @@ import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Intake.IntakeSubsystem;
+import frc.robot.subsystems.Intake.IntakeSubsystemFactory;
+import frc.robot.Constants.IntakeConstants;
 // import frc.robot.subsystems.USBCameraSubsystem;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ElevatorCommand;
@@ -35,11 +37,12 @@ public class Robot extends TimedRobot {
   private LEDSubsystem m_LED = new LEDSubsystem();
   private ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_LED);
   private ShooterCommand m_Shooter = new ShooterCommand(m_ShooterSubsystem, m_LED);
-  private IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem, op, m_LED);
-  private IntakeCommand m_Intake = new IntakeCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_LED);
-  private ElevatorCommand m_Elevator = new ElevatorCommand(op);
+  Constants constants = new Constants("2024");
+  // private IntakeSubsystem m_IntakeSubsystem = IntakeSubsystemFactory.build(constants.Intake, m_LED, m_ShooterSubsystem, op);
+  private ElevatorCommand m_Elevator;
   private ClimberCommand m_Climber = new ClimberCommand(op);
-  private Preflight m_Preflight = new Preflight(op, m_Elevator, m_Intake, m_Climber);
+  public Preflight m_Preflight;
+  public IntakeCommand m_IntakeCommand;
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
   // DigitalOutput test = new DigitalOutput(3);
   public Pigeon2 getPigeon() {
@@ -48,7 +51,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    m_robotContainer = new RobotContainer(m_Joystick1, m_Joystick2, op, m_ShooterSubsystem, m_IntakeSubsystem);
+    m_robotContainer = new RobotContainer(constants, m_Joystick1, m_Joystick2, op, m_ShooterSubsystem, m_LED);
+    m_IntakeCommand = new IntakeCommand(m_ShooterSubsystem, m_robotContainer.m_IntakeSubsystem, m_LED);
+    m_Preflight = new Preflight(op, m_Elevator, m_IntakeCommand, m_Climber);
+    m_Elevator = new ElevatorCommand(op, m_robotContainer.m_ElevatorSubsystem);
+
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
     m_Elevator.initOnce();
     m_SwerveDriveSubsystem.configAuto();
@@ -113,7 +120,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_Intake.schedule();
+    m_IntakeCommand.schedule();
     m_Shooter.schedule();
     m_Elevator.schedule();
     m_Climber.schedule();

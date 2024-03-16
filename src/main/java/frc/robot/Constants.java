@@ -1,14 +1,107 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import com.pathplanner.lib.util.GeometryUtil;
 
 public class Constants {
+    public IntakeConstants Intake = new IntakeConstants();
+    public ElevatorConstants Elevator = new ElevatorConstants();
+    public GyroType Gyro = GyroType.SIM;
+
+    public enum GyroType {
+        SIM,
+        PIGEON2,
+    }
+    public final class AprilTagPoseConstants {
+
+        public static final Pose2d RedAmp = new Pose2d(14.6, 7.6, Rotation2d.fromDegrees(-90));
+        public static final Pose2d BlueAmp = GeometryUtil.flipFieldPose(RedAmp);
+        
+    }
+
+    public Constants(String robotName) {
+            if (robotName.equals("2024")) {
+                Elevator = new ElevatorConstants(18);
+                Intake = new IntakeConstants(25, 14, 15, 22,25);
+                Gyro = GyroType.PIGEON2;
+            } else if (robotName.equals("2023")) {
+
+            }
+    }
+    public final class ElevatorConstants {
+        public final boolean ENABLED;
+        public final int ElevatorMotor;
+        public final double setpoint = 0;
+        public final double highSetpoint = -75;
+        public final double lowSetpoint = -3;
+        /**
+         * Default constructor sets disabled
+         */
+        public ElevatorConstants() {
+          ENABLED = false;
+          ElevatorMotor = -1;
+        }
+
+        /**
+         * Sets the Ids of our Elevator Motor
+         *
+         * @param ElevatorID The Id of the Elevator Motor
+         */
+        public ElevatorConstants(int ElevatorID) {
+            ENABLED = true;
+            this.ElevatorMotor = ElevatorID;
+        }
+    }
+    public final class IntakeConstants {
+        public final boolean ENABLED;
+        public static final double IntakeSpeed = 0.75;
+        public static final double PassoverSpeed = 0.5;
+        public final int midTOF;
+        public final int upperTOF;
+        public final int Bump_Intake;
+        public final int F_Intake;
+        public final int B_Intake;
+        /**
+         * Default constructor sets disabled
+         */
+        public IntakeConstants() {
+          ENABLED = false;
+          midTOF = -1;
+          upperTOF = -1;
+          Bump_Intake = -1;
+          F_Intake = -1;
+          B_Intake = -1;    
+        }
+
+        /**
+         * Sets the Ids of our Intake Motors
+         *
+         * @param BumperIntake The Id of the Bumber intake
+         * @param frontIntake The Id of the Front intake
+         * @param backIntake The Id of the Back intake
+         * @param midTOF The ID of the middle Time of Flight
+         * @param upperTOF The ID of the upper Time of Flight
+         */
+        public IntakeConstants(int BumperIntake, int frontIntake, int backIntake, int midTOF, int upperTOF) {
+            ENABLED = true;
+            this.midTOF = midTOF;
+            this.upperTOF = upperTOF;
+            Bump_Intake = BumperIntake;
+            F_Intake = frontIntake;
+            B_Intake = backIntake;
+        }
+      }
+    
+        
     public class VisionConstants{
         public static final boolean SimEnabled = false;
         public static final String LimeLightName = "limelight";
         public static final Pose3d RobotToCamera = new Pose3d(0.321, 0.244354, 0.548, new Rotation3d(0, 30, 0));
     }
+
     public class REV {
         public static final int L_Kicker = 2;
         public static final int R_Kicker = 3;

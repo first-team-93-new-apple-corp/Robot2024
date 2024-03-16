@@ -16,8 +16,12 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import com.playingwithfusion.TimeOfFlight;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -95,7 +99,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         for (var moduleLocation : m_moduleLocations) {
             driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
         }
-
+        
         AutoBuilder.configureHolonomic(
                 () -> this.getState().Pose, // Supplier of current robot pose
                 // () -> this.m_SwerveDrivePoseEstimator.getEstimatedPosition(),
@@ -204,6 +208,58 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     public void resetPose(Pose2d pose) {
         m_Telemetry.updatePose(pose);
         getState().Pose = pose;
+    }
+    
+    private double X,Y,Theta,tofpos,tofposAngle,calculatedX, calculatedY, calculatedTheta;
+    private PIDController AlignPIDTheta = new PIDController(.25, 0, 0.13); // Rotationly PID
+    private PIDController AlignPIDX = new PIDController(3.25, 2, 0.4); // Drive PIDs should be the same
+    private PIDController AlignPIDY = new PIDController(2, 1.5, 0);
+    private PIDController tofPID = new PIDController(0.008, 0, 0.00125);
+    private SlewRateLimiter xlimit = new SlewRateLimiter(12);
+    private SlewRateLimiter ylimit = new SlewRateLimiter(12);
+    private ChassisSpeeds alignSpeeds; // Chassis Speeds which robot uses for auto align
+    private ChassisSpeeds AlignfieldSpeeds;
+    private TimeOfFlight tof = new TimeOfFlight(23);
+
+    public void toPose(Pose2d pose) {
+        
+        updateOdometry();
+        X = m_SwerveDrivePoseEstimator.getEstimatedPosition().getX();
+        Y = m_SwerveDrivePoseEstimator.getEstimatedPosition().getY();
+        Theta = m_SwerveDrivePoseEstimator.getEstimatedPosition().getRotation().getRadians();
+        tofpos = tof.getRange();
+        if (Theta > 90) {
+            tofposAngle = 90-(Theta-90);
+        } else {
+            tofposAngle = Theta;
+        }
+        tofpos = tofpos*Math.sin(tofposAngle);
+        calculatedX = xlimit
+                .calculate((MathUtil.clamp((AlignPIDX.calculate(X, pose.getX())), -MaxSpeed, MaxSpeed)) * 1);
+
+        calculatedTheta = (-MathUtil.clamp((AlignPIDTheta.calculate(Theta, (pose.getRotation().getRadians()))),
+                -MaxAngularRate, MaxAngularRate));
+        if (Utils.isSimulation()) {
+            calculatedY = ylimit.calculate((MathUtil.clamp((AlignPIDY.calculate(Y, pose.getY())), -MaxSpeed, MaxSpeed)) * 1);
+        } else {
+            calculatedY = MathUtil.clamp(-tofPID.calculate(tofpos, 293), -MaxSpeed, MaxSpeed);
+        }
+        alignSpeeds = new ChassisSpeeds(calculatedX, calculatedY, calculatedTheta);
+
+        if (DriverStation.getAlliance().isPresent()) {
+            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+                // red
+                AlignfieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(alignSpeeds,
+                new Rotation2d(getPigeon2().getRotation2d().getRadians())
+                        .rotateBy(new Rotation2d(Math.PI)));
+            } else {
+                // Blue
+                AlignfieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(alignSpeeds,
+                new Rotation2d(getPigeon2().getRotation2d().getRadians())
+                        .rotateBy(new Rotation2d(0)));
+            }
+        }
+        driveRobotRelative(AlignfieldSpeeds);
     }
 
     public ChassisSpeeds getCurrentRobotChassisSpeeds() {

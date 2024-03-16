@@ -19,11 +19,19 @@ public class IntakeCommand extends Command {
         this.m_LED = m_LED;
     }
 
+    public Command AutoIntake() {
+        return m_IntakeSubsystem.runOnce(() -> m_IntakeSubsystem.intake());
+    }
+
+    public Command AutonStopIntake() {
+        return m_IntakeSubsystem.runOnce(() -> m_IntakeSubsystem.stop());
+    }
+
     @Override
     public void execute() {
         // For the Intake
         if (opController.getRawButton(Constants.xbox.X)) { // X
-            m_IntakeSubsystem.Intake();
+            m_IntakeSubsystem.intake();
         } else if (opController.getRawButton(Constants.xbox.A)) { // A
             // m_IntakeSubsystem.passthrough();
         } else {

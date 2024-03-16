@@ -1,7 +1,10 @@
 package frc.robot.subsystems.Vision;
 
 
+import com.ctre.phoenix6.SignalLogger;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Vision.IO.VisionIO;
@@ -42,5 +45,11 @@ public class VisionSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         m_io.updateValues(m_Inputs, m_DriveSubsystem, m_DriveSubsystem.m_SwerveDrivePoseEstimator.getEstimatedPosition());
+        SignalLogger.writeDoubleArray("Vision: Limelight Data", new double[]{m_Inputs.tx,m_Inputs.ty, m_Inputs.ta, m_Inputs.tl, m_Inputs.cl});
+        SignalLogger.writeDouble("Vision:ID of tag in view", m_Inputs.tid);
+        SignalLogger.writeDoubleArray("Vision:Pose of the Bot (WpiBlue)", m_Inputs.botpose_wpiblue);
+        SignalLogger.writeDoubleArray("Vision:TargetPose Robot Space", m_Inputs.targetpose_robotspace);
+        
+        SmartDashboard.putBoolean("Has targets", hasTargets());
     }
 }

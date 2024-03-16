@@ -5,17 +5,18 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 
 public class ElevatorCommand extends Command {
     XboxController op;
-    ElevatorSubsystem m_elevator = new ElevatorSubsystem();
+    ElevatorSubsystem m_elevator;
     double setpoint = 0;
     double ampSetpoint = -50;
     double sourceSetpoint = -70;
 
-    public ElevatorCommand(XboxController op) {
+    public ElevatorCommand(XboxController op, ElevatorSubsystem m_ElevatorSubsystem) {
         this.op = op;
+        this.m_elevator = m_ElevatorSubsystem;
     }
 
     public void initOnce() {
@@ -26,9 +27,6 @@ public class ElevatorCommand extends Command {
         m_elevator.zero();
     }
 
-    public TalonFX getMotor() {
-        return m_elevator.getMotor();
-    }
 
     public void disable() {
         m_elevator.disable();

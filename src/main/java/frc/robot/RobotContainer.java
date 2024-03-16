@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -34,11 +35,16 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.AutoAlignSubsystem;
 import frc.robot.subsystems.DriveConstants;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
+import frc.robot.subsystems.Elevator.ElevatorSubsystemFactory;
 import frc.robot.subsystems.Intake.IntakeSubsystem;
+import frc.robot.subsystems.Intake.IntakeSubsystemFactory;
+import frc.robot.subsystems.Intake.IO.IntakeIOReal.intakeState;
 
 public class RobotContainer extends TimedRobot {
 
@@ -48,6 +54,8 @@ public class RobotContainer extends TimedRobot {
   public AutoAlignSubsystem m_AutoAlignSubsystem;
   public ElevatorCommand m_ElevatorCommand;  
   public ShooterSubsystem m_ShooterSubsystem;
+  public IntakeSubsystem m_IntakeSubsystem;
+  public ElevatorSubsystem m_ElevatorSubsystem;
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private SendableChooser<Command> autoChooser;
@@ -80,7 +88,7 @@ public class RobotContainer extends TimedRobot {
   // private final SwerveDrivePoseEstimator m_poseEstimator;
   // added this for button bindings and the logic I added
   
-  AutoAlignCommand m_AutoAlignCommand = new AutoAlignCommand(drivetrain);
+  AutoAlignCommand m_AutoAlignCommand;
 
   private SwerveRequest.RobotCentric RobotCentricDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -239,8 +247,11 @@ public class RobotContainer extends TimedRobot {
     drivetrain.configAuto();
   }
 
-  public RobotContainer(Joystick m_Joystick1, Joystick m_Joystick2, XboxController op, ShooterSubsystem m_ShooterSubsystem, IntakeSubsystem m_IntakeSubsystem) {
+  public RobotContainer(Constants constants, Joystick m_Joystick1, Joystick m_Joystick2, XboxController op, ShooterSubsystem m_ShooterSubsystem, LEDSubsystem m_LedSubsystem) {
     this.m_ShooterSubsystem = m_ShooterSubsystem;
+    m_IntakeSubsystem = IntakeSubsystemFactory.build(constants.Intake,m_LedSubsystem, m_ShooterSubsystem, op);
+    m_IntakeCommand = new IntakeCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_LedSubsystem);
+    m_ElevatorSubsystem = ElevatorSubsystemFactory.build(constants.Elevator);
     // m_poseEstimator = new SwerveDrivePoseEstimator());
     // m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     // m_JoystickButton2 = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
@@ -253,6 +264,7 @@ public class RobotContainer extends TimedRobot {
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
     this.op = op;
+    m_AutoAlignCommand = new AutoAlignCommand(drivetrain, m_Joystick1);
     m_fieldRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Top_Middle);
     m_BrakeButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     // m_WheelsPointForwardButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
@@ -264,17 +276,16 @@ public class RobotContainer extends TimedRobot {
     //IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
     // m_AutoAlignSubsystem = new AutoAlignSubsystem(drivetrain);
     // m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);
-    NamedCommands.registerCommand("Intake", m_IntakeSubsystem.AutoIntake());
+    NamedCommands.registerCommand("Intake", m_IntakeCommand.AutoIntake());
     NamedCommands.registerCommand("Shooter", m_ShooterSubsystem.AutonShooter());
     NamedCommands.registerCommand("StopShooter", m_ShooterSubsystem.AutonStopShooter());
     NamedCommands.registerCommand("ShootAmp", m_ShooterSubsystem.AutonAmp());
     NamedCommands.registerCommand("DribbleNote", m_ShooterSubsystem.AutonDribbleNote());
     // NamedCommands.registerCommand("StopKicker", m_ShooterSubsystem.AutonKickerStop());
-    NamedCommands.registerCommand("StopIntake", m_IntakeSubsystem.AutonStopIntake());
+    NamedCommands.registerCommand("StopIntake", m_IntakeCommand.AutonStopIntake());
     NamedCommands.registerCommand("ResetField", drivetrain.resetPigeonAuton());
     SignalLogger.start();
     drivetrain.configAuto();
-
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }

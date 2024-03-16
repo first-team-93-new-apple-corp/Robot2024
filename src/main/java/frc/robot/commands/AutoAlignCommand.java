@@ -2,34 +2,39 @@
 package frc.robot.commands;
 
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
-// import frc.robot.subsystems.VisionSubsystem;
-import frc.robot.subsystems.AutoAlignSubsystem;
-
 
 public class AutoAlignCommand extends Command {
-    Joystick m_joystick1 = new Joystick(0);
+    Joystick m_joystick1;
 
 
-    AutoAlignSubsystem m_AutoAlignSubsystem;
+    SwerveDriveSubsystem m_DriveSubsystem;
 
 
-    public AutoAlignCommand(SwerveDriveSubsystem drivetrain) {
-        m_AutoAlignSubsystem = new AutoAlignSubsystem(drivetrain);
+    public AutoAlignCommand(SwerveDriveSubsystem drivetrain, Joystick stick1) {
+        m_DriveSubsystem = drivetrain;
+        m_joystick1= stick1;
     }
 
 
     @Override
     public void execute() {
         if (m_joystick1.getRawButton(Constants.Thrustmaster.Center_Button)) {
-            m_AutoAlignSubsystem.AutoAimAmp();
+            if (DriverStation.getAlliance().isPresent()) {
+                if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+                    m_DriveSubsystem.toPose(Constants.AprilTagPoseConstants.RedAmp);
+                } else {
+                    m_DriveSubsystem.toPose(Constants.AprilTagPoseConstants.BlueAmp);
+                }
+        }
         } else if(m_joystick1.getRawButton(Constants.Thrustmaster.Right_Button)){
-            m_AutoAlignSubsystem.AutoAimTrap();
+            // m_AutoAlignSubsystem.AutoAimTrap();
         }
     }
 }
