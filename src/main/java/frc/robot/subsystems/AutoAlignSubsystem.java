@@ -193,7 +193,10 @@ public class AutoAlignSubsystem extends SubsystemBase {
         }
         tofpos = tofpos*Math.sin(tofposAngle);
         calculatedX = xlimit
-                .calculate((MathUtil.clamp((AlignPIDY.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * 1);
+                // .calculate((MathUtil.clamp((AlignPIDY.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * 1);
+                // THIS IS THE UNTESTED LINE vv (test when we have time, it should fix the auot align problems)
+                .calculate((MathUtil.clamp((AlignPIDX.calculate(X, PIDSetpointX)), -MaxSpeed, MaxSpeed)) * 1);
+
         // calculatedY = ylimit
         //         .calculate((MathUtil.clamp((AlignPIDX.calculate(Y, PIDSetpointY)), -MaxSpeed, MaxSpeed)) * 1);
         calculatedTheta = (-MathUtil.clamp((AlignPIDTheta.calculate(Theta, (PIDSetpointTheta))),

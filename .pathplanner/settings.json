@@ -12,11 +12,12 @@
     "2 Note Shoot",
     "3 Note",
     "Choreo",
+    "Shoot and Stay",
     "Shoot and Leave"
   ],
-  "defaultMaxVel": 3.0,
+  "defaultMaxVel": 1.5,
   "defaultMaxAccel": 3.0,
-  "defaultMaxAngVel": 1080.0,
-  "defaultMaxAngAccel": 1080.0,
+  "defaultMaxAngVel": 295.76,
+  "defaultMaxAngAccel": 1800.0,
   "maxModuleSpeed": 5.21
 }

@@ -130,12 +130,12 @@ public class ElevatorSubsystem extends SubsystemBase {
                 break;
             case Zeroing:
                 if (!bottomLimitTriggered()) {
-                    m_motor.getConfigurator().apply(zeroConfig);
+                    // m_motor.getConfigurator().apply(zeroConfig);
+                    m_motor.getConfigurator().apply(config);
                     m_motor.set(0.05);
                 } else {
                     m_motor.set(0);
                     m_motor.setPosition(0);
-                    m_motor.getConfigurator().apply(config);
                     currentState = elevatorState.HoldState;
                 }
                 break;
@@ -182,10 +182,5 @@ public class ElevatorSubsystem extends SubsystemBase {
         SignalLogger.writeDouble("Elevator Pos", m_motor.getPosition().getValueAsDouble());
         SignalLogger.writeBoolean("Top Limit?", topLimitTriggered());
         SignalLogger.writeBoolean("Bottom Limit?", bottomLimitTriggered());
-
-        runElevator();
-        // if (!(bottomLimit == null) && bottomLimitTriggered()) {
-        // m_motor.setPosition(0);
-        // }
     }
 }

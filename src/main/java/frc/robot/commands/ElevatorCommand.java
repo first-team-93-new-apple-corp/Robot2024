@@ -57,5 +57,6 @@ public class ElevatorCommand extends Command {
         } else {
             m_elevator.toSetpoint(3);
         }
+        m_elevator.runElevator();
     }
 }

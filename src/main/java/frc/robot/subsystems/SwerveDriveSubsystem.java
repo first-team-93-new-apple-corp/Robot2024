@@ -104,12 +104,13 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
                                                                              // robot
                 new HolonomicPathFollowerConfig(new PIDConstants(5.5
                 , 0.1, 0),
-                        new PIDConstants(1.4, 0, .8),
+                        // new PIDConstants(1.4, 0, .8),
+                        new PIDConstants(2.3, 0, .135),
                         // new HolonomicPathFollowerConfig(new PIDConstants(.1, 0, 0),
                         // new PIDConstants(.25, 0, 0),
                         TunerConstants.kSpeedAt12VoltsMps,
-                        driveBaseRadius,                                                                                        //These values are deadzones, so to speak
-                        new ReplanningConfig(true, true)),
+                        driveBaseRadius,                                                                                      //These values are deadzones, so to speak
+                        new ReplanningConfig(true, true, .5,.25)),
                 () -> {
                     var alliance = DriverStation.getAlliance();
                     if (alliance.isPresent()) {

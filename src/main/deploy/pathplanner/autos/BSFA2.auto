@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.5367261643614196,
+      "y": 2.1829265476712774
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ResetField"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Straight Out"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DribbleNote"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
