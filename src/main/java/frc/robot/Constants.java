@@ -10,12 +10,15 @@ public class Constants {
     public IntakeConstants Intake = new IntakeConstants();
     public ElevatorConstants Elevator = new ElevatorConstants();
     public ClimberConstants Climber = new ClimberConstants();
-    public GyroType Gyro = GyroType.SIM;
-
-    public enum GyroType {
+    public SwerveDriveConstants Drive = new SwerveDriveConstants();
+    public ShooterConstants Shooter = new ShooterConstants();
+    
+    public enum BotName {
         SIM,
-        PIGEON2,
+        Tobor27,
+        Tobor26,
     }
+
     public final class AprilTagPoseConstants {
 
         public static final Pose2d RedAmp = new Pose2d(14.6, 7.6, new Rotation2d(Math.PI/2));
@@ -28,13 +31,64 @@ public class Constants {
             Elevator = new ElevatorConstants(18);
             Intake = new IntakeConstants(25, 14, 15, 22,25);
             Climber = new ClimberConstants(19,20);
-            Gyro = GyroType.PIGEON2;
-        } else if (robotName.equals("2023")) {
+            Shooter = new ShooterConstants(16, 17, 2, 2);
+            Drive = new SwerveDriveConstants(BotName.Tobor27);
 
+        } else if (robotName.equals("2023")) {
+            Drive = new SwerveDriveConstants(BotName.Tobor26);
+        } else if (robotName.equals("SIM")) {
+            Elevator = new ElevatorConstants(18);
+            Intake = new IntakeConstants(25, 14, 15, 22,25);
+            Climber = new ClimberConstants(19,20);
+            Drive = new SwerveDriveConstants(BotName.SIM);
         }
     }
-    public final class DriveConstants {
+    public final class ShooterConstants {
+        public final boolean ENABLED;
+        public final double SpeakerShooterSpeed = 0.55;
+        public final double MuzzleIntake = -0.30;
+        public final double AmpShooterSpeed = 0.1;
+        public final double KickerSpeed = 1;
+        public final double DribbleSpeed = .25;
+        public final int ShooterL;
+        public final int ShooterR;
+        public final int KickerL;
+        public final int KickerR;
+        /**
+         * Default constructor sets disabled
+         */
+        public ShooterConstants() {
+          ENABLED = false;
+          ShooterL = -1;
+          ShooterR = -1;
+          KickerL = -1;
+          KickerR = -1;
+        }
 
+        /**
+         * Sets the Ids of our Intake Motors
+         *
+         * @param ShooterL The Id of the Left Shooter
+         * @param ShooterR The Id of the Right Shooter
+         * @param KickerL The Id of the Left Kicker
+         * @param KickerR The ID of the Right Kicker
+         */
+        public ShooterConstants(int ShooterL, int ShooterR, int KickerL, int KickerR) {
+            ENABLED = true;
+            this.ShooterL = ShooterL;
+            this.ShooterR = ShooterR;
+            this.KickerL = KickerL;
+            this.KickerR = KickerR;
+        }
+    }
+    public final class SwerveDriveConstants {
+        public BotName DriveBase;
+        public SwerveDriveConstants(){
+            DriveBase = BotName.SIM;
+        }
+        public SwerveDriveConstants(BotName bot){
+            DriveBase = bot;
+        }
     }
 
     public final class ClimberConstants {

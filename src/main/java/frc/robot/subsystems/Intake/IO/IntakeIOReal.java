@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.Shooter.ShooterSubsystem;
 
 public class IntakeIOReal implements IntakeIO {
     private final double PassoverSpeed;

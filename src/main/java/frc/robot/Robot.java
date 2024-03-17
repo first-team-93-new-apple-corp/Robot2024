@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.Shooter.ShooterSubsystem;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 // import frc.robot.subsystems.USBCameraSubsystem;
 import frc.robot.commands.ClimberCommand;
@@ -31,9 +31,9 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
   private LEDSubsystem m_LED = new LEDSubsystem();
-  private ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_LED);
-  private ShooterCommand m_Shooter = new ShooterCommand(m_ShooterSubsystem, m_LED);
-  Constants constants = new Constants("2024");
+  private ShooterSubsystem m_ShooterSubsystem;
+  private ShooterCommand m_Shooter;
+  Constants constants = new Constants("SIM");
   // private IntakeSubsystem m_IntakeSubsystem = IntakeSubsystemFactory.build(constants.Intake, m_LED, m_ShooterSubsystem, op);
   private ElevatorCommand m_Elevator;
   private ClimberCommand m_Climber;
@@ -47,11 +47,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    m_robotContainer = new RobotContainer(constants, m_Joystick1, m_Joystick2, op, m_ShooterSubsystem, m_LED);
+    m_robotContainer = new RobotContainer(constants, m_Joystick1, m_Joystick2, op, m_LED);
+    m_ShooterSubsystem = m_robotContainer.m_ShooterSubsystem;
     m_IntakeCommand = new IntakeCommand(m_ShooterSubsystem, m_robotContainer.m_IntakeSubsystem, m_LED);
     m_Climber = new ClimberCommand(op, m_robotContainer.m_ClimberSubsystem);
     m_Elevator = new ElevatorCommand(op, m_robotContainer.m_ElevatorSubsystem);
     m_Preflight = new Preflight(op, m_Elevator, m_IntakeCommand, m_Climber);
+    m_Shooter = new ShooterCommand(m_ShooterSubsystem);
 
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
     m_Elevator.initOnce();

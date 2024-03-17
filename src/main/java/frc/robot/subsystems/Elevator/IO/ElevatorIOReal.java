@@ -17,13 +17,11 @@ public class ElevatorIOReal implements ElevatorIO {
     PIDController pid = new PIDController(0.075, 0, 0);
     TalonFXConfiguration config = new TalonFXConfiguration();
     TalonFXConfiguration zeroConfig = new TalonFXConfiguration();
-
-    double zeroPos;
-    double rawoutput;
-    double currentPos;
-    double setpoint;
-    double highSetpoint;
-    double lowSetpoint;
+    
+    private double currentPos;
+    private double setpoint;
+    private double highSetpoint;
+    private double lowSetpoint;
 
     public enum elevatorState {
         HoldState,

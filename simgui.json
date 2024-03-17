@@ -1,18 +1,17 @@
 {
   "HALProvider": {
-    "Other Devices": {
-      "window": {
-        "visible": false
-      }
-    },
     "RoboRIO": {
+      "3.3V Rail": {
+        "open": true
+      },
+      "6V Rail": {
+        "open": true
+      },
       "RoboRIO Input": {
         "open": true
-      }
-    },
-    "Timing": {
+      },
       "window": {
-        "visible": false
+        "visible": true
       }
     }
   },
@@ -20,47 +19,22 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/Pose": "Field2d",
-      "/SmartDashboard/AlignPIDTheta": "PIDController",
-      "/SmartDashboard/AlignPIDX": "PIDController",
-      "/SmartDashboard/AlignPIDY": "PIDController",
       "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Module 0": "Mechanism2d",
       "/SmartDashboard/Module 1": "Mechanism2d",
       "/SmartDashboard/Module 2": "Mechanism2d",
       "/SmartDashboard/Module 3": "Mechanism2d",
-      "/SmartDashboard/VisionSystemSim-main/Sim Field": "Field2d",
-      "/SmartDashboard/mech2d": "Mechanism2d",
-      "/SmartDashboard/tofPID": "PIDController"
+      "/SmartDashboard/mech2d": "Mechanism2d"
     },
     "windows": {
-      "/FMSInfo": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/Pose": {
-        "bottom": 1476,
-        "height": 8.210550308227539,
-        "left": 150,
-        "right": 2961,
-        "top": 79,
-        "width": 16.541748046875,
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/Field": {
-        "Robot": {
-          "length": 0.800000011920929,
-          "width": 0.800000011920929
-        },
         "bottom": 1476,
         "height": 8.210550308227539,
         "left": 150,
         "right": 2961,
         "top": 79,
-        "units": "meters",
+        "units": "",
         "width": 16.541748046875,
         "window": {
           "visible": true
@@ -74,73 +48,36 @@
     }
   },
   "NetworkTables": {
-    "Persistent Values": {
-      "open": false
-    },
     "transitory": {
-      "Drive": {
-        "open": true
-      },
-      "Shuffleboard": {
-        "open": true
-      },
       "SmartDashboard": {
         "Auto Chooser": {
-          "open": true,
+          "open": false,
           "string[]##v_/SmartDashboard/Auto Chooser/options": {
-            "open": true
+            "open": false
           }
         },
         "Field": {
           "double[]##v_/SmartDashboard/Field/Robot": {
-            "open": true
+            "open": false
           },
-          "open": true
-        },
-        "open": true
+          "open": false
+        }
       }
     }
   },
   "NetworkTables Info": {
-    "Connections": {
-      "open": true
-    },
-    "Server": {
-      "Publishers": {
-        "open": true
-      },
-      "open": true
-    },
     "elastic@1": {
       "Subscribers": {
-        "open": true
+        "open": false
       },
-      "open": true
+      "open": false
     },
     "elastic@2": {
       "Subscribers": {
-        "open": true
+        "open": false
       },
-      "open": true
+      "open": false
     },
     "visible": true
-  },
-  "Plot": {
-    "Plot <0>": {
-      "plots": [
-        {
-          "backgroundColor": [
-            0.05999999865889549,
-            0.05999999865889549,
-            0.05999999865889549,
-            0.9399999976158142
-          ],
-          "height": 0
-        }
-      ],
-      "window": {
-        "visible": false
-      }
-    }
   }
 }

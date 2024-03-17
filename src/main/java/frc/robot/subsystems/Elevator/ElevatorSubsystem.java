@@ -49,7 +49,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         m_io.updateValues(m_Inputs);
-        
+        runElevator();
         SignalLogger.writeDouble("Elevator:Current Positiom", m_io.ElevatorPosition());
         SignalLogger.writeBoolean("Elevator:Top Limit Triggered", topLimitTriggered());
         SignalLogger.writeBoolean("Elevator:Bottom Limit Triggered", bottomLimitTriggered());

@@ -3,23 +3,21 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot.subsystems.Intake.IO;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.SimUtilities.MotorSim;
 import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.Shooter.ShooterSubsystem;
 
 public class IntakeIOSim implements IntakeIO {
     private final double PassoverSpeed;
     private final double IntakeSpeed;
-    private TalonFX frontIntake;
-    private TalonFX backIntake;
-    private TalonFX bumperIntake;
-    private TalonFXConfiguration config;
+    private MotorSim frontIntake;
+    private MotorSim backIntake;
+    private MotorSim bumperIntake;
     private TimeOfFlight midTOF;
     private TimeOfFlight upperTOF;
     private LEDSubsystem m_LED;
@@ -41,17 +39,11 @@ public class IntakeIOSim implements IntakeIO {
         this.op = op;
         PassoverSpeed = IntakeConstants.PassoverSpeed;
         IntakeSpeed = IntakeConstants.IntakeSpeed;
-        frontIntake = new TalonFX(constants.F_Intake, "rio");
-        backIntake = new TalonFX(constants.B_Intake, "rio");
-        bumperIntake = new TalonFX(constants.Bump_Intake, "drivetrain");
+        frontIntake = new MotorSim(100);
+        backIntake = new MotorSim(100);
+        bumperIntake = new MotorSim(100);
         midTOF = new TimeOfFlight(constants.midTOF);
         upperTOF = new TimeOfFlight(constants.upperTOF);
-        config = new TalonFXConfiguration();
-        config.CurrentLimits.SupplyCurrentLimit = 50;
-        config.CurrentLimits.SupplyCurrentLimitEnable = true;
-        frontIntake.getConfigurator().apply(config);
-        backIntake.getConfigurator().apply(config);
-        bumperIntake.getConfigurator().apply(config);
         backIntake.setInverted(false);
         bumperIntake.setInverted(true);
         midTOF.setRangingMode(RangingMode.Short, 24);

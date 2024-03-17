@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -11,10 +11,23 @@ public class ShooterCommand extends Command {
     XboxController opController = new XboxController(2);
     Joystick driver2 = new Joystick(1);
     ShooterSubsystem m_ShooterSubsystem;
-    LEDSubsystem m_LED;
-    public ShooterCommand(ShooterSubsystem m_ShooterSubsystem, LEDSubsystem m_LED) {
+    public ShooterCommand(ShooterSubsystem m_ShooterSubsystem) {
         this.m_ShooterSubsystem = m_ShooterSubsystem;
-        this.m_LED = m_LED;
+    }
+    public Command AutonAmp() {
+        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.AmpForAuton());
+    }
+
+    public Command AutonShooter() {
+        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.ShootingforAuton());
+    }
+
+    public Command AutonStopShooter() {
+        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.shooterStop());
+    }
+
+    public Command AutonDribbleNote(){
+        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.DribbleOutNote());
     }
 
     @Override
@@ -39,10 +52,8 @@ public class ShooterCommand extends Command {
         // For the Kicker
         if (driver2.getRawButton(Constants.Thrustmaster.Trigger) && !opController.getRawButton(Constants.xbox.RightShoulderButton)) { // B
             m_ShooterSubsystem.kicker(1);
-            m_LED.turnLEDSOff();
         } else if (driver2.getRawButton(Constants.Thrustmaster.Trigger) && opController.getRawButton(Constants.xbox.RightShoulderButton)) { // B
             m_ShooterSubsystem.ampKicker();
-            m_LED.turnLEDSOff();
         } else if (!opController.getRawButton(Constants.xbox.LeftShoulderButton) && !opController.getRawButton(Constants.xbox.X)) {
             m_ShooterSubsystem.kickerStop();
             

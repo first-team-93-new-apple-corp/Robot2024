@@ -1,7 +1,4 @@
 package frc.robot.subsystems.Elevator.IO;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -17,8 +14,6 @@ public class ElevatorIOSim implements ElevatorIO {
     private double output;
     private PIDController pid = new PIDController(0.075, 0, 0);
 
-    private double zeroPos;
-    private double rawoutput;
     private double currentPos;
     private double setpoint;
     private double highSetpoint;
@@ -53,17 +48,19 @@ public class ElevatorIOSim implements ElevatorIO {
     }
 
     public void initOnce(){
-        if (currentState == elevatorState.Init) {
-            if (topLimit == null) {
-                topLimit = new DigitalInput(0);
-            }
-            if (bottomLimit == null) {
-                bottomLimit = new DigitalInput(1);
-            }
-            currentState = elevatorState.HoldState;
-        } else {
-            System.out.println("Elevator has already been initialized!");
-        }
+        currentState = elevatorState.HoldState;
+
+        // if (currentState == elevatorState.Init) {
+        //     if (topLimit == null) {
+        //         topLimit = new DigitalInput(0);
+        //     }
+        //     if (bottomLimit == null) {
+        //         bottomLimit = new DigitalInput(1);
+        //     }
+        //     currentState = elevatorState.HoldState;
+        // } else {
+        //     System.out.println("Elevator has already been initialized!");
+        // }
     }
 
     public boolean topLimitTriggered(){

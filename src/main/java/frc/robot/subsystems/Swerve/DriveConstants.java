@@ -38,5 +38,4 @@ public class DriveConstants {
         public static final Translation2d Location_BR = new Translation2d(
                         (-Wheel_Base / 2) + yOffset,
                         (-Track_Width / 2));
-
 }

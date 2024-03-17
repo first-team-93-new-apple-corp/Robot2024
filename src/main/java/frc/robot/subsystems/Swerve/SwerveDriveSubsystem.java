@@ -35,6 +35,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystems.Swerve.TunerConstants.TunerConstants2024;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystemFactory;
 
@@ -111,7 +112,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
                         new PIDConstants(1.4, 0, .8),
                         // new HolonomicPathFollowerConfig(new PIDConstants(.1, 0, 0),
                         // new PIDConstants(.25, 0, 0),
-                        TunerConstants.kSpeedAt12VoltsMps,
+                        TunerConstants2024.kSpeedAt12VoltsMps,
                         driveBaseRadius,                                                                                        //These values are deadzones, so to speak
                         new ReplanningConfig(true, true)),
                 () -> {
@@ -221,7 +222,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     private TimeOfFlight tof = new TimeOfFlight(23);
 
     public void toPose(Pose2d pose) {
-        
+        AlignPIDTheta.enableContinuousInput(-Math.PI, Math.PI);
         updateOdometry();
         X = m_SwerveDrivePoseEstimator.getEstimatedPosition().getX();
         Y = m_SwerveDrivePoseEstimator.getEstimatedPosition().getY();
