@@ -143,7 +143,7 @@ public class Constants {
     }
     public final class IntakeConstants {
         public final boolean ENABLED;
-        public static final double IntakeSpeed = 0.75;
+        public static final double IntakeSpeed = 1;
         public static final double PassoverSpeed = 0.5;
         public final int midTOF;
         public final int upperTOF;

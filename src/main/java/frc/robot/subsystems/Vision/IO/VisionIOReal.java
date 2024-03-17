@@ -52,7 +52,7 @@ public class VisionIOReal implements VisionIO {
     }
     @Override
     public double getLatency(double tl, double cl, double latency) {
-        return tl + cl;
+        return (tl + cl)/1000;
     }
 
 }

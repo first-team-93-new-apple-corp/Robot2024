@@ -244,9 +244,9 @@ public class RobotContainer extends TimedRobot {
     drivetrain.registerTelemetry(logger::telemeterize);
   }
 
-  public void configAuto() {
-    drivetrain.configAuto();
-  }
+  // public void configAuto() {
+  //   drivetrain.configAuto();
+  // }
   public Pose3d getTagPose(AprilTag tag){
     return tag.pose;
   }

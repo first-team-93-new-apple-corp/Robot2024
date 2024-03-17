@@ -49,7 +49,9 @@ public class IntakeIOReal implements IntakeIO {
         midTOF = new TimeOfFlight(constants.midTOF);
         upperTOF = new TimeOfFlight(constants.upperTOF);
         config = new TalonFXConfiguration();
-        config.CurrentLimits.SupplyCurrentLimit = 50;
+        config.CurrentLimits.SupplyCurrentLimit = 25;
+        config.CurrentLimits.SupplyCurrentThreshold = 25;
+        config.CurrentLimits.SupplyTimeThreshold = 0;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
         frontIntake.getConfigurator().apply(config);
         backIntake.getConfigurator().apply(config);
@@ -67,11 +69,11 @@ public class IntakeIOReal implements IntakeIO {
             case Stage1:
                 if (midTOF.getRange() > 150) {
                     m_LED.noteAlmostInBot();
-                    m_shooter.kicker(0.5);
+                    m_shooter.kicker(1);
                     frontIntake.set(-IntakeSpeed);
                     backIntake.set(-IntakeSpeed);
                     bumperIntake.set(-IntakeSpeed * 1.27);
-                    m_shooter.shoot(-0.3);
+                    m_shooter.shoot(-0.5);
                     op.setRumble(RumbleType.kBothRumble, 0.5);
                 } else {
                     state = intakeState.Stage2;
@@ -82,6 +84,7 @@ public class IntakeIOReal implements IntakeIO {
                 if (midTOF.getRange() < 130) {
                     m_LED.noteAlmostInBot();
                     m_shooter.kicker(-0.1);
+                    m_shooter.shoot(-0.3);
                     op.setRumble(RumbleType.kBothRumble, 0.5);
                 } else {
                     state = intakeState.Stage3;
