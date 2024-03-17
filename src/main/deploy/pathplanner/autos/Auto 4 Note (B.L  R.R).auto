@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7,
-      "y": 4.397367068047131
+      "x": 0.7419585748262406,
+      "y": 6.670053340106681
     },
-    "rotation": 120.65066795705289
+    "rotation": -120.0
   },
   "command": {
     "type": "sequential",
@@ -32,13 +32,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(B.R  R.L) Shoot (B.R  R.L) Grab"
+            "pathName": "(B.L  R.R) Shoot Grab (B.L  R.R)"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Start (B.L  R.R) Shoot 4 Note End (B.R  R.L)"
+            "pathName": "2 Note Shoot (B.L  R.R)"
           }
         },
         {
@@ -62,7 +62,67 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(B.R R.L) Speaker to Centerline"
+            "pathName": "Mid Shoot Grab Mid"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Note Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooter"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Note Shoot Grab (B.R  R.L)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Note Shoot (B.R  R.L)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shooter"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mid Stage to Stageline"
           }
         },
         {
@@ -70,34 +130,10 @@
           "data": {
             "name": "ResetField"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(B.R R.L) Centerline to Speaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shooter"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShooter"
-          }
         }
       ]
     }
   },
-  "folder": "3 Note",
+  "folder": null,
   "choreoAuto": false
 }

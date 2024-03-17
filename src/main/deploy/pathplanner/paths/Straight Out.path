@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.85,
-        "y": 4.4
+        "x": 0.5367261643614196,
+        "y": 2.1829265476712774
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.040478444593253,
-        "y": 3.358348534878888
+        "x": 1.536726164361424,
+        "y": 2.1829265476712774
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.710323966102478,
-        "y": 3.470293486041518
+        "x": 2.8782413928464217,
+        "y": 2.1829265476712774
       },
       "prevControl": {
-        "x": 1.6561756759877158,
-        "y": 3.488950977901956
+        "x": 1.8782413928464217,
+        "y": 2.1829265476712774
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,10 +32,10 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 1.5,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 1080.0,
-    "maxAngularAcceleration": 1080.0
+    "maxAngularVelocity": 295.76,
+    "maxAngularAcceleration": 1800.0
   },
   "goalEndState": {
     "velocity": 0,
@@ -43,10 +43,10 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "(B.R   R.L)",
+  "folder": "Away From Notes",
   "previewStartingState": {
-    "rotation": 122.5780625755787,
+    "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
