@@ -1,9 +1,6 @@
-package frc.robot.SimUtilities;
+package frc.robot.Utilities;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
 public class MotorSim implements MotorController{

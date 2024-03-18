@@ -1,7 +1,7 @@
 package frc.robot.subsystems.Climber.IO;
 
 import frc.robot.Constants.ClimberConstants;
-import frc.robot.SimUtilities.MotorSim;
+import frc.robot.Utilities.MotorSim;
 
 
 public class ClimberIOSim implements ClimberIO {

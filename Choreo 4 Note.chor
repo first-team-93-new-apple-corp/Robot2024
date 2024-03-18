@@ -1767,7 +1767,7 @@
                     }
                 }
             ],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "(Choreo) Test Path": {
             "waypoints": [
@@ -2074,7 +2074,7 @@
                 {
                     "name": "Shooter",
                     "target": 0,
-                    "targetTimestamp": 0,
+                    "targetTimestamp": null,
                     "offset": 0,
                     "command": {
                         "type": "named",
@@ -2086,7 +2086,7 @@
                 {
                     "name": "StopShooter",
                     "target": 0,
-                    "targetTimestamp": 0,
+                    "targetTimestamp": null,
                     "offset": 0.5,
                     "command": {
                         "type": "named",
@@ -3709,7 +3709,7 @@
                 }
             ],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         }
     },
     "splitTrajectoriesAtStopPoints": false,

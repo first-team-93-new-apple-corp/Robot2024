@@ -8,7 +8,7 @@ import com.playingwithfusion.TimeOfFlight.RangingMode;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.SimUtilities.MotorSim;
+import frc.robot.Utilities.MotorSim;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.Shooter.ShooterSubsystem;
 

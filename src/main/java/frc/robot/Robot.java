@@ -125,6 +125,7 @@ public class Robot extends TimedRobot {
     m_Climber.schedule();
     // m_LEDCommand.schedule();
     m_robotContainer.updateValues();
+    m_robotContainer.m_loop.poll();
   }
 
   @Override

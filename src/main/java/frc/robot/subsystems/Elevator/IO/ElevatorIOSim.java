@@ -4,7 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.SimUtilities.MotorSim;
+import frc.robot.Utilities.MotorSim;
 import frc.robot.commands.Preflight;
 
 public class ElevatorIOSim implements ElevatorIO {

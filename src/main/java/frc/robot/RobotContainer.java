@@ -22,12 +22,14 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAlignCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
@@ -73,7 +75,7 @@ public class RobotContainer extends TimedRobot {
   // delete this and use the constants file for the button
   // (just so that the logic works for now)
   // private int climbingLevelButton;
-
+  public final EventLoop m_loop = new EventLoop();
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
@@ -84,6 +86,13 @@ public class RobotContainer extends TimedRobot {
   private final JoystickButton m_RobotRelButton;
 
   private final JoystickButton m_CameraRelButton;
+
+  private final JoystickButton m_SysIDDriveQuasiButton;
+  private final JoystickButton m_SysIDDriveDynamButton;
+  private final JoystickButton m_SysIDSteerQuasiButton;
+  private final JoystickButton m_SysIDSteerDynamButton;
+  private final JoystickButton m_SysIDDriveSlipButton;
+
   public Field2d m_Field2d = new Field2d();
   private Pose2d pose = new Pose2d();
   // private final SwerveDrivePoseEstimator m_poseEstimator;
@@ -186,7 +195,6 @@ public class RobotContainer extends TimedRobot {
   public void configureBindings() {
     m_TrapAlignButton.whileTrue(m_AutoAlignCommand);
     m_AmpAlignButton.whileTrue(m_AutoAlignCommand);
-    
     // m_AmpAlignButton.whileTrue(drivetrain.applyRequest(() -> m_swerveRequest
     // .withCenterOfRotation(DriveConstants.dCenter)
     // .withSpeeds(m_AutoAlignSubsystem.fieldSpeeds)));
@@ -241,6 +249,21 @@ public class RobotContainer extends TimedRobot {
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
     }
+    
+    m_SysIDDriveQuasiButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(drivetrain.runDriveQuasiTest(Direction.kForward));
+    m_SysIDDriveQuasiButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(drivetrain.runDriveQuasiTest(Direction.kReverse));
+
+    m_SysIDDriveDynamButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(drivetrain.runDriveDynamTest(Direction.kForward));
+    m_SysIDDriveDynamButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(drivetrain.runDriveDynamTest(Direction.kReverse));
+
+    m_SysIDSteerQuasiButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(drivetrain.runSteerQuasiTest(Direction.kForward));
+    m_SysIDSteerQuasiButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(drivetrain.runSteerQuasiTest(Direction.kReverse));
+
+    m_SysIDSteerDynamButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(drivetrain.runSteerDynamTest(Direction.kForward));
+    m_SysIDSteerDynamButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(drivetrain.runSteerDynamTest(Direction.kReverse));
+    // Drivetrain needs to be placed against a sturdy wall and test stopped immediately upon wheel slip
+    m_SysIDDriveSlipButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(drivetrain.runDriveSlipTest());
+
     drivetrain.registerTelemetry(logger::telemeterize);
   }
 
@@ -277,6 +300,13 @@ public class RobotContainer extends TimedRobot {
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_AmpAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
     m_TrapAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Button);
+
+    m_SysIDDriveQuasiButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Left);
+    m_SysIDDriveDynamButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Middle);
+    m_SysIDSteerQuasiButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Bottom_Left);
+    m_SysIDSteerDynamButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Bottom_Middle);
+    m_SysIDDriveSlipButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Right);
+
     //ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
     //IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
     // m_AutoAlignSubsystem = new AutoAlignSubsystem(drivetrain);

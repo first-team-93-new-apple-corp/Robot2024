@@ -1,7 +1,7 @@
 package frc.robot.subsystems.Shooter.IO;
 
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.SimUtilities.MotorSim;
+import frc.robot.Utilities.MotorSim;
 
 public class ShooterIOSim implements ShooterIO {
 
