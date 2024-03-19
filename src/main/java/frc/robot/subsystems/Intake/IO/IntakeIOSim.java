@@ -96,6 +96,9 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public void updateValues(IntakeIOInputs inputs) {
+        frontIntake.periodic();
+        backIntake.periodic();
+        bumperIntake.periodic();
         if (state == intakeState.Stage3) {
             inputs.NoteInIntake = true;
         } else {

@@ -121,7 +121,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
                         // new PIDConstants(.25, 0, 0),
                         TunerConstants2024.kSpeedAt12VoltsMps,
                         driveBaseRadius,                                                                                        //These values are deadzones, so to speak
-                        new ReplanningConfig(true, true)),
+                        new ReplanningConfig(true, true, .5, .25)),
                 () -> {
                     var alliance = DriverStation.getAlliance();
                     if (alliance.isPresent()) {
@@ -317,8 +317,8 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
                 new Rotation2d(getPigeon2().getRotation2d().getRadians())
                         .rotateBy(new Rotation2d(0)));
             }
+            driveRobotRelative(AlignfieldSpeeds);
         }
-        driveRobotRelative(AlignfieldSpeeds);
     }
 
     public ChassisSpeeds getCurrentRobotChassisSpeeds() {
