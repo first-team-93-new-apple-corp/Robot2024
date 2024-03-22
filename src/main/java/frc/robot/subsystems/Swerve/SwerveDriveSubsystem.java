@@ -43,7 +43,6 @@ import frc.robot.Utilities.ModifiedSignalLogger;
 import frc.robot.Utilities.SwerveVoltageRequest;
 import frc.robot.subsystems.Swerve.TunerConstants.TunerConstants2024;
 import frc.robot.subsystems.Vision.VisionSubsystem;
-import frc.robot.subsystems.Vision.VisionSubsystemFactory;
 import static edu.wpi.first.units.Units.*;
 
 public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem {
@@ -68,7 +67,6 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
             m_pigeon2.getRotation2d(),
             m_modulePositions,
             new Pose2d());
-    public VisionSubsystem m_VisionSubsystem = VisionSubsystemFactory.build(this);
     public void configAuto() {
         // AutoBuilder.configureHolonomic(
         // this::getPose, // Robot pose supplier
@@ -235,12 +233,12 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         return m_modulePositions;
     }
 
-    public void updateOdometry() {
+    public void updateOdometry(VisionSubsystem m_visionSubsystem) {
         m_SwerveDrivePoseEstimator.update(m_pigeon2.getRotation2d(), m_modulePositions);
         try {
-            if (m_VisionSubsystem.hasTargets()) {
-                m_SwerveDrivePoseEstimator.addVisionMeasurement(m_VisionSubsystem.getPose(),
-                        Timer.getFPGATimestamp() - (m_VisionSubsystem.getLatency()));
+            if (m_visionSubsystem.hasTargets()) {
+                m_SwerveDrivePoseEstimator.addVisionMeasurement(m_visionSubsystem.getPose(),
+                        Timer.getFPGATimestamp() - (m_visionSubsystem.getLatency()));
             }
         } catch (Exception e) {
         }
@@ -282,7 +280,6 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
 
     public void toPose(Pose2d pose) {
         AlignPIDTheta.enableContinuousInput(-Math.PI, Math.PI);
-        updateOdometry();
         X = m_SwerveDrivePoseEstimator.getEstimatedPosition().getX();
         Y = m_SwerveDrivePoseEstimator.getEstimatedPosition().getY();
         Theta = m_SwerveDrivePoseEstimator.getEstimatedPosition().getRotation().getRadians();

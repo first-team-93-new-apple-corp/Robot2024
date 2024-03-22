@@ -12,6 +12,7 @@ public class Constants {
     public ClimberConstants Climber = new ClimberConstants();
     public SwerveDriveConstants Drive = new SwerveDriveConstants();
     public ShooterConstants Shooter = new ShooterConstants();
+    public VisionConstants Vision = new VisionConstants();
     
     public enum BotName {
         SIM,
@@ -33,6 +34,7 @@ public class Constants {
             Climber = new ClimberConstants(19,20);
             Shooter = new ShooterConstants(16, 17, 2, 2);
             Drive = new SwerveDriveConstants(BotName.Tobor27);
+            Vision = new VisionConstants("LimeLight");
 
         } else if (robotName.equals("2023")) {
             Drive = new SwerveDriveConstants(BotName.Tobor26);
@@ -41,6 +43,7 @@ public class Constants {
             Intake = new IntakeConstants(25, 14, 15, 22,25);
             Climber = new ClimberConstants(19,20);
             Drive = new SwerveDriveConstants(BotName.SIM);
+            Vision = new VisionConstants("Photon");
         }
     }
     public final class ShooterConstants {
@@ -183,9 +186,15 @@ public class Constants {
     
         
     public class VisionConstants{
-        public static final boolean SimEnabled = false;
-        public static final String LimeLightName = "limelight";
-        public static final Pose3d RobotToCamera = new Pose3d(0.321, 0.244354, 0.548, new Rotation3d(0, 30, 0));
+        public final boolean SimEnabled = true;
+        public final String CameraName;
+        public final Pose3d RobotToCamera = new Pose3d(0.321, 0.244354, 0.548, new Rotation3d(0, 30, 0));
+        public VisionConstants(){
+            CameraName = "LimeLight";
+        }
+        public VisionConstants(String CameraName){
+            this.CameraName = CameraName;
+        }
     }
 
     public class REV {

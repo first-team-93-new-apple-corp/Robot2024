@@ -7,7 +7,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.Constants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 
 public class VisionIOReal implements VisionIO {
@@ -15,8 +15,8 @@ public class VisionIOReal implements VisionIO {
     Pose2d pose;
     double tv;
 
-  public VisionIOReal() {
-    m_limelight = NetworkTableInstance.getDefault().getTable(Constants.VisionConstants.LimeLightName);
+  public VisionIOReal(VisionConstants constants) {
+    m_limelight = NetworkTableInstance.getDefault().getTable(constants.CameraName);
     pose = new Pose2d();
 
   }

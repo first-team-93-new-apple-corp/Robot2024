@@ -5,10 +5,6 @@
 
 package frc.robot;
 
-import javax.swing.text.Position;
-
-import org.ejml.equation.IntegerSequence.For;
-
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -51,6 +47,8 @@ import frc.robot.subsystems.Swerve.DriveConstants;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystemFactory;
 import frc.robot.subsystems.Swerve.Telemetry;
+import frc.robot.subsystems.Vision.VisionSubsystem;
+import frc.robot.subsystems.Vision.VisionSubsystemFactory;
 
 public class RobotContainer extends TimedRobot {
 
@@ -62,6 +60,7 @@ public class RobotContainer extends TimedRobot {
   public IntakeSubsystem m_IntakeSubsystem;
   public ElevatorSubsystem m_ElevatorSubsystem;
   public ClimberSubsystem m_ClimberSubsystem;
+  public VisionSubsystem m_VisionSubsystem;
   public Mechanisms m_Mechanisms;
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   private final SwerveDriveSubsystem drivetrain; // My drivetrain
@@ -287,7 +286,7 @@ public class RobotContainer extends TimedRobot {
     m_IntakeSubsystem = IntakeSubsystemFactory.build(constants.Intake,m_LedSubsystem, m_ShooterSubsystem, op);
     m_ElevatorSubsystem = ElevatorSubsystemFactory.build(constants.Elevator);
     m_ClimberSubsystem = ClimberSubsystemFactory.build(constants.Climber);
-
+    m_VisionSubsystem = VisionSubsystemFactory.build(drivetrain, constants.Vision);
     m_IntakeCommand = new IntakeCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_LedSubsystem);
     m_ShooterCommand = new ShooterCommand(m_ShooterSubsystem);
 
@@ -333,7 +332,7 @@ public class RobotContainer extends TimedRobot {
     return autoChooser.getSelected();
   }
   public void updateVision() {
-    drivetrain.updateOdometry();
+    drivetrain.updateOdometry(m_VisionSubsystem);
     pose = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition();
     m_Field2d.setRobotPose(pose);
   }
