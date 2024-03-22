@@ -5,6 +5,10 @@
 
 package frc.robot;
 
+import javax.swing.text.Position;
+
+import org.ejml.equation.IntegerSequence.For;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -354,6 +358,16 @@ public class RobotContainer extends TimedRobot {
     // m_AutoAlignSubsystem.Alliance();
     updateVision();
     SignalLogger.writeDoubleArray("pose", new double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
+    SignalLogger.writeDouble("overall X pose", pose.getX());
+    for (int i = 0; i < 4; i++) {
+    SignalLogger.writeDouble("Drive Velocity" + i, drivetrain.getDrive(i).getVelocity().getValueAsDouble());
+    SignalLogger.writeDouble("Drive Position" + i, drivetrain.getDrive(i).getPosition().getValueAsDouble());
+    SignalLogger.writeDouble("Drive Voltage" + i, drivetrain.getDrive(i).getMotorVoltage().getValueAsDouble());
+    
+    SignalLogger.writeDouble("Steer Velocity" + i, drivetrain.getTurn(i).getVelocity().getValueAsDouble());
+    SignalLogger.writeDouble("Steer Position" + i, drivetrain.getTurn(i).getPosition().getValueAsDouble());
+    SignalLogger.writeDouble("Steer Voltage" + i, drivetrain.getTurn(i).getMotorVoltage().getValueAsDouble());
+    }
   }
 
   public double checkDeadzone(double input) {
