@@ -11,14 +11,15 @@ import frc.robot.subsystems.Vision.IO.VisionIOSim;
 public class VisionSubsystemFactory {
     public static VisionSubsystem build(SwerveDriveSubsystem m_driveSubsystem, VisionConstants constants) {
         if (Utils.isSimulation()) {
-            if (constants.SimEnabled){
-                return new VisionSubsystem(new VisionIOPhotonReal(constants), m_driveSubsystem);
-            } else {
-                // Real Vision will cause null data meaning its never used
-                return new VisionSubsystem(new VisionIOReal(constants), m_driveSubsystem);
+            if (constants.SimEnabled) {
+                if (constants.hardwareSimLoop){
+                    return new VisionSubsystem(new VisionIOPhotonReal(constants), m_driveSubsystem);
+                } else {
+                    // Real Vision will cause null data meaning its never used
+                    return new VisionSubsystem(new VisionIOSim(), m_driveSubsystem);
+                }
             }
-        } else {
-            return new VisionSubsystem(new VisionIOReal(constants), m_driveSubsystem);
-        }        
+        } 
+        return new VisionSubsystem(new VisionIOReal(constants), m_driveSubsystem);
     }
 }

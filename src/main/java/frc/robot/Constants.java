@@ -187,6 +187,7 @@ public class Constants {
         
     public class VisionConstants{
         public final boolean SimEnabled = true;
+        public final boolean hardwareSimLoop = true;
         public final String CameraName;
         public final Pose3d RobotToCamera = new Pose3d(0.321, 0.244354, 0.548, new Rotation3d(0, 30, 0));
         public VisionConstants(){

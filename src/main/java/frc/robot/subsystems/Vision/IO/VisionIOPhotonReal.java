@@ -13,7 +13,6 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
@@ -35,7 +34,7 @@ public class VisionIOPhotonReal implements VisionIO {
     robotToCamera = new Transform3d(new Pose3d(), constants.RobotToCamera);
     // Add this camera to the vision system simulation with the given robot-to-camera transform.
     photonPoseEstimator = new PhotonPoseEstimator(tagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, robotToCamera);
-    pose = new Pose2d(0,0, Rotation2d.fromDegrees(0));
+    pose = new Pose2d();
   }
 
 
