@@ -32,7 +32,7 @@ public class Constants {
             Elevator = new ElevatorConstants(18);
             Intake = new IntakeConstants(25, 14, 15, 22,25);
             Climber = new ClimberConstants(19,20);
-            Shooter = new ShooterConstants(16, 17, 2, 2);
+            Shooter = new ShooterConstants(16, 17, 2, 3);
             Drive = new SwerveDriveConstants(BotName.Tobor27);
             Vision = new VisionConstants("LimeLight");
 
