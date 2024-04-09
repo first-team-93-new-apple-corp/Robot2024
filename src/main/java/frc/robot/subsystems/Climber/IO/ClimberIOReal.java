@@ -10,8 +10,8 @@ public class ClimberIOReal implements ClimberIO {
     public double maxHeight;
 
     public ClimberIOReal(ClimberConstants constants) {
-        climberLeft = new TalonFX(constants.leftClimber);
-        climberRight = new TalonFX(constants.rightClimber);
+        climberLeft = new TalonFX(constants.leftClimber, "drivetrain");
+        climberRight = new TalonFX(constants.rightClimber, "drivetrain");
         maxHeight = constants.maxHeight;
     }
     @Override
