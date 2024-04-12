@@ -2,6 +2,7 @@ package frc.robot.subsystems.Swerve;
 
 import java.util.function.Supplier;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
@@ -162,6 +163,14 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     public Command runDriveQuasiTest(Direction direction)
     {
         return m_driveSysIdRoutine.quasistatic(direction);
+    }
+
+    public Command StopSignalLogging(){
+        return this.runOnce(() -> this.StopsignalLogger());
+    }
+
+    public void StopsignalLogger(){
+        SignalLogger.stop();
     }
 
     public Command runDriveDynamTest(SysIdRoutine.Direction direction) {

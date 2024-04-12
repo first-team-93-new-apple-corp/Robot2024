@@ -95,7 +95,7 @@ public class RobotContainer extends TimedRobot {
   private final JoystickButton m_SysIDSteerQuasiButton;
   private final JoystickButton m_SysIDSteerDynamButton;
   private final JoystickButton m_SysIDDriveSlipButton;
-
+  private final JoystickButton m_endSignalLogging;
   public Field2d m_Field2d = new Field2d();
   private Pose2d pose = new Pose2d();
   // private final SwerveDrivePoseEstimator m_poseEstimator;
@@ -198,6 +198,7 @@ public class RobotContainer extends TimedRobot {
   public void configureBindings() {
     m_TrapAlignButton.whileTrue(m_AutoAlignCommand);
     m_AmpAlignButton.whileTrue(m_AutoAlignCommand);
+    m_endSignalLogging.whileTrue(drivetrain.StopSignalLogging());
     // m_AmpAlignButton.whileTrue(drivetrain.applyRequest(() -> m_swerveRequest
     // .withCenterOfRotation(DriveConstants.dCenter)
     // .withSpeeds(m_AutoAlignSubsystem.fieldSpeeds)));
@@ -309,6 +310,7 @@ public class RobotContainer extends TimedRobot {
     m_SysIDSteerQuasiButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Bottom_Left);
     m_SysIDSteerDynamButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Bottom_Middle);
     m_SysIDDriveSlipButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Right);
+    m_endSignalLogging = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Right_Buttons.Bottom_Right);
 
     //ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
     //IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
@@ -358,6 +360,7 @@ public class RobotContainer extends TimedRobot {
     updateVision();
     SignalLogger.writeDoubleArray("pose", new double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
     SignalLogger.writeDouble("overall X pose", pose.getX());
+    SignalLogger.writeDouble("test", drivetrain.getDrive(0).getStatorCurrent().getValueAsDouble());
     for (int i = 0; i < 4; i++) {
     SignalLogger.writeDouble("Drive Velocity" + i, drivetrain.getDrive(i).getVelocity().getValueAsDouble());
     SignalLogger.writeDouble("Drive Position" + i, drivetrain.getDrive(i).getPosition().getValueAsDouble());
