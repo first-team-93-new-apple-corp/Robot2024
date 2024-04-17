@@ -19,6 +19,8 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -67,7 +69,6 @@ public class RobotContainer extends TimedRobot {
   private SendableChooser<Command> autoChooser;
   public final double MaxSpeed = DriveConstants.MaxSpeed;
   public final double MaxAngularRate = DriveConstants.MaxAngularRate;
-  private double angle;
   private double deadzone = DriveConstants.JoystickDeadzone;
   private Joystick m_Joystick1;
   private Joystick m_Joystick2;
@@ -340,8 +341,6 @@ public class RobotContainer extends TimedRobot {
   }
   public void updateValues() {
     m_Mechanisms.periodic();
-    angle = drivetrain.getHeading();
-    SmartDashboard.putNumber("PigeonAngle", angle);
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
       fieldRelativeOffset = drivetrain.getPigeon2().getRotation2d().getRadians();
       drivetrain.getPigeon2().reset();
@@ -358,17 +357,45 @@ public class RobotContainer extends TimedRobot {
     POVButton();
     // m_AutoAlignSubsystem.Alliance();
     updateVision();
+
+    SmartDashboard.putData("pigeon", getPigeon());
+    SmartDashboard.putNumber("angular Velocity", getPigeon().getRate());
+
     SignalLogger.writeDoubleArray("pose", new double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
     SignalLogger.writeDouble("overall X pose", pose.getX());
     SignalLogger.writeDouble("test", drivetrain.getDrive(0).getStatorCurrent().getValueAsDouble());
-    for (int i = 0; i < 4; i++) {
-    SignalLogger.writeDouble("Drive Velocity" + i, drivetrain.getDrive(i).getVelocity().getValueAsDouble());
-    SignalLogger.writeDouble("Drive Position" + i, drivetrain.getDrive(i).getPosition().getValueAsDouble());
-    SignalLogger.writeDouble("Drive Voltage" + i, drivetrain.getDrive(i).getMotorVoltage().getValueAsDouble());
+    SmartDashboard.putData("Swerve Drive", new Sendable() {
+      @Override
+      public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("SwerveDrive");
     
-    SignalLogger.writeDouble("Steer Velocity" + i, drivetrain.getTurn(i).getVelocity().getValueAsDouble());
-    SignalLogger.writeDouble("Steer Position" + i, drivetrain.getTurn(i).getPosition().getValueAsDouble());
-    SignalLogger.writeDouble("Steer Voltage" + i, drivetrain.getTurn(i).getMotorVoltage().getValueAsDouble());
+        builder.addDoubleProperty("Front Left Angle", () -> drivetrain.getModule(0).getCurrentState().angle.getRadians(), null);
+        builder.addDoubleProperty("Front Left Velocity", () -> drivetrain.getModule(0).getCurrentState().speedMetersPerSecond, null);
+    
+        builder.addDoubleProperty("Front Right Angle", () -> drivetrain.getModule(1).getCurrentState().angle.getRadians(), null);
+        builder.addDoubleProperty("Front Right Velocity", () -> drivetrain.getModule(1).getCurrentState().speedMetersPerSecond, null);
+    
+        builder.addDoubleProperty("Back Left Angle", () -> drivetrain.getModule(2).getCurrentState().angle.getRadians(), null);
+        builder.addDoubleProperty("Back Left Velocity", () -> drivetrain.getModule(2).getCurrentState().speedMetersPerSecond, null);
+    
+        builder.addDoubleProperty("Back Right Angle", () -> drivetrain.getModule(3).getCurrentState().angle.getRadians(), null);
+        builder.addDoubleProperty("Back Right Velocity", () -> drivetrain.getModule(3).getCurrentState().speedMetersPerSecond, null);
+    
+        builder.addDoubleProperty("Robot Angle", () -> getPigeon().getAngle(), null);
+      }
+    });
+    for (int i = 0; i < 4; i++) {
+    SmartDashboard.putNumber("Drive Module Voltages" + i,drivetrain.getModule(i).getDriveMotor().getMotorVoltage().getValueAsDouble());
+    SmartDashboard.putNumber("Module Speeds" + i,drivetrain.getModule(i).getCurrentState().speedMetersPerSecond);
+
+    SignalLogger.writeDouble("SysID: Stator Current" + i, drivetrain.getDrive(i).getStatorCurrent().getValueAsDouble());
+    SignalLogger.writeDouble("SysID: Drive Velocity" + i, drivetrain.getDrive(i).getVelocity().getValueAsDouble());
+    SignalLogger.writeDouble("SysID: Drive Position" + i, drivetrain.getDrive(i).getPosition().getValueAsDouble());
+    SignalLogger.writeDouble("SysID: Drive Voltage" + i, drivetrain.getDrive(i).getMotorVoltage().getValueAsDouble());
+    
+    SignalLogger.writeDouble("SysID: Steer Velocity" + i, drivetrain.getTurn(i).getVelocity().getValueAsDouble());
+    SignalLogger.writeDouble("SysID: Steer Position" + i, drivetrain.getTurn(i).getPosition().getValueAsDouble());
+    SignalLogger.writeDouble("SysID: Steer Voltage" + i, drivetrain.getTurn(i).getMotorVoltage().getValueAsDouble());
     }
   }
 
