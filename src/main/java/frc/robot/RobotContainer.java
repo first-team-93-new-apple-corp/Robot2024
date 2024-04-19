@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -316,8 +317,8 @@ public class RobotContainer extends TimedRobot {
     //IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
     // m_AutoAlignSubsystem = new AutoAlignSubsystem(drivetrain);
     // m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);
-    NamedCommands.registerCommand("Intake", m_IntakeCommand.AutoIntake());
-    NamedCommands.registerCommand("Shooter", m_ShooterCommand.AutonShooter());
+    NamedCommands.registerCommand("Intake", m_IntakeCommand.AutoIntake().alongWith(Commands.waitSeconds(1.5)).andThen(m_IntakeCommand.AutonStopIntake()));
+    NamedCommands.registerCommand("Shooter", m_ShooterCommand.AutonShooter().alongWith(Commands.waitSeconds(.5)).andThen(m_ShooterCommand.AutonStopShooter()));
     NamedCommands.registerCommand("StopShooter", m_ShooterCommand.AutonStopShooter());
     NamedCommands.registerCommand("ShootAmp", m_ShooterCommand.AutonAmp());
     NamedCommands.registerCommand("DribbleNote", m_ShooterCommand.AutonDribbleNote());
@@ -362,13 +363,13 @@ public class RobotContainer extends TimedRobot {
     SignalLogger.writeDouble("overall X pose", pose.getX());
     SignalLogger.writeDouble("test", drivetrain.getDrive(0).getStatorCurrent().getValueAsDouble());
     for (int i = 0; i < 4; i++) {
-    SignalLogger.writeDouble("Drive Velocity" + i, drivetrain.getDrive(i).getVelocity().getValueAsDouble());
-    SignalLogger.writeDouble("Drive Position" + i, drivetrain.getDrive(i).getPosition().getValueAsDouble());
-    SignalLogger.writeDouble("Drive Voltage" + i, drivetrain.getDrive(i).getMotorVoltage().getValueAsDouble());
+    SignalLogger.writeDouble(i + "Drive Velocity", drivetrain.getDrive(i).getVelocity().getValueAsDouble());
+    SignalLogger.writeDouble(i + "Drive Position", drivetrain.getDrive(i).getPosition().getValueAsDouble());
+    SignalLogger.writeDouble(i + "Drive Voltage", drivetrain.getDrive(i).getMotorVoltage().getValueAsDouble());
     
-    SignalLogger.writeDouble("Steer Velocity" + i, drivetrain.getTurn(i).getVelocity().getValueAsDouble());
-    SignalLogger.writeDouble("Steer Position" + i, drivetrain.getTurn(i).getPosition().getValueAsDouble());
-    SignalLogger.writeDouble("Steer Voltage" + i, drivetrain.getTurn(i).getMotorVoltage().getValueAsDouble());
+    SignalLogger.writeDouble(i + "Steer Velocity", drivetrain.getTurn(i).getVelocity().getValueAsDouble());
+    SignalLogger.writeDouble(i + "Steer Position", drivetrain.getTurn(i).getPosition().getValueAsDouble());
+    SignalLogger.writeDouble(i + "Steer Voltage", drivetrain.getTurn(i).getMotorVoltage().getValueAsDouble());
     }
   }
 
