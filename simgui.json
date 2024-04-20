@@ -34,6 +34,11 @@
       "/SmartDashboard/pigeon": "Gyro"
     },
     "windows": {
+      "/FMSInfo": {
+        "window": {
+          "visible": true
+        }
+      },
       "/Pose": {
         "bottom": 1476,
         "height": 8.210550308227539,
