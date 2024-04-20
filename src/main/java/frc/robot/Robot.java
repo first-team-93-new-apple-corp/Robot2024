@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -82,6 +83,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     m_robotContainer.updateVision();
+    m_robotContainer.pathTrajectory();
   }
 
   @Override
@@ -110,6 +112,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousExit() {
+    m_robotContainer.m_Field2d.getObject("Traj").setTrajectory(new Trajectory());
   }
 
   @Override

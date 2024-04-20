@@ -5,6 +5,9 @@
 
 package frc.robot;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -12,6 +15,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -19,6 +23,8 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Joystick;
@@ -340,6 +346,19 @@ public class RobotContainer extends TimedRobot {
     pose = drivetrain.m_SwerveDrivePoseEstimator.getEstimatedPosition();
     m_Field2d.setRobotPose(pose);
   }
+
+  private List<Pose2d> poses;
+  public void pathTrajectory() {
+    try {
+      poses =
+      PathPlannerAuto.getPathGroupFromAutoFile(autoChooser.getSelected().getName()).get(0).getAllPathPoints().stream()
+        .map(point -> new Pose2d(point.position, new Rotation2d()))
+        .collect(Collectors.toList());
+        m_Field2d.getObject("Traj").setTrajectory(TrajectoryGenerator.generateTrajectory(poses, new TrajectoryConfig(3, 3)));
+    } catch (Exception e) {
+    }
+  }
+
   public void updateValues() {
     m_Mechanisms.periodic();
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {

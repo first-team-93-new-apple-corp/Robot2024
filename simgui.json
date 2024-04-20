@@ -51,6 +51,18 @@
         }
       },
       "/SmartDashboard/Field": {
+        "Traj": {
+          "arrowSize": 42,
+          "arrows": false,
+          "color": [
+            0.08333331346511841,
+            0.08006533980369568,
+            0.08006533980369568,
+            255.0
+          ],
+          "selectable": false,
+          "style": "Line"
+        },
         "bottom": 1476,
         "height": 8.210550308227539,
         "left": 150,
@@ -111,8 +123,7 @@
     "elastic@2": {
       "Subscribers": {
         "open": false
-      },
-      "open": false
+      }
     },
     "visible": true
   }
