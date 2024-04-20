@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -317,8 +318,8 @@ public class RobotContainer extends TimedRobot {
     //IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
     // m_AutoAlignSubsystem = new AutoAlignSubsystem(drivetrain);
     // m_climbingLevelButton = new JoystickButton(op, climbingLevelButton);
-    NamedCommands.registerCommand("Intake", m_IntakeCommand.AutoIntake());
-    NamedCommands.registerCommand("Shooter", m_ShooterCommand.AutonShooter());
+    NamedCommands.registerCommand("Intake", m_IntakeCommand.AutoIntake().alongWith(Commands.waitSeconds(1.5)).andThen(m_IntakeCommand.AutonStopIntake()));
+    NamedCommands.registerCommand("Shooter", m_ShooterCommand.AutonShooter().alongWith(Commands.waitSeconds(.5)).andThen(m_ShooterCommand.AutonStopShooter()));
     NamedCommands.registerCommand("StopShooter", m_ShooterCommand.AutonStopShooter());
     NamedCommands.registerCommand("ShootAmp", m_ShooterCommand.AutonAmp());
     NamedCommands.registerCommand("DribbleNote", m_ShooterCommand.AutonDribbleNote());
