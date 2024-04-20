@@ -1,5 +1,5 @@
 {
-    "version": "v0.3",
+    "version": "v0.3.1",
     "robotConfiguration": {
         "mass": 61.73998083590995,
         "rotationalInertia": 4.405114148739326,
@@ -710,6 +710,7 @@
                 {
                     "name": "Shoot",
                     "target": 0,
+                    "trajTargetIndex": 0,
                     "targetTimestamp": 0,
                     "offset": 0,
                     "command": {
@@ -722,6 +723,7 @@
                 {
                     "name": "Reset Pigeon",
                     "target": 2,
+                    "trajTargetIndex": 2,
                     "targetTimestamp": 4.179585425637588,
                     "offset": 0,
                     "command": {
@@ -2039,6 +2041,7 @@
                 {
                     "name": "Shoot Note 1",
                     "target": "first",
+                    "trajTargetIndex": 0,
                     "targetTimestamp": 0,
                     "offset": 0,
                     "command": {
@@ -2051,6 +2054,7 @@
                 {
                     "name": "Intake Note 2",
                     "target": 3,
+                    "trajTargetIndex": 3,
                     "targetTimestamp": 1.881389037660905,
                     "offset": -0.75,
                     "command": {
@@ -2063,6 +2067,7 @@
                 {
                     "name": "Shoot Note 3",
                     "target": 6,
+                    "trajTargetIndex": 6,
                     "targetTimestamp": 3.477203302549652,
                     "offset": -0.15,
                     "command": {
@@ -2075,6 +2080,7 @@
                 {
                     "name": "Reset Pigeon",
                     "target": 8,
+                    "trajTargetIndex": 8,
                     "targetTimestamp": 7.750195999816046,
                     "offset": 0,
                     "command": {
@@ -3946,6 +3952,7 @@
                 {
                     "name": "Shoot Note 1",
                     "target": "first",
+                    "trajTargetIndex": 0,
                     "targetTimestamp": 0,
                     "offset": 0,
                     "command": {
@@ -3958,6 +3965,7 @@
                 {
                     "name": "Intake Note 2",
                     "target": 3,
+                    "trajTargetIndex": 3,
                     "targetTimestamp": 1.8815499679762908,
                     "offset": -0.75,
                     "command": {
@@ -3970,6 +3978,7 @@
                 {
                     "name": "Shoot Note 2",
                     "target": 6,
+                    "trajTargetIndex": 6,
                     "targetTimestamp": 3.610754344138603,
                     "offset": -0.2,
                     "command": {
@@ -3982,6 +3991,7 @@
                 {
                     "name": "Intake Note 3",
                     "target": 9,
+                    "trajTargetIndex": 9,
                     "targetTimestamp": 5.58941104647801,
                     "offset": 0,
                     "command": {
@@ -3994,6 +4004,7 @@
                 {
                     "name": "Shoot Note 3",
                     "target": 10,
+                    "trajTargetIndex": 10,
                     "targetTimestamp": 6.746967784039083,
                     "offset": 0,
                     "command": {
@@ -4006,6 +4017,7 @@
                 {
                     "name": "Reset Pigeon",
                     "target": 12,
+                    "trajTargetIndex": 12,
                     "targetTimestamp": 11.388829567843791,
                     "offset": 0,
                     "command": {
@@ -6153,6 +6165,7 @@
                 {
                     "name": "Shoot Note 1",
                     "target": "first",
+                    "trajTargetIndex": 0,
                     "targetTimestamp": 0,
                     "offset": 0,
                     "command": {
@@ -6165,6 +6178,7 @@
                 {
                     "name": "Intake Note 2",
                     "target": 3,
+                    "trajTargetIndex": 3,
                     "targetTimestamp": 1.881549968006862,
                     "offset": -0.75,
                     "command": {
@@ -6177,6 +6191,7 @@
                 {
                     "name": "Shoot Note 2",
                     "target": 6,
+                    "trajTargetIndex": 6,
                     "targetTimestamp": 3.610754344138591,
                     "offset": -0.15,
                     "command": {
@@ -6189,6 +6204,7 @@
                 {
                     "name": "Intake Note 3",
                     "target": 9,
+                    "trajTargetIndex": 9,
                     "targetTimestamp": 5.5894110464779425,
                     "offset": -0.75,
                     "command": {
@@ -6201,6 +6217,7 @@
                 {
                     "name": "Intake Note 4",
                     "target": 12,
+                    "trajTargetIndex": 12,
                     "targetTimestamp": 8.263742770732643,
                     "offset": -0.7,
                     "command": {
@@ -6213,6 +6230,7 @@
                 {
                     "name": "Shoot Note 3",
                     "target": 10,
+                    "trajTargetIndex": 10,
                     "targetTimestamp": 6.746967784039048,
                     "offset": -0.15,
                     "command": {
@@ -6225,6 +6243,7 @@
                 {
                     "name": "Shoot Note 4",
                     "target": 13,
+                    "trajTargetIndex": 13,
                     "targetTimestamp": 9.6610779519257,
                     "offset": -0.15,
                     "command": {
@@ -6237,6 +6256,7 @@
                 {
                     "name": "Reset Pigeon",
                     "target": 15,
+                    "trajTargetIndex": 15,
                     "targetTimestamp": 13.373430108238967,
                     "offset": 0,
                     "command": {

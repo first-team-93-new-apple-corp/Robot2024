@@ -21,6 +21,8 @@ import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.Preflight;
+
+import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.*;
 
 public class Robot extends TimedRobot {
@@ -33,7 +35,7 @@ public class Robot extends TimedRobot {
   private LEDSubsystem m_LED = new LEDSubsystem();
   private ShooterSubsystem m_ShooterSubsystem;
   private ShooterCommand m_Shooter;
-  Constants constants = new Constants("2024");
+  Constants constants;
   // private IntakeSubsystem m_IntakeSubsystem = IntakeSubsystemFactory.build(constants.Intake, m_LED, m_ShooterSubsystem, op);
   private ElevatorCommand m_Elevator;
   private ClimberCommand m_Climber;
@@ -47,13 +49,18 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    if (Utils.isSimulation()) {
+      constants = new Constants("SIM");
+    } else {
+      constants = new Constants("2024");
+    }
     m_robotContainer = new RobotContainer(constants, m_Joystick1, m_Joystick2, op, m_LED);
     m_ShooterSubsystem = m_robotContainer.m_ShooterSubsystem;
     m_IntakeCommand = new IntakeCommand(m_ShooterSubsystem, m_robotContainer.m_IntakeSubsystem, m_LED);
     m_Climber = new ClimberCommand(op, m_robotContainer.m_ClimberSubsystem);
     m_Elevator = new ElevatorCommand(op, m_robotContainer.m_ElevatorSubsystem);
     m_Preflight = new Preflight(op, m_Elevator, m_IntakeCommand, m_Climber);
-    m_Shooter = new ShooterCommand(m_ShooterSubsystem);
+    m_Shooter = m_robotContainer.m_ShooterCommand;
 
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
     m_Elevator.initOnce();
