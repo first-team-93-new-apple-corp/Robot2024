@@ -829,19 +829,6 @@
                             "name": "Shooter"
                         }
                     }
-                },
-                {
-                    "name": "Reset Pigeon",
-                    "target": 3,
-                    "trajTargetIndex": 3,
-                    "targetTimestamp": 5.1825234148550186,
-                    "offset": 0,
-                    "command": {
-                        "type": "named",
-                        "data": {
-                            "name": "ResetField"
-                        }
-                    }
                 }
             ],
             "isTrajectoryStale": false
@@ -2034,19 +2021,6 @@
                         "type": "named",
                         "data": {
                             "name": "Shooter"
-                        }
-                    }
-                },
-                {
-                    "name": "Reset Pigeon",
-                    "target": 6,
-                    "trajTargetIndex": 6,
-                    "targetTimestamp": 8.631405507402397,
-                    "offset": 0,
-                    "command": {
-                        "type": "named",
-                        "data": {
-                            "name": "ResetField"
                         }
                     }
                 }
@@ -3629,19 +3603,6 @@
                         "type": "named",
                         "data": {
                             "name": "Shooter"
-                        }
-                    }
-                },
-                {
-                    "name": "Reset Pigeon",
-                    "target": 8,
-                    "trajTargetIndex": 8,
-                    "targetTimestamp": 11.848127095843118,
-                    "offset": 0,
-                    "command": {
-                        "type": "named",
-                        "data": {
-                            "name": "ResetField"
                         }
                     }
                 }
@@ -5699,19 +5660,6 @@
                         "type": "named",
                         "data": {
                             "name": "Shooter"
-                        }
-                    }
-                },
-                {
-                    "name": "Reset Pigeon",
-                    "target": 12,
-                    "trajTargetIndex": 12,
-                    "targetTimestamp": 15.079876933546604,
-                    "offset": 0,
-                    "command": {
-                        "type": "named",
-                        "data": {
-                            "name": "ResetField"
                         }
                     }
                 }

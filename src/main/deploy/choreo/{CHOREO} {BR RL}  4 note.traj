@@ -1810,15 +1810,6 @@
           "name": "Shooter"
         }
       }
-    },
-    {
-      "timestamp": 13.373430108238967,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "ResetField"
-        }
-      }
     }
   ]
 }

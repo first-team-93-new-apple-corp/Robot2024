@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.5367261643614196,
-      "y": 2.1829265476712774
+      "x": 3.0,
+      "y": 2.0
     },
     "rotation": 0
   },
@@ -20,13 +20,13 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 6.0
+            "waitTime": 1.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Straight Out"
+            "pathName": "Test Cal path"
           }
         }
       ]

@@ -16,6 +16,12 @@
           "data": {
             "pathName": "{Choreo} {BL RR} 1 note"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ResetField"
+          }
         }
       ]
     }

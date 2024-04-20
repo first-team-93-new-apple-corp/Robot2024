@@ -9,12 +9,11 @@
     "Away From Notes"
   ],
   "autoFolders": [
+    "Shoot and Leave",
     "2 Note Shoot",
     "3 Note",
-    "Choreo",
-    "Choreo (BR RL)",
     "Choreo (BL RR)",
-    "Shoot and Leave"
+    "Choreo (BR RL)"
   ],
   "defaultMaxVel": 5.0,
   "defaultMaxAccel": 3.0,
