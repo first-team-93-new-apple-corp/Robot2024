@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7546440958976746,
+      "y": 4.439635753631592
+    },
+    "rotation": 119.99999986287999
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "{CHOREO} {BR RL}  2 note"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Choreo (BR RL)",
+  "choreoAuto": true
+}
