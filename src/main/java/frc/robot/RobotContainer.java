@@ -205,7 +205,7 @@ public class RobotContainer extends TimedRobot {
   }
   public void configureBindings() {
     m_TrapAlignButton.whileTrue(m_AutoAlignCommand);
-    m_AmpAlignButton.whileTrue(m_AutoAlignCommand);
+    m_AmpAlignButton.whileTrue(m_AutoAlignCommand.PathFindToAmp());
     m_endSignalLogging.whileTrue(drivetrain.StopSignalLogging());
     // m_AmpAlignButton.whileTrue(drivetrain.applyRequest(() -> m_swerveRequest
     // .withCenterOfRotation(DriveConstants.dCenter)

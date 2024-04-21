@@ -117,8 +117,7 @@
     "elastic@1": {
       "Subscribers": {
         "open": false
-      },
-      "open": false
+      }
     },
     "elastic@2": {
       "Subscribers": {

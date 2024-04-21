@@ -25,6 +25,7 @@ import frc.robot.commands.Preflight;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.*;
+import com.pathplanner.lib.commands.PathfindingCommand;
 
 public class Robot extends TimedRobot {
   static Joystick m_Joystick1 = new Joystick(0);
@@ -69,6 +70,7 @@ public class Robot extends TimedRobot {
     // m_UsbCameraSubsystem.register();
     SmartDashboard.putBoolean("Preflight Done?", false);
     m_LED.startup();
+    PathfindingCommand.warmupCommand();
   }
 
   @Override
