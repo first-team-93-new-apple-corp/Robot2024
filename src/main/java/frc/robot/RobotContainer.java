@@ -214,12 +214,12 @@ public class RobotContainer extends TimedRobot {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> m_swerveRequest
             .withCenterOfRotation(DriveConstants.dCenter)
-            .withSpeeds(fieldSpeeds)));
+            .withSpeeds(ChassisSpeeds.discretize(fieldSpeeds, kDefaultPeriod))));
 
     m_fieldRelButton.onTrue(
         drivetrain.applyRequest(() -> m_swerveRequest
             .withCenterOfRotation(DriveConstants.dCenter)
-            .withSpeeds(fieldSpeeds)));
+            .withSpeeds(ChassisSpeeds.discretize(fieldSpeeds, kDefaultPeriod))));
 
     // Brake while held
     m_BrakeButton.whileTrue(drivetrain.applyRequest(() -> brake));
@@ -383,27 +383,7 @@ public class RobotContainer extends TimedRobot {
 
     SignalLogger.writeDoubleArray("pose", new double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
     SignalLogger.writeDouble("overall X pose", pose.getX());
-    SignalLogger.writeDouble("test", drivetrain.getDrive(0).getStatorCurrent().getValueAsDouble());
-    SmartDashboard.putData("Swerve Drive", new Sendable() {
-      @Override
-      public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("SwerveDrive");
-    
-        builder.addDoubleProperty("Front Left Angle", () -> drivetrain.getModule(0).getCurrentState().angle.getRadians(), null);
-        builder.addDoubleProperty("Front Left Velocity", () -> drivetrain.getModule(0).getCurrentState().speedMetersPerSecond, null);
-    
-        builder.addDoubleProperty("Front Right Angle", () -> drivetrain.getModule(1).getCurrentState().angle.getRadians(), null);
-        builder.addDoubleProperty("Front Right Velocity", () -> drivetrain.getModule(1).getCurrentState().speedMetersPerSecond, null);
-    
-        builder.addDoubleProperty("Back Left Angle", () -> drivetrain.getModule(2).getCurrentState().angle.getRadians(), null);
-        builder.addDoubleProperty("Back Left Velocity", () -> drivetrain.getModule(2).getCurrentState().speedMetersPerSecond, null);
-    
-        builder.addDoubleProperty("Back Right Angle", () -> drivetrain.getModule(3).getCurrentState().angle.getRadians(), null);
-        builder.addDoubleProperty("Back Right Velocity", () -> drivetrain.getModule(3).getCurrentState().speedMetersPerSecond, null);
-    
-        builder.addDoubleProperty("Robot Angle", () -> getPigeon().getAngle(), null);
-      }
-    });
+    SignalLogger.writeDouble("Stator Current", drivetrain.getDrive(0).getStatorCurrent().getValueAsDouble());
     for (int i = 0; i < 4; i++) {
     SmartDashboard.putNumber("Drive Module Voltages" + i,drivetrain.getModule(i).getDriveMotor().getMotorVoltage().getValueAsDouble());
     SmartDashboard.putNumber("Module Speeds" + i,drivetrain.getModule(i).getCurrentState().speedMetersPerSecond);
