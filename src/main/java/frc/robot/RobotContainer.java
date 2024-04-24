@@ -366,9 +366,9 @@ public class RobotContainer extends TimedRobot {
       drivetrain.getPigeon2().reset();
     }
     speeds = new ChassisSpeeds(
-        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * MaxSpeed),
-        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
-        (checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxAngularRate));
+        ((checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * Math.abs(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y))) * MaxSpeed),
+        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * Math.abs(m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
+        (checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * Math.abs(m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxAngularRate));
     fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
         new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians())
             // .rotateBy(new Rotation2d(-fieldRelativeOffset))
