@@ -33,10 +33,7 @@ public interface VisionIO {
     public default double getLatency(double tl, double cl, double latency) {
       return 0;
     }
-    public default boolean hasTargets(double tv) {
-      if (tv == 1) {
-          return true;
-      } else
-          return false;
+    public default boolean hasTargets() {
+      return false;
     }
 }

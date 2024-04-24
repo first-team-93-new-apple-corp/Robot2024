@@ -34,7 +34,7 @@ public class Constants {
             Climber = new ClimberConstants(19,20);
             Shooter = new ShooterConstants(16, 17, 2, 3);
             Drive = new SwerveDriveConstants(BotName.Tobor27);
-            Vision = new VisionConstants("LimeLight");
+            Vision = new VisionConstants("limelight");
 
         } else if (robotName.equals("2023")) {
             Drive = new SwerveDriveConstants(BotName.Tobor26);

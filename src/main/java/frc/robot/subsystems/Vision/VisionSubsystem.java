@@ -39,7 +39,7 @@ public class VisionSubsystem extends SubsystemBase {
     }
     public Boolean hasTargets() {
         m_io.updateValues(m_Inputs, m_DriveSubsystem, m_DriveSubsystem.m_SwerveDrivePoseEstimator.getEstimatedPosition());
-        return m_io.hasTargets(m_Inputs.tv);
+        return m_io.hasTargets();
     }
 
     @Override

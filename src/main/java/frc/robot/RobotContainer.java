@@ -360,6 +360,7 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void updateValues() {
+    // m_VisionSubsystem.periodic();
     m_Mechanisms.periodic();
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
       fieldRelativeOffset = drivetrain.getPigeon2().getRotation2d().getRadians();
@@ -384,26 +385,6 @@ public class RobotContainer extends TimedRobot {
     SignalLogger.writeDoubleArray("pose", new double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
     SignalLogger.writeDouble("overall X pose", pose.getX());
     SignalLogger.writeDouble("test", drivetrain.getDrive(0).getStatorCurrent().getValueAsDouble());
-    SmartDashboard.putData("Swerve Drive", new Sendable() {
-      @Override
-      public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("SwerveDrive");
-    
-        builder.addDoubleProperty("Front Left Angle", () -> drivetrain.getModule(0).getCurrentState().angle.getRadians(), null);
-        builder.addDoubleProperty("Front Left Velocity", () -> drivetrain.getModule(0).getCurrentState().speedMetersPerSecond, null);
-    
-        builder.addDoubleProperty("Front Right Angle", () -> drivetrain.getModule(1).getCurrentState().angle.getRadians(), null);
-        builder.addDoubleProperty("Front Right Velocity", () -> drivetrain.getModule(1).getCurrentState().speedMetersPerSecond, null);
-    
-        builder.addDoubleProperty("Back Left Angle", () -> drivetrain.getModule(2).getCurrentState().angle.getRadians(), null);
-        builder.addDoubleProperty("Back Left Velocity", () -> drivetrain.getModule(2).getCurrentState().speedMetersPerSecond, null);
-    
-        builder.addDoubleProperty("Back Right Angle", () -> drivetrain.getModule(3).getCurrentState().angle.getRadians(), null);
-        builder.addDoubleProperty("Back Right Velocity", () -> drivetrain.getModule(3).getCurrentState().speedMetersPerSecond, null);
-    
-        builder.addDoubleProperty("Robot Angle", () -> getPigeon().getAngle(), null);
-      }
-    });
     for (int i = 0; i < 4; i++) {
     SmartDashboard.putNumber("Drive Module Voltages" + i,drivetrain.getModule(i).getDriveMotor().getMotorVoltage().getValueAsDouble());
     SmartDashboard.putNumber("Module Speeds" + i,drivetrain.getModule(i).getCurrentState().speedMetersPerSecond);
