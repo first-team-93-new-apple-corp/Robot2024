@@ -149,11 +149,12 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     m_Preflight.resetPreflight();
     m_Preflight.schedule();
-    m_robotContainer.m_ElevatorSubsystem.zero();
+    // m_robotContainer.m_ElevatorSubsystem.zero();
   }
 
   @Override
   public void testPeriodic() {
+    m_robotContainer.m_ElevatorSubsystem.runElevator();
   }
 
   @Override

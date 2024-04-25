@@ -164,6 +164,7 @@ public class ElevatorIOReal implements ElevatorIO {
 
     public void zero() {
         currentState = elevatorState.Zeroing;
+        // runElevator();
     }
 
 }
