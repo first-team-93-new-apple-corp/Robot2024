@@ -54,17 +54,8 @@ public class LEDSubsystem extends SubsystemBase {
         setColor(Color.kBlack);
     }
 
-    public void X(){
+    public void Shot(){
         setColor(Color.kBlue);
-    }
-    public void Y(){
-        setColor(Color.kYellow);
-    }
-    public void A(){
-        setColor(Color.kGreen);
-    }
-    public void B(){
-        setColor(Color.kRed);
     }
 
     public void noteInBot(){

@@ -37,6 +37,7 @@
 //         // For the Kicker
 //         if (driver2.getRawButton(Constants.Thrustmaster.Trigger)) { // B
 //             m_ShooterSubsystem.kicker(1);
+            //    m_LEDCommand.LEDShotCommand().schedule();
 //         } else if (!opController.getRawButton(Constants.xbox.LeftShoulderButton) && !opController.getRawButton(Constants.xbox.X)) {
 //             m_ShooterSubsystem.kickerStop();
 //         }
