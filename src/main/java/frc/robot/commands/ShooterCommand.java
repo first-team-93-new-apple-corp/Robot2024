@@ -12,6 +12,7 @@ public class ShooterCommand extends Command {
     Joystick driver2 = new Joystick(1);
     ShooterSubsystem m_ShooterSubsystem;
     LEDSubsystem m_LED;
+
     public ShooterCommand(ShooterSubsystem m_ShooterSubsystem, LEDSubsystem m_LED) {
         this.m_ShooterSubsystem = m_ShooterSubsystem;
         this.m_LED = m_LED;
@@ -39,14 +40,12 @@ public class ShooterCommand extends Command {
         // For the Kicker
         if (driver2.getRawButton(Constants.Thrustmaster.Trigger) && !opController.getRawButton(Constants.xbox.RightShoulderButton)) { // B
             m_ShooterSubsystem.kicker(1);
-            m_LED.turnLEDSOff();
+            m_LED.shot();
         } else if (driver2.getRawButton(Constants.Thrustmaster.Trigger) && opController.getRawButton(Constants.xbox.RightShoulderButton)) { // B
             m_ShooterSubsystem.ampKicker();
-            m_LED.turnLEDSOff();
+            m_LED.shot();
         } else if (!opController.getRawButton(Constants.xbox.LeftShoulderButton) && !opController.getRawButton(Constants.xbox.X)) {
             m_ShooterSubsystem.kickerStop();
-            
-            // m_LED.turnLEDSOff();
         }
     }
 }

@@ -16,6 +16,8 @@ public class LEDSubsystem extends SubsystemBase {
     DigitalOutput red1;
     DigitalOutput blue1;
 
+    int shotCounter;
+
     public void startup() {
         if (red == null) {
             red = new DigitalOutput(6);
@@ -50,6 +52,10 @@ public class LEDSubsystem extends SubsystemBase {
 
     public void turnLEDSOff() {
         setColor(Color.kBlack);
+    }
+
+    public void shot(){
+        setColor(Color.kGray);
     }
 
     public void noteAlmostInBot(){
