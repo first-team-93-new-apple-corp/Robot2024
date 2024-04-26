@@ -9,7 +9,7 @@ public class ElevatorCommand extends Command {
     XboxController op;
     ElevatorSubsystem m_elevatorSubsystem;
     double setpoint = 0;
-    double ampSetpoint = -25;
+    double ampSetpoint = -50;
     double sourceSetpoint = -70;
 
     public ElevatorCommand(XboxController op, ElevatorSubsystem m_ElevatorSubsystem) {

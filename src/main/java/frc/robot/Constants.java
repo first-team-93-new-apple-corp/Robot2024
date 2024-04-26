@@ -48,9 +48,9 @@ public class Constants {
     }
     public final class ShooterConstants {
         public final boolean ENABLED;
-        public final double SpeakerShooterSpeed = 0.55;
+        public final double SpeakerShooterSpeed = 0.6;
         public final double MuzzleIntake = -0.30;
-        public final double AmpShooterSpeed = 0.1;
+        public final double AmpShooterSpeed = 0.09;
         public final double KickerSpeed = 1;
         public final double DribbleSpeed = .25;
         public final int ShooterL;
@@ -146,7 +146,7 @@ public class Constants {
     }
     public final class IntakeConstants {
         public final boolean ENABLED;
-        public static final double IntakeSpeed = 1;
+        public static final double IntakeSpeed = .75;
         public static final double PassoverSpeed = 0.5;
         public final int midTOF;
         public final int upperTOF;

@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDSubsystem extends SubsystemBase {
@@ -46,6 +48,27 @@ public class LEDSubsystem extends SubsystemBase {
 
     public void turnLEDSOff() {
         setColor(Color.kBlack);
+    }
+
+    public void LEDBlue(){
+        setColor(Color.kBlue);
+    }
+
+    public Command LEDSHOOT() {
+        return LEDOn(Color.kBlue).alongWith(Commands.waitSeconds(.1)) //blue
+        .andThen(LEDNoMoreOn().alongWith(Commands.waitSeconds(.05))) //off
+        .andThen(LEDOn(Color.kBlue).alongWith(Commands.waitSeconds(.1))) //blue
+        .andThen(LEDNoMoreOn().alongWith(Commands.waitSeconds(.05))) //off
+        .andThen(LEDOn(Color.kBlue).alongWith(Commands.waitSeconds(.1))) //blue
+        .andThen(LEDNoMoreOn()); //off
+    }
+
+    public Command LEDNoMoreOn() {
+        return runOnce(() -> turnLEDSOff());
+    }
+
+    public Command LEDOn(Color m_Color) {
+        return runOnce(() -> setColor(m_Color));
     }
 
     public void noteAlmostInBot(){
