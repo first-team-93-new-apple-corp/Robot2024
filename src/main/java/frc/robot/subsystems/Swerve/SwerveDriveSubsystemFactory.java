@@ -8,15 +8,23 @@ import frc.robot.subsystems.Swerve.TunerConstants.TunerConstants2024;
 import frc.robot.subsystems.Swerve.TunerConstants.TunerConstantsSIM;
 
 public class SwerveDriveSubsystemFactory {
+    private static TunerConstants2023 tunerConstants2023;
+    private static TunerConstantsSIM tunerConstantsSIM;
+    private static TunerConstants2024 tunerConstants2024;
     public static SwerveDriveSubsystem build(SwerveDriveConstants constants) {
+
         if (constants.DriveBase == Constants.BotName.Tobor27) {
-            return TunerConstants2024.DriveTrain;
+            tunerConstants2024 = new TunerConstants2024();
+            return tunerConstants2024.DriveTrain;
         } else if (constants.DriveBase == Constants.BotName.Tobor26) {
-            return TunerConstants2023.DriveTrain;
+            tunerConstants2023 = new TunerConstants2023();
+            return tunerConstants2023.DriveTrain;
         } else if (constants.DriveBase.equals(Constants.BotName.SIM)) {
-            return TunerConstantsSIM.DriveTrain;
+            tunerConstantsSIM = new TunerConstantsSIM();
+            return tunerConstantsSIM.DriveTrain;
         } else {
-            return TunerConstantsSIM.DriveTrain;
+            tunerConstantsSIM = new TunerConstantsSIM();
+            return tunerConstantsSIM.DriveTrain;
         }
         
     }
