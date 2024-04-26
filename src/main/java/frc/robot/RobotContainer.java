@@ -375,7 +375,7 @@ public class RobotContainer extends TimedRobot {
     // --------------------------------------------SYS ID LOGGING--------------------------------------------
     SignalLogger.writeDoubleArray("pose", new double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
     SignalLogger.writeDouble("overall X pose", pose.getX());
-    SignalLogger.writeDouble("Stator Current", drivetrain.getDrive(0).getStatorCurrent().getValueAsDouble());
+    SignalLogger.writeDouble("Stator Current", m_SwerveDriveSubsystem.getDrive(0).getStatorCurrent().getValueAsDouble());
     for (int i = 0; i < 4; i++) {
     SignalLogger.writeDouble("SysID: Stator Current" + i, m_SwerveDriveSubsystem.getDrive(i).getStatorCurrent().getValueAsDouble());
     SignalLogger.writeDouble("SysID: Drive Velocity" + i, m_SwerveDriveSubsystem.getDrive(i).getVelocity().getValueAsDouble());
