@@ -210,12 +210,12 @@ public class RobotContainer extends TimedRobot {
     m_SwerveDriveSubsystem.setDefaultCommand( // Drivetrain will execute this command periodically
         m_SwerveDriveSubsystem.applyRequest(() -> m_swerveRequest
             .withCenterOfRotation(DriveConstants.dCenter)
-            .withSpeeds(fieldSpeeds)));
+            .withSpeeds(ChassisSpeeds.discretize(fieldSpeeds, kDefaultPeriod))));
 
     m_fieldRelButton.onTrue(
         m_SwerveDriveSubsystem.applyRequest(() -> m_swerveRequest
             .withCenterOfRotation(DriveConstants.dCenter)
-            .withSpeeds(fieldSpeeds)));
+            .withSpeeds(ChassisSpeeds.discretize(fieldSpeeds, kDefaultPeriod))));
 
     // Brake while held
     m_BrakeButton.whileTrue(m_SwerveDriveSubsystem.applyRequest(() -> brake));
@@ -358,9 +358,9 @@ public class RobotContainer extends TimedRobot {
       m_SwerveDriveSubsystem.getPigeon2().reset();
     }
     speeds = new ChassisSpeeds(
-        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * MaxSpeed),
-        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
-        (checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxAngularRate));
+        ((checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * Math.abs(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y))) * MaxSpeed),
+        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * Math.abs(m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
+        (checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * Math.abs(m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxAngularRate));
     fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
         new Rotation2d(m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians())
             // .rotateBy(new Rotation2d(-fieldRelativeOffset))
@@ -375,7 +375,7 @@ public class RobotContainer extends TimedRobot {
     // --------------------------------------------SYS ID LOGGING--------------------------------------------
     SignalLogger.writeDoubleArray("pose", new double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
     SignalLogger.writeDouble("overall X pose", pose.getX());
-    SignalLogger.writeDouble("test", m_SwerveDriveSubsystem.getDrive(0).getStatorCurrent().getValueAsDouble());
+    SignalLogger.writeDouble("Stator Current", drivetrain.getDrive(0).getStatorCurrent().getValueAsDouble());
     for (int i = 0; i < 4; i++) {
     SignalLogger.writeDouble("SysID: Stator Current" + i, m_SwerveDriveSubsystem.getDrive(i).getStatorCurrent().getValueAsDouble());
     SignalLogger.writeDouble("SysID: Drive Velocity" + i, m_SwerveDriveSubsystem.getDrive(i).getVelocity().getValueAsDouble());
