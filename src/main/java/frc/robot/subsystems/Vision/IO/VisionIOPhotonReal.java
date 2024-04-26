@@ -77,7 +77,7 @@ public class VisionIOPhotonReal implements VisionIO {
 
 
     @Override
-    public boolean hasTargets(double tv) {
+    public boolean hasTargets() {
         return result.hasTargets();
     }
     @Override

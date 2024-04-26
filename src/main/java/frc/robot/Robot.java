@@ -25,6 +25,7 @@ import frc.robot.commands.Preflight;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.*;
+import com.pathplanner.lib.commands.PathfindingCommand;
 
 public class Robot extends TimedRobot {
   static Joystick m_Joystick1 = new Joystick(0);
@@ -60,7 +61,7 @@ public class Robot extends TimedRobot {
     m_IntakeCommand = new IntakeCommand(m_ShooterSubsystem, m_robotContainer.m_IntakeSubsystem, m_LED);
     m_Climber = new ClimberCommand(op, m_robotContainer.m_ClimberSubsystem);
     m_Elevator = new ElevatorCommand(op, m_robotContainer.m_ElevatorSubsystem);
-    m_Preflight = new Preflight(op, m_Elevator, m_IntakeCommand, m_Climber);
+    m_Preflight = new Preflight(m_Elevator, m_Climber);
     m_Shooter = m_robotContainer.m_ShooterCommand;
 
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
@@ -69,6 +70,7 @@ public class Robot extends TimedRobot {
     // m_UsbCameraSubsystem.register();
     SmartDashboard.putBoolean("Preflight Done?", false);
     m_LED.startup();
+    PathfindingCommand.warmupCommand();
   }
 
   @Override
@@ -147,10 +149,12 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     m_Preflight.resetPreflight();
     m_Preflight.schedule();
+    // m_robotContainer.m_ElevatorSubsystem.zero();
   }
 
   @Override
   public void testPeriodic() {
+    m_robotContainer.m_ElevatorSubsystem.runElevator();
   }
 
   @Override

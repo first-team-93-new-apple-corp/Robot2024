@@ -13,7 +13,8 @@ import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 public class VisionIOReal implements VisionIO {
     private final NetworkTable m_limelight;
     Pose2d pose;
-    double tv;
+    double tv, tl, cl;
+    double[] botpose_wpiblue;
 
   public VisionIOReal(VisionConstants constants) {
     m_limelight = NetworkTableInstance.getDefault().getTable(constants.CameraName);
@@ -51,8 +52,22 @@ public class VisionIOReal implements VisionIO {
         m_limelight.getEntry("ledMode").setNumber(0);
     }
     @Override
+    public Pose2d getPose(Pose2d pose) {
+        botpose_wpiblue = m_limelight.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
+        pose = new Pose2d(botpose_wpiblue[0], botpose_wpiblue[1], new Rotation2d(Math.toRadians(botpose_wpiblue[5])));
+
+        return this.pose;
+    }
+    @Override
+    public boolean hasTargets() {
+        return m_limelight.getEntry("tv").getDouble(0) == 1;
+    }
+
+    @Override
     public double getLatency(double tl, double cl, double latency) {
-        return (tl + cl)/1000;
+        this.tl = m_limelight.getEntry("tl").getDouble(0);
+        this.cl = m_limelight.getEntry("cl").getDouble(0);
+        return (this.tl + this.cl)/1000;
     }
 
 }
