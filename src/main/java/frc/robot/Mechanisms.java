@@ -6,10 +6,11 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Climber.ClimberSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 
-public class Mechanisms {
+public class Mechanisms extends SubsystemBase{
     private double EleGearRatio = -10;
     private double ClimbGearRatio = -5;
 
@@ -47,6 +48,7 @@ public class Mechanisms {
 
     }
 
+    @Override
     public void periodic() {                //inital + Revolutions*gearRatio
         elevatorMechanismLigament.setLength(.57+ (m_ElevatorSubsystem.getPosition()/2048)*EleGearRatio);
         climberMechanismLigament.setLength(.39+(m_ClimberSubsystem.leftPosition()/2048)*ClimbGearRatio);

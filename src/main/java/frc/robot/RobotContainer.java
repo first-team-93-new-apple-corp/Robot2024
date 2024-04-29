@@ -17,9 +17,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -36,10 +34,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAlignCommand;
+import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.Preflight;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.Climber.ClimberSubsystem;
@@ -65,14 +66,36 @@ public class RobotContainer extends TimedRobot {
   public final ClimberSubsystem m_ClimberSubsystem;
   public final VisionSubsystem m_VisionSubsystem;
   public final Mechanisms m_MechanismsSubsystem;
+  private final SwerveDriveSubsystem m_SwerveDriveSubsystem;
+  public final LEDSubsystem m_LedSubsystem;
   // --------------------------------------------COMMANDS--------------------------------------------
   public final ShooterCommand m_ShooterCommand;
   public final IntakeCommand m_IntakeCommand;
   public final ElevatorCommand m_ElevatorCommand;  
-  private final AutoAlignCommand m_AutoAlignCommand;  
+  public final AutoAlignCommand m_AutoAlignCommand;  
+  public final Preflight m_PreflightCommand;
+  public final ClimberCommand m_ClimberCommand;
+  // --------------------------------------------SHOOTER Control Buttons--------------------------------------------
+  private final Trigger m_Prime;
+  private final Trigger m_ShootAmp;
+  private final Trigger m_IntakeFront;
+  private final Trigger m_Kicker;
+  private final Trigger m_KickerAmp;
+  private final Trigger m_StopShooter;
+  // --------------------------------------------DRIVE Buttons--------------------------------------------
+  private final JoystickButton m_AmpAlignButton;
+  private final JoystickButton m_BrakeButton;
+  private final JoystickButton m_fieldRelButton;
+  private final JoystickButton m_RobotRelButton;
+  // --------------------------------------------SYS ID Buttons--------------------------------------------
+  private final JoystickButton m_SysIDDriveQuasiButton;
+  private final JoystickButton m_SysIDDriveDynamButton;
+  private final JoystickButton m_SysIDSteerQuasiButton;
+  private final JoystickButton m_SysIDSteerDynamButton;
+  private final JoystickButton m_SysIDDriveSlipButton;
+  private final JoystickButton m_endSignalLogging;
 
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
-  private final SwerveDriveSubsystem m_SwerveDriveSubsystem; // My m_SwerveDriveSubsystem
   private SendableChooser<Command> autoChooser;
   public final double MaxSpeed = DriveConstants.MaxSpeed;
   public final double MaxAngularRate = DriveConstants.MaxAngularRate;
@@ -81,41 +104,19 @@ public class RobotContainer extends TimedRobot {
   private Joystick m_Joystick2;
   private XboxController op;
   private boolean Limit = true;
-  // can set this to whatever button you want you can also just
-  // delete this and use the constants file for the button
-  // (just so that the logic works for now)
-  // private int climbingLevelButton;
   public final EventLoop m_loop = new EventLoop();
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
 
-  private final JoystickButton m_AmpAlignButton;
-  private final JoystickButton m_TrapAlignButton;
-  private final JoystickButton m_BrakeButton;
-  private final JoystickButton m_fieldRelButton;
-  private final JoystickButton m_RobotRelButton;
-
-  private final JoystickButton m_CameraRelButton;
-
-  private final JoystickButton m_SysIDDriveQuasiButton;
-  private final JoystickButton m_SysIDDriveDynamButton;
-  private final JoystickButton m_SysIDSteerQuasiButton;
-  private final JoystickButton m_SysIDSteerDynamButton;
-  private final JoystickButton m_SysIDDriveSlipButton;
-  private final JoystickButton m_endSignalLogging;
   public Field2d m_Field2d = new Field2d();
   private Pose2d pose = new Pose2d();
-  // private final SwerveDrivePoseEstimator m_poseEstimator;
-  // added this for button bindings and the logic I added
   
-
   private SwerveRequest.RobotCentric RobotCentricDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-  // private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
   POVButton pov0; // front
@@ -202,10 +203,11 @@ public class RobotContainer extends TimedRobot {
       Limit = true;
     }
   }
+  
   public void configureBindings() {
-    m_TrapAlignButton.whileTrue(m_AutoAlignCommand);
+    m_SwerveDriveSubsystem.registerTelemetry(logger::telemeterize);
+    // --------------------------------------------DRIVE BUTTON BINDINGS--------------------------------------------
     m_AmpAlignButton.whileTrue(m_AutoAlignCommand.PathFindToAmp());
-    m_endSignalLogging.whileTrue(m_SwerveDriveSubsystem.StopSignalLogging());
 
     m_SwerveDriveSubsystem.setDefaultCommand( // Drivetrain will execute this command periodically
         m_SwerveDriveSubsystem.applyRequest(() -> m_swerveRequest
@@ -219,6 +221,7 @@ public class RobotContainer extends TimedRobot {
 
     // Brake while held
     m_BrakeButton.whileTrue(m_SwerveDriveSubsystem.applyRequest(() -> brake));
+
     m_RobotRelButton.onTrue(m_SwerveDriveSubsystem.applyRequest(() -> RobotCentricDrive
         .withVelocityX(
             -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
@@ -229,35 +232,15 @@ public class RobotContainer extends TimedRobot {
         .withRotationalRate(
             -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
                 * MaxAngularRate)));
-
-    m_CameraRelButton.whileTrue(m_SwerveDriveSubsystem.applyRequest(() -> RobotCentricDrive
-        .withVelocityX(
-            m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
-                * MaxSpeed)
-        .withVelocityY(
-            m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)
-                * MaxSpeed)
-        .withRotationalRate(
-            -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
-                * MaxAngularRate)));
-
-    // Climbing Level logic added to button
-    // When the button of your choosing is held it should atomaticly do the climbing
-    // level
-    // m_climbingLevelButton.whileTrue(m_ClimbingLevel);
-
-    // Points all in a direction
-    // m_WheelsPointForwardButton.whileTrue(m_SwerveDriveSubsystem
-    //     .applyRequest(
-    //         () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0),
-    //             -m_Joystick1.getRawAxis(1)))));
-
-    // reset the field-centric heading on left bumper press
-
-    if (Utils.isSimulation()) {
-      m_SwerveDriveSubsystem.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
-    }
-    
+    // --------------------------------------------SHOOTER BUTTON BINDINGS--------------------------------------------
+    m_ShootAmp.whileTrue(m_ShooterCommand.ShootAmp());
+    m_KickerAmp.whileTrue(m_ShooterCommand.AmpKicker().alongWith());
+    m_Kicker.whileTrue(m_ShooterCommand.Kicker());
+    m_IntakeFront.whileTrue(m_ShooterCommand.IntakeFront());
+    m_Prime.whileTrue(m_ShooterCommand.Prime());
+    //If not doing any of the above stop the shooter
+    m_StopShooter.whileTrue(m_ShooterCommand.StopShooter());
+    // --------------------------------------------SYS ID BUTTON BINDINGS--------------------------------------------
     m_SysIDDriveQuasiButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveQuasiTest(Direction.kForward));
     m_SysIDDriveQuasiButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveQuasiTest(Direction.kReverse));
 
@@ -271,24 +254,16 @@ public class RobotContainer extends TimedRobot {
     m_SysIDSteerDynamButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(m_SwerveDriveSubsystem.runSteerDynamTest(Direction.kReverse));
     // Drivetrain needs to be placed against a sturdy wall and test stopped immediately upon wheel slip
     m_SysIDDriveSlipButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveSlipTest());
-
-    m_SwerveDriveSubsystem.registerTelemetry(logger::telemeterize);
+    m_endSignalLogging.whileTrue(m_SwerveDriveSubsystem.StopSignalLogging());
   }
 
-  // public void configAuto() {
-  //   m_SwerveDriveSubsystem.configAuto();
-  // }
-  public Pose3d getTagPose(AprilTag tag){
-    return tag.pose;
-  }
-
-  public RobotContainer(Constants constants, Joystick m_Joystick1, Joystick m_Joystick2, XboxController op, LEDSubsystem m_LedSubsystem) {
+  public RobotContainer(Constants constants, Joystick m_Joystick1, Joystick m_Joystick2, XboxController operator) {
     this.m_Joystick1 = m_Joystick1;
     this.m_Joystick2 = m_Joystick2;
-    this.op = op;
-    
+    this.op = operator;
     // --------------------------------------------SUBSYSTEMS--------------------------------------------
     m_ShooterSubsystem = ShooterSubsystemFactory.build(constants.Shooter);
+    m_LedSubsystem = new LEDSubsystem();
     m_SwerveDriveSubsystem = SwerveDriveSubsystemFactory.build(constants.Drive);
     m_IntakeSubsystem = IntakeSubsystemFactory.build(constants.Intake,m_LedSubsystem, m_ShooterSubsystem, op);
     m_ElevatorSubsystem = ElevatorSubsystemFactory.build(constants.Elevator);
@@ -300,13 +275,20 @@ public class RobotContainer extends TimedRobot {
     m_ShooterCommand = new ShooterCommand(m_ShooterSubsystem, m_LedSubsystem);
     m_IntakeCommand = new IntakeCommand(m_ShooterSubsystem, m_IntakeSubsystem, m_LedSubsystem);
     m_ElevatorCommand = new ElevatorCommand(op, m_ElevatorSubsystem);
-    // --------------------------------------------Control Buttons--------------------------------------------
+    m_ClimberCommand = new ClimberCommand(op, m_ClimberSubsystem);
+    m_PreflightCommand = new Preflight(m_ElevatorCommand, m_ClimberCommand);
+    // --------------------------------------------Shooter Control Buttons--------------------------------------------
+    m_ShootAmp = new Trigger(op.button(Constants.xbox.RightShoulderButton, m_loop));
+    m_KickerAmp = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Trigger).and(op.button(Constants.xbox.RightShoulderButton, m_loop));  
+    m_Kicker = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Trigger).and(op.button(Constants.xbox.RightShoulderButton, m_loop).negate());  
+    m_IntakeFront = new Trigger(op.button(Constants.xbox.LeftShoulderButton, m_loop));
+    m_Prime = new Trigger(op.axisGreaterThan(Constants.xbox.Axis.RT, 0.6, m_loop));
+    m_StopShooter = new Trigger((m_ShootAmp.and(m_KickerAmp).and(m_Kicker).and(m_IntakeFront).and(m_Prime)).negate());
+    // --------------------------------------------DRIVE Control Buttons--------------------------------------------
     m_fieldRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Top_Middle);
     m_BrakeButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
-    m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_AmpAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
-    m_TrapAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Button);
     // --------------------------------------------SYS ID BUTTONS--------------------------------------------
     m_SysIDDriveQuasiButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Left);
     m_SysIDDriveDynamButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Middle);
@@ -324,6 +306,9 @@ public class RobotContainer extends TimedRobot {
     NamedCommands.registerCommand("ResetField", m_SwerveDriveSubsystem.resetPigeonAuton());
     // --------------------------------------------OTHER/MISC--------------------------------------------
     SignalLogger.start();
+    if (Utils.isSimulation()) {
+      m_SwerveDriveSubsystem.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
+    }
     m_SwerveDriveSubsystem.configAuto();
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -352,7 +337,6 @@ public class RobotContainer extends TimedRobot {
   }
 
   public void updateValues() {
-    m_MechanismsSubsystem.periodic();
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
       fieldRelativeOffset = m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians();
       m_SwerveDriveSubsystem.getPigeon2().reset();
@@ -367,7 +351,6 @@ public class RobotContainer extends TimedRobot {
             );
     RotationPoints(m_Joystick2);
     POVButton();
-    // m_AutoAlignSubsystem.Alliance();
     updateVision();
     // --------------------------------------------SMARTDASHBOARD STUFF--------------------------------------------
     SmartDashboard.putData("pigeon", getPigeon());

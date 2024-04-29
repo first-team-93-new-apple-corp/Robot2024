@@ -34,11 +34,8 @@ public class Robot extends TimedRobot {
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  private LEDSubsystem m_LED = new LEDSubsystem();
-  private ShooterSubsystem m_ShooterSubsystem;
-  private ShooterCommand m_Shooter;
+  private LEDSubsystem m_LED;
   Constants constants;
-  // private IntakeSubsystem m_IntakeSubsystem = IntakeSubsystemFactory.build(constants.Intake, m_LED, m_ShooterSubsystem, op);
   private ElevatorCommand m_Elevator;
   private ClimberCommand m_Climber;
   public Preflight m_Preflight;
@@ -56,13 +53,12 @@ public class Robot extends TimedRobot {
     } else {
       constants = new Constants("2024");
     }
-    m_robotContainer = new RobotContainer(constants, m_Joystick1, m_Joystick2, op, m_LED);
-    m_ShooterSubsystem = m_robotContainer.m_ShooterSubsystem;
-    m_IntakeCommand = new IntakeCommand(m_ShooterSubsystem, m_robotContainer.m_IntakeSubsystem, m_LED);
-    m_Climber = new ClimberCommand(op, m_robotContainer.m_ClimberSubsystem);
-    m_Elevator = new ElevatorCommand(op, m_robotContainer.m_ElevatorSubsystem);
-    m_Preflight = new Preflight(m_Elevator, m_Climber);
-    m_Shooter = m_robotContainer.m_ShooterCommand;
+    m_robotContainer = new RobotContainer(constants, m_Joystick1, m_Joystick2, op);
+    m_IntakeCommand = m_robotContainer.m_IntakeCommand;
+    m_Climber = m_robotContainer.m_ClimberCommand;
+    m_Elevator = m_robotContainer.m_ElevatorCommand;
+    m_Preflight = m_robotContainer.m_PreflightCommand;
+    m_LED = m_robotContainer.m_LedSubsystem;
 
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
     m_Elevator.initOnce();
@@ -119,8 +115,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    
-    
     // THIS SHOULDN'T BE RAN PERIODIC!!!!!!!!!!!!!
     m_robotContainer.configureBindings();
     // ^^^
@@ -132,10 +126,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     m_IntakeCommand.schedule();
-    m_Shooter.schedule();
+    // m_Shooter.schedule();
     m_Elevator.schedule();
     m_Climber.schedule();
-    // m_LEDCommand.schedule();
     m_robotContainer.updateValues();
     m_robotContainer.m_loop.poll();
   }
