@@ -8,10 +8,10 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class ShooterCommand extends Command {
-    XboxController opController = new XboxController(2);
-    Joystick driver2 = new Joystick(1);
-    ShooterSubsystem m_ShooterSubsystem;
-    LEDSubsystem m_LED;
+    private XboxController opController = new XboxController(2);
+    private Joystick driver2 = new Joystick(1);
+    private ShooterSubsystem m_ShooterSubsystem;
+    private LEDSubsystem m_LED;
     public ShooterCommand(ShooterSubsystem m_ShooterSubsystem, LEDSubsystem m_LED) {
         this.m_ShooterSubsystem = m_ShooterSubsystem;
         this.m_LED = m_LED;
@@ -30,6 +30,34 @@ public class ShooterCommand extends Command {
 
     public Command AutonDribbleNote(){
         return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.DribbleOutNote());
+    }
+
+    public Command Prime(){
+        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.prime());
+    }
+
+    public Command ShootAmp(){
+        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.shootAmp());
+    }
+
+    public Command IntakeFront(){
+        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.intakeFront());
+    }
+
+    public Command StopShooter(){
+        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.shooterStop());
+    }
+
+    public Command Kicker(){
+        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.kicker(1));
+    }
+
+    public Command AmpKicker(){
+        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.ampKicker());
+    }
+
+    public Command KickerStop(){
+        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.kickerStop());
     }
 
     @Override
