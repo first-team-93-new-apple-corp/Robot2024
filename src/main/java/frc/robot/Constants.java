@@ -50,7 +50,7 @@ public class Constants {
         public final boolean ENABLED;
         public final double SpeakerShooterSpeed = 0.6;
         public final double MuzzleIntake = -0.30;
-        public final double AmpShooterSpeed = 0.09;
+        public final double AmpShooterSpeed = 0.12;
         public final double KickerSpeed = 1;
         public final double DribbleSpeed = .25;
         public final int ShooterL;
