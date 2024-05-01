@@ -135,7 +135,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     
     private SysIdRoutine m_driveSysIdRoutine =
     new SysIdRoutine(
-        new SysIdRoutine.Config(null, null, null, ModifiedSignalLogger.logState()),
+        new SysIdRoutine.Config(Volts.of(.5).per(Seconds.of(1)), Volts.of(3), null, ModifiedSignalLogger.logState()),
         new SysIdRoutine.Mechanism(
             (Measure<Voltage> volts) -> setControl(driveVoltageRequest.withVoltage(volts.in(Volts))),
             null,
@@ -145,7 +145,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
 
     private SysIdRoutine m_steerSysIdRoutine =
     new SysIdRoutine(
-        new SysIdRoutine.Config(null, null, null, ModifiedSignalLogger.logState()),
+        new SysIdRoutine.Config(Volts.of(.5).per(Seconds.of(1)), Volts.of(3), null, ModifiedSignalLogger.logState()),
         new SysIdRoutine.Mechanism(
             (Measure<Voltage> volts) -> setControl(steerVoltageRequest.withVoltage(volts.in(Volts))),
             null,
