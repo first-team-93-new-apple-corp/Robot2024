@@ -26,6 +26,9 @@ public class IntakeCommand extends Command {
     public Command AutonStopIntake() {
         return m_IntakeSubsystem.runOnce(() -> m_IntakeSubsystem.stop());
     }
+    public Command Intake(){
+        return m_IntakeSubsystem.startEnd((m_IntakeSubsystem::intake),(m_IntakeSubsystem::stop));
+    }
 
     @Override
     public void execute() {

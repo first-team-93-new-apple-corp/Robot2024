@@ -75,19 +75,21 @@ public class RobotContainer extends TimedRobot {
   public final AutoAlignCommand m_AutoAlignCommand;  
   public final Preflight m_PreflightCommand;
   public final ClimberCommand m_ClimberCommand;
-  // --------------------------------------------SHOOTER Control Buttons--------------------------------------------
+  // --------------------------------------------INTAKE Control BUTTONS--------------------------------------------
+  private final Trigger m_Intake;
+  // --------------------------------------------SHOOTER Control BUTTONS--------------------------------------------
   private final Trigger m_Prime;
   private final Trigger m_ShootAmp;
   private final Trigger m_IntakeFront;
   private final Trigger m_Kicker;
   private final Trigger m_KickerAmp;
   private final Trigger m_StopShooter;
-  // --------------------------------------------DRIVE Buttons--------------------------------------------
+  // --------------------------------------------DRIVE BUTTONS--------------------------------------------
   private final JoystickButton m_AmpAlignButton;
   private final JoystickButton m_BrakeButton;
   private final JoystickButton m_fieldRelButton;
   private final JoystickButton m_RobotRelButton;
-  // --------------------------------------------SYS ID Buttons--------------------------------------------
+  // --------------------------------------------SYS ID BUTTONS--------------------------------------------
   private final JoystickButton m_SysIDDriveQuasiButton;
   private final JoystickButton m_SysIDDriveDynamButton;
   private final JoystickButton m_SysIDSteerQuasiButton;
@@ -232,6 +234,8 @@ public class RobotContainer extends TimedRobot {
         .withRotationalRate(
             -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
                 * MaxAngularRate)));
+    // --------------------------------------------INTAKE BUTTON BINDINGS--------------------------------------------
+    m_Intake.whileTrue(m_IntakeCommand.Intake());
     // --------------------------------------------SHOOTER BUTTON BINDINGS--------------------------------------------
     m_ShootAmp.whileTrue(m_ShooterCommand.ShootAmp());
     m_KickerAmp.whileTrue(m_ShooterCommand.AmpKicker().alongWith());
@@ -277,14 +281,16 @@ public class RobotContainer extends TimedRobot {
     m_ElevatorCommand = new ElevatorCommand(op, m_ElevatorSubsystem);
     m_ClimberCommand = new ClimberCommand(op, m_ClimberSubsystem);
     m_PreflightCommand = new Preflight(m_ElevatorCommand, m_ClimberCommand);
-    // --------------------------------------------Shooter Control Buttons--------------------------------------------
+    // --------------------------------------------INTAKE Control BUTTONS--------------------------------------------
+    m_Intake = new Trigger(op.button(Constants.xbox.X, m_loop));
+    // --------------------------------------------SHOOTER Control BUTTONS--------------------------------------------
     m_ShootAmp = new Trigger(op.button(Constants.xbox.RightShoulderButton, m_loop));
     m_KickerAmp = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Trigger).and(op.button(Constants.xbox.RightShoulderButton, m_loop));  
     m_Kicker = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Trigger).and(op.button(Constants.xbox.RightShoulderButton, m_loop).negate());  
     m_IntakeFront = new Trigger(op.button(Constants.xbox.LeftShoulderButton, m_loop));
     m_Prime = new Trigger(op.axisGreaterThan(Constants.xbox.Axis.RT, 0.6, m_loop));
     m_StopShooter = new Trigger((m_ShootAmp.and(m_KickerAmp).and(m_Kicker).and(m_IntakeFront).and(m_Prime)).negate());
-    // --------------------------------------------DRIVE Control Buttons--------------------------------------------
+    // --------------------------------------------DRIVE Control BUTTONS--------------------------------------------
     m_fieldRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Top_Middle);
     m_BrakeButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
