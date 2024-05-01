@@ -20,7 +20,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.generated.TunerConstants;
+import frc.robot.Subsystems.SwerveDriveSubsystem;
+import frc.robot.Subsystems.Telemetry;
+import frc.robot.Subsystems.TunerConstants;
 
 public class RobotContainer {
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
@@ -32,7 +34,7 @@ public class RobotContainer {
   private final XboxController m_Driver = new XboxController(0);
   private final JoystickButton m_FieldRelativeButton = new JoystickButton(m_LeftStick, 12);
   private final JoystickButton m_FieldRelativeButtonXbox = new JoystickButton(m_Driver, 5);
-  private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+  private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private SendableChooser<Command> autoChooser;
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband

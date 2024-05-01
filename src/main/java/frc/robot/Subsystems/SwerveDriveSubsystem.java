@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.Subsystems;
 
 import java.util.function.Supplier;
 
@@ -19,24 +19,23 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.generated.TunerConstants;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements subsystem
  * so it can be used in command-based projects easily.
  */
-public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsystem {
+public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem {
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
     private SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
-    public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
+    public SwerveDriveSubsystem(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
         if (Utils.isSimulation()) {
             startSimThread();
         }
     }
-    public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
+    public SwerveDriveSubsystem(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         if (Utils.isSimulation()) {
             startSimThread();
@@ -53,12 +52,9 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                 this::getCurrentRobotChassisSpeeds,
                 (speeds) -> this.setControl(autoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the
                                                                              // robot
-                new HolonomicPathFollowerConfig(new PIDConstants(5.5
-                , 0.1, 0),
-                        // new PIDConstants(1.4, 0, .8),
-                        new PIDConstants(2.3, 0, .135),
-                        // new HolonomicPathFollowerConfig(new PIDConstants(.1, 0, 0),
-                        // new PIDConstants(.25, 0, 0),
+                new HolonomicPathFollowerConfig(new PIDConstants(3
+                , 0, 0.1),
+                        new PIDConstants(1.5, 0, 0.1),
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius,                                                                                      //These values are deadzones, so to speak
                         new ReplanningConfig(true, true, .5,.25)),
@@ -73,6 +69,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
     public void resetOdometry(Pose2d pose) {
         m_odometry.resetPosition(pose.getRotation(), this.m_modulePositions, pose);
+       
     }
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
         return run(() -> this.setControl(requestSupplier.get()));
