@@ -88,7 +88,7 @@ public class ClimberCommand extends Command {
     }
     //--------------------------------------------CLIMBER COMMANDS--------------------------------------------
     public boolean AtSetpoint(){
-        return leftClimberPID.atSetpoint();
+        return leftClimberPID.atSetpoint() & rightClimberPID.atSetpoint();
     }
 
     public Command driveClimbers() {
