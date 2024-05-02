@@ -128,7 +128,7 @@ public class Robot extends TimedRobot {
     m_IntakeCommand.schedule();
     // m_Shooter.schedule();
     m_Elevator.schedule();
-    m_Climber.schedule();
+    // m_Climber.schedule();
     m_robotContainer.updateValues();
     m_robotContainer.m_loop.poll();
   }

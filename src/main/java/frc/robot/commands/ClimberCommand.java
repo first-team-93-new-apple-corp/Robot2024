@@ -19,6 +19,8 @@ public class ClimberCommand extends Command {
     public ClimberCommand(XboxController op, ClimberSubsystem m_ClimberSubsystem) {
         this.op = op;
         this.m_ClimberSubsystem = m_ClimberSubsystem;
+        leftClimberPID.setTolerance(2);
+        rightClimberPID.setTolerance(2);
     }
 
     //--------------------------------------------PREFLIGHT METHODS--------------------------------------------
@@ -48,17 +50,21 @@ public class ClimberCommand extends Command {
     //--------------------------------------------SETS SETPOINTS--------------------------------------------
     public void leftSetpoint(double setpoint) {
         leftSetpoint = setpoint;
+        leftClimberPID.setSetpoint(leftSetpoint);
     }
     public void rightSetpoint(double setpoint) {
         rightSetpoint = setpoint;
+        rightClimberPID.setSetpoint(rightSetpoint);
     }
 
     public void changeLeft(double amount) {
         leftSetpoint += amount;
+        leftClimberPID.setSetpoint(leftSetpoint);
     }
     
     public void changeRight(double amount) {
         rightSetpoint += amount;
+        rightClimberPID.setSetpoint(rightSetpoint);
     }
     //--------------------------------------------SETS SETPOINTS--------------------------------------------
     public void toHang() {
@@ -81,27 +87,34 @@ public class ClimberCommand extends Command {
         m_ClimberSubsystem.rightSpeed(m_ClimberSubsystem.checkRightBound(rightClimberPID.calculate(m_ClimberSubsystem.rightPosition(), rightSetpoint)));
     }
     //--------------------------------------------CLIMBER COMMANDS--------------------------------------------
-    private boolean atPID(){
-        return leftClimberPID.atSetpoint() && rightClimberPID.atSetpoint();
+    public boolean AtSetpoint(){
+        return leftClimberPID.atSetpoint();
     }
 
     public Command driveClimbers() {
-        return m_ClimberSubsystem.run(() ->
+        return m_ClimberSubsystem.runOnce(() ->
         {calculateLeft();
         calculateRight();
-        }).until(this::atPID);
+        });
+    }
+
+    public Command stopClimbers() {
+        return m_ClimberSubsystem.runOnce(() ->
+        {m_ClimberSubsystem.leftSpeed(0);
+        m_ClimberSubsystem.rightSpeed(0);
+        });
     }
 
     public Command hangCommand(){
-        return m_ClimberSubsystem.runOnce(this::toHang).andThen(this.driveClimbers());
+        return (m_ClimberSubsystem.runOnce(this::toHang)).andThen(this.driveClimbers().repeatedly().until(this::AtSetpoint)).andThen(stopClimbers());
     }
 
     public Command stowCommand(){
-        return m_ClimberSubsystem.runOnce(this::stow).andThen(this.driveClimbers());
+        return (m_ClimberSubsystem.runOnce(this::stow)).andThen(this.driveClimbers().repeatedly().until(this::AtSetpoint)).andThen(stopClimbers());
     }   
 
     public Command climbCommand(){
-        return m_ClimberSubsystem.runOnce(this::toClimb).andThen(this.driveClimbers());
+        return (m_ClimberSubsystem.runOnce(this::toClimb)).andThen(this.driveClimbers().repeatedly().until(this::AtSetpoint)).andThen(stopClimbers());
     }
     //--------------------------------------------OLD CLIMBER COMMAND D: --------------------------------------------
     @Override

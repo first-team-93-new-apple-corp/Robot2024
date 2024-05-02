@@ -243,9 +243,9 @@ public class RobotContainer extends TimedRobot {
     m_Prime.whileTrue(m_ShooterCommand.Prime());
     //If not doing any of the above stop the shooter
     m_StopShooter.whileTrue(m_ShooterCommand.StopShooter());
-    // --------------------------------------------SHOOTER BUTTON BINDINGS--------------------------------------------
-    m_stowClimber.whileTrue(m_ClimberCommand.stowCommand());
-    m_hangClimber.whileTrue(m_ClimberCommand.hangCommand());
+    // --------------------------------------------CLIMBER BUTTON BINDINGS--------------------------------------------
+    m_stowClimber.onTrue(m_ClimberCommand.stowCommand());
+    m_hangClimber.onTrue(m_ClimberCommand.hangCommand());
     // --------------------------------------------SYS ID BUTTON BINDINGS--------------------------------------------
     m_SysIDDriveQuasiButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveQuasiTest(Direction.kForward));
     m_SysIDDriveQuasiButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveQuasiTest(Direction.kReverse));
