@@ -7,6 +7,7 @@ package frc.robot;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.IntakeShooterCommand;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
@@ -27,6 +29,8 @@ public class RobotContainer {
   // Constants / Other things
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+
+  private IntakeShooterCommand m_IntakeShooter;
 
   // Joysticks / Controllers
   private final Joystick m_LeftStick = new Joystick(0);
@@ -79,6 +83,8 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
+
+    NamedCommands.registerCommand("Intake", m_IntakeShooter.Intake());
   }
 
   public Command getAutonomousCommand() {
