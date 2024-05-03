@@ -35,9 +35,6 @@ public class ElevatorCommand extends Command {
     public void stop() {
         State = States.Stop;
     }
-    public void savePosition() {
-        m_Elevator.savePosition();
-    }
     @Override
     public void execute() {
         switch (State) {

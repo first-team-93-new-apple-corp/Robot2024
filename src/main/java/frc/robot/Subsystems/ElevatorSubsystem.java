@@ -6,27 +6,23 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ElevatorSubsystem extends SubsystemBase {
     TalonFX m_motor;
     TalonFXConfiguration m_config;
-    NeutralOut m_NeutralOut = new NeutralOut();
-    PositionVoltage m_PositionVoltage = new PositionVoltage(0);
-    double position;
-    double restoredPos;
+    NeutralOut m_NeutralOut;
+    PositionVoltage m_PositionVoltage;
+    DutyCycleEncoder m_Encoder;
 
-    /*
-     * Restoring position:
-     * Will use custom param 0 (-32768 through 32767)
-     * if it takes, say, idk 25.4 rotations to fully extend the elevator
-     * one rotation is 2048 ticks
-     * 2048 * 3 * 25.4 = 156057.6 / 5 = 31211.52, which is well within the range
-     * without compromising too much
-     * 
-     */
     public void init() {
+        //Init variables
+        m_Encoder = new DutyCycleEncoder(0);
+        m_PositionVoltage = new PositionVoltage(0);
+        m_NeutralOut = new NeutralOut();
+        
         // Motor
         m_motor = new TalonFX(Constants.CTRE.RIO.Elevator);
 
@@ -40,7 +36,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_config.Audio.AllowMusicDurDisable = true;
         m_config.Audio.BeepOnBoot = false;
         m_config.Audio.BeepOnBoot = false;
-        restoredPos = m_config.CustomParams.CustomParam0;
+        
         // Control Requests
         m_PositionVoltage.Slot = 0;
         m_PositionVoltage.EnableFOC = false;
@@ -48,7 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         // Applying Config
         m_motor.getConfigurator().apply(m_config);
         m_motor.setNeutralMode(NeutralModeValue.Brake);
-        m_motor.setPosition(restoredPos);
+        
     }
 
     public void toSetpoint(double setpoint) {
@@ -59,17 +55,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_motor.setControl(m_NeutralOut);
     }
 
-    public void savePosition() {
-
-    }
-
-    public double toStorage() {
-        return m_motor.getPosition().getValueAsDouble() / 5;
-    }
-
-    public double fromStorage(double input) {
-        return input * 5;
-    }
 
     @Override
     public void periodic() {

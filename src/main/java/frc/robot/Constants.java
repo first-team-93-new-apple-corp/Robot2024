@@ -1,6 +1,6 @@
 package frc.robot;
 
-public class Constants {
+public final class Constants {
     public class CTRE {
         public class RIO {
             public static final int Intake = 14;
@@ -130,6 +130,48 @@ public class Constants {
             public static final int Left_Stick_X = 0;
             public static final int Right_Stick_Y = 5;
             public static final int Right_Stick_X = 4;
+        }
+    }
+
+    // Formatted: Shoulder Angle, Elevator Pos,
+    public enum ARM_SETPOINTS {
+        Intake(),
+
+    }
+
+    // Events are all the possible "Modes" of the arm
+    public enum ARM_EVENTS {
+        CHECK_AT_DESIRED,
+        ALL_TO_SP,
+        SHOULDER_TO_SP,
+        RETRACT_TELESCOPE,
+        EXTEND_TELESCOPE,
+        // Used to stop telescope from running into bumper while leaving stow
+        SHOULDER_TO_SP_NC,
+        END
+    }
+
+    // States are all the possible movements of the arm
+    // (ex: intake to amp, amp to shoot, amp to stow, etc.)
+    public enum ARM_STATES {
+        
+        DO_NOTHING(new ARM_EVENTS[] { ARM_EVENTS.END }),
+
+        // To Intake
+        
+        SHOOT_TO_INTAKE(new ARM_EVENTS[] { ARM_EVENTS.RETRACT_TELESCOPE, ARM_EVENTS.SHOULDER_TO_SP, ARM_EVENTS.END}),
+        AMP_TO_INTAKE(new ARM_EVENTS[] { ARM_EVENTS.RETRACT_TELESCOPE, ARM_EVENTS.SHOULDER_TO_SP, ARM_EVENTS.END})
+        
+        
+        
+        public final ARM_EVENTS[] events;
+
+        private ARM_STATES(ARM_EVENTS[] events) {
+          this.events = events;
+        }
+    
+        public ARM_EVENTS[] getEvents() {
+          return events;
         }
     }
 }

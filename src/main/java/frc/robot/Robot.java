@@ -20,7 +20,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    // Quadrature = new Encoder(2, 1);
+    Quadrature = new Encoder(2, 1);
     DutyCycle = new DutyCycleEncoder(0);
   }
 
