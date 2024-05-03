@@ -130,5 +130,15 @@ public class ShooterIOSim implements ShooterIO {
             SpeakerShooterSpeed -= 0.05; // -5%speed
         }
     }
+
+    @Override
+    public void ServoUp() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void ServoDown() {
+        // TODO Auto-generated method stub
+    }
     
 }

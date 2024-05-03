@@ -37,7 +37,9 @@ public class ShooterCommand extends Command {
     }
 
     public Command ShootAmp(){
-        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.shootAmp());
+        return m_ShooterSubsystem.runOnce(() -> {m_ShooterSubsystem.shootAmp();
+            m_ShooterSubsystem.ServoUp();
+        });
     }
 
     public Command IntakeFront(){
@@ -45,7 +47,9 @@ public class ShooterCommand extends Command {
     }
 
     public Command StopShooter(){
-        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.shooterStop());
+        return m_ShooterSubsystem.runOnce(() -> {m_ShooterSubsystem.shooterStop();
+            m_ShooterSubsystem.ServoDown();}
+            );
     }
 
     public Command Kicker(){

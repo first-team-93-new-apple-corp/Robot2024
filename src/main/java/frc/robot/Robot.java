@@ -19,6 +19,7 @@ import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.Preflight;
+import frc.robot.commands.ShooterCommand;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.*;
@@ -38,6 +39,7 @@ public class Robot extends TimedRobot {
   public Preflight m_Preflight;
   public IntakeCommand m_IntakeCommand;
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
+  private ShooterCommand m_Shooter;
   // DigitalOutput test = new DigitalOutput(3);
   public Pigeon2 getPigeon() {
     return m_robotContainer.getPigeon();
@@ -56,7 +58,7 @@ public class Robot extends TimedRobot {
     m_Elevator = m_robotContainer.m_ElevatorCommand;
     m_Preflight = m_robotContainer.m_PreflightCommand;
     m_LED = m_robotContainer.m_LedSubsystem;
-
+    m_Shooter = m_robotContainer.m_ShooterCommand;
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
     m_Elevator.initOnce();
     // m_SwerveDriveSubsystem.configAuto();
@@ -78,7 +80,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     m_robotContainer.updateVision();
-    m_robotContainer.pathTrajectory();
+    // m_robotContainer.pathTrajectory();
   }
 
   @Override

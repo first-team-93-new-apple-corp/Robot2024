@@ -27,7 +27,14 @@ public class IntakeCommand extends Command {
         return m_IntakeSubsystem.runOnce(() -> m_IntakeSubsystem.stop());
     }
     public Command Intake(){
-        return m_IntakeSubsystem.startEnd((m_IntakeSubsystem::intake),(m_IntakeSubsystem::stop));
+        return m_IntakeSubsystem.run((m_IntakeSubsystem::intake));
+    }
+
+    public Command StopIntake(){
+        return m_IntakeSubsystem.runOnce((() -> {m_IntakeSubsystem.stop();
+            m_IntakeSubsystem.resetIntakeState();
+            opController.setRumble(RumbleType.kBothRumble, 0);
+        }));
     }
 
     @Override
