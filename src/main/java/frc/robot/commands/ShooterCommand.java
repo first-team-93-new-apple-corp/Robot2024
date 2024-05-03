@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -6,13 +6,15 @@ import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 public class ShooterCommand extends Command {
     XboxController opController = new XboxController(2);
     Joystick driver2 = new Joystick(1);
     ShooterSubsystem m_ShooterSubsystem;
     LEDSubsystem m_LED;
-
+    POVButton up = new POVButton(opController, 0);
+    POVButton down = new POVButton(opController, 180);
     public ShooterCommand(ShooterSubsystem m_ShooterSubsystem, LEDSubsystem m_LED) {
         this.m_ShooterSubsystem = m_ShooterSubsystem;
         this.m_LED = m_LED;
@@ -46,6 +48,12 @@ public class ShooterCommand extends Command {
             m_LED.shot();
         } else if (!opController.getRawButton(Constants.xbox.LeftShoulderButton) && !opController.getRawButton(Constants.xbox.X)) {
             m_ShooterSubsystem.kickerStop();
+        }
+
+        if (up.getAsBoolean()) {
+            m_LED.servoUP();
+        } else if (down.getAsBoolean()) {
+            m_LED.servoDOWN();
         }
     }
 }

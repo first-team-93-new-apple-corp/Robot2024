@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.PubSub;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,6 +16,9 @@ public class LEDSubsystem extends SubsystemBase {
     DigitalOutput green1;
     DigitalOutput red1;
     DigitalOutput blue1;
+    DigitalOutput servo;
+
+    Servo servo1;
 
     int shotCounter;
 
@@ -26,6 +30,7 @@ public class LEDSubsystem extends SubsystemBase {
             red1 = new DigitalOutput(7);
             green1 = new DigitalOutput(5);
             blue1 = new DigitalOutput(3);
+            servo1 = new Servo(8);
             setColor(Color.kBlack);
         }
         
@@ -49,6 +54,14 @@ public class LEDSubsystem extends SubsystemBase {
         green1.enablePWM(m_color.green);
         blue1.enablePWM(m_color.blue);
     }
+
+    public void servoDOWN(){
+        servo1.set(.1);
+    }
+
+    public void servoUP(){
+        servo1.set(.7);
+   }
 
     public void turnLEDSOff() {
         setColor(Color.kBlack);

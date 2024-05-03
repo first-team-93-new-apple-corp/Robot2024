@@ -12,16 +12,16 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.ShooterCommand;
+import frc.robot.Commands.ShooterCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 // import frc.robot.subsystems.USBCameraSubsystem;
-import frc.robot.commands.ClimberCommand;
-import frc.robot.commands.ElevatorCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.Preflight;
+import frc.robot.Commands.ClimberCommand;
+import frc.robot.Commands.ElevatorCommand;
+import frc.robot.Commands.IntakeCommand;
+import frc.robot.Commands.Preflight;
 import com.ctre.phoenix6.hardware.*;
 
 public class Robot extends TimedRobot {
