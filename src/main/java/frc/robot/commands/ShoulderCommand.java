@@ -30,15 +30,4 @@ class ShoulderCommand extends Command {
     public Command stopShoulder() {
         return (m_shoulder.runOnce(() -> m_shoulder.stopShoulder()));
     }
-    // public void execute() {
-    //     switch (shoulderState) {
-    //         case Stop:
-    //             m_shoulder.stopShoulder();
-    //             break;
-    //         case Run:
-    //             m_shoulder.moveShoulder(angleSetpoint);
-    //             break;
-    //     }
-    // }
-    
 }
