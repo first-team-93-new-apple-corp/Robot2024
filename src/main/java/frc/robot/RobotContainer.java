@@ -18,22 +18,26 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Subsystems.SwerveDriveSubsystem;
-import frc.robot.Subsystems.Telemetry;
-import frc.robot.Subsystems.TunerConstants;
+import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.subsystems.Telemetry;
+import frc.robot.subsystems.TunerConstants;
 
 public class RobotContainer {
+  // Constants / Other things
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
-  /* Setting up bindings for necessary control of the swerve drive platform */
+  // Joysticks / Controllers
   private final Joystick m_LeftStick = new Joystick(0);
   private final Joystick m_RightStick = new Joystick(1);
-  private final XboxController m_Driver = new XboxController(0);
+  private final XboxController m_XboxDriver = new XboxController(0);
+
+  // Joystick Buttons
   private final JoystickButton m_FieldRelativeButton = new JoystickButton(m_LeftStick, 12);
-  private final JoystickButton m_FieldRelativeButtonXbox = new JoystickButton(m_Driver, 5);
+  private final JoystickButton m_FieldRelativeButtonXbox = new JoystickButton(m_XboxDriver, 5);
+
+  // Drivetrain
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private SendableChooser<Command> autoChooser;
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -43,19 +47,22 @@ public class RobotContainer {
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   private void configureBindings() {
+    // Controls
+    // reset the field-centric heading on left bumper press
+    m_FieldRelativeButton.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    m_FieldRelativeButtonXbox.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    
+    // Drive Controls
     if (DriverStation.getJoystickIsXbox(0)) {
       drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
           drivetrain
-              .applyRequest(() -> drive.withVelocityX((-m_Driver.getLeftY() * Math.abs(m_Driver.getLeftY())) * MaxSpeed) // Drive
-                                                                                                                         // forward
-                                                                                                                         // with
-                  // negative Y (forward)
-                  .withVelocityY((-m_Driver.getLeftX() * Math.abs(m_Driver.getLeftX())) * MaxSpeed) // Drive left with
-                                                                                                    // negative X (left)
-                  .withRotationalRate(
-                      (-m_Driver.getRightX() * Math.abs(m_Driver.getRightX()) * Math.abs(m_Driver.getRightX()))
-                          * MaxAngularRate) // Drive counterclockwise with negative X (left)
-              ));
+              .applyRequest(
+                  () -> drive.withVelocityX((-m_XboxDriver.getLeftY() * Math.abs(m_XboxDriver.getLeftY())) * MaxSpeed)
+                      .withVelocityY((-m_XboxDriver.getLeftX() * Math.abs(m_XboxDriver.getLeftX())) * MaxSpeed)
+                      .withRotationalRate(
+                          (-m_XboxDriver.getRightX() * Math.abs(m_XboxDriver.getRightX())
+                              * Math.abs(m_XboxDriver.getRightX()))
+                              * MaxAngularRate)));
     } else {
       drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
           drivetrain.applyRequest(() -> drive.withVelocityX(-m_LeftStick.getRawAxis(1) * MaxSpeed) // Drive forward with
@@ -65,10 +72,6 @@ public class RobotContainer {
                                                                                 // X (left)
           ));
     }
-
-    // reset the field-centric heading on left bumper press
-    m_FieldRelativeButton.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-    m_FieldRelativeButtonXbox.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
