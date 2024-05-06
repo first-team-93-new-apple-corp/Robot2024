@@ -33,7 +33,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAlignCommand;
@@ -75,22 +74,24 @@ public class RobotContainer extends TimedRobot {
   public final AutoAlignCommand m_AutoAlignCommand;  
   public final Preflight m_PreflightCommand;
   public final ClimberCommand m_ClimberCommand;
-  // --------------------------------------------SHOOTER Control Buttons--------------------------------------------
+  // --------------------------------------------INTAKE Control BUTTONS--------------------------------------------
+  private final Trigger m_Intake;
+  // --------------------------------------------SHOOTER Control BUTTONS--------------------------------------------
   private final Trigger m_Prime;
   private final Trigger m_ShootAmp;
   private final Trigger m_IntakeFront;
   private final Trigger m_Kicker;
   private final Trigger m_KickerAmp;
   private final Trigger m_StopShooter;
-  // --------------------------------------------SHOOTER Control Buttons--------------------------------------------
+  // --------------------------------------------CLIMBER CONTROL BUTTONS--------------------------------------------
   private final Trigger m_hangClimber;
   private final Trigger m_stowClimber;
-  // --------------------------------------------DRIVE Buttons--------------------------------------------
+  // --------------------------------------------DRIVE BUTTONS--------------------------------------------
   private final JoystickButton m_AmpAlignButton;
   private final JoystickButton m_BrakeButton;
   private final JoystickButton m_fieldRelButton;
   private final JoystickButton m_RobotRelButton;
-  // --------------------------------------------SYS ID Buttons--------------------------------------------
+  // --------------------------------------------SYS ID BUTTONS--------------------------------------------
   private final JoystickButton m_SysIDDriveQuasiButton;
   private final JoystickButton m_SysIDDriveDynamButton;
   private final JoystickButton m_SysIDSteerQuasiButton;
@@ -122,90 +123,8 @@ public class RobotContainer extends TimedRobot {
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
-  POVButton pov0; // front
-  POVButton pov45; // fr wheel
-  POVButton pov90; // right
-  POVButton pov135; // br wheel
-  POVButton pov180; // back
-  POVButton pov225;// bl wheel
-  POVButton pov270;// left
-  POVButton pov315; // fl wheel
-  POVButton povCenter;
-
+  
   // logan was here you silly gooses ;)
-  // Configures the bindings to drive / control the swerve drive :)
-  public void RotationPoints(Joystick m_Joystick2) {
-    m_Joystick2 = this.m_Joystick2;
-    pov0 = new POVButton(m_Joystick2, 0); // front
-    pov45 = new POVButton(m_Joystick2, 45); // fr wheel
-    pov90 = new POVButton(m_Joystick2, 90); // right
-    pov135 = new POVButton(m_Joystick2, 135); // br wheel
-    pov180 = new POVButton(m_Joystick2, 180); // back
-    pov225 = new POVButton(m_Joystick2, 225);// bl wheel
-    pov270 = new POVButton(m_Joystick2, 270);// left
-    pov315 = new POVButton(m_Joystick2, 315); // fl wheel
-    povCenter = new POVButton(m_Joystick2, -1);
-  }
-
-  public void POVButton() {
-    // SmartDashboard.putNumber("Limit", Limit);
-    if (!(m_Joystick2.getRawAxis(0) <= 0.1 && m_Joystick2.getRawAxis(0) >= -0.1)) {
-      if (Limit) {
-        Limit = false;
-        // SmartDashboard.putNumber("Limit", Limit);
-        if (pov0.getAsBoolean()) {
-          DriveConstants.dCenter = DriveConstants.Front
-              .rotateBy(Rotation2d.fromDegrees(-1 * m_SwerveDriveSubsystem.getHeading())
-              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
-              );
-        } else if (pov45.getAsBoolean()) {
-          DriveConstants.dCenter = DriveConstants.Location_FR
-              .rotateBy(Rotation2d.fromDegrees(-1 * m_SwerveDriveSubsystem.getHeading())
-              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
-              );
-        } else if (pov90.getAsBoolean()) {
-          DriveConstants.dCenter = DriveConstants.Right
-              .rotateBy(Rotation2d.fromDegrees(-1 * m_SwerveDriveSubsystem.getHeading())
-              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
-              );
-        } else if (pov135.getAsBoolean()) {
-          DriveConstants.dCenter = DriveConstants.Location_BR
-              .rotateBy(Rotation2d.fromDegrees(-1 * m_SwerveDriveSubsystem.getHeading())
-              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
-              );
-        } else if (pov180.getAsBoolean()) {
-          DriveConstants.dCenter = DriveConstants.Back
-              .rotateBy(Rotation2d.fromDegrees(-1 * m_SwerveDriveSubsystem.getHeading())
-              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
-              );
-        } else if (pov225.getAsBoolean()) {
-          DriveConstants.dCenter = DriveConstants.Location_BL
-              .rotateBy(Rotation2d.fromDegrees(-1 * m_SwerveDriveSubsystem.getHeading())
-              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
-              );
-        } else if (pov270.getAsBoolean()) {
-          DriveConstants.dCenter = DriveConstants.Left
-              .rotateBy(Rotation2d.fromDegrees(-1 * m_SwerveDriveSubsystem.getHeading())
-              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
-              );
-        } else if (pov315.getAsBoolean()) {
-          DriveConstants.dCenter = DriveConstants.Location_FL
-              .rotateBy(Rotation2d.fromDegrees(-1 * m_SwerveDriveSubsystem.getHeading())
-              // .rotateBy(new Rotation2d(-fieldRelativeOffset))
-              );
-        } else {
-          DriveConstants.dCenter = DriveConstants.Center;
-        }
-      } else {
-        Limit = false;
-        if (povCenter.getAsBoolean()) {
-          DriveConstants.dCenter = DriveConstants.Center;
-        }
-      }
-    } else {
-      Limit = true;
-    }
-  }
   
   public void configureBindings() {
     m_SwerveDriveSubsystem.registerTelemetry(logger::telemeterize);
@@ -235,32 +154,38 @@ public class RobotContainer extends TimedRobot {
         .withRotationalRate(
             -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
                 * MaxAngularRate)));
+    // --------------------------------------------INTAKE BUTTON BINDINGS--------------------------------------------
+    m_Intake.onTrue(m_IntakeCommand.Intake());
+    m_Intake.onFalse(m_IntakeCommand.StopIntake().alongWith(m_ShooterCommand.StopShooter()));
     // --------------------------------------------SHOOTER BUTTON BINDINGS--------------------------------------------
-    m_ShootAmp.whileTrue(m_ShooterCommand.ShootAmp());
-    m_KickerAmp.whileTrue(m_ShooterCommand.AmpKicker().alongWith());
-    m_Kicker.whileTrue(m_ShooterCommand.Kicker());
-    m_IntakeFront.whileTrue(m_ShooterCommand.IntakeFront());
-    m_Prime.whileTrue(m_ShooterCommand.Prime());
-    //If not doing any of the above stop the shooter
-    m_StopShooter.whileTrue(m_ShooterCommand.StopShooter());
+    m_ShootAmp.onTrue(m_ShooterCommand.ShootAmp());
+    m_KickerAmp.onTrue(m_ShooterCommand.AmpKicker());
+    m_Kicker.onTrue(m_ShooterCommand.Kicker());
+    m_IntakeFront.onTrue(m_ShooterCommand.IntakeFront());
+    m_Prime.onTrue(m_ShooterCommand.Prime().alongWith(m_LedSubsystem.LEDSHOOT()));
+    m_ShootAmp.onFalse(m_ShooterCommand.StopShooter());
+    m_KickerAmp.onFalse(m_ShooterCommand.StopShooter());
+    m_Kicker.onFalse(m_ShooterCommand.StopShooter());
+    m_IntakeFront.onFalse(m_ShooterCommand.StopShooter());
+    m_Prime.onFalse(m_ShooterCommand.StopShooter());
     // --------------------------------------------CLIMBER BUTTON BINDINGS--------------------------------------------
     m_stowClimber.onTrue(m_ClimberCommand.stowCommand());
     m_hangClimber.onTrue(m_ClimberCommand.hangCommand());
     // --------------------------------------------SYS ID BUTTON BINDINGS--------------------------------------------
-    m_SysIDDriveQuasiButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveQuasiTest(Direction.kForward));
-    m_SysIDDriveQuasiButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveQuasiTest(Direction.kReverse));
+    // m_SysIDDriveQuasiButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveQuasiTest(Direction.kForward));
+    // m_SysIDDriveQuasiButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveQuasiTest(Direction.kReverse));
 
-    m_SysIDDriveDynamButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveDynamTest(Direction.kForward));
-    m_SysIDDriveDynamButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveDynamTest(Direction.kReverse));
+    // m_SysIDDriveDynamButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveDynamTest(Direction.kForward));
+    // m_SysIDDriveDynamButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveDynamTest(Direction.kReverse));
 
-    m_SysIDSteerQuasiButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(m_SwerveDriveSubsystem.runSteerQuasiTest(Direction.kForward));
-    m_SysIDSteerQuasiButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(m_SwerveDriveSubsystem.runSteerQuasiTest(Direction.kReverse));
+    // m_SysIDSteerQuasiButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(m_SwerveDriveSubsystem.runSteerQuasiTest(Direction.kForward));
+    // m_SysIDSteerQuasiButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(m_SwerveDriveSubsystem.runSteerQuasiTest(Direction.kReverse));
 
-    m_SysIDSteerDynamButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(m_SwerveDriveSubsystem.runSteerDynamTest(Direction.kForward));
-    m_SysIDSteerDynamButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(m_SwerveDriveSubsystem.runSteerDynamTest(Direction.kReverse));
-    // Drivetrain needs to be placed against a sturdy wall and test stopped immediately upon wheel slip
-    m_SysIDDriveSlipButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveSlipTest());
-    m_endSignalLogging.whileTrue(m_SwerveDriveSubsystem.StopSignalLogging());
+    // m_SysIDSteerDynamButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(m_SwerveDriveSubsystem.runSteerDynamTest(Direction.kForward));
+    // m_SysIDSteerDynamButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(m_SwerveDriveSubsystem.runSteerDynamTest(Direction.kReverse));
+    // // Drivetrain needs to be placed against a sturdy wall and test stopped immediately upon wheel slip
+    // m_SysIDDriveSlipButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveSlipTest());
+    // m_endSignalLogging.whileTrue(m_SwerveDriveSubsystem.StopSignalLogging());
   }
 
   public RobotContainer(Constants constants, Joystick m_Joystick1, Joystick m_Joystick2, XboxController operator) {
@@ -283,14 +208,16 @@ public class RobotContainer extends TimedRobot {
     m_ElevatorCommand = new ElevatorCommand(op, m_ElevatorSubsystem);
     m_ClimberCommand = new ClimberCommand(op, m_ClimberSubsystem);
     m_PreflightCommand = new Preflight(m_ElevatorCommand, m_ClimberCommand);
-    // --------------------------------------------Shooter Control Buttons--------------------------------------------
+    // --------------------------------------------INTAKE Control BUTTONS--------------------------------------------
+    m_Intake = new Trigger(op.button(Constants.xbox.X, m_loop));
+    // --------------------------------------------SHOOTER Control BUTTONS--------------------------------------------
     m_ShootAmp = new Trigger(op.button(Constants.xbox.RightShoulderButton, m_loop));
     m_KickerAmp = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Trigger).and(op.button(Constants.xbox.RightShoulderButton, m_loop));  
     m_Kicker = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Trigger).and(op.button(Constants.xbox.RightShoulderButton, m_loop).negate());  
     m_IntakeFront = new Trigger(op.button(Constants.xbox.LeftShoulderButton, m_loop));
     m_Prime = new Trigger(op.axisGreaterThan(Constants.xbox.Axis.RT, 0.6, m_loop));
     m_StopShooter = new Trigger((m_ShootAmp.and(m_KickerAmp).and(m_Kicker).and(m_IntakeFront).and(m_Prime)).negate());
-    // --------------------------------------------DRIVE Control Buttons--------------------------------------------
+    // --------------------------------------------DRIVE Control BUTTONS--------------------------------------------
     m_fieldRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Top_Middle);
     m_BrakeButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
@@ -358,26 +285,24 @@ public class RobotContainer extends TimedRobot {
         new Rotation2d(m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians())
             // .rotateBy(new Rotation2d(-fieldRelativeOffset))
             );
-    RotationPoints(m_Joystick2);
-    POVButton();
     updateVision();
     // --------------------------------------------SMARTDASHBOARD STUFF--------------------------------------------
     SmartDashboard.putData("pigeon", getPigeon());
     SmartDashboard.putNumber("angular Velocity", getPigeon().getRate());
     // --------------------------------------------SYS ID LOGGING--------------------------------------------
     SignalLogger.writeDoubleArray("pose", new double[] {pose.getX(), pose.getY(), pose.getRotation().getDegrees()});
-    SignalLogger.writeDouble("overall X pose", pose.getX());
-    SignalLogger.writeDouble("Stator Current", m_SwerveDriveSubsystem.getDrive(0).getStatorCurrent().getValueAsDouble());
-    for (int i = 0; i < 4; i++) {
-    SignalLogger.writeDouble("SysID: Stator Current" + i, m_SwerveDriveSubsystem.getDrive(i).getStatorCurrent().getValueAsDouble());
-    SignalLogger.writeDouble("SysID: Drive Velocity" + i, m_SwerveDriveSubsystem.getDrive(i).getVelocity().getValueAsDouble());
-    SignalLogger.writeDouble("SysID: Drive Position" + i, m_SwerveDriveSubsystem.getDrive(i).getPosition().getValueAsDouble());
-    SignalLogger.writeDouble("SysID: Drive Voltage" + i, m_SwerveDriveSubsystem.getDrive(i).getMotorVoltage().getValueAsDouble());
+    // SignalLogger.writeDouble("overall X pose", pose.getX());
+    // SignalLogger.writeDouble("Stator Current", m_SwerveDriveSubsystem.getDrive(0).getStatorCurrent().getValueAsDouble());
+    // for (int i = 0; i < 4; i++) {
+    // SignalLogger.writeDouble("SysID: Stator Current" + i, m_SwerveDriveSubsystem.getDrive(i).getStatorCurrent().getValueAsDouble());
+    // SignalLogger.writeDouble("SysID: Drive Velocity" + i, m_SwerveDriveSubsystem.getDrive(i).getVelocity().getValueAsDouble());
+    // SignalLogger.writeDouble("SysID: Drive Position" + i, m_SwerveDriveSubsystem.getDrive(i).getPosition().getValueAsDouble());
+    // SignalLogger.writeDouble("SysID: Drive Voltage" + i, m_SwerveDriveSubsystem.getDrive(i).getMotorVoltage().getValueAsDouble());
     
-    SignalLogger.writeDouble("SysID: Steer Velocity" + i, m_SwerveDriveSubsystem.getTurn(i).getVelocity().getValueAsDouble());
-    SignalLogger.writeDouble("SysID: Steer Position" + i, m_SwerveDriveSubsystem.getTurn(i).getPosition().getValueAsDouble());
-    SignalLogger.writeDouble("SysID: Steer Voltage" + i, m_SwerveDriveSubsystem.getTurn(i).getMotorVoltage().getValueAsDouble());
-    }
+    // SignalLogger.writeDouble("SysID: Steer Velocity" + i, m_SwerveDriveSubsystem.getTurn(i).getVelocity().getValueAsDouble());
+    // SignalLogger.writeDouble("SysID: Steer Position" + i, m_SwerveDriveSubsystem.getTurn(i).getPosition().getValueAsDouble());
+    // SignalLogger.writeDouble("SysID: Steer Voltage" + i, m_SwerveDriveSubsystem.getTurn(i).getMotorVoltage().getValueAsDouble());
+    // }
   }
 
   public double checkDeadzone(double input) {

@@ -37,4 +37,8 @@ public interface ShooterIO {
     public void increaseSpeed();
 
     public void decreaseSpeed();
+
+    public void ServoUp();
+
+    public void ServoDown();
 }
