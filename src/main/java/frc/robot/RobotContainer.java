@@ -83,6 +83,9 @@ public class RobotContainer extends TimedRobot {
   private final Trigger m_Kicker;
   private final Trigger m_KickerAmp;
   private final Trigger m_StopShooter;
+  // --------------------------------------------CLIMBER CONTROL BUTTONS--------------------------------------------
+  private final Trigger m_hangClimber;
+  private final Trigger m_stowClimber;
   // --------------------------------------------DRIVE BUTTONS--------------------------------------------
   private final JoystickButton m_AmpAlignButton;
   private final JoystickButton m_BrakeButton;
@@ -165,6 +168,9 @@ public class RobotContainer extends TimedRobot {
     m_Kicker.onFalse(m_ShooterCommand.StopShooter());
     m_IntakeFront.onFalse(m_ShooterCommand.StopShooter());
     m_Prime.onFalse(m_ShooterCommand.StopShooter());
+    // --------------------------------------------CLIMBER BUTTON BINDINGS--------------------------------------------
+    m_stowClimber.onTrue(m_ClimberCommand.stowCommand());
+    m_hangClimber.onTrue(m_ClimberCommand.hangCommand());
     // --------------------------------------------SYS ID BUTTON BINDINGS--------------------------------------------
     // m_SysIDDriveQuasiButton.and(m_Joystick1.pov(0, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveQuasiTest(Direction.kForward));
     // m_SysIDDriveQuasiButton.and(m_Joystick1.pov(180, m_loop)).whileTrue(m_SwerveDriveSubsystem.runDriveQuasiTest(Direction.kReverse));
@@ -216,6 +222,9 @@ public class RobotContainer extends TimedRobot {
     m_BrakeButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     m_AmpAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
+    // --------------------------------------------DRIVE Control Buttons--------------------------------------------
+    m_stowClimber = new Trigger(op.button(Constants.xbox.A, m_loop));
+    m_hangClimber = new Trigger(op.button(Constants.xbox.B, m_loop));
     // --------------------------------------------SYS ID BUTTONS--------------------------------------------
     m_SysIDDriveQuasiButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Left);
     m_SysIDDriveDynamButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Middle);
