@@ -85,6 +85,9 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
     NamedCommands.registerCommand("Intake", m_IntakeShooter.Intake());
+    NamedCommands.registerCommand("Prime", m_IntakeShooter.shoot());
+    NamedCommands.registerCommand("Amp", m_IntakeShooter.amp());
+    NamedCommands.registerCommand("Kicker", m_IntakeShooter.kicker());
   }
 
   public Command getAutonomousCommand() {

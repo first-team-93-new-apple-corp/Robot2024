@@ -15,7 +15,7 @@ public class IntakeShooterCommand extends Command {
         this.m_IntakeShooter = m_IntakeShooter;
     }
 
-    public Command intake(){
+    public Command Intake(){
         return m_IntakeShooter.runOnce(() -> m_IntakeShooter.Intake());
     }
     
