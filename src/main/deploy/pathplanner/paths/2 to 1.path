@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.887570138776641,
-        "y": 6.99655944766435
+        "x": 2.909982492594682,
+        "y": 5.521816553472107
       },
       "prevControl": {
-        "x": 2.8782413928464217,
-        "y": 6.99655944766435
+        "x": 2.9006537466644624,
+        "y": 5.521816553472107
       },
       "nextControl": null,
       "isLocked": false,
@@ -54,7 +54,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "BL RR",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
