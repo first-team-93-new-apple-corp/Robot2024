@@ -35,14 +35,15 @@ public class Robot extends TimedRobot {
   private LEDSubsystem m_LED;
   Constants constants;
   private ElevatorCommand m_Elevator;
-  private ClimberCommand m_Climber;
   public Preflight m_Preflight;
   public IntakeCommand m_IntakeCommand;
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
-  private ShooterCommand m_Shooter;
   // DigitalOutput test = new DigitalOutput(3);
   public Pigeon2 getPigeon() {
     return m_robotContainer.getPigeon();
+  }
+  public Robot() {
+    addPeriodic(this::teleopControllerPeriodic, .03, .05);
   }
 
   @Override
@@ -54,11 +55,9 @@ public class Robot extends TimedRobot {
     }
     m_robotContainer = new RobotContainer(constants, m_Joystick1, m_Joystick2, op);
     m_IntakeCommand = m_robotContainer.m_IntakeCommand;
-    m_Climber = m_robotContainer.m_ClimberCommand;
     m_Elevator = m_robotContainer.m_ElevatorCommand;
     m_Preflight = m_robotContainer.m_PreflightCommand;
     m_LED = m_robotContainer.m_LedSubsystem;
-    m_Shooter = m_robotContainer.m_ShooterCommand;
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
     m_Elevator.initOnce();
     // m_SwerveDriveSubsystem.configAuto();
@@ -126,10 +125,14 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // m_IntakeCommand.schedule();
     // m_Shooter.schedule();
-    m_Elevator.schedule();
+    // m_Elevator.schedule();
     // m_Climber.schedule();
     m_robotContainer.updateValues();
-    m_robotContainer.m_loop.poll();
+    // m_robotContainer.m_loop.poll();
+  }
+
+  public void teleopControllerPeriodic(){
+    m_robotContainer.m_controllerLoop.poll();
   }
 
   @Override

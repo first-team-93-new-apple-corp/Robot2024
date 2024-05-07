@@ -78,11 +78,10 @@ public class RobotContainer extends TimedRobot {
   private final Trigger m_Intake;
   // --------------------------------------------SHOOTER Control BUTTONS--------------------------------------------
   private final Trigger m_Prime;
-  private final Trigger m_ShootAmp;
-  private final Trigger m_IntakeFront;
+  private final Trigger m_AMP;
+  private final Trigger m_Source;
   private final Trigger m_Kicker;
   private final Trigger m_KickerAmp;
-  private final Trigger m_StopShooter;
   // --------------------------------------------CLIMBER CONTROL BUTTONS--------------------------------------------
   private final Trigger m_hangClimber;
   private final Trigger m_stowClimber;
@@ -107,8 +106,8 @@ public class RobotContainer extends TimedRobot {
   private Joystick m_Joystick1;
   private Joystick m_Joystick2;
   private XboxController op;
-  private boolean Limit = true;
-  public final EventLoop m_loop = new EventLoop();
+  // public final EventLoop m_loop = new EventLoop();
+  public final EventLoop m_controllerLoop = new EventLoop();
   private ChassisSpeeds speeds;
   private ChassisSpeeds fieldSpeeds;
   private double fieldRelativeOffset;
@@ -157,16 +156,18 @@ public class RobotContainer extends TimedRobot {
     // --------------------------------------------INTAKE BUTTON BINDINGS--------------------------------------------
     m_Intake.onTrue(m_IntakeCommand.Intake());
     m_Intake.onFalse(m_IntakeCommand.StopIntake().alongWith(m_ShooterCommand.StopShooter()));
+    // --------------------------------------------ELEVATOR + SHOOTER BUTTON BINDINGS--------------------------------------------
+    m_AMP.onTrue(m_ShooterCommand.ShootAmp().alongWith(m_ElevatorCommand.Amp()));
+    m_AMP.onFalse(m_ShooterCommand.StopShooter().alongWith(m_ElevatorCommand.Default()));
+
+    m_Source.onTrue(m_ShooterCommand.IntakeFront().alongWith(m_ElevatorCommand.Source()));
+    m_Source.onFalse(m_ShooterCommand.StopShooter().alongWith(m_ElevatorCommand.Default()));
     // --------------------------------------------SHOOTER BUTTON BINDINGS--------------------------------------------
-    m_ShootAmp.onTrue(m_ShooterCommand.ShootAmp());
     m_KickerAmp.onTrue(m_ShooterCommand.AmpKicker());
     m_Kicker.onTrue(m_ShooterCommand.Kicker());
-    m_IntakeFront.onTrue(m_ShooterCommand.IntakeFront());
     m_Prime.onTrue(m_ShooterCommand.Prime().alongWith(m_LedSubsystem.LEDSHOOT()));
-    m_ShootAmp.onFalse(m_ShooterCommand.StopShooter());
     m_KickerAmp.onFalse(m_ShooterCommand.StopShooter());
     m_Kicker.onFalse(m_ShooterCommand.StopShooter());
-    m_IntakeFront.onFalse(m_ShooterCommand.StopShooter());
     m_Prime.onFalse(m_ShooterCommand.StopShooter());
     // --------------------------------------------CLIMBER BUTTON BINDINGS--------------------------------------------
     m_stowClimber.onTrue(m_ClimberCommand.stowCommand());
@@ -208,23 +209,23 @@ public class RobotContainer extends TimedRobot {
     m_ElevatorCommand = new ElevatorCommand(op, m_ElevatorSubsystem);
     m_ClimberCommand = new ClimberCommand(op, m_ClimberSubsystem);
     m_PreflightCommand = new Preflight(m_ElevatorCommand, m_ClimberCommand);
-    // --------------------------------------------INTAKE Control BUTTONS--------------------------------------------
-    m_Intake = new Trigger(op.button(Constants.xbox.X, m_loop));
-    // --------------------------------------------SHOOTER Control BUTTONS--------------------------------------------
-    m_ShootAmp = new Trigger(op.button(Constants.xbox.RightShoulderButton, m_loop));
-    m_KickerAmp = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Trigger).and(op.button(Constants.xbox.RightShoulderButton, m_loop));  
-    m_Kicker = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Trigger).and(op.button(Constants.xbox.RightShoulderButton, m_loop).negate());  
-    m_IntakeFront = new Trigger(op.button(Constants.xbox.LeftShoulderButton, m_loop));
-    m_Prime = new Trigger(op.axisGreaterThan(Constants.xbox.Axis.RT, 0.6, m_loop));
-    m_StopShooter = new Trigger((m_ShootAmp.and(m_KickerAmp).and(m_Kicker).and(m_IntakeFront).and(m_Prime)).negate());
-    // --------------------------------------------DRIVE Control BUTTONS--------------------------------------------
+    // --------------------------------------------INTAKE CONTROL BUTTONS--------------------------------------------
+    m_Intake = new Trigger(op.button(Constants.xbox.X, m_controllerLoop));
+    // --------------------------------------------ELEVATOR + SHOOTER CONTROL BUTTONS--------------------------------------------
+    m_AMP = new Trigger(op.button(Constants.xbox.RightShoulderButton, m_controllerLoop));
+    m_Source = new Trigger(op.button(Constants.xbox.LeftShoulderButton, m_controllerLoop));
+    // --------------------------------------------SHOOTER CONTROL BUTTONS--------------------------------------------
+    m_KickerAmp = new Trigger(m_Joystick2.button(Constants.Thrustmaster.Trigger, m_controllerLoop)).and(op.button(Constants.xbox.RightShoulderButton, m_controllerLoop));  
+    m_Kicker = new Trigger(m_Joystick2.button(Constants.Thrustmaster.Trigger, m_controllerLoop)).and(op.button(Constants.xbox.RightShoulderButton, m_controllerLoop).negate());  
+    m_Prime = new Trigger(op.axisGreaterThan(Constants.xbox.Axis.RT, 0.6, m_controllerLoop));
+    // --------------------------------------------DRIVE CONTROL BUTTONS--------------------------------------------
     m_fieldRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Top_Middle);
     m_BrakeButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     m_AmpAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
-    // --------------------------------------------DRIVE Control Buttons--------------------------------------------
-    m_stowClimber = new Trigger(op.button(Constants.xbox.A, m_loop));
-    m_hangClimber = new Trigger(op.button(Constants.xbox.B, m_loop));
+    // --------------------------------------------CLIMBER CONTROL Buttons--------------------------------------------
+    m_stowClimber = new Trigger(op.button(Constants.xbox.A, m_controllerLoop));
+    m_hangClimber = new Trigger(op.button(Constants.xbox.B, m_controllerLoop));
     // --------------------------------------------SYS ID BUTTONS--------------------------------------------
     m_SysIDDriveQuasiButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Left);
     m_SysIDDriveDynamButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Middle);
@@ -232,7 +233,7 @@ public class RobotContainer extends TimedRobot {
     m_SysIDSteerDynamButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Bottom_Middle);
     m_SysIDDriveSlipButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Right);
     m_endSignalLogging = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Right_Buttons.Bottom_Right);
-    // --------------------------------------------PATH PLANNER NAMED COMMANDS--------------------------------------------
+    // --------------------------------------------NAMED COMMANDS--------------------------------------------
     NamedCommands.registerCommand("Intake", m_IntakeCommand.AutoIntake().alongWith(Commands.waitSeconds(1.5)).andThen(m_IntakeCommand.AutonStopIntake()));
     NamedCommands.registerCommand("Shooter", m_ShooterCommand.AutonShooter().alongWith(Commands.waitSeconds(.5)).andThen(m_ShooterCommand.AutonStopShooter()));
     NamedCommands.registerCommand("StopShooter", m_ShooterCommand.AutonStopShooter());
@@ -278,9 +279,9 @@ public class RobotContainer extends TimedRobot {
       m_SwerveDriveSubsystem.getPigeon2().reset();
     }
     speeds = new ChassisSpeeds(
-        ((checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * Math.abs(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y))) * MaxSpeed),
-        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * Math.abs(m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
-        (checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * Math.abs(m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxAngularRate));
+        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * MaxSpeed),
+        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
+        (checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x))* MaxAngularRate));
     fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
         new Rotation2d(m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians())
             // .rotateBy(new Rotation2d(-fieldRelativeOffset))

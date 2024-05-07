@@ -14,7 +14,7 @@ public class ElevatorIOReal implements ElevatorIO {
     static DigitalInput bottomLimit;
     TalonFX ElevatorMotor;
     double output;
-    PIDController pid = new PIDController(0.075, 0, 0);
+    PIDController pid = new PIDController(0.07, 0, 0);
     TalonFXConfiguration config = new TalonFXConfiguration();
     TalonFXConfiguration zeroConfig = new TalonFXConfiguration();
     
@@ -49,10 +49,19 @@ public class ElevatorIOReal implements ElevatorIO {
         setpoint = constants.setpoint;
         highSetpoint = constants.highSetpoint;
         lowSetpoint = constants.lowSetpoint;
+        pid.setTolerance(1);
     }
     @Override
     public void updateValues(ElevatorIOInputs inputs){
-        
+    }
+
+    public void stopElevator(){
+        currentState = elevatorState.HoldState;
+        runElevator();
+    }
+
+    public boolean atSetpoint() {
+        return pid.atSetpoint();
     }
 
     public void disable(){

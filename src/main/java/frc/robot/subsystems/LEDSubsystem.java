@@ -55,7 +55,7 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     public Command LEDSHOOT() {
-        return LEDOn(Color.kBlue).alongWith(Commands.waitSeconds(.5)).andThen(LEDNoMoreOn());
+        return LEDOn(Color.kBlue).alongWith(Commands.waitSeconds(.1)).andThen(LEDNoMoreOn());
     }
 
     public Command LEDNoMoreOn() {

@@ -43,8 +43,12 @@ public class ElevatorIOSim implements ElevatorIO {
         ElevatorMotor.periodic();
     }
 
+    @Override
     public void disable(){
         // currentState = elevatorState.Disabled;
+    }
+    public boolean atSetpoint() {
+        return pid.atSetpoint();
     }
 
     public void initOnce(){
@@ -62,6 +66,11 @@ public class ElevatorIOSim implements ElevatorIO {
         //     System.out.println("Elevator has already been initialized!");
         // }
     }
+    public void stopElevator(){
+        currentState = elevatorState.HoldState;
+        runElevator();
+    }
+
 
     public boolean topLimitTriggered(){
         if (!(topLimit == null)) {

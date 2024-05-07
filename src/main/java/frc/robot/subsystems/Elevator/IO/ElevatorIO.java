@@ -27,4 +27,7 @@ public interface ElevatorIO {
 
     public void zero();
 
+    public boolean atSetpoint();
+    public void stopElevator();
+
 }

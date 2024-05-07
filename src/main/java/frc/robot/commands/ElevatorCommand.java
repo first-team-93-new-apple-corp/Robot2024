@@ -29,23 +29,37 @@ public class ElevatorCommand extends Command {
     public void disable() {
         m_elevatorSubsystem.disable();
     }
+
+    
+    public Command stopElevator() {
+        return m_elevatorSubsystem.runOnce(m_elevatorSubsystem::stopElevator);
+    }
+
+    public Command runElevator() {
+        return m_elevatorSubsystem.runOnce(m_elevatorSubsystem::runElevator);
+    }
+
+    public Command Amp(){
+        return (m_elevatorSubsystem.runOnce(()-> m_elevatorSubsystem.toSetpoint(ampSetpoint)))
+        .andThen(this.runElevator().repeatedly().until(m_elevatorSubsystem::atSetpoint))
+        .andThen(stopElevator());
+    }
+
+    public Command Source(){
+        return (m_elevatorSubsystem.runOnce(()-> m_elevatorSubsystem.toSetpoint(sourceSetpoint)))
+        .andThen(this.runElevator().repeatedly().until(m_elevatorSubsystem::atSetpoint))
+        .andThen(stopElevator());
+    }   
+
+    public Command Default(){
+        return (m_elevatorSubsystem.runOnce(()-> m_elevatorSubsystem.toSetpoint(3)))
+        .andThen(this.runElevator().repeatedly().until(m_elevatorSubsystem::atSetpoint))
+        .andThen(stopElevator());
+    }
+
     @Override
     public void execute() {
         
-        // if (op.getPOV() == 0) {
-        //     // m_elevatorSubsystem.toSetpoint(-75);
-        //     setpoint -= 5;
-        // } else if (op.getPOV() == 90) {
-        //     // m_elevatorSubsystem.toSetpoint(-40);
-        // } else if (op.getPOV() == 180) {
-        // // m_elevatorSubsystem.toSetpoint(-3);
-        //     setpoint += 5;
-        // } else if (op.getPOV() == 270) {
-        //     // m_elevatorSubsystem.toSetpoint(-25);
-        // }
-
-        // m_elevatorSubsystem.toSetpoint(setpoint);
-
         if (op.getRawButton(Constants.xbox.RightShoulderButton)) {
             m_elevatorSubsystem.toSetpoint(ampSetpoint);
         } else if (op.getRawButton(Constants.xbox.LeftShoulderButton)) {
