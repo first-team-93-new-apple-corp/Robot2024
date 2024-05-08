@@ -7,7 +7,6 @@ package frc.robot;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -34,8 +33,6 @@ public class RobotContainer {
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
-  private IntakeShooterCommand m_IntakeShooter;
-
   // Joysticks / Controllers
   private final Joystick m_LeftStick = new Joystick(0);
   private final Joystick m_RightStick = new Joystick(1);
@@ -47,7 +44,7 @@ public class RobotContainer {
   private final JoystickButton m_AmpButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.X);
   private final JoystickButton m_IntakeButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.Y);
   private final JoystickButton m_AimButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.A);
-  private final JoystickButton m_FireButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.B);
+  // private final JoystickButton m_FireButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.B);
   // Drivetrain
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private SendableChooser<Command> autoChooser;
@@ -66,8 +63,8 @@ public class RobotContainer {
     // reset the field-centric heading on left bumper press
     m_FieldRelativeButton.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
     m_FieldRelativeButtonXbox.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-    
-    //Subsystems
+
+    // Subsystems
     m_ArmHelper = new ArmHelper(m_ShoulderSubsystem, m_ElevatorSubsystem);
 
     // The funny buttons
@@ -104,10 +101,6 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
-    NamedCommands.registerCommand("Intake", m_IntakeShooter.Intake());
-    NamedCommands.registerCommand("Prime", m_IntakeShooter.shoot());
-    NamedCommands.registerCommand("Amp", m_IntakeShooter.amp());
-    NamedCommands.registerCommand("Kicker", m_IntakeShooter.kicker());
   }
 
   public Command getAutonomousCommand() {
