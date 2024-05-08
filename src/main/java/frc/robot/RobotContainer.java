@@ -55,8 +55,8 @@ public class RobotContainer {
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   private ArmHelper m_ArmHelper;
-  private ShoulderSubsystem m_ShoulderSubsystem;
-  private ElevatorSubsystem m_ElevatorSubsystem;
+  private ShoulderSubsystem m_ShoulderSubsystem = new ShoulderSubsystem();
+  private ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
 
   private void configureBindings() {
     // Controls
