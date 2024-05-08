@@ -91,12 +91,12 @@ public class RobotContainer extends TimedRobot {
   private final JoystickButton m_fieldRelButton;
   private final JoystickButton m_RobotRelButton;
   // --------------------------------------------SYS ID BUTTONS--------------------------------------------
-  private final JoystickButton m_SysIDDriveQuasiButton;
-  private final JoystickButton m_SysIDDriveDynamButton;
-  private final JoystickButton m_SysIDSteerQuasiButton;
-  private final JoystickButton m_SysIDSteerDynamButton;
-  private final JoystickButton m_SysIDDriveSlipButton;
-  private final JoystickButton m_endSignalLogging;
+  // private final JoystickButton m_SysIDDriveQuasiButton;
+  // private final JoystickButton m_SysIDDriveDynamButton;
+  // private final JoystickButton m_SysIDSteerQuasiButton;
+  // private final JoystickButton m_SysIDSteerDynamButton;
+  // private final JoystickButton m_SysIDDriveSlipButton;
+  // private final JoystickButton m_endSignalLogging;
 
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   private SendableChooser<Command> autoChooser;
@@ -227,12 +227,12 @@ public class RobotContainer extends TimedRobot {
     m_stowClimber = new Trigger(op.button(Constants.xbox.A, m_controllerLoop));
     m_hangClimber = new Trigger(op.button(Constants.xbox.B, m_controllerLoop));
     // --------------------------------------------SYS ID BUTTONS--------------------------------------------
-    m_SysIDDriveQuasiButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Left);
-    m_SysIDDriveDynamButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Middle);
-    m_SysIDSteerQuasiButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Bottom_Left);
-    m_SysIDSteerDynamButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Bottom_Middle);
-    m_SysIDDriveSlipButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Right);
-    m_endSignalLogging = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Right_Buttons.Bottom_Right);
+    // m_SysIDDriveQuasiButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Left);
+    // m_SysIDDriveDynamButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Middle);
+    // m_SysIDSteerQuasiButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Bottom_Left);
+    // m_SysIDSteerDynamButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Bottom_Middle);
+    // m_SysIDDriveSlipButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Buttons.Top_Right);
+    // m_endSignalLogging = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Right_Buttons.Bottom_Right);
     // --------------------------------------------NAMED COMMANDS--------------------------------------------
     NamedCommands.registerCommand("Intake", m_IntakeCommand.AutoIntake().alongWith(Commands.waitSeconds(1.5)).andThen(m_IntakeCommand.AutonStopIntake()));
     NamedCommands.registerCommand("Shooter", m_ShooterCommand.AutonShooter().alongWith(Commands.waitSeconds(.5)).andThen(m_ShooterCommand.AutonStopShooter()));
@@ -248,6 +248,7 @@ public class RobotContainer extends TimedRobot {
     }
     m_SwerveDriveSubsystem.configAuto();
     autoChooser = AutoBuilder.buildAutoChooser();
+    this.configureBindings();
     SmartDashboard.putData("Auto Chooser", autoChooser);
     SmartDashboard.putData("Field",m_Field2d);
   }

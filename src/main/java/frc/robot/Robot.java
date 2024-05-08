@@ -15,11 +15,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
-import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ElevatorCommand;
-import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.Preflight;
-import frc.robot.commands.ShooterCommand;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.*;
@@ -35,8 +32,14 @@ public class Robot extends TimedRobot {
   private LEDSubsystem m_LED;
   Constants constants;
   private ElevatorCommand m_Elevator;
-  public Preflight m_Preflight;
-  public IntakeCommand m_IntakeCommand;
+  private Preflight m_Preflight;
+  private boolean inTele = false;
+  public enum RobotName {
+    SIM,
+    Tobor27,
+    Tobor26,
+  }
+
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
   // DigitalOutput test = new DigitalOutput(3);
   public Pigeon2 getPigeon() {
@@ -44,24 +47,21 @@ public class Robot extends TimedRobot {
   }
   public Robot() {
     addPeriodic(this::teleopControllerPeriodic, .03, .05);
+    if (Utils.isSimulation()) {
+      constants = new Constants(RobotName.SIM);
+    } else {
+      constants = new Constants(RobotName.Tobor27);
+    }
   }
 
   @Override
   public void robotInit() {
-    if (Utils.isSimulation()) {
-      constants = new Constants("SIM");
-    } else {
-      constants = new Constants("2024");
-    }
     m_robotContainer = new RobotContainer(constants, m_Joystick1, m_Joystick2, op);
-    m_IntakeCommand = m_robotContainer.m_IntakeCommand;
     m_Elevator = m_robotContainer.m_ElevatorCommand;
     m_Preflight = m_robotContainer.m_PreflightCommand;
     m_LED = m_robotContainer.m_LedSubsystem;
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
     m_Elevator.initOnce();
-    // m_SwerveDriveSubsystem.configAuto();
-    // m_UsbCameraSubsystem.register();
     SmartDashboard.putBoolean("Preflight Done?", false);
     m_LED.startup();
     PathfindingCommand.warmupCommand();
@@ -114,29 +114,28 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     // THIS SHOULDN'T BE RAN PERIODIC!!!!!!!!!!!!!
-    m_robotContainer.configureBindings();
     // ^^^
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    inTele = true;
   }
 
   @Override
   public void teleopPeriodic() {
-    // m_IntakeCommand.schedule();
-    // m_Shooter.schedule();
-    // m_Elevator.schedule();
-    // m_Climber.schedule();
+
     m_robotContainer.updateValues();
-    // m_robotContainer.m_loop.poll();
   }
 
   public void teleopControllerPeriodic(){
+    if (inTele) {
     m_robotContainer.m_controllerLoop.poll();
+    }
   }
 
   @Override
   public void teleopExit() {
+    inTele = false;
   }
 
   @Override

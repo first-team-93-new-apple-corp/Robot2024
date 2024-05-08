@@ -1,7 +1,6 @@
 package frc.robot.subsystems.Swerve;
 
 
-import frc.robot.Constants;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.subsystems.Swerve.TunerConstants.TunerConstants2023;
 import frc.robot.subsystems.Swerve.TunerConstants.TunerConstants2024;
@@ -12,20 +11,19 @@ public class SwerveDriveSubsystemFactory {
     private static TunerConstantsSIM tunerConstantsSIM;
     private static TunerConstants2024 tunerConstants2024;
     public static SwerveDriveSubsystem build(SwerveDriveConstants constants) {
+        switch (constants.Drivebase) {
+            default:
+            case SIM:
+                tunerConstantsSIM = new TunerConstantsSIM();
+                return tunerConstantsSIM.DriveTrain;
+            case Tobor27:
+                tunerConstants2024 = new TunerConstants2024();
+                return tunerConstants2024.DriveTrain;
+            case Tobor26:
+                tunerConstants2023 = new TunerConstants2023();
+                return tunerConstants2023.DriveTrain;
 
-        if (constants.DriveBase == Constants.BotName.Tobor27) {
-            tunerConstants2024 = new TunerConstants2024();
-            return tunerConstants2024.DriveTrain;
-        } else if (constants.DriveBase == Constants.BotName.Tobor26) {
-            tunerConstants2023 = new TunerConstants2023();
-            return tunerConstants2023.DriveTrain;
-        } else if (constants.DriveBase.equals(Constants.BotName.SIM)) {
-            tunerConstantsSIM = new TunerConstantsSIM();
-            return tunerConstantsSIM.DriveTrain;
-        } else {
-            tunerConstantsSIM = new TunerConstantsSIM();
-            return tunerConstantsSIM.DriveTrain;
+
         }
-        
     }
 }

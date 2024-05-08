@@ -49,7 +49,7 @@ public class ElevatorIOReal implements ElevatorIO {
         setpoint = constants.setpoint;
         highSetpoint = constants.highSetpoint;
         lowSetpoint = constants.lowSetpoint;
-        pid.setTolerance(1);
+        pid.setTolerance(2);
     }
     @Override
     public void updateValues(ElevatorIOInputs inputs){
@@ -107,7 +107,7 @@ public class ElevatorIOReal implements ElevatorIO {
             default:
             case HoldState:
                 if (Preflight.isPreflightDone()) {
-                    ElevatorMotor.set(0);
+                    ElevatorMotor.set(0.005);
                     ElevatorMotor.setNeutralMode(NeutralModeValue.Brake);
                 } else {
                     System.out.println("Preflight not completed. Disabling elevator.");

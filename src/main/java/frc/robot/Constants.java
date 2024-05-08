@@ -14,7 +14,7 @@ public class Constants {
     public ShooterConstants Shooter = new ShooterConstants();
     public VisionConstants Vision = new VisionConstants();
     
-    public enum BotName {
+    public enum DriveBase {
         SIM,
         Tobor27,
         Tobor26,
@@ -27,23 +27,29 @@ public class Constants {
         
     }
 
-    public Constants(String robotName) {
-        if (robotName.equals("2024")) {
-            Elevator = new ElevatorConstants(18);
-            Intake = new IntakeConstants(25, 14, 15, 22,25);
-            Climber = new ClimberConstants(19,20);
-            Shooter = new ShooterConstants(16, 17, 2, 3);
-            Drive = new SwerveDriveConstants(BotName.Tobor27);
-            Vision = new VisionConstants("limelight");
-
-        } else if (robotName.equals("2023")) {
-            Drive = new SwerveDriveConstants(BotName.Tobor26);
-        } else if (robotName.equals("SIM")) {
-            Elevator = new ElevatorConstants(18);
-            Intake = new IntakeConstants(25, 14, 15, 22,25);
-            Climber = new ClimberConstants(19,20);
-            Drive = new SwerveDriveConstants(BotName.SIM);
-            Vision = new VisionConstants("Photon");
+    public Constants(Robot.RobotName name) {
+        switch (name) {
+            case SIM:
+                Elevator = new ElevatorConstants(18);
+                Intake = new IntakeConstants(25, 14, 15, 22,25);
+                Climber = new ClimberConstants(19,20);
+                Drive = new SwerveDriveConstants(DriveBase.SIM);
+                Vision = new VisionConstants("Photon");
+                break;
+            case Tobor26:
+                Drive = new SwerveDriveConstants(DriveBase.Tobor26);
+                break;
+            case Tobor27:
+                Elevator = new ElevatorConstants(18);
+                Intake = new IntakeConstants(25, 14, 15, 22,25);
+                Climber = new ClimberConstants(19,20);
+                Shooter = new ShooterConstants(16, 17, 2, 3);
+                Drive = new SwerveDriveConstants(DriveBase.Tobor27);
+                Vision = new VisionConstants("limelight");
+                break;
+            default:
+                break;
+            
         }
     }
     public final class ShooterConstants {
@@ -85,12 +91,14 @@ public class Constants {
         }
     }
     public final class SwerveDriveConstants {
-        public BotName DriveBase;
-        public SwerveDriveConstants(){
-            DriveBase = BotName.SIM;
+        public DriveBase Drivebase;
+      
+        public SwerveDriveConstants(DriveBase bot){
+            Drivebase = bot;
         }
-        public SwerveDriveConstants(BotName bot){
-            DriveBase = bot;
+
+        public SwerveDriveConstants() {
+            Drivebase = DriveBase.SIM;
         }
     }
 
