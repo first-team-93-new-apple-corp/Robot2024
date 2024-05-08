@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.887570138776641,
-        "y": 6.99655944766435
+        "x": 2.909982492594682,
+        "y": 5.521816553472107
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.887570138776641,
-        "y": 6.99655944766435
+        "x": 3.9099824925946813,
+        "y": 5.521816553472107
       },
       "isLocked": false,
       "linkedName": "BL RR NOTE"
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "BL RR",
   "previewStartingState": null,
   "useDefaultConstraints": true
 }

@@ -7,6 +7,7 @@ package frc.robot;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -32,6 +33,8 @@ public class RobotContainer {
   // Constants / Other things
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+
+  private IntakeShooterCommand m_IntakeShooter;
 
   // Joysticks / Controllers
   private final Joystick m_LeftStick = new Joystick(0);
@@ -100,6 +103,11 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
+
+    NamedCommands.registerCommand("Intake", m_IntakeShooter.Intake());
+    NamedCommands.registerCommand("Prime", m_IntakeShooter.shoot());
+    NamedCommands.registerCommand("Amp", m_IntakeShooter.amp());
+    NamedCommands.registerCommand("Kicker", m_IntakeShooter.kicker());
   }
 
   public Command getAutonomousCommand() {

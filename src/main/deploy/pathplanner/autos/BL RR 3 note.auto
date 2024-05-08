@@ -22,18 +22,6 @@
           "data": {
             "pathName": "2 to 1"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "1 to midline 1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Top Far to BL RR"
-          }
         }
       ]
     }
