@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,19 +12,17 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class IntakeShooterSubsystem extends SubsystemBase {
-    TalonFX Shooter = new TalonFX(Constants.CTRE.RIO.Shoot, "rio");
-    TalonFX Intake = new TalonFX(Constants.CTRE.RIO.Intake, "rio");
+    TalonFX Shooter = new TalonFX(Constants.CTRE.Shoot);
+    TalonFX Intake = new TalonFX(Constants.CTRE.Intake);
 
     TalonFXConfiguration m_configIntake;
     TalonFXConfiguration m_configShooter;
 
     TalonFX m_motorIntake;
     TalonFX m_motorShooter;
-    
+
     PositionVoltage m_PositionVoltage = new PositionVoltage(0);
 
     XboxController op;
@@ -41,21 +38,21 @@ public class IntakeShooterSubsystem extends SubsystemBase {
     double SpeakerShooterSpeed = 0.55;
     double StartTime;
     double currentspeed;
-    
+
     public void init(XboxController op) {
         this.op = op;
 
         m_configIntake = new TalonFXConfiguration();
         m_configShooter = new TalonFXConfiguration();
 
-        m_motorIntake = new TalonFX(0);
-        m_motorShooter = new TalonFX(0);
+        m_motorIntake = new TalonFX(Constants.CTRE.Intake);
+        m_motorShooter = new TalonFX(Constants.CTRE.Shoot);
 
         m_configIntake.CurrentLimits.SupplyCurrentLimit = 25;
         m_configIntake.CurrentLimits.SupplyCurrentThreshold = 25;
         m_configIntake.CurrentLimits.SupplyTimeThreshold = 0;
         m_configIntake.CurrentLimits.SupplyCurrentLimitEnable = true;
-        
+
         m_configIntake.Slot0.kP = 0.05;
         m_configIntake.Slot0.kI = 0;
         m_configIntake.Slot0.kD = 0;
@@ -66,12 +63,12 @@ public class IntakeShooterSubsystem extends SubsystemBase {
 
         m_motorIntake.getConfigurator().apply(m_configIntake);
         m_motorShooter.getConfigurator().apply(m_configShooter);
-
+        
         TOF = new TimeOfFlight(22);
         TOF.setRangingMode(RangingMode.Short, 24);
     }
 
-    //**************************************************************Intake*******************************************************
+    // **************************************************************Intake*******************************************************
 
     public enum intakeState {
         IntakeStage1,
@@ -87,11 +84,11 @@ public class IntakeShooterSubsystem extends SubsystemBase {
                 Intake.set(IntakeSpeed);
                 Shooter.set(0.05);
                 op.setRumble(RumbleType.kBothRumble, 0.5);
-                if (TOF.getRange() < 100){
+                if (TOF.getRange() < 100) {
                     notePastTOF = true;
-                } else if ((TOF.getRange() > 100) && (notePastTOF == true)){
+                } else if ((TOF.getRange() > 100) && (notePastTOF == true)) {
                     state = intakeState.IntakeStage2;
-                } 
+                }
                 break;
             case IntakeStage2:
                 if (notePastTOF == true && TOF.getRange() > 100) {
@@ -114,7 +111,6 @@ public class IntakeShooterSubsystem extends SubsystemBase {
                 break;
         }
     }
-    
 
     public void resetIntakeState() {
         state = intakeState.IntakeStage1;
@@ -132,11 +128,11 @@ public class IntakeShooterSubsystem extends SubsystemBase {
         return this.runOnce(() -> stop());
     }
 
-    public void intakePeriodic(){
+    public void intakePeriodic() {
         SmartDashboard.putBoolean("Note In Intake?", notePastTOF);
     }
 
-//**************************************************************Shooter*******************************************************
+    // **************************************************************Shooter*******************************************************
 
     public void shoot(double speed) {
         Shooter.set(speed);
@@ -146,7 +142,7 @@ public class IntakeShooterSubsystem extends SubsystemBase {
         Shooter.set(SpeakerShooterSpeed);
     }
 
-    public void AutonPrime(){
+    public void AutonPrime() {
         Shooter.set(.60);
     }
 
@@ -194,13 +190,14 @@ public class IntakeShooterSubsystem extends SubsystemBase {
             SpeakerShooterSpeed -= 0.05; // -5%speed
         }
     }
-    
-    public void shooterPeriodic(){
+
+    public void shooterPeriodic() {
         SmartDashboard.putNumber("Shooter Speed", SpeakerShooterSpeed);
         SmartDashboard.putNumber("Shooter RPM", Shooter.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber("Shooter Temp", Shooter.getDeviceTemp().getValueAsDouble());
     }
-//**************************************************************Misc.*******************************************************
+
+    // **************************************************************Misc.*******************************************************
     @Override
     public void periodic() {
         shooterPeriodic();

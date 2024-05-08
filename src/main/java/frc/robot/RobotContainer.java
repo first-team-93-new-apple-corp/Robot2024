@@ -19,9 +19,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.ARM_SETPOINTS;
+import frc.robot.commands.ArmToSetpoint;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ShoulderSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
+import frc.robot.subsystems.Helpers.ArmHelper;
 
 public class RobotContainer {
   // Constants / Other things
@@ -36,7 +41,10 @@ public class RobotContainer {
   // Joystick Buttons
   private final JoystickButton m_FieldRelativeButton = new JoystickButton(m_LeftStick, 12);
   private final JoystickButton m_FieldRelativeButtonXbox = new JoystickButton(m_XboxDriver, 5);
-
+  private final JoystickButton m_AmpButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.X);
+  private final JoystickButton m_IntakeButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.Y);
+  private final JoystickButton m_AimButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.A);
+  private final JoystickButton m_FireButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.B);
   // Drivetrain
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private SendableChooser<Command> autoChooser;
@@ -46,12 +54,25 @@ public class RobotContainer {
                                                                // driving in open loop
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
+  private ArmHelper m_ArmHelper;
+  private ShoulderSubsystem m_ShoulderSubsystem;
+  private ElevatorSubsystem m_ElevatorSubsystem;
+
   private void configureBindings() {
     // Controls
     // reset the field-centric heading on left bumper press
     m_FieldRelativeButton.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
     m_FieldRelativeButtonXbox.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
     
+    //Subsystems
+    m_ArmHelper = new ArmHelper(m_ShoulderSubsystem, m_ElevatorSubsystem);
+
+    // The funny buttons
+    m_AmpButtonXbox.whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Amp));
+    m_IntakeButtonXbox.whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Intake));
+    // for auto aim (later)
+    m_AimButtonXbox.whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Shoot));
+
     // Drive Controls
     if (DriverStation.getJoystickIsXbox(0)) {
       drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically

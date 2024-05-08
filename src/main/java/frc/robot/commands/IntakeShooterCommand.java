@@ -1,13 +1,11 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+// import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.IntakeShooterSubsystem;
-import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class IntakeShooterCommand extends Command {
-    private static XboxController opController = new XboxController(2);
+    // private static XboxController opController = new XboxController(2);
 
     IntakeShooterSubsystem m_IntakeShooter;
 
