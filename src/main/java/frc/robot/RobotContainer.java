@@ -64,7 +64,7 @@ public class RobotContainer extends TimedRobot {
   public final ElevatorSubsystem m_ElevatorSubsystem;
   public final ClimberSubsystem m_ClimberSubsystem;
   public final VisionSubsystem m_VisionSubsystem;
-  public final Mechanisms m_MechanismsSubsystem;
+  public Mechanisms m_MechanismsSubsystem;
   private final SwerveDriveSubsystem m_SwerveDriveSubsystem;
   public final LEDSubsystem m_LedSubsystem;
   // --------------------------------------------COMMANDS--------------------------------------------
@@ -201,7 +201,10 @@ public class RobotContainer extends TimedRobot {
     m_ElevatorSubsystem = ElevatorSubsystemFactory.build(constants.Elevator);
     m_ClimberSubsystem = ClimberSubsystemFactory.build(constants.Climber);
     m_VisionSubsystem = VisionSubsystemFactory.build(m_SwerveDriveSubsystem, constants.Vision);
+    // --------------------------------------------SUBSYSTEMS--------------------------------------------
+    if (Utils.isSimulation()) {
     m_MechanismsSubsystem = new Mechanisms(m_ElevatorSubsystem, m_ClimberSubsystem);
+    }
     // --------------------------------------------COMMANDS--------------------------------------------
     m_AutoAlignCommand = new AutoAlignCommand(m_SwerveDriveSubsystem, m_Joystick1);
     m_ShooterCommand = new ShooterCommand(m_ShooterSubsystem, m_LedSubsystem);
