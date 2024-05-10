@@ -70,7 +70,7 @@ public class ShoulderSubsystem extends SubsystemBase {
         ShoulderL.setControl(m_PositionVoltage);
     }
 
-    public double getPostition() {
+    public double getPosition() {
         // 5.67 - (int of 5.67) 5 = 0.67
         position -= (int) position;
         return position;
