@@ -35,6 +35,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.DriveInputs.Driver;
+import frc.robot.DriveInputs.InputsIO;
 import frc.robot.commands.AutoAlignCommand;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ElevatorCommand;
@@ -276,16 +278,16 @@ public class RobotContainer extends TimedRobot {
     } catch (Exception e) {
     }
   }
+  public InputsIO m_input;
+  public Driver m_Driver = new Driver(0,1,0);
 
   public void updateValues() {
+    m_input = m_Driver.getDriver();
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
       fieldRelativeOffset = m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians();
       m_SwerveDriveSubsystem.getPigeon2().reset();
     }
-    speeds = new ChassisSpeeds(
-        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * MaxSpeed),
-        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
-        (checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x))* MaxAngularRate));
+    speeds = m_input.inputSpeeds();
     fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
         new Rotation2d(m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians())
             // .rotateBy(new Rotation2d(-fieldRelativeOffset))

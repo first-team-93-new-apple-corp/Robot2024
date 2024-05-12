@@ -28,7 +28,7 @@
       "axisCount": 3,
       "buttonCount": 11,
       "buttonKeys": [
-        -1,
+        330,
         80,
         67,
         86,
@@ -104,13 +104,14 @@
   ],
   "robotJoysticks": [
     {
-      "guid": "Keyboard0"
+      "guid": "78696e70757401000000000000000000",
+      "useGamepad": true
     },
     {
       "guid": "Keyboard1"
     },
     {
-      "guid": "Keyboard2"
+      "guid": "Keyboard0"
     }
   ],
   "useEnableDisableHotkeys": true

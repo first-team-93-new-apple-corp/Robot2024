@@ -25,11 +25,14 @@
       "/FMSInfo": "FMSInfo",
       "/Pose": "Field2d",
       "/SmartDashboard/Auto Chooser": "String Chooser",
+      "/SmartDashboard/DriveChoose": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Module 0": "Mechanism2d",
       "/SmartDashboard/Module 1": "Mechanism2d",
       "/SmartDashboard/Module 2": "Mechanism2d",
       "/SmartDashboard/Module 3": "Mechanism2d",
+      "/SmartDashboard/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/SendableChooser[1]": "String Chooser",
       "/SmartDashboard/mech2d": "Mechanism2d",
       "/SmartDashboard/pigeon": "Gyro"
     },
@@ -40,12 +43,14 @@
         "left": 150,
         "right": 2961,
         "top": 79,
-        "width": 16.541748046875,
+        "width": 16.541748046875
+      },
+      "/SmartDashboard/Auto Chooser": {
         "window": {
           "visible": true
         }
       },
-      "/SmartDashboard/Auto Chooser": {
+      "/SmartDashboard/DriveChoose": {
         "window": {
           "visible": true
         }
@@ -112,6 +117,9 @@
       "open": true
     },
     "Server": {
+      "Publishers": {
+        "open": true
+      },
       "open": true
     },
     "elastic@1": {
