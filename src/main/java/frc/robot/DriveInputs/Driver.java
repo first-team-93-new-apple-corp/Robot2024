@@ -14,13 +14,14 @@ public class Driver {
             new XboxDriveLinear(XboxDriverPort),
             new XboxDriveExponential(XboxDriverPort),
             new TwoStickAcellerationDrive(JoystickDriver1Port, JoystickDriver2Port),
-            new XboxAcellerationDrive(XboxDriverPort)
+            new XboxAcellerationDrive(XboxDriverPort),
+            new XboxTank(XboxDriverPort)
         };
         DriveChooser = new SendableChooser<InputsIO>();
         for (InputsIO inputsIO : InputOptions) {
             DriveChooser.setDefaultOption(inputsIO.getClass().getName().substring(22), inputsIO);
-
         }
+        DriveChooser.setDefaultOption(InputOptions[0].getClass().getName().substring(22), InputOptions[0]);
         SmartDashboard.putData("DriveChoose",DriveChooser);
     }
     public InputsIO getDriver() {

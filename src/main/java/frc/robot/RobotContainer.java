@@ -110,8 +110,7 @@ public class RobotContainer extends TimedRobot {
   private XboxController op;
   // public final EventLoop m_loop = new EventLoop();
   public final EventLoop m_controllerLoop = new EventLoop();
-  private ChassisSpeeds speeds;
-  private ChassisSpeeds fieldSpeeds;
+  private ChassisSpeeds fieldSpeeds = new ChassisSpeeds();
   private double fieldRelativeOffset;
 
   public Field2d m_Field2d = new Field2d();
@@ -287,11 +286,7 @@ public class RobotContainer extends TimedRobot {
       fieldRelativeOffset = m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians();
       m_SwerveDriveSubsystem.getPigeon2().reset();
     }
-    speeds = m_input.inputSpeeds();
-    fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
-        new Rotation2d(m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians())
-            // .rotateBy(new Rotation2d(-fieldRelativeOffset))
-            );
+    fieldSpeeds = m_input.fieldSpeeds(m_SwerveDriveSubsystem);
     updateVision();
     // --------------------------------------------SMARTDASHBOARD STUFF--------------------------------------------
     SmartDashboard.putData("pigeon", getPigeon());

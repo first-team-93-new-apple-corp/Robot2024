@@ -1,8 +1,11 @@
 package frc.robot.DriveInputs;
 
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.subsystems.Swerve.DriveConstants;
+import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 
 public interface InputsIO {
 
@@ -15,39 +18,35 @@ public interface InputsIO {
     * Returns a double containing our forward input
     */
     public default double ForwardInput(){
-        return Inputs().getX();
+        return checkDeadzone(Inputs().getX());
     }
 
     /**
     * Returns a double containing our Sideways input
     */
     public default double SidewaysInput(){
-        return Inputs().getY();
+        return checkDeadzone(Inputs().getY());
     }
 
     /**
     * Returns a double containing our Rotational input
     */
     public default double omegaInput(){
-        return Inputs().getRotation().getRadians();
-    }
-
-    private Pose2d Speeds(){
-        return Inputs().times(DriveConstants.MaxSpeed);
+        return checkDeadzone(Inputs().getRotation().getRadians());
     }
     
     /**
     * Returns a double containing our forward Speed
     */
     public default double ForwardMetersPerSecond(){
-        return Speeds().getX();
+        return ForwardInput() * DriveConstants.MaxSpeed;
     }
 
     /**
     * Returns a double containing our Sideways input
     */
     public default double SidewaysMetersPerSecond(){
-        return Speeds().getY();
+        return SidewaysInput() * DriveConstants.MaxSpeed;
     }
 
     /**
@@ -71,9 +70,19 @@ public interface InputsIO {
     */
     public default ChassisSpeeds inputSpeeds(){
         return new ChassisSpeeds(
-            (checkDeadzone(ForwardMetersPerSecond())),
-            (checkDeadzone(SidewaysMetersPerSecond())),
-            (checkDeadzone(omegaRadiansPerSecond())));
+            ((ForwardMetersPerSecond())),
+            ((SidewaysMetersPerSecond())),
+            ((omegaRadiansPerSecond())));
+    }    
+        
+    /**
+    * Returns a Field Relitive ChassisSpeeds
+    */
+    public default ChassisSpeeds fieldSpeeds(SwerveDriveSubsystem m_SwerveDriveSubsystem){
+    return ChassisSpeeds.fromFieldRelativeSpeeds(inputSpeeds(),
+        new Rotation2d(m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians())
+            // .rotateBy(new Rotation2d(-fieldRelativeOffset))
+            );
     }     
 
 } 
