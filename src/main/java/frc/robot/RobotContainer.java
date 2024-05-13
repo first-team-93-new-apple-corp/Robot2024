@@ -278,7 +278,7 @@ public class RobotContainer extends TimedRobot {
     }
   }
   public InputsIO m_input;
-  public Driver m_Driver = new Driver(0,1,0);
+  public Driver m_Driver = new Driver(0,1,4);
 
   public void updateValues() {
     m_input = m_Driver.getDriver();

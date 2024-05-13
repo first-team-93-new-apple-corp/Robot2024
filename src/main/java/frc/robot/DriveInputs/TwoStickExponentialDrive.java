@@ -16,7 +16,7 @@ public class TwoStickExponentialDrive implements InputsIO{
         this.Joystick1 = new Joystick(Joystick1Port);
         this.Joystick2 = new Joystick(Joystick2Port);
     }
-    public double SquareWithSign(double value){
+    private double SquareWithSign(double value){
         return Math.copySign(value * value, value);
     }
     @Override

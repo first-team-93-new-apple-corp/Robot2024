@@ -22,8 +22,5 @@ public class XboxAcellerationDrive extends XboxDriveLinear{
             (checkDeadzone(SidewaysMetersPerSecond())),
             (checkDeadzone(omegaRadiansPerSecond()))).times(.02));
         return oldChassisSpeeds;
-        
-        
-    }   
-    
+    }    
 }

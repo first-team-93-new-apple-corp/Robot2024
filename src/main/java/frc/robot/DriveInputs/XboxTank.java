@@ -33,7 +33,7 @@ public class XboxTank implements InputsIO{
     }
 
     /**
-    * Returns a Field Relitive ChassisSpeeds
+    * Returns a Field Relative ChassisSpeeds
     */
     @Override
     public ChassisSpeeds fieldSpeeds(SwerveDriveSubsystem m_SwerveDriveSubsystem){

@@ -76,7 +76,7 @@ public interface InputsIO {
     }    
         
     /**
-    * Returns a Field Relitive ChassisSpeeds
+    * Returns a Field Relative ChassisSpeeds
     */
     public default ChassisSpeeds fieldSpeeds(SwerveDriveSubsystem m_SwerveDriveSubsystem){
     return ChassisSpeeds.fromFieldRelativeSpeeds(inputSpeeds(),

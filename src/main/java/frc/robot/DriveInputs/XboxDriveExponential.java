@@ -14,7 +14,7 @@ public class XboxDriveExponential implements InputsIO{
     public XboxDriveExponential(int XboxPort){
         this.Xbox = new XboxController(XboxPort);
     }
-    public double SquareWithSign(double value){
+    private double SquareWithSign(double value){
         return Math.copySign(value * value, value);
     }
     @Override
