@@ -9,8 +9,7 @@ import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 public class WiiMoteDrive implements InputsIO{
     private final GenericHID Wiimote;
     private double speed;
-    private double Acelleration = .01;
-
+    private double Acelleration = .005;
     /**
     * Creates an object containing the Wiimote that will return our input values
     * The drive is Mario Kart Style
@@ -18,8 +17,11 @@ public class WiiMoteDrive implements InputsIO{
     public WiiMoteDrive(int WiimotePort){
         this.Wiimote = new GenericHID(WiimotePort);
     }
-    public double Steer(){
+    private double Steer(){
         return -Wiimote.getRawAxis(0);
+    }
+    private double SquareWithSign(double value){
+        return Math.copySign(value * value, value);
     }
 
     @Override
@@ -34,7 +36,7 @@ public class WiiMoteDrive implements InputsIO{
         speed = (speed >1) ? (1) : (speed);
         speed = (speed <-1) ? (-1) : (speed);
         return new Pose2d(
-            speed,
+            SquareWithSign(speed),
             0,
             Rotation2d.fromRadians(Steer()));
     }
