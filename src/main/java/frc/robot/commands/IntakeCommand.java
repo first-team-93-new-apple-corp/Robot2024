@@ -31,9 +31,9 @@ public class IntakeCommand extends Command {
     }
 
     public Command StopIntake(){
-        return m_IntakeSubsystem.runOnce((() -> {m_IntakeSubsystem.stop();
-            m_IntakeSubsystem.resetIntakeState();
+        return m_IntakeSubsystem.run((() -> {m_IntakeSubsystem.stop();
             opController.setRumble(RumbleType.kBothRumble, 0);
+            m_IntakeSubsystem.resetIntakeState();
         }));
     }
 
