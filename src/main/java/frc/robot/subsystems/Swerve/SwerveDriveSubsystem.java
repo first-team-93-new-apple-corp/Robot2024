@@ -17,12 +17,8 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-import com.playingwithfusion.TimeOfFlight;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -63,11 +59,11 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
     private Telemetry m_Telemetry = new Telemetry(MaxSpeed);
-    public SwerveDrivePoseEstimator m_SwerveDrivePoseEstimator = new SwerveDrivePoseEstimator(
-            m_kinematics,
-            m_pigeon2.getRotation2d(),
-            m_modulePositions,
-            new Pose2d());
+    // public SwerveDrivePoseEstimator m_SwerveDrivePoseEstimator = new SwerveDrivePoseEstimator(
+    //         m_kinematics,
+    //         m_pigeon2.getRotation2d(),
+    //         m_modulePositions,
+    //         new Pose2d());
     public void configAuto() {
         // AutoBuilder.configureHolonomic(
         // this::getPose, // Robot pose supplier
@@ -107,8 +103,8 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         }
         
         AutoBuilder.configureHolonomic(
-                // () -> this.getState().Pose, // Supplier of current robot pose
-                () -> this.m_SwerveDrivePoseEstimator.getEstimatedPosition(),
+                () -> this.getState().Pose, // Supplier of current robot pose
+                // () -> this.m_SwerveDrivePoseEstimator.getEstimatedPosition(),
                 this::resetOdometry, // Consumer for seeding pose against auto
                 this::getCurrentRobotChassisSpeeds,
                 (speeds) -> this.setControl(autoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the
@@ -193,7 +189,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
 
     public void resetOdometry(Pose2d Pose) {
         seedFieldRelative(Pose);
-        m_SwerveDrivePoseEstimator.resetPosition(new Rotation2d(Math.toRadians(getHeading())), m_modulePositions, Pose);
+        // m_SwerveDrivePoseEstimator.resetPosition(new Rotation2d(Math.toRadians(getHeading())), m_modulePositions, Pose);
         
     }
 
@@ -243,15 +239,10 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     }
 
     public void updateOdometry(VisionSubsystem m_visionSubsystem) {
-        m_SwerveDrivePoseEstimator.update(m_pigeon2.getRotation2d(), m_modulePositions);
-        try {
-            if (m_visionSubsystem.hasTargets()) {
-                m_SwerveDrivePoseEstimator.addVisionMeasurement(m_visionSubsystem.getPose(),
+        if (m_visionSubsystem.hasTargets()){
+        this.addVisionMeasurement(m_visionSubsystem.getPose(),
                         Timer.getFPGATimestamp() - (m_visionSubsystem.getLatency()));
-            }
-        } catch (Exception e) {
         }
-        
     }
 
     public Pose2d getPose() {
@@ -276,57 +267,6 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         getState().Pose = pose;
     }
     
-    private double X,Y,Theta,tofpos,tofposAngle,calculatedX, calculatedY, calculatedTheta;
-    private PIDController AlignPIDTheta = new PIDController(.25, 0, 0.13); // Rotationly PID
-    private PIDController AlignPIDX = new PIDController(3.25, 2, 0.4); // Drive PIDs should be the same
-    private PIDController AlignPIDY = new PIDController(2, 1.5, 0);
-    private PIDController tofPID = new PIDController(0.008, 0, 0.00125);
-    private SlewRateLimiter xlimit = new SlewRateLimiter(12);
-    private SlewRateLimiter ylimit = new SlewRateLimiter(12);
-    private ChassisSpeeds alignSpeeds; // Chassis Speeds which robot uses for auto align
-    private ChassisSpeeds AlignfieldSpeeds;
-    private TimeOfFlight tof = new TimeOfFlight(23);
-
-    public void toPose(Pose2d pose) {
-        AlignPIDTheta.enableContinuousInput(-Math.PI, Math.PI);
-        X = m_SwerveDrivePoseEstimator.getEstimatedPosition().getX();
-        Y = m_SwerveDrivePoseEstimator.getEstimatedPosition().getY();
-        Theta = m_SwerveDrivePoseEstimator.getEstimatedPosition().getRotation().getRadians();
-        tofpos = tof.getRange();
-        if (Theta > 90) {
-            tofposAngle = 90-(Theta-90);
-        } else {
-            tofposAngle = Theta;
-        }
-        tofpos = tofpos*Math.sin(tofposAngle);
-        calculatedX = xlimit
-                .calculate((MathUtil.clamp((AlignPIDX.calculate(X, pose.getX())), -MaxSpeed, MaxSpeed)) * 1);
-
-        calculatedTheta = (MathUtil.clamp((AlignPIDTheta.calculate(Theta, (pose.getRotation().getRadians()))),
-                -MaxAngularRate, MaxAngularRate));
-        if (Utils.isSimulation()) {
-            calculatedY = ylimit.calculate((MathUtil.clamp((AlignPIDY.calculate(Y, pose.getY())), -MaxSpeed, MaxSpeed)) * 1);
-        } else {
-            calculatedY = MathUtil.clamp(-tofPID.calculate(tofpos, 293), -MaxSpeed, MaxSpeed);
-        }
-        alignSpeeds = new ChassisSpeeds(calculatedX, calculatedY, calculatedTheta);
-
-        if (DriverStation.getAlliance().isPresent()) {
-            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-                // red
-                AlignfieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(alignSpeeds,
-                new Rotation2d(getPigeon2().getRotation2d().getRadians())
-                        .rotateBy(new Rotation2d(Math.PI)));
-            } else {
-                // Blue
-                AlignfieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(alignSpeeds,
-                new Rotation2d(getPigeon2().getRotation2d().getRadians())
-                        .rotateBy(new Rotation2d(0)));
-            }
-            driveRobotRelative(AlignfieldSpeeds);
-        }
-    }
-
     public ChassisSpeeds getCurrentRobotChassisSpeeds() {
         return m_kinematics.toChassisSpeeds(getState().ModuleStates);
     }
@@ -336,8 +276,6 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     }
 
     public void driveRobotRelative(ChassisSpeeds speeds) {
-        // Before leaving DS write what your current goal so someone else can take over
-        // if needed
         // applyRequest(() -> )
         setControl(robotDrive.withVelocityX(speeds.vxMetersPerSecond)
                 .withVelocityY(speeds.vyMetersPerSecond)

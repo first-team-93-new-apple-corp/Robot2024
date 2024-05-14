@@ -82,6 +82,8 @@ public class RobotContainer extends TimedRobot {
   private final Trigger m_Source;
   private final Trigger m_Kicker;
   private final Trigger m_KickerAmp;
+  private final Trigger m_increaseSpeed;
+  private final Trigger m_decreaseSpeed;
   // --------------------------------------------CLIMBER CONTROL BUTTONS--------------------------------------------
   private final Trigger m_hangClimber;
   private final Trigger m_stowClimber;
@@ -169,6 +171,8 @@ public class RobotContainer extends TimedRobot {
     m_KickerAmp.onFalse(m_ShooterCommand.StopShooter());
     m_Kicker.onFalse(m_ShooterCommand.StopShooter());
     m_Prime.onFalse(m_ShooterCommand.StopShooter());
+    m_increaseSpeed.onTrue(m_ShooterCommand.increseSpeed());
+    m_decreaseSpeed.onTrue(m_ShooterCommand.decreaseSpeed());
     // --------------------------------------------CLIMBER BUTTON BINDINGS--------------------------------------------
     m_stowClimber.onTrue(m_ClimberCommand.stowCommand());
     m_hangClimber.onTrue(m_ClimberCommand.hangCommand());
@@ -221,6 +225,8 @@ public class RobotContainer extends TimedRobot {
     m_KickerAmp = new Trigger(m_Joystick2.button(Constants.Thrustmaster.Trigger, m_controllerLoop)).and(op.button(Constants.xbox.RightShoulderButton, m_controllerLoop));  
     m_Kicker = new Trigger(m_Joystick2.button(Constants.Thrustmaster.Trigger, m_controllerLoop)).and(op.button(Constants.xbox.RightShoulderButton, m_controllerLoop).negate());  
     m_Prime = new Trigger(op.axisGreaterThan(Constants.xbox.Axis.RT, 0.6, m_controllerLoop));
+    m_increaseSpeed = new Trigger(op.button(Constants.xbox.Menu, m_controllerLoop));
+    m_decreaseSpeed = new Trigger(op.button(Constants.xbox.Window, m_controllerLoop));
     // --------------------------------------------DRIVE CONTROL BUTTONS--------------------------------------------
     m_fieldRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Top_Middle);
     m_BrakeButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
@@ -261,7 +267,7 @@ public class RobotContainer extends TimedRobot {
   }
   public void updateVision() {
     m_SwerveDriveSubsystem.updateOdometry(m_VisionSubsystem);
-    pose = m_SwerveDriveSubsystem.m_SwerveDrivePoseEstimator.getEstimatedPosition();
+    pose = m_SwerveDriveSubsystem.getPose();
     m_Field2d.setRobotPose(pose);
   }
 

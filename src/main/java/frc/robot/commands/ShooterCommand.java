@@ -63,6 +63,13 @@ public class ShooterCommand extends Command {
     public Command KickerStop(){
         return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.kickerStop());
     }
+    
+    public Command increseSpeed(){
+        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.increaseSpeed());
+    }
+    public Command decreaseSpeed(){
+        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.decreaseSpeed());
+    }
 
     @Override
     public void execute() {
