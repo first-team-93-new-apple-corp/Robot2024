@@ -1,4 +1,4 @@
-package frc.robot.Commands;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -40,10 +40,10 @@ public class ShooterCommand extends Command {
         }
 
         // For the Kicker
-        if (driver2.getRawButton(Constants.Thrustmaster.Trigger) && !opController.getRawButton(Constants.xbox.RightShoulderButton)) { // B
+        if (driver2.getRawButton(Constants.Thrustmaster.Trigger) && !opController.getRawButton(Constants.xbox.RightShoulderButton)) {
             m_ShooterSubsystem.kicker(1);
             m_LED.shot();
-        } else if (driver2.getRawButton(Constants.Thrustmaster.Trigger) && opController.getRawButton(Constants.xbox.RightShoulderButton)) { // B
+        } else if (driver2.getRawButton(Constants.Thrustmaster.Trigger) && opController.getRawButton(Constants.xbox.RightShoulderButton)) { 
             m_ShooterSubsystem.ampKicker();
             m_LED.shot();
         } else if (!opController.getRawButton(Constants.xbox.LeftShoulderButton) && !opController.getRawButton(Constants.xbox.X)) {

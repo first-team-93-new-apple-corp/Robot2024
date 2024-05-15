@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDSubsystem extends SubsystemBase {
@@ -69,6 +70,28 @@ public class LEDSubsystem extends SubsystemBase {
 
     public void shot(){
         setColor(Color.kGray);
+    }
+
+    public Command LEDSHOOT() {
+        return LEDOn(Color.kBlue).alongWith(Commands.waitSeconds(.1))
+        .andThen(LEDOn(Color.kBlue)).alongWith(Commands.waitSeconds(.1))
+        .andThen(LEDOn(Color.kBlue)).alongWith(Commands.waitSeconds(.1))
+        .andThen(LEDNoMoreOn());
+    }
+
+    public Command LEDDEMO(){
+        return LEDOn(Color.kRed).alongWith(Commands.waitSeconds(.1))
+        .andThen(LEDOn(Color.kWhite)).alongWith(Commands.waitSeconds(.1))
+        .andThen(LEDOn(Color.kBlue)).alongWith(Commands.waitSeconds(.1))
+        .andThen(LEDNoMoreOn());
+    }
+
+    public Command LEDNoMoreOn() {
+        return runOnce(() -> turnLEDSOff());
+    }
+
+    public Command LEDOn(Color m_Color) {
+        return runOnce(() -> setColor(m_Color));
     }
 
     public void noteAlmostInBot(){

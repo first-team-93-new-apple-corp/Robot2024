@@ -12,16 +12,16 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Commands.ShooterCommand;
+import frc.robot.commands.ClimberCommand;
+import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.Preflight;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
-// import frc.robot.subsystems.USBCameraSubsystem;
-import frc.robot.Commands.ClimberCommand;
-import frc.robot.Commands.ElevatorCommand;
-import frc.robot.Commands.IntakeCommand;
-import frc.robot.Commands.Preflight;
+
 import com.ctre.phoenix6.hardware.*;
 
 public class Robot extends TimedRobot {
@@ -31,7 +31,6 @@ public class Robot extends TimedRobot {
 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  // private USBCameraSubsystem m_UsbCameraSubsystem = new USBCameraSubsystem();
   private LEDSubsystem m_LED = new LEDSubsystem();
   private ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(m_LED);
   private ShooterCommand m_Shooter = new ShooterCommand(m_ShooterSubsystem, m_LED);
@@ -41,7 +40,6 @@ public class Robot extends TimedRobot {
   private ClimberCommand m_Climber = new ClimberCommand(op);
   private Preflight m_Preflight = new Preflight(op, m_Elevator, m_Intake, m_Climber);
   private SwerveDriveSubsystem m_SwerveDriveSubsystem;
-  // DigitalOutput test = new DigitalOutput(3);
   public Pigeon2 getPigeon() {
     return m_robotContainer.getPigeon();
   }
@@ -51,8 +49,6 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer(m_Joystick1, m_Joystick2, op, m_ShooterSubsystem, m_IntakeSubsystem);
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
     m_Elevator.initOnce();
-    // m_SwerveDriveSubsystem.configAuto();
-    // m_UsbCameraSubsystem.register();
     SmartDashboard.putBoolean("Preflight Done?", false);
     m_LED.startup();
   }
@@ -77,7 +73,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    // m_Elevator.disable();
     m_SwerveDriveSubsystem.m_SwerveDrivePoseEstimator.resetPosition(new Rotation2d(m_SwerveDriveSubsystem.getHeading()),
         m_SwerveDriveSubsystem.getModulePositions(),
         m_SwerveDriveSubsystem.getPose());
@@ -89,10 +84,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    // m_SwerveDriveSubsystem.m_SwerveDrivePoseEstimator.update(new Rotation2d(Math.toRadians(m_SwerveDriveSubsystem.getHeading())), m_SwerveDriveSubsystem.getModulePositions());
-    // m_robotContainer.m_Field2d.setRobotPose(m_SwerveDriveSubsystem.m_SwerveDrivePoseEstimator.getEstimatedPosition());
-    // m_Elevator.disable();
-    // m_robotContainer.updateVision();
   }
 
   @Override
@@ -117,7 +108,6 @@ public class Robot extends TimedRobot {
     m_Shooter.schedule();
     m_Elevator.schedule();
     m_Climber.schedule();
-    // m_LEDCommand.schedule();
     m_robotContainer.updateValues();
   }
 
