@@ -246,7 +246,6 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     }
 
     public Pose2d getPose() {
-        // return m_cachedState.Pose;
         return m_odometry.getEstimatedPosition();
     }
 
@@ -276,14 +275,12 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     }
 
     public void driveRobotRelative(ChassisSpeeds speeds) {
-        // applyRequest(() -> )
         setControl(robotDrive.withVelocityX(speeds.vxMetersPerSecond)
                 .withVelocityY(speeds.vyMetersPerSecond)
                 .withRotationalRate(speeds.omegaRadiansPerSecond));
     }
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
-
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
@@ -295,7 +292,6 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
             final double currentTime = Utils.getCurrentTimeSeconds();
             double deltaTime = currentTime - m_lastSimTime;
             m_lastSimTime = currentTime;
-
             /* use the measured time delta, get battery voltage from WPILib */
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });

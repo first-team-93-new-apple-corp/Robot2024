@@ -110,8 +110,8 @@ public class RobotContainer extends TimedRobot {
   private XboxController op;
   // public final EventLoop m_loop = new EventLoop();
   public final EventLoop m_controllerLoop = new EventLoop();
-  private ChassisSpeeds speeds;
-  private ChassisSpeeds fieldSpeeds;
+  private ChassisSpeeds speeds = new ChassisSpeeds();
+  private ChassisSpeeds fieldSpeeds = new ChassisSpeeds();
   private double fieldRelativeOffset;
 
   public Field2d m_Field2d = new Field2d();
