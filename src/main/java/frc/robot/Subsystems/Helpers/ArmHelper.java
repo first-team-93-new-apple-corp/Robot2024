@@ -33,8 +33,8 @@ public class ArmHelper extends SubsystemBase {
     }
 
     public ARM_SECTOR getCurrentArmSector() {
-        double shoulderPose = m_ShoulderSubsystem.getPostition();
-        // double telescopePose = m_ElevatorSubsystem.getPostition();
+        double shoulderPose = m_ShoulderSubsystem.getPosition();
+        // double telescopePose = m_ElevatorSubsystem.getPosition();
 
         if (shoulderPose > 0.45) {
             return ARM_SECTOR.AMP;
