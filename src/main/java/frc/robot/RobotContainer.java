@@ -30,7 +30,7 @@ import frc.robot.commands.AutoAlignCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
-import frc.robot.subsystems.AutoAlignSubsystem;
+// import frc.robot.subsystems.AutoAlignSubsystem;
 import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -43,7 +43,7 @@ public class RobotContainer extends TimedRobot {
   // public ClimbingLevel m_ClimbingLevel;
   public ShooterCommand m_ShooterCommand;
   public IntakeCommand m_IntakeCommand;
-  public AutoAlignSubsystem m_AutoAlignSubsystem;
+  // public AutoAlignSubsystem m_AutoAlignSubsystem;
   public ElevatorCommand m_ElevatorCommand;  
   public ShooterSubsystem m_ShooterSubsystem;
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
@@ -78,7 +78,7 @@ public class RobotContainer extends TimedRobot {
   // private final SwerveDrivePoseEstimator m_poseEstimator;
   // added this for button bindings and the logic I added
   
-  AutoAlignCommand m_AutoAlignCommand = new AutoAlignCommand(drivetrain);
+  AutoAlignCommand m_AutoAlignCommand;
 
   private SwerveRequest.RobotCentric RobotCentricDrive = new SwerveRequest.RobotCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -173,8 +173,7 @@ public class RobotContainer extends TimedRobot {
     }
   }
   public void configureBindings() {
-    m_TrapAlignButton.whileTrue(m_AutoAlignCommand);
-    m_AmpAlignButton.whileTrue(m_AutoAlignCommand);
+    m_AmpAlignButton.whileTrue(m_AutoAlignCommand.PathFindToAmp());
     
     // m_AmpAlignButton.whileTrue(drivetrain.applyRequest(() -> m_swerveRequest
     // .withCenterOfRotation(DriveConstants.dCenter)
@@ -257,7 +256,7 @@ public class RobotContainer extends TimedRobot {
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_AmpAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
-    m_TrapAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Button);
+    // m_TrapAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Button);
     //ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
     //IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
     // m_AutoAlignSubsystem = new AutoAlignSubsystem(drivetrain);
@@ -272,9 +271,9 @@ public class RobotContainer extends TimedRobot {
     NamedCommands.registerCommand("ResetField", drivetrain.resetPigeonAuton());
     SignalLogger.start();
     drivetrain.configAuto();
-
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
+    m_AutoAlignCommand = new AutoAlignCommand(drivetrain, m_Joystick1);
   }
 
   public Command getAutonomousCommand() {

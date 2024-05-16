@@ -21,7 +21,7 @@ public class LEDSubsystem extends SubsystemBase {
     DigitalOutput blue1;
     DigitalOutput servo;
 
-    Servo servo1;
+    // Servo ampServo;
 
     boolean vibe;
 
@@ -42,10 +42,9 @@ public class LEDSubsystem extends SubsystemBase {
             red1 = new DigitalOutput(7);
             green1 = new DigitalOutput(5);
             blue1 = new DigitalOutput(3);
-            servo1 = new Servo(8);
+            // ampServo = new Servo(8);
             setColor(Color.kBlack);
         }
-
     }
 
     public void setColor(Color m_color) {
@@ -66,14 +65,6 @@ public class LEDSubsystem extends SubsystemBase {
         blue1.enablePWM(m_color.blue);
     }
 
-    public void servoDOWN() {
-        servo1.set(.1);
-    }
-
-    public void servoUP() {
-        servo1.set(.7);
-    }
-
     public void turnLEDSOff() {
         setColor(Color.kBlack);
     }
@@ -83,16 +74,15 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     public Command LEDSHOOT() {
-        return LEDOn(Color.kBlue).alongWith(Commands.waitSeconds(.1))
-                .andThen(LEDOn(Color.kBlue)).alongWith(Commands.waitSeconds(.1))
-                .andThen(LEDOn(Color.kBlue)).alongWith(Commands.waitSeconds(.1))
-                .andThen(LEDNoMoreOn());
+        return LEDOn(Color.kBlue).alongWith(Commands.waitSeconds(.5)).andThen(LEDNoMoreOn())
+                .andThen(LEDOn(Color.kBlue).alongWith(Commands.waitSeconds(.3))).andThen(LEDNoMoreOn())
+                .andThen(LEDOn(Color.kBlue).alongWith(Commands.waitSeconds(.3))).andThen(LEDNoMoreOn());
     }
 
     public Command LEDDEMO() {
-        return LEDOn(Color.kRed).alongWith(Commands.waitSeconds(.1))
-                .andThen(LEDOn(Color.kWhite)).alongWith(Commands.waitSeconds(.1))
-                .andThen(LEDOn(Color.kBlue)).alongWith(Commands.waitSeconds(.1))
+        return LEDOn(Color.kRed).alongWith(Commands.waitSeconds(1)).andThen(LEDNoMoreOn())
+                .andThen(LEDOn(Color.kWhite).alongWith(Commands.waitSeconds(1))).andThen(LEDNoMoreOn())
+                .andThen(LEDOn(Color.kBlue).alongWith(Commands.waitSeconds(1)))
                 .andThen(LEDNoMoreOn());
     }
 
@@ -106,6 +96,7 @@ public class LEDSubsystem extends SubsystemBase {
 
     public void toggleVibeOff() {
         vibe = false;
+        LEDNoMoreOn().schedule();
     }
 
     public void toggleVibeOn() {
@@ -135,7 +126,9 @@ public class LEDSubsystem extends SubsystemBase {
             toggleVibeOff();
         }
 
-        
+        if (op.getRawAxis(Constants.xbox.Axis.LT) > 0.6) { // LeftTrigger
+            LEDDEMO();
+        }
 
         if (vibe) {
             if (loopsCounter >= loopsBetweenVibing) {
@@ -152,9 +145,10 @@ public class LEDSubsystem extends SubsystemBase {
 
             setColor(Color.fromHSV(vibingCounter, 255, 255));
         } else {
-            if (op.getRawAxis(Constants.xbox.Axis.RT) > 0.6) { // RightTrigger
-                LEDDEMO();
+            if (op.getRawAxis(Constants.xbox.Axis.LT) > 0.6) { // LeftTrigger
+                LEDDEMO().schedule();
             }
+            return;
         }
     }
 
@@ -199,4 +193,6 @@ public class LEDSubsystem extends SubsystemBase {
         green1.enablePWM(191.25);
         blue1.enablePWM(0);
     }
+
+
 }

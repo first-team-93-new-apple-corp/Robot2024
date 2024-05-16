@@ -1,6 +1,18 @@
 package frc.robot;
 
+import com.pathplanner.lib.util.GeometryUtil;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+
 public class Constants {
+    public final class AprilTagPoseConstants {
+
+        public static final Pose2d RedAmp = new Pose2d(14.6, 7.6, new Rotation2d(Math.PI / 2));
+        public static final Pose2d BlueAmp = GeometryUtil.flipFieldPose(RedAmp);
+
+    }
+
     public class REV {
         public static final int L_Kicker = 2;
         public static final int R_Kicker = 3;
@@ -11,7 +23,7 @@ public class Constants {
             public static final int Bump_Intake = 25;
             public static final int F_Intake = 14;
             public static final int B_Intake = 15;
-            
+
             public static final int L_Shoot = 16;
             public static final int R_Shoot = 17;
 
@@ -118,6 +130,7 @@ public class Constants {
             public static final int Right_Stick_X = 4;
         }
     }
+
     public class xbox {
         public static final int A = 1;
         public static final int B = 2;

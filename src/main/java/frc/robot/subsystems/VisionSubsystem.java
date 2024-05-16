@@ -33,12 +33,12 @@ public class VisionSubsystem extends SubsystemBase {
         this.drivetrain = drivetrain;
         // tx = m_limelight.getEntry("tx").getDouble(0);
         // ty = m_limelight.getEntry("ty").getDouble(0);
-        // tv = m_limelight.getEntry("tv").getDouble(0);
+        tv = m_limelight.getEntry("tv").getDouble(0);
         // ta = m_limelight.getEntry("ta").getDouble(0);
         // tid = m_limelight.getEntry("tid").getDouble(0);
         // ts = m_limelight.getEntry("ts").getDouble(0);
-        // tl = m_limelight.getEntry("tl").getDouble(0);
-        // cl = m_limelight.getEntry("cl").getDouble(0);
+        tl = m_limelight.getEntry("tl").getDouble(0);
+        cl = m_limelight.getEntry("cl").getDouble(0);
         targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
         botpose_wpiblue = m_limelight.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
         pose = new Pose2d();
@@ -62,12 +62,12 @@ public class VisionSubsystem extends SubsystemBase {
 
     public void updateValues() {
         // tx = m_limelight.getEntry("tx").getDouble(0);
-        // tv = m_limelight.getEntry("tv").getDouble(0);
+        tv = m_limelight.getEntry("tv").getDouble(0);
         // ty = m_limelight.getEntry("ty").getDouble(0);
         // tid = m_limelight.getEntry("tid").getDouble(0);
         // ts = m_limelight.getEntry("ts").getDouble(0);
-        // tl = m_limelight.getEntry("tl").getDouble(0);
-        // cl = m_limelight.getEntry("cl").getDouble(0);
+        tl = m_limelight.getEntry("tl").getDouble(0);
+        cl = m_limelight.getEntry("cl").getDouble(0);
         targetpose_robotspace = m_limelight.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
         botpose_wpiblue = m_limelight.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
         y = targetpose_robotspace[2];

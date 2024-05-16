@@ -26,15 +26,14 @@ public class ShooterCommand extends Command {
         if (opController.getRawAxis(Constants.xbox.Axis.RT) > 0.6) { // RightTrigger
             m_LED.toggleVibeOff();
             m_ShooterSubsystem.prime();
-            m_LED.LEDSHOOT();
+            m_LED.LEDSHOOT().schedule();
         } else if (opController.getRawButton(Constants.xbox.RightShoulderButton)) { // RightShoulderButton
             m_ShooterSubsystem.shootAmp();
         } else if (opController.getRawButton(Constants.xbox.LeftShoulderButton)) { // LeftShoulderButton
             m_ShooterSubsystem.intakeFront();
         } else if (!opController.getRawButton(Constants.xbox.X)){
             m_ShooterSubsystem.shooterStop();
-        } else {
-            m_LED.toggleVibeOn();
+            // m_LED.toggleVibeOn();
         }
 
         if (opController.getRawButtonPressed(Constants.xbox.Menu)) {
@@ -75,13 +74,15 @@ public class ShooterCommand extends Command {
         //     m_LED.vibing();
         // }else if (driver2.getRawButton(Constants.Thrustmaster.Right_Buttons.Bottom_Right)){
         //     m_LED.toggleVibeOff();
-        // } 
-       
+        // } \
 
-        if (up.getAsBoolean()) {
-            m_LED.servoUP();
-        } else if (down.getAsBoolean()) {
-            m_LED.servoDOWN();
-        }
+        // For the Elevator
+
+        // if (opController.getRawButtonPressed(Constants.xbox.RightShoulderButton)){
+        //     m_LED.ServoUp();
+        // } else if (opController.getRawButtonReleased(Constants.xbox.LeftShoulderButton)){
+        //     m_LED.ServoDown();
+        // }
+       
     }
 }

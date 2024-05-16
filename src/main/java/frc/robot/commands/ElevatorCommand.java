@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -12,7 +13,9 @@ public class ElevatorCommand extends Command {
     ElevatorSubsystem m_elevator = new ElevatorSubsystem();
     double setpoint = 0;
     double ampSetpoint = -50;
-    double sourceSetpoint = -70;
+    double sourceSetpoint = -3;
+    private Servo ampServo = new Servo(8);
+    
 
     public ElevatorCommand(XboxController op) {
         this.op = op;
@@ -38,6 +41,13 @@ public class ElevatorCommand extends Command {
     public void disable() {
         m_elevator.disable();
     }
+    public void ServoUp() {
+        ampServo.set(0.1);
+    }
+
+    public void ServoDown() {
+        ampServo.set(0.65);
+    }
     @Override
     public void execute() {
         
@@ -57,10 +67,12 @@ public class ElevatorCommand extends Command {
 
         if (op.getRawButton(Constants.xbox.RightShoulderButton)) {
             m_elevator.toSetpoint(ampSetpoint);
+            this.ServoUp();
         } else if (op.getRawButton(Constants.xbox.LeftShoulderButton)) {
             m_elevator.toSetpoint(sourceSetpoint);
         } else {
             m_elevator.toSetpoint(3);
+            this.ServoDown();
         }
         m_elevator.runElevator();
     }
