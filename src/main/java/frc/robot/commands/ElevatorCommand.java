@@ -21,9 +21,14 @@ public class ElevatorCommand extends Command {
     public void initOnce() {
         m_elevator.initOnce();
     }
-
+    public boolean done() {
+        return m_elevator.bottomLimitTriggered();
+    }
     public void preflight() {
         m_elevator.zero();
+    }
+    public void runElevator() {
+        m_elevator.runElevator();
     }
 
     public TalonFX getMotor() {

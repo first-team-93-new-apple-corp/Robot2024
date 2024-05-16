@@ -51,11 +51,14 @@ public class Robot extends TimedRobot {
     m_Elevator.initOnce();
     SmartDashboard.putBoolean("Preflight Done?", false);
     m_LED.startup();
+    
+    m_LED.toggleVibeOn();
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    m_LED.vibing();
   }
 
   @Override
@@ -119,11 +122,11 @@ public class Robot extends TimedRobot {
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
     m_Preflight.resetPreflight();
-    m_Preflight.schedule();
   }
 
   @Override
   public void testPeriodic() {
+    m_Preflight.schedule();
   }
 
   @Override

@@ -13,7 +13,7 @@ public class Preflight extends Command {
     SlewRateLimiter right = new SlewRateLimiter(0.5, -0.5, 0.5);
     private static boolean leftFinished = false;
     private static boolean rightFinished = false;
-    private static boolean elevatorFinished = false;
+    public static boolean elevatorFinished = false;
 
     public Preflight(XboxController op, ElevatorCommand elevatorCommand, IntakeCommand m_IntakeCommand, ClimberCommand climbers) {
         this.climbers = climbers;
@@ -50,8 +50,10 @@ public class Preflight extends Command {
             }
         }
         if(!elevatorFinished) {
-          elevatorCommand.preflight();  
-          elevatorFinished = true;
+          elevatorCommand.preflight();
+          if(elevatorCommand.done()) {
+            elevatorFinished = true;
+          }
         } 
         
         // elevatorCommand.preflight();

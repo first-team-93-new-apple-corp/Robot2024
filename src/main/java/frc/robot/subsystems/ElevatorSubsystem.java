@@ -56,9 +56,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         zeroConfig.CurrentLimits.SupplyCurrentLimit = 5;
         zeroConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     }
+
     public void disable() {
         // currentState = elevatorState.Disabled;
     }
+
     public void initOnce() {
         if (currentState == elevatorState.Init) {
             if (topLimit == null) {
@@ -93,13 +95,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         switch (currentState) {
             default:
             case HoldState:
-                if (Preflight.isPreflightDone()) {
-                    m_motor.set(0);
-                    m_motor.setNeutralMode(NeutralModeValue.Brake);
-                } else {
-                    System.out.println("Preflight not completed. Disabling elevator.");
-                    currentState = elevatorState.Disabled;
-                }
+                m_motor.set(0);
+                m_motor.setNeutralMode(NeutralModeValue.Brake);
+
                 break;
 
             case TempState:
@@ -130,9 +128,7 @@ public class ElevatorSubsystem extends SubsystemBase {
                 break;
             case Zeroing:
                 if (!bottomLimitTriggered()) {
-                    // m_motor.getConfigurator().apply(zeroConfig);
-                    m_motor.getConfigurator().apply(config);
-                    m_motor.set(0.05);
+                    m_motor.set(0.03);
                 } else {
                     m_motor.set(0);
                     m_motor.setPosition(0);
@@ -155,17 +151,21 @@ public class ElevatorSubsystem extends SubsystemBase {
         setpoint = newSetpoint;
         setpoint = MathUtil.clamp(setpoint, highSetpoint, lowSetpoint);
         // if (!(currentState == elevatorState.Disabled)) {
-            currentState = elevatorState.ToSetpoint;
+        currentState = elevatorState.ToSetpoint;
         // } else {
-            // System.out.println("Elevator is disabled!");
+        // System.out.println("Elevator is disabled!");
         // }
     }
 
     public void zero() {
         // if (!(currentState == elevatorState.Disabled)) {
+        if (currentState != elevatorState.Zeroing) {
             currentState = elevatorState.Zeroing;
+        } else {
+            runElevator();
+        }
         // } else {
-        //     System.out.println("Elevator is disabled!");
+        // System.out.println("Elevator is disabled!");
         // }
     }
 

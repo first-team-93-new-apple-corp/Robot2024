@@ -84,12 +84,12 @@ public class ShooterSubsystem extends SubsystemBase {
     public void AmpForAuton(){
         shootAmp();
         kicker(KickerSpeed);
-        m_LED.turnLEDSOff();
+        // m_LED.turnLEDSOff();
     }
     public void ShootingforAuton() {
         AutonPrime();
         kicker(KickerSpeed);
-        m_LED.turnLEDSOff();
+        // m_LED.turnLEDSOff();
     }
 
     public void DribbleOutNote() {
