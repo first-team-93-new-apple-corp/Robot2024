@@ -282,7 +282,7 @@ public class RobotContainer extends TimedRobot {
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
     m_AutoAlignCommand = new AutoAlignCommand(drivetrain, m_Joystick1);
-    this.configureBindings();
+    // this.configureBindings();
   }
 
   public Command getAutonomousCommand() {

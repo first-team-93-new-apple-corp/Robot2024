@@ -147,42 +147,10 @@ public class LEDSubsystem extends SubsystemBase {
 
             setColor(Color.fromHSV(vibingCounter, 255, 255));
         } else {
-            if (op.getRawAxis(Constants.xbox.Axis.LT) > 0.6) { // LeftTrigger
-                LEDDEMO().schedule();
-            }
             return;
         }
     }
 
-    public void RGBVibing() {
-        if (driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) <= 0
-                && driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) < .2) {
-            vibeSpeed1();
-        } else if (driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) <= .2
-                && driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) < .4) {
-            vibeSpeed2();
-        } else if (driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) <= .4
-                && driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) < .6) {
-            vibeSpeed3();
-        } else if (driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) <= .6
-                && driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) < .8) {
-            vibeSpeed4();
-        } else if (driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) <= .8
-                && driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) < 1) {
-            vibeSpeed5();
-        }
-        if (driver2.getRawButton(Constants.Thrustmaster.Right_Buttons.Top_Right)) {
-            toggleVibeOn();
-        } else if (driver2.getRawButton(Constants.Thrustmaster.Right_Buttons.Bottom_Right)) {
-            toggleVibeOff();
-        }
-
-        if (vibe) {
-            RGBvibe().schedule();
-        } else {
-            return;
-        }
-    }
     public Command RGBvibe(){
         return (LEDOn(Color.kRed).alongWith(Commands.waitSeconds(.5))
                 .andThen(LEDOn(Color.kWhite).alongWith(Commands.waitSeconds(.5)))
