@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    m_robotContainer = new RobotContainer(m_Joystick1, m_Joystick2, op, m_ShooterSubsystem, m_IntakeSubsystem);
+    m_robotContainer = new RobotContainer(m_Joystick1, m_Joystick2, op, m_ShooterSubsystem, m_IntakeSubsystem, m_LED);
     m_SwerveDriveSubsystem = m_robotContainer.getDrive();
     m_Elevator.initOnce();
     SmartDashboard.putBoolean("Preflight Done?", false);
@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    m_LED.vibing();
+    // m_LED.RGBVibing();
   }
 
   @Override
@@ -98,7 +98,7 @@ public class Robot extends TimedRobot {
     
     
     // THIS SHOULDN'T BE RAN PERIODIC!!!!!!!!!!!!!
-    m_robotContainer.configureBindings();
+    // m_robotContainer.configureBindings();
     // ^^^
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

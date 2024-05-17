@@ -33,6 +33,7 @@ import frc.robot.commands.ShooterCommand;
 // import frc.robot.subsystems.AutoAlignSubsystem;
 import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
@@ -46,6 +47,7 @@ public class RobotContainer extends TimedRobot {
   // public AutoAlignSubsystem m_AutoAlignSubsystem;
   public ElevatorCommand m_ElevatorCommand;  
   public ShooterSubsystem m_ShooterSubsystem;
+  public LEDSubsystem m_LED;
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private SendableChooser<Command> autoChooser;
@@ -71,6 +73,8 @@ public class RobotContainer extends TimedRobot {
   private final JoystickButton m_BrakeButton;
   private final JoystickButton m_fieldRelButton;
   private final JoystickButton m_RobotRelButton;
+  private final JoystickButton m_DEMOButton;
+  private final JoystickButton m_NoDemo;
 
   private final JoystickButton m_CameraRelButton;
   public Field2d m_Field2d = new Field2d();
@@ -174,7 +178,8 @@ public class RobotContainer extends TimedRobot {
   }
   public void configureBindings() {
     m_AmpAlignButton.whileTrue(m_AutoAlignCommand.PathFindToAmp());
-    
+    m_DEMOButton.onTrue(m_LED.RGBvibe());
+    m_NoDemo.onTrue(m_LED.LEDNoMoreOn());
     // m_AmpAlignButton.whileTrue(drivetrain.applyRequest(() -> m_swerveRequest
     // .withCenterOfRotation(DriveConstants.dCenter)
     // .withSpeeds(m_AutoAlignSubsystem.fieldSpeeds)));
@@ -236,8 +241,9 @@ public class RobotContainer extends TimedRobot {
   //   drivetrain.configAuto();
   // }
 
-  public RobotContainer(Joystick m_Joystick1, Joystick m_Joystick2, XboxController op, ShooterSubsystem m_ShooterSubsystem, IntakeSubsystem m_IntakeSubsystem) {
+  public RobotContainer(Joystick m_Joystick1, Joystick m_Joystick2, XboxController op, ShooterSubsystem m_ShooterSubsystem, IntakeSubsystem m_IntakeSubsystem, LEDSubsystem m_LED) {
     this.m_ShooterSubsystem = m_ShooterSubsystem;
+    this.m_LED = m_LED;
     // m_poseEstimator = new SwerveDrivePoseEstimator());
     // m_JoystickTrigger = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     // m_JoystickButton2 = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
@@ -256,6 +262,8 @@ public class RobotContainer extends TimedRobot {
     m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     m_CameraRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     m_AmpAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
+    m_DEMOButton = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Center_Button);
+    m_NoDemo = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Right_Buttons.Bottom_Right);
     // m_TrapAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Right_Button);
     //ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
     //IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem(m_ShooterSubsystem);
@@ -274,6 +282,7 @@ public class RobotContainer extends TimedRobot {
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
     m_AutoAlignCommand = new AutoAlignCommand(drivetrain, m_Joystick1);
+    this.configureBindings();
   }
 
   public Command getAutonomousCommand() {

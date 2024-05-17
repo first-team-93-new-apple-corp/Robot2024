@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
+import org.opencv.video.Video;
+
 import edu.wpi.first.networktables.PubSub;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Joystick;
@@ -23,7 +27,7 @@ public class LEDSubsystem extends SubsystemBase {
 
     // Servo ampServo;
 
-    boolean vibe;
+    boolean vibe = true;
 
     int loopsCounter;
     int loopsBetweenVibing = 1;
@@ -87,11 +91,11 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     public Command LEDNoMoreOn() {
-        return runOnce(() -> turnLEDSOff());
+        return runOnce(() -> turnLEDSOff()).ignoringDisable(true);
     }
 
     public Command LEDOn(Color m_Color) {
-        return runOnce(() -> setColor(m_Color));
+        return runOnce(() -> setColor(m_Color)).ignoringDisable(true);
     }
 
     public void toggleVibeOff() {
@@ -126,10 +130,6 @@ public class LEDSubsystem extends SubsystemBase {
             toggleVibeOff();
         }
 
-        if (op.getRawAxis(Constants.xbox.Axis.LT) > 0.6) { // LeftTrigger
-            LEDDEMO();
-        }
-
         if (vibe) {
             if (loopsCounter >= loopsBetweenVibing) {
                 loopsCounter = 0;
@@ -152,6 +152,43 @@ public class LEDSubsystem extends SubsystemBase {
         }
     }
 
+    public void RGBVibing() {
+        if (driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) <= 0
+                && driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) < .2) {
+            vibeSpeed1();
+        } else if (driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) <= .2
+                && driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) < .4) {
+            vibeSpeed2();
+        } else if (driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) <= .4
+                && driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) < .6) {
+            vibeSpeed3();
+        } else if (driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) <= .6
+                && driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) < .8) {
+            vibeSpeed4();
+        } else if (driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) <= .8
+                && driver2.getRawAxis(Constants.Thrustmaster.Axis.slider) < 1) {
+            vibeSpeed5();
+        }
+        if (driver2.getRawButton(Constants.Thrustmaster.Right_Buttons.Top_Right)) {
+            toggleVibeOn();
+        } else if (driver2.getRawButton(Constants.Thrustmaster.Right_Buttons.Bottom_Right)) {
+            toggleVibeOff();
+        }
+
+        if (vibe) {
+            RGBvibe().schedule();
+        } else {
+            return;
+        }
+    }
+    public Command RGBvibe(){
+        return (LEDOn(Color.kRed).alongWith(Commands.waitSeconds(.5))
+                .andThen(LEDOn(Color.kWhite).alongWith(Commands.waitSeconds(.5)))
+                .andThen(LEDOn(Color.kBlue).alongWith(Commands.waitSeconds(.5)))).repeatedly().ignoringDisable(true);
+    }
+    public BooleanSupplier Vibes() {
+        return () -> !this.vibe;
+    }
     public void vibeSpeed1() {
         vibeSpeed = 1;
     }
