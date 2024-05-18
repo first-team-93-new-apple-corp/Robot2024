@@ -281,7 +281,7 @@ public class RobotContainer extends TimedRobot {
   public Driver m_Driver = new Driver(0,1,4);
 
   public void updateValues() {
-    m_input = m_Driver.getDriver();
+    m_input = m_Driver.GetDrive();
     if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
       fieldRelativeOffset = m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians();
       m_SwerveDriveSubsystem.getPigeon2().reset();

@@ -26,6 +26,7 @@
       "/Pose": "Field2d",
       "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/DriveChoose": "String Chooser",
+      "/SmartDashboard/DriveChooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Module 0": "Mechanism2d",
       "/SmartDashboard/Module 1": "Mechanism2d",
@@ -53,7 +54,7 @@
           "visible": true
         }
       },
-      "/SmartDashboard/DriveChoose": {
+      "/SmartDashboard/DriveChooser": {
         "window": {
           "visible": true
         }
