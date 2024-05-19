@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 
 public class WiiMoteDrive implements InputsIO{
@@ -47,6 +48,26 @@ public class WiiMoteDrive implements InputsIO{
     @Override
     public ChassisSpeeds fieldSpeeds(SwerveDriveSubsystem m_SwerveDriveSubsystem){
     return inputSpeeds();
+    }
+    @Override
+    public Trigger brake() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'brake'");
+    }
+    @Override
+    public Trigger fieldRelButton() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'fieldRelButton'");
+    }
+    @Override
+    public Trigger robotRelButtonke() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'robotRelButtonke'");
+    }
+    @Override
+    public Trigger ampAlignButton() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'ampAlignButton'");
     } 
     
 }

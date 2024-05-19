@@ -4,12 +4,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 
 public class XboxTank implements InputsIO{
     private final XboxController Xbox;
-
     /**
     * Creates an object containing the Xbox Controller that will return our input values
     */
@@ -39,5 +39,23 @@ public class XboxTank implements InputsIO{
     public ChassisSpeeds fieldSpeeds(SwerveDriveSubsystem m_SwerveDriveSubsystem){
     return inputSpeeds();
     } 
-    
+
+    @Override
+    public Trigger brake() {
+        return new Trigger(loop, () -> (Xbox.getRawAxis(2) > .8));
+    }
+    @Override
+    public Trigger fieldRelButton() {
+        return new Trigger(loop, Xbox::getXButton);
+        
+    }
+    @Override
+    public Trigger robotRelButtonke() {
+        return new Trigger(loop, () -> (Xbox.getRawAxis(3) > .8));
+        
+    }
+    @Override
+    public Trigger ampAlignButton() {
+        return new Trigger(loop, Xbox::getYButton);
+    }
 }

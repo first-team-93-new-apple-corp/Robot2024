@@ -1,14 +1,21 @@
 package frc.robot.DriveInputs;
 
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Swerve.DriveConstants;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 
 public interface InputsIO {
-
+    public EventLoop loop = new EventLoop();
+    public default void unBind(){
+        loop.clear();
+    }
+    public default void poll(){
+        loop.poll();
+    }
     /**
     * Returns a object containing all our inputs
     */
@@ -83,6 +90,12 @@ public interface InputsIO {
         new Rotation2d(m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians())
             // .rotateBy(new Rotation2d(-fieldRelativeOffset))
             );
-    }     
-
+    }    
+    /**
+     * Returns the Brake Trigger
+     */
+    public Trigger brake();
+    public Trigger fieldRelButton();
+    public Trigger robotRelButtonke();
+    public Trigger ampAlignButton();    
 } 
