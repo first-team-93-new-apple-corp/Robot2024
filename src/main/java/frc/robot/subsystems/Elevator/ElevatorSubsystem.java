@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Elevator;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -51,6 +53,12 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_io.zero();
     }
 
+    public DoubleSupplier ElevatorPostion = new DoubleSupplier() {
+        @Override
+        public double getAsDouble() {
+            return getPosition();
+        }
+    };
     @Override
     public void periodic() {
         m_io.updateValues(m_Inputs);

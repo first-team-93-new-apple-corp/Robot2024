@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Climber;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,6 +48,12 @@ public class ClimberSubsystem extends SubsystemBase {
     public double checkRightBound(double output) {
         return m_io.checkRightBound(output);
     }
+      public DoubleSupplier ClimberPostion = new DoubleSupplier() {
+        @Override
+        public double getAsDouble() {
+            return leftPosition();
+        }
+    };
     @Override
     public void periodic() {
         m_io.updateValues(m_Inputs);

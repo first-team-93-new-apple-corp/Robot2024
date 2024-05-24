@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -7,8 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.Climber.ClimberSubsystem;
-import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 
 public class Mechanisms extends SubsystemBase{
     private double EleGearRatio = -10;
@@ -22,13 +22,13 @@ public class Mechanisms extends SubsystemBase{
     private MechanismLigament2d elevatorMechanismLigament;
     private MechanismLigament2d climberMechanismLigament;
 
-    private ElevatorSubsystem m_ElevatorSubsystem;
-    private ClimberSubsystem m_ClimberSubsystem;
+    private DoubleSupplier m_ElevatorPosition;
+    private DoubleSupplier m_ClimberPostion;
 
     //constructor
-    public Mechanisms(ElevatorSubsystem m_ElevatorSubsystem, ClimberSubsystem m_ClimberSubsystem) {
-        this.m_ElevatorSubsystem = m_ElevatorSubsystem;
-        this.m_ClimberSubsystem = m_ClimberSubsystem;
+    public Mechanisms(DoubleSupplier m_ElevatorPosition, DoubleSupplier m_ClimberPostion) {
+        this.m_ElevatorPosition = m_ElevatorPosition;
+        this.m_ClimberPostion = m_ClimberPostion;
         
         //CHANGE ALL VALUES WHEN UNDERSTAND GOODLY
         robotMechanism = new Mechanism2d(1.2, 1.2);
@@ -50,8 +50,8 @@ public class Mechanisms extends SubsystemBase{
 
     @Override
     public void periodic() {                //inital + Revolutions*gearRatio
-        elevatorMechanismLigament.setLength(.57+ (m_ElevatorSubsystem.getPosition()/2048)*EleGearRatio);
-        climberMechanismLigament.setLength(.39+(m_ClimberSubsystem.leftPosition()/2048)*ClimbGearRatio);
+        elevatorMechanismLigament.setLength(.57+ (m_ElevatorPosition.getAsDouble()/2048)*EleGearRatio);
+        climberMechanismLigament.setLength(.39+(m_ClimberPostion.getAsDouble()/2048)*ClimbGearRatio);
         
         SmartDashboard.putData("mech2d", robotMechanism);
     }

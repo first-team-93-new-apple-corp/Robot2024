@@ -207,7 +207,7 @@ public class RobotContainer extends TimedRobot {
     m_VisionSubsystem = VisionSubsystemFactory.build(m_SwerveDriveSubsystem, constants.Vision);
     // --------------------------------------------SUBSYSTEMS--------------------------------------------
     if (Utils.isSimulation()) {
-    m_MechanismsSubsystem = new Mechanisms(m_ElevatorSubsystem, m_ClimberSubsystem);
+    m_MechanismsSubsystem = new Mechanisms(m_ElevatorSubsystem.ElevatorPostion, m_ClimberSubsystem.ClimberPostion);
     }
     // --------------------------------------------COMMANDS--------------------------------------------
     m_AutoAlignCommand = new AutoAlignCommand(m_SwerveDriveSubsystem, m_Joystick1);
