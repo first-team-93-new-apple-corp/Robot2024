@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 
 public class WiiMoteDrive implements InputsIO{
     private final GenericHID Wiimote;
@@ -46,7 +45,7 @@ public class WiiMoteDrive implements InputsIO{
     * Returns a Field Relative ChassisSpeeds
     */
     @Override
-    public ChassisSpeeds fieldSpeeds(SwerveDriveSubsystem m_SwerveDriveSubsystem){
+    public ChassisSpeeds fieldSpeeds(Rotation2d RobotAngle){
     return inputSpeeds();
     }
     @Override

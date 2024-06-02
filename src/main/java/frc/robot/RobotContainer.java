@@ -32,7 +32,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.DriveInputs.Driver;
@@ -302,11 +301,6 @@ public class RobotContainer extends TimedRobot {
             .withCenterOfRotation(DriveConstants.dCenter)
             .withSpeeds(ChassisSpeeds.discretize(fieldSpeeds, kDefaultPeriod))));
 
-      m_fieldRelButton.onTrue(
-        m_SwerveDriveSubsystem.applyRequest(() -> m_swerveRequest
-            .withCenterOfRotation(DriveConstants.dCenter)
-            .withSpeeds(ChassisSpeeds.discretize(fieldSpeeds, kDefaultPeriod))));
-
       // Brake while held
       m_BrakeButton.whileTrue(m_SwerveDriveSubsystem.applyRequest(() -> brake));
 
@@ -316,12 +310,15 @@ public class RobotContainer extends TimedRobot {
         .withSpeeds(ChassisSpeeds.discretize(m_input.inputSpeeds(), kDefaultPeriod))));
       m_Driver.Updated();
     }
+
     m_Driver.getDrive().poll();
-    if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
+    
+    if (m_fieldRelButton.getAsBoolean()){
       fieldRelativeOffset = m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians();
-      m_SwerveDriveSubsystem.getPigeon2().reset();
     }
-    fieldSpeeds = m_input.fieldSpeeds(m_SwerveDriveSubsystem);
+    fieldSpeeds = m_input.fieldSpeeds(new Rotation2d(m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians())
+    .rotateBy(new Rotation2d(-fieldRelativeOffset))
+    );
     updateVision();
     // --------------------------------------------SMARTDASHBOARD STUFF--------------------------------------------
     SmartDashboard.putData("pigeon", getPigeon());
@@ -340,14 +337,6 @@ public class RobotContainer extends TimedRobot {
     // SignalLogger.writeDouble("SysID: Steer Position" + i, m_SwerveDriveSubsystem.getTurn(i).getPosition().getValueAsDouble());
     // SignalLogger.writeDouble("SysID: Steer Voltage" + i, m_SwerveDriveSubsystem.getTurn(i).getMotorVoltage().getValueAsDouble());
     // }
-  }
-
-  public double checkDeadzone(double input) {
-    if (deadzone > input && input > -deadzone) {
-      return 0;
-    } else {
-      return input;
-    }
   }
 
   public SwerveDriveSubsystem getDrive() {

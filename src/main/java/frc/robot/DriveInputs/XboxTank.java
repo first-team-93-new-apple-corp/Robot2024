@@ -6,7 +6,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
-import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 
 public class XboxTank implements InputsIO{
     private final XboxController Xbox;
@@ -36,7 +35,7 @@ public class XboxTank implements InputsIO{
     * Returns a Field Relative ChassisSpeeds
     */
     @Override
-    public ChassisSpeeds fieldSpeeds(SwerveDriveSubsystem m_SwerveDriveSubsystem){
+    public ChassisSpeeds fieldSpeeds(Rotation2d RobotAngle){
     return inputSpeeds();
     } 
 

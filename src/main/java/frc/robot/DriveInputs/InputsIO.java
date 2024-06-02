@@ -6,7 +6,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Swerve.DriveConstants;
-import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 
 public interface InputsIO {
     public EventLoop loop = new EventLoop();
@@ -85,11 +84,8 @@ public interface InputsIO {
     /**
     * Returns a Field Relative ChassisSpeeds
     */
-    public default ChassisSpeeds fieldSpeeds(SwerveDriveSubsystem m_SwerveDriveSubsystem){
-    return ChassisSpeeds.fromFieldRelativeSpeeds(inputSpeeds(),
-        new Rotation2d(m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians())
-            // .rotateBy(new Rotation2d(-fieldRelativeOffset))
-            );
+    public default ChassisSpeeds fieldSpeeds(Rotation2d Robotangle){
+    return ChassisSpeeds.fromFieldRelativeSpeeds(inputSpeeds(), Robotangle);
     }    
     /**
      * Returns the Brake Trigger
