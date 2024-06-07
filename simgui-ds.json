@@ -28,7 +28,7 @@
       "axisCount": 3,
       "buttonCount": 11,
       "buttonKeys": [
-        -1,
+        92,
         80,
         67,
         86,
@@ -109,8 +109,12 @@
     {
       "guid": "Keyboard1"
     },
+    {},
     {
-      "guid": "Keyboard2"
+      "useGamepad": true
+    },
+    {
+      "useGamepad": true
     }
   ],
   "useEnableDisableHotkeys": true
