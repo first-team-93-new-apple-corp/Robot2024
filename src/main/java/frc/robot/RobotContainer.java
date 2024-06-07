@@ -32,9 +32,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.DriveInputs.Driver;
+import frc.robot.DriveInputs.InputsIO;
 import frc.robot.commands.AutoAlignCommand;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.ElevatorCommand;
@@ -88,10 +89,10 @@ public class RobotContainer extends TimedRobot {
   private final Trigger m_hangClimber;
   private final Trigger m_stowClimber;
   // --------------------------------------------DRIVE BUTTONS--------------------------------------------
-  private final JoystickButton m_AmpAlignButton;
-  private final JoystickButton m_BrakeButton;
-  private final JoystickButton m_fieldRelButton;
-  private final JoystickButton m_RobotRelButton;
+  private Trigger m_AmpAlignButton;
+  private Trigger m_BrakeButton;
+  private Trigger m_fieldRelButton;
+  private Trigger m_RobotRelButton;
   // --------------------------------------------SYS ID BUTTONS--------------------------------------------
   // private final JoystickButton m_SysIDDriveQuasiButton;
   // private final JoystickButton m_SysIDDriveDynamButton;
@@ -110,7 +111,7 @@ public class RobotContainer extends TimedRobot {
   private XboxController op;
   // public final EventLoop m_loop = new EventLoop();
   public final EventLoop m_controllerLoop = new EventLoop();
-  private ChassisSpeeds speeds = new ChassisSpeeds();
+
   private ChassisSpeeds fieldSpeeds = new ChassisSpeeds();
   private double fieldRelativeOffset;
 
@@ -130,31 +131,31 @@ public class RobotContainer extends TimedRobot {
   public void configureBindings() {
     m_SwerveDriveSubsystem.registerTelemetry(logger::telemeterize);
     // --------------------------------------------DRIVE BUTTON BINDINGS--------------------------------------------
-    m_AmpAlignButton.whileTrue(m_AutoAlignCommand.PathFindToAmp());
+    // m_AmpAlignButton.whileTrue(m_AutoAlignCommand.PathFindToAmp());
 
-    m_SwerveDriveSubsystem.setDefaultCommand( // Drivetrain will execute this command periodically
-        m_SwerveDriveSubsystem.applyRequest(() -> m_swerveRequest
-            .withCenterOfRotation(DriveConstants.dCenter)
-            .withSpeeds(ChassisSpeeds.discretize(fieldSpeeds, kDefaultPeriod))));
+    // m_SwerveDriveSubsystem.setDefaultCommand( // Drivetrain will execute this command periodically
+    //     m_SwerveDriveSubsystem.applyRequest(() -> m_swerveRequest
+    //         .withCenterOfRotation(DriveConstants.dCenter)
+    //         .withSpeeds(ChassisSpeeds.discretize(fieldSpeeds, kDefaultPeriod))));
 
-    m_fieldRelButton.onTrue(
-        m_SwerveDriveSubsystem.applyRequest(() -> m_swerveRequest
-            .withCenterOfRotation(DriveConstants.dCenter)
-            .withSpeeds(ChassisSpeeds.discretize(fieldSpeeds, kDefaultPeriod))));
+    // m_fieldRelButton.onTrue(
+    //     m_SwerveDriveSubsystem.applyRequest(() -> m_swerveRequest
+    //         .withCenterOfRotation(DriveConstants.dCenter)
+    //         .withSpeeds(ChassisSpeeds.discretize(fieldSpeeds, kDefaultPeriod))));
 
-    // Brake while held
-    m_BrakeButton.whileTrue(m_SwerveDriveSubsystem.applyRequest(() -> brake));
+    // // Brake while held
+    // m_BrakeButton.whileTrue(m_SwerveDriveSubsystem.applyRequest(() -> brake));
 
-    m_RobotRelButton.onTrue(m_SwerveDriveSubsystem.applyRequest(() -> RobotCentricDrive
-        .withVelocityX(
-            -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
-                * MaxSpeed)
-        .withVelocityY(
-            -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)
-                * MaxSpeed)
-        .withRotationalRate(
-            -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
-                * MaxAngularRate)));
+    // m_RobotRelButton.onTrue(m_SwerveDriveSubsystem.applyRequest(() -> RobotCentricDrive
+    //     .withVelocityX(
+    //         -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
+    //             * MaxSpeed)
+    //     .withVelocityY(
+    //         -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)
+    //             * MaxSpeed)
+    //     .withRotationalRate(
+    //         -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
+    //             * MaxAngularRate)));
     // --------------------------------------------INTAKE BUTTON BINDINGS--------------------------------------------
     m_Intake.onTrue(m_IntakeCommand.Intake());
     m_Intake.onFalse(m_IntakeCommand.StopIntake().alongWith(m_ShooterCommand.StopShooter()));
@@ -228,10 +229,16 @@ public class RobotContainer extends TimedRobot {
     m_increaseSpeed = new Trigger(op.button(Constants.xbox.Menu, m_controllerLoop));
     m_decreaseSpeed = new Trigger(op.button(Constants.xbox.Window, m_controllerLoop));
     // --------------------------------------------DRIVE CONTROL BUTTONS--------------------------------------------
-    m_fieldRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Top_Middle);
-    m_BrakeButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
-    m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
-    m_AmpAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
+    // m_fieldRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Top_Middle);
+    // m_BrakeButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
+    // m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
+    // m_AmpAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
+    
+    m_fieldRelButton = m_Driver.getFieldRelButton();
+    m_BrakeButton = m_Driver.getBrakeButton();
+    m_RobotRelButton = m_Driver.getRobotRelButton();
+    m_AmpAlignButton = m_Driver.getAmpAlignButton();
+    
     // --------------------------------------------CLIMBER CONTROL Buttons--------------------------------------------
     m_stowClimber = new Trigger(op.button(Constants.xbox.A, m_controllerLoop));
     m_hangClimber = new Trigger(op.button(Constants.xbox.B, m_controllerLoop));
@@ -282,20 +289,43 @@ public class RobotContainer extends TimedRobot {
     } catch (Exception e) {
     }
   }
+  public Driver m_Driver = new Driver(0,1,0);
+  public InputsIO m_input = m_Driver.getDrive();
 
   public void updateValues() {
-    if (m_Joystick1.getRawButtonPressed(Constants.Thrustmaster.Left_Buttons.Top_Middle)) {
-      fieldRelativeOffset = m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians();
-      m_SwerveDriveSubsystem.getPigeon2().reset();
+    if (!m_Driver.upToDate){
+      m_input = m_Driver.getDrive();
+      
+      m_fieldRelButton = m_input.fieldRelButton();
+      m_BrakeButton = m_input.brake();
+      m_RobotRelButton = m_input.robotRelButtonke();
+      m_AmpAlignButton = m_input.ampAlignButton();
+          // --------------------------------------------DRIVE BUTTON BINDINGS--------------------------------------------
+      m_AmpAlignButton.whileTrue(m_AutoAlignCommand.PathFindToAmp());
+
+      m_SwerveDriveSubsystem.setDefaultCommand( // Drivetrain will execute this command periodically
+        m_SwerveDriveSubsystem.applyRequest(() -> m_swerveRequest
+            .withCenterOfRotation(DriveConstants.dCenter)
+            .withSpeeds(ChassisSpeeds.discretize(fieldSpeeds, kDefaultPeriod))));
+
+      // Brake while held
+      m_BrakeButton.whileTrue(m_SwerveDriveSubsystem.applyRequest(() -> brake));
+
+      m_RobotRelButton.whileTrue(
+        m_SwerveDriveSubsystem.applyRequest(() -> m_swerveRequest
+        .withCenterOfRotation(DriveConstants.dCenter)
+        .withSpeeds(ChassisSpeeds.discretize(m_input.inputSpeeds(), kDefaultPeriod))));
+      m_Driver.Updated();
     }
-    speeds = new ChassisSpeeds(
-        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)) * MaxSpeed),
-        (checkDeadzone(-m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)) * MaxSpeed),
-        (checkDeadzone(-m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x))* MaxAngularRate));
-    fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
-        new Rotation2d(m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians())
-            // .rotateBy(new Rotation2d(-fieldRelativeOffset))
-            );
+
+    m_Driver.getDrive().poll();
+    
+    if (m_fieldRelButton.getAsBoolean()){
+      fieldRelativeOffset = m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians();
+    }
+    fieldSpeeds = m_input.fieldSpeeds(new Rotation2d(m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians())
+    .rotateBy(new Rotation2d(-fieldRelativeOffset))
+    );
     updateVision();
     // --------------------------------------------SMARTDASHBOARD STUFF--------------------------------------------
     SmartDashboard.putData("pigeon", getPigeon());
@@ -314,14 +344,6 @@ public class RobotContainer extends TimedRobot {
     // SignalLogger.writeDouble("SysID: Steer Position" + i, m_SwerveDriveSubsystem.getTurn(i).getPosition().getValueAsDouble());
     // SignalLogger.writeDouble("SysID: Steer Voltage" + i, m_SwerveDriveSubsystem.getTurn(i).getMotorVoltage().getValueAsDouble());
     // }
-  }
-
-  public double checkDeadzone(double input) {
-    if (deadzone > input && input > -deadzone) {
-      return 0;
-    } else {
-      return input;
-    }
   }
 
   public SwerveDriveSubsystem getDrive() {
