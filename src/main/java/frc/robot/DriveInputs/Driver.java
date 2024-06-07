@@ -1,7 +1,5 @@
 package frc.robot.DriveInputs;
 
-import java.util.function.Consumer;
-
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -15,7 +13,9 @@ public class Driver {
         TwoStickAcellerationDrive,
         XboxAcellerationDrive,
         XboxTank,
-        WiiMoteDrive
+        WiiMoteDrive,
+        OneStickLinear,
+        OneStickDriveExponential
     }
 
     private final SendableChooser<DriveStates> DriveChooser2;
@@ -71,6 +71,12 @@ public class Driver {
                 break;
             case XboxTank:
                 CurrentSelection = new XboxTank(XboxDriverPort);
+                break;
+            case OneStickDriveExponential:
+                CurrentSelection = new OneStickDriveExponential(JoystickDriver1Port);
+                break;
+            case OneStickLinear:
+                CurrentSelection = new OneStickLinear(JoystickDriver1Port);
                 break;
         }
     }
