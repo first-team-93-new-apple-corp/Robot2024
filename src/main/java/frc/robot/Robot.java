@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
@@ -89,9 +88,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     // m_Elevator.disable();
-    m_SwerveDriveSubsystem.m_SwerveDrivePoseEstimator.resetPosition(new Rotation2d(m_SwerveDriveSubsystem.getHeading()),
-        m_SwerveDriveSubsystem.getModulePositions(),
-        m_SwerveDriveSubsystem.getPose());
+    // m_SwerveDriveSubsystem.m_SwerveDrivePoseEstimator.resetPosition(new Rotation2d(m_SwerveDriveSubsystem.getHeading()),
+    //     m_SwerveDriveSubsystem.getModulePositions(),
+    //     m_SwerveDriveSubsystem.getPose());
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

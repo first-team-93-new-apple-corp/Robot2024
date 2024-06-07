@@ -73,7 +73,7 @@ public class VisionIOSim implements VisionIO {
     */
     @Override
     public void updateValues(VisionIOInputs inputs, SwerveDriveSubsystem m_DriveSubsystem, Pose2d lastpose) {
-      visionSim.update(m_DriveSubsystem.m_SwerveDrivePoseEstimator.getEstimatedPosition());
+      visionSim.update(m_DriveSubsystem.getPose());
       result = camera.getLatestResult();
         if (result.hasTargets()) {
           target = result.getBestTarget();
@@ -108,7 +108,7 @@ public class VisionIOSim implements VisionIO {
      */
     public void updateVisionSim(SwerveDriveSubsystem m_DriveSubsystem) {
         // Update with the simulated drivetrain pose. This should be called every loop in simulation.
-        visionSim.update(m_DriveSubsystem.m_SwerveDrivePoseEstimator.getEstimatedPosition());
+        visionSim.update(m_DriveSubsystem.getPose());
     }
 
     @Override

@@ -47,9 +47,9 @@ public class AutoAlignCommand extends Command {
         if (m_joystick1.getRawButton(Constants.Thrustmaster.Center_Button)) {
             if (DriverStation.getAlliance().isPresent()) {
                 if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-                    m_DriveSubsystem.toPose(Constants.AprilTagPoseConstants.RedAmp);
+                    // m_DriveSubsystem.toPose(Constants.AprilTagPoseConstants.RedAmp);
                 } else {
-                    m_DriveSubsystem.toPose(Constants.AprilTagPoseConstants.BlueAmp);
+                    // m_DriveSubsystem.toPose(Constants.AprilTagPoseConstants.BlueAmp);
                 }
         }
         } else if(m_joystick1.getRawButton(Constants.Thrustmaster.Right_Button)){

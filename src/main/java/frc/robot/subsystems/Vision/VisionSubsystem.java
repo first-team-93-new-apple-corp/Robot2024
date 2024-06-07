@@ -25,26 +25,26 @@ public class VisionSubsystem extends SubsystemBase {
     
 
     protected void initialize() {
-        m_io.updateValues(m_Inputs, m_DriveSubsystem, m_DriveSubsystem.m_SwerveDrivePoseEstimator.getEstimatedPosition());
+        m_io.updateValues(m_Inputs, m_DriveSubsystem, m_DriveSubsystem.getPose());
     }
 
     public Pose2d getPose() {
-        m_io.updateValues(m_Inputs, m_DriveSubsystem, m_DriveSubsystem.m_SwerveDrivePoseEstimator.getEstimatedPosition());
+        m_io.updateValues(m_Inputs, m_DriveSubsystem, m_DriveSubsystem.getPose());
         return m_io.getPose(m_Inputs.pose);
     }
     
     public double getLatency(){
-        m_io.updateValues(m_Inputs, m_DriveSubsystem, m_DriveSubsystem.m_SwerveDrivePoseEstimator.getEstimatedPosition());
+        m_io.updateValues(m_Inputs, m_DriveSubsystem, m_DriveSubsystem.getPose());
         return m_io.getLatency(m_Inputs.tl, m_Inputs.cl, m_Inputs.latency);
     }
     public Boolean hasTargets() {
-        m_io.updateValues(m_Inputs, m_DriveSubsystem, m_DriveSubsystem.m_SwerveDrivePoseEstimator.getEstimatedPosition());
+        m_io.updateValues(m_Inputs, m_DriveSubsystem, m_DriveSubsystem.getPose());
         return m_io.hasTargets();
     }
 
     @Override
     public void periodic() {
-        m_io.updateValues(m_Inputs, m_DriveSubsystem, m_DriveSubsystem.m_SwerveDrivePoseEstimator.getEstimatedPosition());
+        m_io.updateValues(m_Inputs, m_DriveSubsystem, m_DriveSubsystem.getPose());
         SignalLogger.writeDoubleArray("Vision: Limelight Data", new double[]{m_Inputs.tx,m_Inputs.ty, m_Inputs.ta, m_Inputs.tl, m_Inputs.cl});
         SignalLogger.writeDouble("Vision:ID of tag in view", m_Inputs.tid);
         SignalLogger.writeDoubleArray("Vision:Pose of the Bot (WpiBlue)", m_Inputs.botpose_wpiblue);
