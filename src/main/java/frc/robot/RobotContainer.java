@@ -51,6 +51,7 @@ import frc.robot.subsystems.Intake.IntakeSubsystem;
 import frc.robot.subsystems.Intake.IntakeSubsystemFactory;
 import frc.robot.subsystems.Shooter.ShooterSubsystem;
 import frc.robot.subsystems.Shooter.ShooterSubsystemFactory;
+import frc.robot.subsystems.Swerve.CollisionDeteaction;
 import frc.robot.subsystems.Swerve.DriveConstants;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystemFactory;
@@ -125,7 +126,8 @@ public class RobotContainer extends TimedRobot {
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
-  
+  private CollisionDeteaction collisionDeteaction = new CollisionDeteaction();
+  private Pose2d oldPose = new Pose2d();
   // logan was here you silly gooses ;)
   
   public void configureBindings() {
@@ -233,7 +235,8 @@ public class RobotContainer extends TimedRobot {
     // m_BrakeButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Trigger);
     // m_RobotRelButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Left_Buttons.Bottom_Middle);
     // m_AmpAlignButton = new JoystickButton(m_Joystick1, Constants.Thrustmaster.Center_Button);
-    
+    m_Driver = new Driver(0,1,0, m_SwerveDriveSubsystem::getPose);
+    m_input = m_Driver.getDrive();
     m_fieldRelButton = m_Driver.getFieldRelButton();
     m_BrakeButton = m_Driver.getBrakeButton();
     m_RobotRelButton = m_Driver.getRobotRelButton();
@@ -267,6 +270,7 @@ public class RobotContainer extends TimedRobot {
     this.configureBindings();
     SmartDashboard.putData("Auto Chooser", autoChooser);
     SmartDashboard.putData("Field",m_Field2d);
+
   }
 
   public Command getAutonomousCommand() {
@@ -289,8 +293,8 @@ public class RobotContainer extends TimedRobot {
     } catch (Exception e) {
     }
   }
-  public Driver m_Driver = new Driver(0,1,0);
-  public InputsIO m_input = m_Driver.getDrive();
+  public Driver m_Driver;
+  public InputsIO m_input;
 
   public void updateValues() {
     if (!m_Driver.upToDate){
@@ -326,6 +330,9 @@ public class RobotContainer extends TimedRobot {
     fieldSpeeds = m_input.fieldSpeeds(new Rotation2d(m_SwerveDriveSubsystem.getPigeon2().getRotation2d().getRadians())
     .rotateBy(new Rotation2d(-fieldRelativeOffset))
     );
+    if (collisionDeteaction.checkPosition(m_SwerveDriveSubsystem.getPose())){
+      getDrive().resetOdometry(oldPose);
+    }
     updateVision();
     // --------------------------------------------SMARTDASHBOARD STUFF--------------------------------------------
     SmartDashboard.putData("pigeon", getPigeon());
@@ -344,6 +351,7 @@ public class RobotContainer extends TimedRobot {
     // SignalLogger.writeDouble("SysID: Steer Position" + i, m_SwerveDriveSubsystem.getTurn(i).getPosition().getValueAsDouble());
     // SignalLogger.writeDouble("SysID: Steer Voltage" + i, m_SwerveDriveSubsystem.getTurn(i).getMotorVoltage().getValueAsDouble());
     // }
+    oldPose = getDrive().getPose();
   }
 
   public SwerveDriveSubsystem getDrive() {
