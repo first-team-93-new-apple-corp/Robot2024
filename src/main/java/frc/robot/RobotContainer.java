@@ -45,7 +45,8 @@ public class RobotContainer {
   private final JoystickButton m_AmpButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.X);
   private final JoystickButton m_IntakeButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.Y);
   private final JoystickButton m_AimButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.A);
-  // private final JoystickButton m_FireButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.B);
+  // private final JoystickButton m_FireButtonXbox = new
+  // JoystickButton(m_XboxDriver, Constants.xbox.B);
   // Drivetrain
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private SendableChooser<Command> autoChooser;
@@ -54,13 +55,17 @@ public class RobotContainer {
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                // driving in open loop
 
-  // private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric()
-  //     .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-  //     .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+  // private final SwerveRequest.RobotCentric robotDrive = new
+  // SwerveRequest.RobotCentric()
+  // .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) //
+  // Add a 10% deadband
+  // .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
-  // private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+  // private final SwerveRequest.SwerveDriveBrake brake = new
+  // SwerveRequest.SwerveDriveBrake();
   // private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
-  // private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+  // private final SwerveRequest.PointWheelsAt point = new
+  // SwerveRequest.PointWheelsAt();
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   private ArmHelper m_ArmHelper;
@@ -71,13 +76,13 @@ public class RobotContainer {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive
             .withVelocityX(
-                    -m_LeftStick.getRawAxis(Constants.Thrustmaster.Axis.y)
+                -m_LeftStick.getRawAxis(Constants.Thrustmaster.Axis.y)
                     * MaxSpeed)
             .withVelocityY(
-                    -m_LeftStick.getRawAxis(Constants.Thrustmaster.Axis.x)
+                -m_LeftStick.getRawAxis(Constants.Thrustmaster.Axis.x)
                     * MaxSpeed)
             .withRotationalRate(
-                    -m_RightStick.getRawAxis(Constants.Thrustmaster.Axis.x)
+                -m_RightStick.getRawAxis(Constants.Thrustmaster.Axis.x)
                     * MaxAngularRate)));
     // Brake while held
     // m_JoystickTrigger.onTrue(drivetrain.applyRequest(() -> brake));
@@ -88,13 +93,18 @@ public class RobotContainer {
     m_FieldRelativeButtonXbox.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     // Subsystems
+    m_ShoulderSubsystem.init();
+    m_ElevatorSubsystem.init();
     m_ArmHelper = new ArmHelper(m_ShoulderSubsystem, m_ElevatorSubsystem);
 
-    // The funny buttons
+    // // The funny buttons
+    //X
     m_AmpButtonXbox.whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Amp));
+    //Y
     m_IntakeButtonXbox.whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Intake));
-    // for auto aim (later)
-    m_AimButtonXbox.whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Shoot));
+    // // for auto aim (later)
+    // m_AimButtonXbox.whileTrue(new ArmToSetpoint(m_ArmHelper,
+    // ARM_SETPOINTS.Shoot));
 
     // Drive Controls
     if (DriverStation.getJoystickIsXbox(0)) {
@@ -134,7 +144,19 @@ public class RobotContainer {
     configureBindings();
   }
 
+  public void updateValues() {
+    SmartDashboard.putNumber("Shoulder Angle",
+        m_ShoulderSubsystem.getPosition());
+    SmartDashboard.putBoolean("Shoulder At Setpoint", 
+        m_ShoulderSubsystem.atSetpoint());
+    SmartDashboard.putBoolean("Elevator Hall Effect",
+        m_ElevatorSubsystem.getZero());
+  }
+
   public Command getTeleopCommand() {
     return null;
+  }
+  public void checkZero() {
+    m_ElevatorSubsystem.checkZero();
   }
 }

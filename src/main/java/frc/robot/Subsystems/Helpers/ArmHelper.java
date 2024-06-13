@@ -36,11 +36,11 @@ public class ArmHelper extends SubsystemBase {
         double shoulderPose = m_ShoulderSubsystem.getPosition();
         // double telescopePose = m_ElevatorSubsystem.getPosition();
 
-        if (shoulderPose > 0.45) {
+        if (shoulderPose > 0.65) {
             return ARM_SECTOR.AMP;
         }
 
-        else if (shoulderPose > 0) {
+        else if (shoulderPose > 0.5) {
             return ARM_SECTOR.SHOOT;
         }
 
@@ -137,7 +137,7 @@ public class ArmHelper extends SubsystemBase {
                 break;
 
             case ALL_TO_SP:
-                allToSetpoint(null);
+                allToSetpoint(desiredSetpoint);
                 break;
 
             case SHOULDER_TO_SP:

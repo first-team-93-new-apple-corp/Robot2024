@@ -3,7 +3,7 @@ package frc.robot;
 public final class Constants {
     public class Sensors {
         public class DIO {
-            public static final int ThroughBoreEncoder = 0;
+            public static final int ThroughBoreEncoder = 9;
         }
         public class AnalogIn {
             public static final int HallEffect = 0;
@@ -142,8 +142,8 @@ public final class Constants {
 
     // Formatted: Shoulder Angle, Elevator Pos, ARM_SECTOR
     public enum ARM_SETPOINTS {
-        Intake(0, 0, ARM_SECTOR.INTAKE),
-        Amp(0, 0, ARM_SECTOR.AMP),
+        Intake(0.45238588630964716, 0, ARM_SECTOR.INTAKE),
+        Amp(0.7592446689811168, 0, ARM_SECTOR.AMP),
         Shoot(0, 0, ARM_SECTOR.SHOOT);
 
         private double shoulderPosition, elevatorPosition;
@@ -152,6 +152,7 @@ public final class Constants {
         private ARM_SETPOINTS(double shoulderPosition, double elevatorPosition, ARM_SECTOR desiredArmSector) {
             this.shoulderPosition = shoulderPosition;
             this.elevatorPosition = elevatorPosition;
+            this.desiredArmSector = desiredArmSector;
         }
 
         public double getShoulderPosition() {

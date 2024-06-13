@@ -61,7 +61,18 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        return setpoint - 0.5 < m_motor.getPosition().getValueAsDouble() && setpoint + 0.5 > m_motor.getPosition().getValueAsDouble();
+        return setpoint - 0.5 < m_motor.getPosition().getValueAsDouble()
+                && setpoint + 0.5 > m_motor.getPosition().getValueAsDouble();
+    }
+
+    public boolean getZero() {
+        return m_HallEffect.getValue() < 50;
+    }
+
+    public void checkZero() {
+        if (getZero()) {
+            m_motor.setPosition(0);
+        }
     }
 
     @Override
