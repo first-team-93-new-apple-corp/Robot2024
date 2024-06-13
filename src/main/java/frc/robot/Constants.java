@@ -1,6 +1,43 @@
 package frc.robot;
 
-public class Constants {
+public final class Constants {
+    public class Sensors {
+        public class DIO {
+            public static final int ThroughBoreEncoder = 0;
+        }
+        public class AnalogIn {
+            public static final int HallEffect = 0;
+        }
+
+    }
+
+    public class CTRE {
+            public static final int Intake = 14;
+
+            public static final int Shoot = 15;
+
+            public static final int Elevator = 16;
+
+            public static final int L_Shoulder = 17;
+            public static final int R_Shoulder = 18;
+        
+            public static final int FLDrive = 1;
+            public static final int FRDrive = 2;
+            public static final int BR_Drive = 3;
+            public static final int BL_Drive = 4;
+
+            public static final int FL_Steer = 5;
+            public static final int FR_Steer = 6;
+            public static final int BR_Steer = 7;
+            public static final int BL_Steer = 8;
+
+            public static final int FL_Cancoder = 10;
+            public static final int FR_Cancoder = 11;
+            public static final int BR_Cancoder = 12;
+            public static final int BL_CanCoder = 13;
+        
+    }
+
     public class Thrustmaster {
         public static final int Trigger = 1;
         public static final int Center_Button = 2;
@@ -78,6 +115,102 @@ public class Constants {
             public static final int Left_Stick_X = 0;
             public static final int Right_Stick_Y = 5;
             public static final int Right_Stick_X = 4;
+        }
+    }
+
+    public class xbox {
+        public static final int A = 1;
+        public static final int B = 2;
+        public static final int X = 3;
+        public static final int Y = 4;
+        public static final int LeftShoulderButton = 5;
+        public static final int RightShoulderButton = 6;
+        public static final int Window = 7;
+        public static final int Menu = 8;
+        public static final int LeftPaddle = 9;
+        public static final int RightPaddle = 10;
+
+        public class Axis {
+            public static final int LT = 2;
+            public static final int RT = 3;
+            public static final int Left_Stick_Y = 1;
+            public static final int Left_Stick_X = 0;
+            public static final int Right_Stick_Y = 5;
+            public static final int Right_Stick_X = 4;
+        }
+    }
+
+    // Formatted: Shoulder Angle, Elevator Pos, ARM_SECTOR
+    public enum ARM_SETPOINTS {
+        Intake(0, 0, ARM_SECTOR.INTAKE),
+        Amp(0, 0, ARM_SECTOR.AMP),
+        Shoot(0, 0, ARM_SECTOR.SHOOT);
+
+        private double shoulderPosition, elevatorPosition;
+        private ARM_SECTOR desiredArmSector;
+
+        private ARM_SETPOINTS(double shoulderPosition, double elevatorPosition, ARM_SECTOR desiredArmSector) {
+            this.shoulderPosition = shoulderPosition;
+            this.elevatorPosition = elevatorPosition;
+        }
+
+        public double getShoulderPosition() {
+            return shoulderPosition;
+        }
+
+        public double getElevatorPosition() {
+            return elevatorPosition;
+        }
+
+        public ARM_SECTOR getDesiredArmSector() {
+            return desiredArmSector;
+        }
+    }
+
+    // Events are all the possible "Modes" of the arm
+    public enum ARM_EVENTS {
+        ALL_TO_SP,
+        SHOULDER_TO_SP,
+        RETRACT_TELESCOPE,
+        EXTEND_TELESCOPE,
+        // Used to stop telescope from running into bumper while leaving stow
+        SHOULDER_TO_SP_NC,
+        END
+    }
+
+    public enum ARM_SECTOR {
+        INTAKE,
+        AMP,
+        SHOOT
+    }
+
+    // States are all the possible movements of the arm
+    // (ex: intake to amp, amp to shoot, amp to stow, etc.)
+    public enum ARM_STATES {
+
+        DO_NOTHING(new ARM_EVENTS[] { ARM_EVENTS.END }),
+
+        // To Intake
+        SHOOT_TO_INTAKE(new ARM_EVENTS[] { ARM_EVENTS.SHOULDER_TO_SP, ARM_EVENTS.END }),
+        AMP_TO_INTAKE(new ARM_EVENTS[] { ARM_EVENTS.RETRACT_TELESCOPE, ARM_EVENTS.SHOULDER_TO_SP, ARM_EVENTS.END }),
+        INTAKE_TO_INTAKE(new ARM_EVENTS[] { ARM_EVENTS.ALL_TO_SP, ARM_EVENTS.END }),
+        // To speaker
+        INTAKE_TO_SHOOT(new ARM_EVENTS[] { ARM_EVENTS.SHOULDER_TO_SP_NC, ARM_EVENTS.END }),
+        AMP_TO_SHOOT(new ARM_EVENTS[] { ARM_EVENTS.RETRACT_TELESCOPE, ARM_EVENTS.SHOULDER_TO_SP, ARM_EVENTS.END }),
+        SHOOT_TO_SHOOT(new ARM_EVENTS[] { ARM_EVENTS.ALL_TO_SP, ARM_EVENTS.END }),
+        // To amp
+        INTAKE_TO_AMP(new ARM_EVENTS[] { ARM_EVENTS.SHOULDER_TO_SP_NC, ARM_EVENTS.EXTEND_TELESCOPE, ARM_EVENTS.END }),
+        SHOOT_TO_AMP(new ARM_EVENTS[] { ARM_EVENTS.SHOULDER_TO_SP, ARM_EVENTS.EXTEND_TELESCOPE, ARM_EVENTS.END }),
+        AMP_TO_AMP(new ARM_EVENTS[] { ARM_EVENTS.ALL_TO_SP, ARM_EVENTS.END });
+
+        public final ARM_EVENTS[] events;
+
+        private ARM_STATES(ARM_EVENTS[] events) {
+            this.events = events;
+        }
+
+        public ARM_EVENTS[] getEvents() {
+            return events;
         }
     }
 }

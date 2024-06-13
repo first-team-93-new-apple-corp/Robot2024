@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7326298288936706,
+      "y": 6.726025815683572
+    },
+    "rotation": -121.9306821037438
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BL RR to 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 to 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1 to midline 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Far to BL RR"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "BL RR",
+  "choreoAuto": false
+}
