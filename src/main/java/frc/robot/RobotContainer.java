@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.HumanDrive;
 import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
@@ -42,8 +41,6 @@ public class RobotContainer {
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
-  private HumanDrive m_HumanDrive = new HumanDrive(m_Joystick1, m_Joystick2, drivetrain, drive, robotDrive);
-
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -54,16 +51,13 @@ public class RobotContainer {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive
             .withVelocityX(
-                m_HumanDrive.checkJoystickDeadzone(
-                    -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y))
+                    -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
                     * MaxSpeed)
             .withVelocityY(
-                m_HumanDrive.checkJoystickDeadzone(
-                    -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x))
+                    -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)
                     * MaxSpeed)
             .withRotationalRate(
-                m_HumanDrive.checkJoystickDeadzone(
-                    -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x))
+                    -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
                     * MaxAngularRate)));
     // Brake while held
     m_JoystickTrigger.onTrue(drivetrain.applyRequest(() -> brake));
@@ -91,6 +85,6 @@ public class RobotContainer {
   }
 
   public Command getTeleopCommand() {
-    return m_HumanDrive;
+    return null;
   }
 }
