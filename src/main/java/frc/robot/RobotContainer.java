@@ -19,7 +19,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.DriveConstants;
+import frc.robot.Constants.ARM_SETPOINTS;
+import frc.robot.commands.ArmToSetpoint;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ShoulderSubsystem;
+// import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
@@ -50,13 +54,13 @@ public class RobotContainer {
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                // driving in open loop
 
-  private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric()
-      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-      .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+  // private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric()
+  //     .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+  //     .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
-  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-  private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
-  private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+  // private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+  // private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
+  // private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   private ArmHelper m_ArmHelper;
@@ -67,22 +71,17 @@ public class RobotContainer {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive
             .withVelocityX(
-                    -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y)
+                    -m_LeftStick.getRawAxis(Constants.Thrustmaster.Axis.y)
                     * MaxSpeed)
             .withVelocityY(
-                    -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x)
+                    -m_LeftStick.getRawAxis(Constants.Thrustmaster.Axis.x)
                     * MaxSpeed)
             .withRotationalRate(
-                    -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x)
+                    -m_RightStick.getRawAxis(Constants.Thrustmaster.Axis.x)
                     * MaxAngularRate)));
     // Brake while held
-    m_JoystickTrigger.onTrue(drivetrain.applyRequest(() -> brake));
-    m_fieldRelButton.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    // m_JoystickTrigger.onTrue(drivetrain.applyRequest(() -> brake));
     // Points all in a direction
-    m_JoystickButton2.whileTrue(drivetrain
-    .applyRequest(
-    () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0),
-    -m_Joystick1.getRawAxis(1)))));
 
     // reset the field-centric heading on left bumper press
     m_FieldRelativeButton.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
@@ -133,10 +132,6 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
-  }
-
-  public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
   }
 
   public Command getTeleopCommand() {
