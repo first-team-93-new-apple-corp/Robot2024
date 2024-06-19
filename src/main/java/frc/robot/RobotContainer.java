@@ -28,6 +28,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
 import frc.robot.subsystems.Helpers.ArmHelper;
+import frc.robot.subsystems.IntakeShooterSubsystem;
 
 public class RobotContainer {
   // Constants / Other things
@@ -44,7 +45,9 @@ public class RobotContainer {
   private final JoystickButton m_FieldRelativeButtonXbox = new JoystickButton(m_XboxDriver, 5);
   private final JoystickButton m_AmpButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.X);
   private final JoystickButton m_IntakeButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.Y);
-  private final JoystickButton m_AimButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.A);
+  private final JoystickButton m_IntakeNoteXbox = new JoystickButton(m_XboxDriver, Constants.xbox.B);
+  private final JoystickButton TestRunElevator = new JoystickButton(m_XboxDriver, Constants.xbox.RightShoulderButton);
+  // private final JoystickButton m_AimButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.A);
   // private final JoystickButton m_FireButtonXbox = new
   // JoystickButton(m_XboxDriver, Constants.xbox.B);
   // Drivetrain
@@ -71,8 +74,12 @@ public class RobotContainer {
   private ArmHelper m_ArmHelper;
   private ShoulderSubsystem m_ShoulderSubsystem = new ShoulderSubsystem();
   private ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+  private IntakeShooterSubsystem m_IntakeShooterSubsystem = new IntakeShooterSubsystem();
 
   private void configureBindings() {
+
+    // SmartDashboard.putNumber("Elevator Setpoint", 35);
+
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive
             .withVelocityX(
@@ -95,6 +102,7 @@ public class RobotContainer {
     // Subsystems
     m_ShoulderSubsystem.init();
     m_ElevatorSubsystem.init();
+    m_IntakeShooterSubsystem.init();
     m_ArmHelper = new ArmHelper(m_ShoulderSubsystem, m_ElevatorSubsystem);
 
     // // The funny buttons
@@ -102,6 +110,13 @@ public class RobotContainer {
     m_AmpButtonXbox.whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Amp));
     //Y
     m_IntakeButtonXbox.whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Intake));
+    //B
+    m_IntakeNoteXbox.whileTrue(m_IntakeShooterSubsystem.AutoIntake());
+    m_IntakeNoteXbox.whileFalse(m_IntakeShooterSubsystem.stop());
+
+    TestRunElevator.whileTrue(m_ElevatorSubsystem.toSetpoint(15));
+    TestRunElevator.whileFalse(m_ElevatorSubsystem.lock());
+
     // // for auto aim (later)
     // m_AimButtonXbox.whileTrue(new ArmToSetpoint(m_ArmHelper,
     // ARM_SETPOINTS.Shoot));
@@ -151,6 +166,7 @@ public class RobotContainer {
         m_ShoulderSubsystem.atSetpoint());
     SmartDashboard.putBoolean("Elevator Hall Effect",
         m_ElevatorSubsystem.getZero());
+    SmartDashboard.putNumber("Elevator Position", m_ElevatorSubsystem.getPostition());
   }
 
   public Command getTeleopCommand() {

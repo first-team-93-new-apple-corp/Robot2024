@@ -3,8 +3,6 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -25,22 +23,22 @@ public class IntakeShooterSubsystem extends SubsystemBase {
 
     PositionVoltage m_PositionVoltage = new PositionVoltage(0);
 
-    XboxController op;
+    // XboxController op;
 
     TimeOfFlight TOF;
 
     final double MuzzleIntake = -0.30;
     final double AmpShooterSpeed = 0.1;
     final double KickerSpeed = 1;
-    private double IntakeSpeed = 1;
+    private double IntakeSpeed = 0.25;
 
     boolean notePastTOF = false;
     double SpeakerShooterSpeed = 0.55;
     double StartTime;
     double currentspeed;
 
-    public void init(XboxController op) {
-        this.op = op;
+    public void init() {
+        // this.op = op;
 
         m_configIntake = new TalonFXConfiguration();
         m_configShooter = new TalonFXConfiguration();
@@ -63,7 +61,8 @@ public class IntakeShooterSubsystem extends SubsystemBase {
 
         m_motorIntake.getConfigurator().apply(m_configIntake);
         m_motorShooter.getConfigurator().apply(m_configShooter);
-        
+        m_motorIntake.setInverted(true);
+
         TOF = new TimeOfFlight(22);
         TOF.setRangingMode(RangingMode.Short, 24);
     }
@@ -83,7 +82,7 @@ public class IntakeShooterSubsystem extends SubsystemBase {
             case IntakeStage1:
                 Intake.set(IntakeSpeed);
                 Shooter.set(0.05);
-                op.setRumble(RumbleType.kBothRumble, 0.5);
+                // op.setRumble(RumbleType.kBothRumble, 0.5);
                 if (TOF.getRange() < 100) {
                     notePastTOF = true;
                 } else if ((TOF.getRange() > 100) && (notePastTOF == true)) {
@@ -94,7 +93,7 @@ public class IntakeShooterSubsystem extends SubsystemBase {
                 if (notePastTOF == true && TOF.getRange() > 100) {
                     Intake.set(-0.1);
                     Shooter.set(-0.1);
-                    op.setRumble(RumbleType.kBothRumble, 0.5);
+                    // op.setRumble(RumbleType.kBothRumble, 0.5);
                 } else {
                     state = intakeState.BreakStage;
                 }
@@ -106,7 +105,7 @@ public class IntakeShooterSubsystem extends SubsystemBase {
                     notePastTOF = false;
                     Shooter.set(0);
                     Intake.set(0);
-                    op.setRumble(RumbleType.kBothRumble, 0);
+                    // op.setRumble(RumbleType.kBothRumble, 0);
                 }
                 break;
         }
@@ -116,8 +115,8 @@ public class IntakeShooterSubsystem extends SubsystemBase {
         state = intakeState.IntakeStage1;
     }
 
-    public void stop() {
-        Intake.set(0);
+    public Command stop() {
+        return this.runOnce(() -> Intake.set(0));
     }
 
     public Command AutoIntake() {

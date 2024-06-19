@@ -7,6 +7,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -19,6 +21,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     double setpoint;
 
     public void init() {
+        SmartDashboard.putNumber("Elevator Setpoint", 35);
         // Init variables
         m_HallEffect = new AnalogInput(Constants.Sensors.AnalogIn.HallEffect);
         m_PositionVoltage = new PositionVoltage(0);
@@ -29,9 +32,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         // Config
         m_config = new TalonFXConfiguration();
-        m_config.Slot0.kP = 0.05;
+        m_config.Slot0.kP = 0.35;
         m_config.Slot0.kI = 0;
         m_config.Slot0.kD = 0;
+        m_config.Slot0.kG = 1.3;
+        m_config.Slot0.kV = 2.83;
+        m_config.Slot0.kA = 0.16;
         m_config.CurrentLimits.StatorCurrentLimit = 25;
         m_config.Audio.AllowMusicDurDisable = true;
         m_config.Audio.BeepOnBoot = false;
@@ -44,16 +50,17 @@ public class ElevatorSubsystem extends SubsystemBase {
         // Applying Config
         m_motor.getConfigurator().apply(m_config);
         m_motor.setNeutralMode(NeutralModeValue.Brake);
-
+        
     }
 
-    public void toSetpoint(double setpoint) {
-        this.setpoint = setpoint;
-        m_motor.setControl(m_PositionVoltage.withPosition(setpoint));
+    public Command toSetpoint(double setpoint) {
+        // this.setpoint = setpoint;
+        this.setpoint = SmartDashboard.getNumber("Elevator Setpoint", 35);
+        return this.runOnce(() -> m_motor.setControl(m_PositionVoltage.withPosition(setpoint)));
     }
 
-    public void lock() {
-        m_motor.setControl(m_NeutralOut);
+    public Command lock() {
+        return this.runOnce(() -> m_motor.setControl(m_NeutralOut));
     }
 
     public double getPostition() {
@@ -68,15 +75,19 @@ public class ElevatorSubsystem extends SubsystemBase {
     public boolean getZero() {
         return m_HallEffect.getValue() < 50;
     }
-
+    private void zeroing() {
+        if(!getZero()) {
+            m_motor.set(-0.05);
+        } else {
+            m_motor.set(0);
+        }
+    }
+    public Command zeroTelescope() {
+        return this.runOnce(() -> zeroing());
+    }
     public void checkZero() {
         if (getZero()) {
             m_motor.setPosition(0);
         }
-    }
-
-    @Override
-    public void periodic() {
-
     }
 }

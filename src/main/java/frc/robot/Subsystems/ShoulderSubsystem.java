@@ -56,8 +56,8 @@ public class ShoulderSubsystem extends SubsystemBase {
         m_configR.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         ShoulderL.getConfigurator().apply(m_configL);
         ShoulderR.getConfigurator().apply(m_configR);
-        ShoulderL.setInverted(true);
-        ShoulderR.setInverted(true);
+        ShoulderL.setInverted(false);
+        ShoulderR.setInverted(false);
         ShoulderL.setNeutralMode(NeutralModeValue.Brake);
         ShoulderR.setNeutralMode(NeutralModeValue.Brake);
 
