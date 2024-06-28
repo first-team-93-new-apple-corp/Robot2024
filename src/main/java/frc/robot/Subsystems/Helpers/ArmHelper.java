@@ -11,7 +11,7 @@ import frc.robot.subsystems.ShoulderSubsystem;
 
 public class ArmHelper extends SubsystemBase {
     ShoulderSubsystem m_ShoulderSubsystem;
-    ElevatorSubsystem m_ElevatorSubsystem;
+    // ElevatorSubsystem m_ElevatorSubsystem;
     public ARM_EVENTS currentEvent;
     private ARM_EVENTS[] armEvents;
     public ARM_SETPOINTS desiredSetpoint;
@@ -19,7 +19,7 @@ public class ArmHelper extends SubsystemBase {
 
     public ArmHelper(ShoulderSubsystem m_ShoulderSubsystem, ElevatorSubsystem m_ElevatorSubsystem) {
         this.m_ShoulderSubsystem = m_ShoulderSubsystem;
-        this.m_ElevatorSubsystem = m_ElevatorSubsystem;
+        // this.m_ElevatorSubsystem = m_ElevatorSubsystem;
         currentEvent = ARM_EVENTS.END;
     }
 
@@ -104,13 +104,13 @@ public class ArmHelper extends SubsystemBase {
     public Subsystem[] getRequiredSubsystems() {
         return new Subsystem[] {
                 m_ShoulderSubsystem,
-                m_ElevatorSubsystem
+                // m_ElevatorSubsystem
         };
     }
 
     public void allToSetpoint(ARM_SETPOINTS armSetpoint) {
         m_ShoulderSubsystem.toSetpoint(armSetpoint.getShoulderPosition());
-        m_ElevatorSubsystem.toSetpoint(armSetpoint.getElevatorPosition());
+        // m_ElevatorSubsystem.toSetpoint(armSetpoint.getElevatorPosition());
     }
 
     public void shoulderToSetpoint() {
@@ -118,16 +118,16 @@ public class ArmHelper extends SubsystemBase {
     }
 
     public void retractTelescope() {
-        m_ElevatorSubsystem.toSetpoint(desiredSetpoint.getElevatorPosition());
+        // m_ElevatorSubsystem.toSetpoint(desiredSetpoint.getElevatorPosition());
     }
 
     public void extendTelescope() {
-        m_ElevatorSubsystem.toSetpoint(desiredSetpoint.getElevatorPosition());
+        // m_ElevatorSubsystem.toSetpoint(desiredSetpoint.getElevatorPosition());
     }
 
     public void shoulderToSetpointNC() {
         m_ShoulderSubsystem.toSetpoint(desiredSetpoint.getShoulderPosition());
-        m_ElevatorSubsystem.toSetpoint(desiredSetpoint.getElevatorPosition());
+        // m_ElevatorSubsystem.toSetpoint(desiredSetpoint.getElevatorPosition());
     }
 
     public void follow() {
@@ -163,7 +163,7 @@ public class ArmHelper extends SubsystemBase {
     }
 
     public boolean allAtSetpoint() {
-        return m_ShoulderSubsystem.atSetpoint() && m_ElevatorSubsystem.atSetpoint();
+        return m_ShoulderSubsystem.atSetpoint();
     }
 
     public void switchToNextEvent() {

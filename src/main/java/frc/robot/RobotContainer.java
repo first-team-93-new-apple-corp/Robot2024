@@ -47,6 +47,8 @@ public class RobotContainer {
   private final JoystickButton m_IntakeButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.Y);
   private final JoystickButton m_IntakeNoteXbox = new JoystickButton(m_XboxDriver, Constants.xbox.B);
   private final JoystickButton TestRunElevator = new JoystickButton(m_XboxDriver, Constants.xbox.RightShoulderButton);
+  private final JoystickButton TestZeroElevator = new JoystickButton(m_XboxDriver, Constants.xbox.LeftShoulderButton);
+  
   // private final JoystickButton m_AimButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.A);
   // private final JoystickButton m_FireButtonXbox = new
   // JoystickButton(m_XboxDriver, Constants.xbox.B);
@@ -115,7 +117,9 @@ public class RobotContainer {
     m_IntakeNoteXbox.whileFalse(m_IntakeShooterSubsystem.stop());
 
     TestRunElevator.whileTrue(m_ElevatorSubsystem.toSetpoint(15));
-    TestRunElevator.whileFalse(m_ElevatorSubsystem.lock());
+    // TestRunElevator.whileFalse(m_ElevatorSubsystem.lock());
+    TestZeroElevator.whileTrue(m_ElevatorSubsystem.zeroTelescope());
+
 
     // // for auto aim (later)
     // m_AimButtonXbox.whileTrue(new ArmToSetpoint(m_ArmHelper,
@@ -167,6 +171,9 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Elevator Hall Effect",
         m_ElevatorSubsystem.getZero());
     SmartDashboard.putNumber("Elevator Position", m_ElevatorSubsystem.getPostition());
+    SmartDashboard.putNumber("Shoulder L", m_ShoulderSubsystem.getLeft());
+    SmartDashboard.putNumber("Shoulder R", m_ShoulderSubsystem.getRight());
+
   }
 
   public Command getTeleopCommand() {
@@ -175,4 +182,5 @@ public class RobotContainer {
   public void checkZero() {
     m_ElevatorSubsystem.checkZero();
   }
+
 }

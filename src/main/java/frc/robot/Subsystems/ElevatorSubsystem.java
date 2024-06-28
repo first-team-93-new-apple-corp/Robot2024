@@ -32,10 +32,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         // Config
         m_config = new TalonFXConfiguration();
-        m_config.Slot0.kP = 0.35;
+        m_config.Slot0.kP = 1.75;
         m_config.Slot0.kI = 0;
-        m_config.Slot0.kD = 0;
-        m_config.Slot0.kG = 1.3;
+        m_config.Slot0.kD = 0.1;
+        m_config.Slot0.kG = 0.8; // 1.3
         m_config.Slot0.kV = 2.83;
         m_config.Slot0.kA = 0.16;
         m_config.CurrentLimits.StatorCurrentLimit = 25;
@@ -54,8 +54,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public Command toSetpoint(double setpoint) {
-        // this.setpoint = setpoint;
-        this.setpoint = SmartDashboard.getNumber("Elevator Setpoint", 35);
+        this.setpoint = setpoint;
         return this.runOnce(() -> m_motor.setControl(m_PositionVoltage.withPosition(setpoint)));
     }
 
@@ -77,13 +76,16 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
     private void zeroing() {
         if(!getZero()) {
-            m_motor.set(-0.05);
+            m_motor.set(-0.1);
         } else {
             m_motor.set(0);
         }
     }
     public Command zeroTelescope() {
-        return this.runOnce(() -> zeroing());
+    // public void zeroTelescope() {
+        return this.run(() -> zeroing());
+        // zeroing();
+
     }
     public void checkZero() {
         if (getZero()) {
