@@ -13,6 +13,8 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+
+  private int periodicTimer = 0;
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
@@ -21,7 +23,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    m_robotContainer.checkZero();
+    periodicTimer++;
+    if(periodicTimer>20){
+      m_robotContainer.checkZero();
+      periodicTimer = 0;
+    }
   }
 
   @Override

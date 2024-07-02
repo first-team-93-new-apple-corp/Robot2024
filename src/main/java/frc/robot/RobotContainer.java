@@ -30,6 +30,8 @@ import frc.robot.subsystems.TunerConstants;
 import frc.robot.subsystems.Helpers.ArmHelper;
 import frc.robot.subsystems.IntakeShooterSubsystem;
 
+import frc.robot.commands.ElevatorZeroCommand;
+
 public class RobotContainer {
   // Constants / Other things
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
@@ -43,11 +45,11 @@ public class RobotContainer {
   // Joystick Buttons
   private final JoystickButton m_FieldRelativeButton = new JoystickButton(m_LeftStick, 12);
   private final JoystickButton m_FieldRelativeButtonXbox = new JoystickButton(m_XboxDriver, 5);
-  private final JoystickButton m_AmpButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.X);
-  private final JoystickButton m_IntakeButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.Y);
+  private final JoystickButton m_AmpButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.Y);
+  private final JoystickButton m_IntakeButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.X);
   private final JoystickButton m_IntakeNoteXbox = new JoystickButton(m_XboxDriver, Constants.xbox.B);
   private final JoystickButton TestRunElevator = new JoystickButton(m_XboxDriver, Constants.xbox.RightShoulderButton);
-  private final JoystickButton TestZeroElevator = new JoystickButton(m_XboxDriver, Constants.xbox.LeftShoulderButton);
+  private final JoystickButton TestZeroElevator = new JoystickButton(m_XboxDriver, Constants.xbox.A);
   
   // private final JoystickButton m_AimButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.A);
   // private final JoystickButton m_FireButtonXbox = new
@@ -77,6 +79,8 @@ public class RobotContainer {
   private ShoulderSubsystem m_ShoulderSubsystem = new ShoulderSubsystem();
   private ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private IntakeShooterSubsystem m_IntakeShooterSubsystem = new IntakeShooterSubsystem();
+
+  ElevatorZeroCommand m_ElevatorZeroCommand = new ElevatorZeroCommand(m_ElevatorSubsystem);
 
   private void configureBindings() {
 
@@ -116,9 +120,9 @@ public class RobotContainer {
     m_IntakeNoteXbox.whileTrue(m_IntakeShooterSubsystem.AutoIntake());
     m_IntakeNoteXbox.whileFalse(m_IntakeShooterSubsystem.stop());
 
-    TestRunElevator.whileTrue(m_ElevatorSubsystem.toSetpoint(15));
+    // TestRunElevator.whileTrue(m_ElevatorSubsystem.toSetpoint(15));
     // TestRunElevator.whileFalse(m_ElevatorSubsystem.lock());
-    TestZeroElevator.whileTrue(m_ElevatorSubsystem.zeroTelescope());
+    // TestZeroElevator.whileTrue(m_ElevatorZeroCommand);
 
 
     // // for auto aim (later)
@@ -170,7 +174,7 @@ public class RobotContainer {
         m_ShoulderSubsystem.atSetpoint());
     SmartDashboard.putBoolean("Elevator Hall Effect",
         m_ElevatorSubsystem.getZero());
-    SmartDashboard.putNumber("Elevator Position", m_ElevatorSubsystem.getPostition());
+    SmartDashboard.putNumber("Elevator Position", m_ElevatorSubsystem.getPosition());
     SmartDashboard.putNumber("Shoulder L", m_ShoulderSubsystem.getLeft());
     SmartDashboard.putNumber("Shoulder R", m_ShoulderSubsystem.getRight());
 

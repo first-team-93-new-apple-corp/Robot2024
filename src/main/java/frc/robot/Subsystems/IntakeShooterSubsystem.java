@@ -27,16 +27,19 @@ public class IntakeShooterSubsystem extends SubsystemBase {
 
     TimeOfFlight TOF;
 
-    final double MuzzleIntake = -0.30;
+    final double MuzzleIntake = -0.50;
     final double AmpShooterSpeed = 0.1;
     final double KickerSpeed = 1;
-    private double IntakeSpeed = 0.25;
+    private double IntakeSpeed = 0.40;
 
     boolean notePastTOF = false;
     double SpeakerShooterSpeed = 0.55;
     double StartTime;
     double currentspeed;
 
+
+
+    int periodicTimer = 0;
     public void init() {
         // this.op = op;
 
@@ -193,13 +196,17 @@ public class IntakeShooterSubsystem extends SubsystemBase {
     public void shooterPeriodic() {
         SmartDashboard.putNumber("Shooter Speed", SpeakerShooterSpeed);
         SmartDashboard.putNumber("Shooter RPM", Shooter.getVelocity().getValueAsDouble());
-        SmartDashboard.putNumber("Shooter Temp", Shooter.getDeviceTemp().getValueAsDouble());
+        //SmartDashboard.putNumber("Shooter Temp", Shooter.getDeviceTemp().getValueAsDouble());
     }
 
     // **************************************************************Misc.*******************************************************
     @Override
     public void periodic() {
-        shooterPeriodic();
-        intakePeriodic();
+        periodicTimer++;
+        if(periodicTimer>5){
+            shooterPeriodic();
+            intakePeriodic();
+            periodicTimer=0;
+        }
     }
 }

@@ -143,7 +143,7 @@ public final class Constants {
     // Formatted: Shoulder Angle, Elevator Pos, ARM_SECTOR
     public enum ARM_SETPOINTS {
         Intake(0, 0, ARM_SECTOR.INTAKE),
-        Amp(37.5, 0, ARM_SECTOR.AMP),
+        Amp(50, 0, ARM_SECTOR.AMP),
         Shoot(0, 0, ARM_SECTOR.SHOOT);
 
         private double shoulderPosition, elevatorPosition;

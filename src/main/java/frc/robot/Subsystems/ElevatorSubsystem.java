@@ -21,7 +21,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     double setpoint;
 
     public void init() {
-        SmartDashboard.putNumber("Elevator Setpoint", 35);
         // Init variables
         m_HallEffect = new AnalogInput(Constants.Sensors.AnalogIn.HallEffect);
         m_PositionVoltage = new PositionVoltage(0);
@@ -50,19 +49,20 @@ public class ElevatorSubsystem extends SubsystemBase {
         // Applying Config
         m_motor.getConfigurator().apply(m_config);
         m_motor.setNeutralMode(NeutralModeValue.Brake);
-        
+
     }
 
-    public Command toSetpoint(double setpoint) {
+    public void toSetpoint(double setpoint) {
         this.setpoint = setpoint;
-        return this.runOnce(() -> m_motor.setControl(m_PositionVoltage.withPosition(setpoint)));
+        SmartDashboard.putNumber("Elevator Setpoint", setpoint);
+        m_motor.setControl(m_PositionVoltage.withPosition(setpoint));
     }
 
     public Command lock() {
         return this.runOnce(() -> m_motor.setControl(m_NeutralOut));
     }
 
-    public double getPostition() {
+    public double getPosition() {
         return m_motor.getPosition().getValueAsDouble();
     }
 
@@ -72,23 +72,28 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public boolean getZero() {
+        // System.out.println(m_HallEffect.getValue());
         return m_HallEffect.getValue() < 50;
     }
-    private void zeroing() {
-        if(!getZero()) {
+
+    public void zeroing() {
+        if (!getZero()) {
             m_motor.set(-0.1);
         } else {
             m_motor.set(0);
         }
     }
+
     public Command zeroTelescope() {
-    // public void zeroTelescope() {
+        // public void zeroTelescope() {
         return this.run(() -> zeroing());
         // zeroing();
 
     }
+
     public void checkZero() {
         if (getZero()) {
+            // System.out.print("HALP");
             m_motor.setPosition(0);
         }
     }
