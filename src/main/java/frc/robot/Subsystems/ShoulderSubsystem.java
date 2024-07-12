@@ -5,9 +5,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,6 +27,7 @@ public class ShoulderSubsystem extends SubsystemBase {
     double motorPos;
     double position;
     double setpoint;
+    private double tempPos;
 
     // double kP = 1.00;
     // double kI = 0;
@@ -87,6 +86,20 @@ public class ShoulderSubsystem extends SubsystemBase {
         ShoulderR.setControl(new Follower(ShoulderL.getDeviceID(), false));
         m_Encoder.setPositionOffset(0.5);
 
+        /*
+         * This in theory should allow us to reset the motor inbuilt encoder to the
+         * value of the duty cycle encoder but
+         * this is not the case, however, due to the play in chain and gearbox.
+         * Resetting the motor encoder to the
+         * duty cycle encoder value will cause the motor to move causes the system to
+         * oscillate. Current idea is to create a "check" of sorts
+         * to see if the motor encoder is within a certain range of the duty cycle
+         * encoder and if it is not, reset the motor encoder to the
+         * duty cycle encoder value. Also, resetting here doesn't seem to work, likely
+         * due to the fact that we are applying motor configs at the same time, which
+         * likely "locks"
+         * the motor from receiving new values/inputs.
+         */
         ShoulderL.setPosition(m_Encoder.get() * 300);
         ShoulderR.setPosition(m_Encoder.get() * 300);
 
@@ -114,7 +127,8 @@ public class ShoulderSubsystem extends SubsystemBase {
     public boolean atSetpoint() {
         SmartDashboard.putNumber("Setpoint", setpoint);
 
-        return ShoulderL.getPosition().getValueAsDouble() < setpoint + 0.5 && ShoulderL.getPosition().getValueAsDouble() > setpoint - 0.5;
+        return ShoulderL.getPosition().getValueAsDouble() < setpoint + 0.5
+                && ShoulderL.getPosition().getValueAsDouble() > setpoint - 0.5;
 
     }
 
@@ -128,14 +142,34 @@ public class ShoulderSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        periodicTimer++;
-        if (periodicTimer > 50) {
-            ShoulderL.setPosition(m_Encoder.get() * 300);
-            ShoulderR.setPosition(m_Encoder.get() * 300);
-            periodicTimer = 0;
-        }
-        if (atSetpoint()) {
-            lock();
+        // Below is attempt #1 at figuring out the position issue but this method of
+        // doing it caused lots of stuttering and oscillation
+        // If I could do this 100s of times a second, it wouldn't be an issue (I have it set at 1 second for debugging purposes)
+
+        // periodicTimer++;
+        // if (periodicTimer > 50) {
+        // ShoulderL.setPosition(m_Encoder.get() * 300);
+        // ShoulderR.setPosition(m_Encoder.get() * 300);
+        // periodicTimer = 0;
+        // }
+        // if (atSetpoint()) {
+        // lock();
+        // }
+
+        //Below is attempt #2 (results pending)
+        tempPos = getPosition() * 300;
+        // For this example, let's say that "acceptable" error in position is 1 rotation
+        // of the motor in either direction (2 rotations)
+
+        // I learned about Ternary operators (https://www.w3schools.com/java/java_conditions_shorthand.asp)
+        // This isn't a great use case but it works for now
+        // yes I know that I should just use a global variable but I'm lazy (it took longer to write this than to actually move it lol)
+        boolean needsReset = (ShoulderL.getPosition().getValueAsDouble() < tempPos - 1
+                && ShoulderL.getPosition().getValueAsDouble() > tempPos + 1) ? true : false;
+        if (needsReset) {
+            System.out.println("Reset shoulder motor position(s)");
+            ShoulderL.setPosition(getPosition() * 300);
+            ShoulderR.setPosition(getPosition() * 300);
         }
     }
 
