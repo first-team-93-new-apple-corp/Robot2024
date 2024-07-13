@@ -123,7 +123,7 @@ public class IntakeShooterSubsystem extends SubsystemBase {
         Shooter.set(0);
     }
 
-    public Command AutoIntake() {
+    public Command AutonIntake() {
         return this.runOnce(() -> Intake());
     }
 
