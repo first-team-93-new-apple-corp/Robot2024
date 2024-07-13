@@ -74,6 +74,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public boolean getZero() {
         // System.out.println(m_HallEffect.getValue());
         return m_HallEffect.getValue() < 50;
+        
     }
 
     public void zeroing() {

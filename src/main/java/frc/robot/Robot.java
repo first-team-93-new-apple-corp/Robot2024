@@ -81,6 +81,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
+    m_robotContainer.zeroElevator();
   }
 
   @Override
@@ -90,6 +91,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testExit() {
+    m_robotContainer.endzeroElevator();
   }
 
   @Override

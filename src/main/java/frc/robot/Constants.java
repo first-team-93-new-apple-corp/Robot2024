@@ -8,6 +8,9 @@ public final class Constants {
         public class AnalogIn {
             public static final int HallEffect = 0;
         }
+        public class CAN {
+            public static final int TOF = 21;
+        }
 
     }
 
@@ -142,8 +145,8 @@ public final class Constants {
 
     // Formatted: Shoulder Angle, Elevator Pos, ARM_SECTOR
     public enum ARM_SETPOINTS {
-        Intake(0, 0, ARM_SECTOR.INTAKE),
-        Amp(50, 0, ARM_SECTOR.AMP),
+        Intake(-10, 0, ARM_SECTOR.INTAKE),
+        Amp(70, 70, ARM_SECTOR.AMP),
         Shoot(0, 0, ARM_SECTOR.SHOOT);
 
         private double shoulderPosition, elevatorPosition;

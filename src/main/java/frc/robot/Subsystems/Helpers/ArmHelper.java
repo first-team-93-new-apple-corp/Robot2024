@@ -118,7 +118,7 @@ public class ArmHelper extends SubsystemBase {
     }
 
     public void retractTelescope() {
-        m_ElevatorSubsystem.toSetpoint(desiredSetpoint.getElevatorPosition());
+        m_ElevatorSubsystem.toSetpoint(0);
     }
 
     public void extendTelescope() {
@@ -127,6 +127,7 @@ public class ArmHelper extends SubsystemBase {
 
     public void shoulderToSetpointNC() {
         m_ShoulderSubsystem.toSetpoint(desiredSetpoint.getShoulderPosition());
+        retractTelescope();
     }
 
     public void follow() {
@@ -162,7 +163,7 @@ public class ArmHelper extends SubsystemBase {
     }
 
     public boolean allAtSetpoint() {
-        return m_ShoulderSubsystem.atSetpoint();
+        return m_ShoulderSubsystem.atSetpoint() && m_ElevatorSubsystem.atSetpoint();
     }
 
     public void switchToNextEvent() {

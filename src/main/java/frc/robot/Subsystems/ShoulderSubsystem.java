@@ -58,7 +58,7 @@ public class ShoulderSubsystem extends SubsystemBase {
         m_configL.CurrentLimits.StatorCurrentLimitEnable = true;
         m_configR.CurrentLimits.StatorCurrentLimitEnable = true;
 
-        m_configL.Slot0.kP = 0;
+        m_configL.Slot0.kP = 0.5;
         m_configL.Slot0.kI = 0;
         m_configL.Slot0.kD = 0;
         m_configL.Slot0.kV = 0.05; // 5.39
@@ -68,8 +68,8 @@ public class ShoulderSubsystem extends SubsystemBase {
         // m_configL.Slot0.kG = 0.1;
 
         m_MotionMagicConfigs = m_configL.MotionMagic;
-        m_MotionMagicConfigs.MotionMagicCruiseVelocity = 40; // Target cruise velocity of 80 rps
-        m_MotionMagicConfigs.MotionMagicAcceleration = 80; // Target acceleration of 160 rps/s (0.5 seconds)
+        m_MotionMagicConfigs.MotionMagicCruiseVelocity = 100; // Target cruise velocity of 80 rps
+        m_MotionMagicConfigs.MotionMagicAcceleration = 200; // Target acceleration of 160 rps/s (0.5 seconds)
         // m_MotionMagicConfigs.MotionMagicJerk = 5;
 
         // Motor Setup
@@ -127,8 +127,8 @@ public class ShoulderSubsystem extends SubsystemBase {
     public boolean atSetpoint() {
         SmartDashboard.putNumber("Setpoint", setpoint);
 
-        return ShoulderL.getPosition().getValueAsDouble() < setpoint + 0.5
-                && ShoulderL.getPosition().getValueAsDouble() > setpoint - 0.5;
+        return ShoulderL.getPosition().getValueAsDouble() < setpoint + 1
+                && ShoulderL.getPosition().getValueAsDouble() > setpoint - 1;
 
     }
 
@@ -142,6 +142,7 @@ public class ShoulderSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        
         // Below is attempt #1 at figuring out the position issue but this method of
         // doing it caused lots of stuttering and oscillation
         // If I could do this 100s of times a second, it wouldn't be an issue (I have it set at 1 second for debugging purposes)
@@ -158,19 +159,24 @@ public class ShoulderSubsystem extends SubsystemBase {
 
         //Below is attempt #2 (results pending)
         tempPos = getPosition() * 300;
+        SmartDashboard.putNumber("tempPos",tempPos);
         // For this example, let's say that "acceptable" error in position is 1 rotation
         // of the motor in either direction (2 rotations)
 
         // I learned about Ternary operators (https://www.w3schools.com/java/java_conditions_shorthand.asp)
         // This isn't a great use case but it works for now
         // yes I know that I should just use a global variable but I'm lazy (it took longer to write this than to actually move it lol)
-        boolean needsReset = (ShoulderL.getPosition().getValueAsDouble() < tempPos - 1
-                && ShoulderL.getPosition().getValueAsDouble() > tempPos + 1) ? true : false;
+        boolean needsReset = (ShoulderL.getPosition().getValueAsDouble() < (tempPos - 5)
+                || ShoulderL.getPosition().getValueAsDouble() > (tempPos + 5));
+                SmartDashboard.putBoolean("needsReset", needsReset);
         if (needsReset) {
-            System.out.println("Reset shoulder motor position(s)");
+            // System.out.println("Reset shoulder motor position(s)");
             ShoulderL.setPosition(getPosition() * 300);
             ShoulderR.setPosition(getPosition() * 300);
         }
     }
 
 }
+
+
+

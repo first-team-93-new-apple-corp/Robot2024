@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -37,9 +38,8 @@ public class IntakeShooterSubsystem extends SubsystemBase {
     double StartTime;
     double currentspeed;
 
-
-
     int periodicTimer = 0;
+
     public void init() {
         // this.op = op;
 
@@ -66,7 +66,7 @@ public class IntakeShooterSubsystem extends SubsystemBase {
         m_motorShooter.getConfigurator().apply(m_configShooter);
         m_motorIntake.setInverted(true);
 
-        TOF = new TimeOfFlight(22);
+        TOF = new TimeOfFlight(Constants.Sensors.CAN.TOF);
         TOF.setRangingMode(RangingMode.Short, 24);
     }
 
@@ -118,8 +118,9 @@ public class IntakeShooterSubsystem extends SubsystemBase {
         state = intakeState.IntakeStage1;
     }
 
-    public Command stop() {
-        return this.runOnce(() -> Intake.set(0));
+    public void stop() {
+        Intake.set(0);
+        Shooter.set(0);
     }
 
     public Command AutoIntake() {
@@ -196,17 +197,18 @@ public class IntakeShooterSubsystem extends SubsystemBase {
     public void shooterPeriodic() {
         SmartDashboard.putNumber("Shooter Speed", SpeakerShooterSpeed);
         SmartDashboard.putNumber("Shooter RPM", Shooter.getVelocity().getValueAsDouble());
-        //SmartDashboard.putNumber("Shooter Temp", Shooter.getDeviceTemp().getValueAsDouble());
+        // SmartDashboard.putNumber("Shooter Temp",
+        // Shooter.getDeviceTemp().getValueAsDouble());
     }
 
     // **************************************************************Misc.*******************************************************
     @Override
     public void periodic() {
         periodicTimer++;
-        if(periodicTimer>5){
+        if (periodicTimer > 5) {
             shooterPeriodic();
             intakePeriodic();
-            periodicTimer=0;
+            periodicTimer = 0;
         }
     }
 }

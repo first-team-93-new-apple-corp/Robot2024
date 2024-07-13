@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ARM_SETPOINTS;
 import frc.robot.commands.ArmToSetpoint;
@@ -28,6 +30,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
 import frc.robot.subsystems.Helpers.ArmHelper;
+import frc.robot.subsystems.Helpers.Vision;
 import frc.robot.subsystems.IntakeShooterSubsystem;
 
 import frc.robot.commands.ElevatorZeroCommand;
@@ -40,20 +43,10 @@ public class RobotContainer {
   // Joysticks / Controllers
   private final Joystick m_LeftStick = new Joystick(0);
   private final Joystick m_RightStick = new Joystick(1);
-  private final XboxController m_XboxDriver = new XboxController(0);
+  private final CommandXboxController m_XboxDriver = new CommandXboxController(0);
 
   // Joystick Buttons
   private final JoystickButton m_FieldRelativeButton = new JoystickButton(m_LeftStick, 12);
-  private final JoystickButton m_FieldRelativeButtonXbox = new JoystickButton(m_XboxDriver, 5);
-  private final JoystickButton m_AmpButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.Y);
-  private final JoystickButton m_IntakeButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.X);
-  private final JoystickButton m_IntakeNoteXbox = new JoystickButton(m_XboxDriver, Constants.xbox.B);
-  private final JoystickButton TestRunElevator = new JoystickButton(m_XboxDriver, Constants.xbox.RightShoulderButton);
-  private final JoystickButton TestZeroElevator = new JoystickButton(m_XboxDriver, Constants.xbox.A);
-  
-  // private final JoystickButton m_AimButtonXbox = new JoystickButton(m_XboxDriver, Constants.xbox.A);
-  // private final JoystickButton m_FireButtonXbox = new
-  // JoystickButton(m_XboxDriver, Constants.xbox.B);
   // Drivetrain
   private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
   private SendableChooser<Command> autoChooser;
@@ -79,13 +72,12 @@ public class RobotContainer {
   private ShoulderSubsystem m_ShoulderSubsystem = new ShoulderSubsystem();
   private ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private IntakeShooterSubsystem m_IntakeShooterSubsystem = new IntakeShooterSubsystem();
-
+  private Vision m_Vision = new Vision(drivetrain);
   ElevatorZeroCommand m_ElevatorZeroCommand = new ElevatorZeroCommand(m_ElevatorSubsystem);
 
   private void configureBindings() {
-
     // SmartDashboard.putNumber("Elevator Setpoint", 35);
-
+    m_Vision.periodic();
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive
             .withVelocityX(
@@ -103,7 +95,8 @@ public class RobotContainer {
 
     // reset the field-centric heading on left bumper press
     m_FieldRelativeButton.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-    m_FieldRelativeButtonXbox.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    
+    m_XboxDriver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     // Subsystems
     m_ShoulderSubsystem.init();
@@ -113,21 +106,14 @@ public class RobotContainer {
 
     // // The funny buttons
     //X
-    m_AmpButtonXbox.whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Amp));
+    m_XboxDriver.y().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Amp));
     //Y
-    m_IntakeButtonXbox.whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Intake));
+    m_XboxDriver.x().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Intake));
     //B
-    m_IntakeNoteXbox.whileTrue(m_IntakeShooterSubsystem.AutoIntake());
-    m_IntakeNoteXbox.whileFalse(m_IntakeShooterSubsystem.stop());
+    m_XboxDriver.b().whileTrue(m_IntakeShooterSubsystem.AutoIntake());
+    m_XboxDriver.b().whileFalse(Commands.runOnce(() -> m_IntakeShooterSubsystem.stop()));
 
-    // TestRunElevator.whileTrue(m_ElevatorSubsystem.toSetpoint(15));
-    // TestRunElevator.whileFalse(m_ElevatorSubsystem.lock());
-    // TestZeroElevator.whileTrue(m_ElevatorZeroCommand);
-
-
-    // // for auto aim (later)
-    // m_AimButtonXbox.whileTrue(new ArmToSetpoint(m_ArmHelper,
-    // ARM_SETPOINTS.Shoot));
+    m_XboxDriver.rightTrigger().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Shoot));
 
     // Drive Controls
     if (DriverStation.getJoystickIsXbox(0)) {
@@ -185,6 +171,12 @@ public class RobotContainer {
   }
   public void checkZero() {
     m_ElevatorSubsystem.checkZero();
+  }
+  public void zeroElevator() {
+    m_ElevatorZeroCommand.schedule();
+  }
+  public void endzeroElevator() {
+    m_ElevatorZeroCommand.cancel();
   }
 
 }
