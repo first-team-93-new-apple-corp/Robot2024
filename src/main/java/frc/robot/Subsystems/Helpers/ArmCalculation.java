@@ -2,13 +2,18 @@ package frc.robot.subsystems.Helpers;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.ShoulderSubsystem;
 
-public class ArmCalculation {
+public class ArmCalculation extends SubsystemBase{
     public NetworkTable table;
     double[] values = new double[6];
     private double setpoint;
+    ShoulderSubsystem m_ShoulderSubsystem;
     public ArmCalculation() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
+        m_ShoulderSubsystem = new ShoulderSubsystem();
     }
 
     public double[] getValues() {
@@ -20,9 +25,12 @@ public class ArmCalculation {
         values[5] = table.getEntry("tv").getDouble(0);
         return values;
     }
-    public double calculateSetpoint() {
+    public void calculateSetpoint() {
         // we need a magic equation to calculate the setpoint...
         setpoint = 0; 
-        return setpoint;
+        m_ShoulderSubsystem.toSetpoint(setpoint);
+    }
+    public Command calculate(){
+        return this.runOnce(() -> calculateSetpoint());
     }
 }

@@ -7,6 +7,7 @@ package frc.robot;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -29,6 +30,7 @@ import frc.robot.subsystems.ShoulderSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.TunerConstants;
+import frc.robot.subsystems.Helpers.ArmCalculation;
 import frc.robot.subsystems.Helpers.ArmHelper;
 import frc.robot.subsystems.Helpers.Vision;
 import frc.robot.subsystems.IntakeShooterSubsystem;
@@ -69,6 +71,7 @@ public class RobotContainer {
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   private ArmHelper m_ArmHelper;
+  private ArmCalculation m_ArmCalculation = new ArmCalculation();
   private ShoulderSubsystem m_ShoulderSubsystem = new ShoulderSubsystem();
   private ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private IntakeShooterSubsystem m_IntakeShooterSubsystem = new IntakeShooterSubsystem();
@@ -109,8 +112,8 @@ public class RobotContainer {
     m_XboxDriver.y().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Amp));
     // Y
     m_XboxDriver.x().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Intake));
-    // B
-    m_XboxDriver.b().whileTrue(m_IntakeShooterSubsystem.AutoIntake());
+    //B
+    m_XboxDriver.b().whileTrue(m_IntakeShooterSubsystem.AutonIntake());
     m_XboxDriver.b().whileFalse(Commands.runOnce(() -> m_IntakeShooterSubsystem.stop()));
 
     m_XboxDriver.rightTrigger().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Shoot));
@@ -144,6 +147,13 @@ public class RobotContainer {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
     drivetrain.registerTelemetry(logger::telemeterize);
+
+    NamedCommands.registerCommand("StopIntake", m_IntakeShooterSubsystem.AutonStopIntake());
+    NamedCommands.registerCommand("Ready", m_IntakeShooterSubsystem.AutonIntake());
+    NamedCommands.registerCommand("StopShoot", m_IntakeShooterSubsystem.AutonStopShooter());
+    NamedCommands.registerCommand("Fire", m_IntakeShooterSubsystem.AutonShooter());
+    NamedCommands.registerCommand("Aim", m_ArmCalculation.calculate());
+
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
