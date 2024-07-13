@@ -72,7 +72,7 @@ public class RobotContainer {
   private ShoulderSubsystem m_ShoulderSubsystem = new ShoulderSubsystem();
   private ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private IntakeShooterSubsystem m_IntakeShooterSubsystem = new IntakeShooterSubsystem();
-  private Vision m_Vision = new Vision(drivetrain);
+  private Vision m_Vision = new Vision();
   ElevatorZeroCommand m_ElevatorZeroCommand = new ElevatorZeroCommand(m_ElevatorSubsystem);
 
   private void configureBindings() {
@@ -95,7 +95,7 @@ public class RobotContainer {
 
     // reset the field-centric heading on left bumper press
     m_FieldRelativeButton.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-    
+
     m_XboxDriver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     // Subsystems
@@ -105,16 +105,20 @@ public class RobotContainer {
     m_ArmHelper = new ArmHelper(m_ShoulderSubsystem, m_ElevatorSubsystem);
 
     // // The funny buttons
-    //X
+    // X
     m_XboxDriver.y().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Amp));
-    //Y
+    // Y
     m_XboxDriver.x().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Intake));
-    //B
+    // B
     m_XboxDriver.b().whileTrue(m_IntakeShooterSubsystem.AutoIntake());
     m_XboxDriver.b().whileFalse(Commands.runOnce(() -> m_IntakeShooterSubsystem.stop()));
 
     m_XboxDriver.rightTrigger().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Shoot));
-
+    m_XboxDriver.a().whileTrue(
+        drivetrain.applyRequest(() -> drive
+            .withVelocityX((-m_XboxDriver.getLeftY() * Math.abs(m_XboxDriver.getLeftY())) * MaxSpeed)
+            .withVelocityY((-m_XboxDriver.getLeftX() * Math.abs(m_XboxDriver.getLeftX())) * MaxSpeed)
+            .withRotationalRate(m_Vision.pointToCalc())));
     // Drive Controls
     if (DriverStation.getJoystickIsXbox(0)) {
       drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -156,7 +160,7 @@ public class RobotContainer {
   public void updateValues() {
     SmartDashboard.putNumber("Shoulder Angle",
         m_ShoulderSubsystem.getPosition());
-    SmartDashboard.putBoolean("Shoulder At Setpoint", 
+    SmartDashboard.putBoolean("Shoulder At Setpoint",
         m_ShoulderSubsystem.atSetpoint());
     SmartDashboard.putBoolean("Elevator Hall Effect",
         m_ElevatorSubsystem.getZero());
@@ -169,12 +173,15 @@ public class RobotContainer {
   public Command getTeleopCommand() {
     return null;
   }
+
   public void checkZero() {
     m_ElevatorSubsystem.checkZero();
   }
+
   public void zeroElevator() {
     m_ElevatorZeroCommand.schedule();
   }
+
   public void endzeroElevator() {
     m_ElevatorZeroCommand.cancel();
   }
