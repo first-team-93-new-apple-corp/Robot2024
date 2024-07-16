@@ -11,9 +11,9 @@ public class ArmCalculation extends SubsystemBase{
     double[] values = new double[6];
     private double setpoint;
     ShoulderSubsystem m_ShoulderSubsystem;
-    public ArmCalculation() {
+    public ArmCalculation(ShoulderSubsystem m_ShoulderSubsystem) {
         table = NetworkTableInstance.getDefault().getTable("limelight");
-        m_ShoulderSubsystem = new ShoulderSubsystem();
+        this.m_ShoulderSubsystem = m_ShoulderSubsystem;
     }
 
     public double[] getValues() {

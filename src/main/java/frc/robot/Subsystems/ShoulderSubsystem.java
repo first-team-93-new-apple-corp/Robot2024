@@ -41,7 +41,7 @@ public class ShoulderSubsystem extends SubsystemBase {
 
     int periodicTimer = 0;
 
-    public void init() {
+    public ShoulderSubsystem() {
 
         // Definitions
         m_Encoder = new DutyCycleEncoder(Constants.Sensors.DIO.ThroughBoreEncoder);

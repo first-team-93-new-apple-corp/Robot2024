@@ -71,8 +71,8 @@ public class RobotContainer {
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   private ArmHelper m_ArmHelper;
-  private ArmCalculation m_ArmCalculation = new ArmCalculation();
   private ShoulderSubsystem m_ShoulderSubsystem = new ShoulderSubsystem();
+  private ArmCalculation m_ArmCalculation = new ArmCalculation(m_ShoulderSubsystem);
   private ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private IntakeShooterSubsystem m_IntakeShooterSubsystem = new IntakeShooterSubsystem();
   private Vision m_Vision = new Vision();
@@ -102,7 +102,7 @@ public class RobotContainer {
     m_XboxDriver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     // Subsystems
-    m_ShoulderSubsystem.init();
+    // m_ShoulderSubsystem.init();
     m_ElevatorSubsystem.init();
     m_IntakeShooterSubsystem.init();
     m_ArmHelper = new ArmHelper(m_ShoulderSubsystem, m_ElevatorSubsystem);
