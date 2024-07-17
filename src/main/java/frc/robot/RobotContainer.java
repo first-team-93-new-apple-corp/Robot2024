@@ -39,7 +39,7 @@ import frc.robot.commands.ElevatorZeroCommand;
 
 public class RobotContainer {
   // Constants / Other things
-  private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
+  private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps/2; // kSpeedAt12VoltsMps desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   // Joysticks / Controllers
@@ -111,12 +111,13 @@ public class RobotContainer {
     // X
     m_XboxDriver.y().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Amp));
     // Y
-    m_XboxDriver.x().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Intake));
+    m_XboxDriver.b().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Intake));
     //B
-    m_XboxDriver.b().whileTrue(m_IntakeShooterSubsystem.AutonIntake());
-    m_XboxDriver.b().whileFalse(Commands.runOnce(() -> m_IntakeShooterSubsystem.stop()));
-
-    m_XboxDriver.rightTrigger().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Shoot));
+    m_XboxDriver.x().whileTrue(m_IntakeShooterSubsystem.AutonIntake());
+    m_XboxDriver.x().whileFalse(Commands.runOnce(() -> m_IntakeShooterSubsystem.stop()));
+    m_XboxDriver.rightTrigger().whileTrue(m_IntakeShooterSubsystem.AutonShooter());
+    m_XboxDriver.rightTrigger().whileFalse(m_IntakeShooterSubsystem.AutonStopShooter());
+    m_XboxDriver.leftTrigger().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Shoot));
     m_XboxDriver.a().whileTrue(
         drivetrain.applyRequest(() -> drive
             .withVelocityX((-m_XboxDriver.getLeftY() * Math.abs(m_XboxDriver.getLeftY())) * MaxSpeed)
