@@ -23,8 +23,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ARM_SETPOINTS;
+import frc.robot.Constants.xbox;
 import frc.robot.commands.ArmToSetpoint;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ShoulderSubsystem;
 // import frc.robot.subsystems.DriveConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -33,13 +36,13 @@ import frc.robot.subsystems.TunerConstants;
 import frc.robot.subsystems.Helpers.ArmCalculation;
 import frc.robot.subsystems.Helpers.ArmHelper;
 import frc.robot.subsystems.Helpers.Vision;
-import frc.robot.subsystems.IntakeShooterSubsystem;
 
 import frc.robot.commands.ElevatorZeroCommand;
+import frc.robot.commands.NoteHandle;
 
 public class RobotContainer {
   // Constants / Other things
-  private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps/2; // kSpeedAt12VoltsMps desired top speed
+  private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps / 2; // kSpeedAt12VoltsMps desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   // Joysticks / Controllers
@@ -74,9 +77,11 @@ public class RobotContainer {
   private ShoulderSubsystem m_ShoulderSubsystem = new ShoulderSubsystem();
   private ArmCalculation m_ArmCalculation = new ArmCalculation(m_ShoulderSubsystem);
   private ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
-  private IntakeShooterSubsystem m_IntakeShooterSubsystem = new IntakeShooterSubsystem();
   private Vision m_Vision = new Vision();
-  ElevatorZeroCommand m_ElevatorZeroCommand = new ElevatorZeroCommand(m_ElevatorSubsystem);
+  private ElevatorZeroCommand m_ElevatorZeroCommand = new ElevatorZeroCommand(m_ElevatorSubsystem);
+  private IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+  private ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+  private NoteHandle noteHandle = new NoteHandle(m_IntakeSubsystem, m_ShooterSubsystem);
 
   private void configureBindings() {
     // SmartDashboard.putNumber("Elevator Setpoint", 35);
@@ -104,7 +109,6 @@ public class RobotContainer {
     // Subsystems
     // m_ShoulderSubsystem.init();
     m_ElevatorSubsystem.init();
-    m_IntakeShooterSubsystem.init();
     m_ArmHelper = new ArmHelper(m_ShoulderSubsystem, m_ElevatorSubsystem);
 
     // // The funny buttons
@@ -112,12 +116,13 @@ public class RobotContainer {
     m_XboxDriver.y().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Amp));
     // Y
     m_XboxDriver.b().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Intake));
-    //B
-    m_XboxDriver.x().whileTrue(m_IntakeShooterSubsystem.AutonIntake());
-    m_XboxDriver.x().whileFalse(Commands.run(() -> m_IntakeShooterSubsystem.stop()));
-    m_XboxDriver.rightTrigger().whileTrue(m_IntakeShooterSubsystem.AutonShooter());
-    m_XboxDriver.rightTrigger().whileFalse(m_IntakeShooterSubsystem.AutonStopShooter());
+    // B
+    m_XboxDriver.x().whileTrue(Commands.run(() -> noteHandle.intake()));
+    m_XboxDriver.rightTrigger().whileTrue(Commands.run(() -> noteHandle.shoot()));
+    m_XboxDriver.rightTrigger().onFalse(Commands.runOnce(() -> checkConflictShoot()));
+    m_XboxDriver.x().onFalse(Commands.runOnce(() -> checkConflictIntake()));
     m_XboxDriver.leftTrigger().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Shoot));
+
     m_XboxDriver.a().whileTrue(
         drivetrain.applyRequest(() -> drive
             .withVelocityX((-m_XboxDriver.getLeftY() * Math.abs(m_XboxDriver.getLeftY())) * MaxSpeed)
@@ -149,10 +154,10 @@ public class RobotContainer {
     }
     drivetrain.registerTelemetry(logger::telemeterize);
 
-    NamedCommands.registerCommand("StopIntake", m_IntakeShooterSubsystem.AutonStopIntake());
-    NamedCommands.registerCommand("Ready", m_IntakeShooterSubsystem.AutonIntake());
-    NamedCommands.registerCommand("StopShoot", m_IntakeShooterSubsystem.AutonStopShooter());
-    NamedCommands.registerCommand("Fire", m_IntakeShooterSubsystem.AutonShooter());
+    NamedCommands.registerCommand("StopIntake", Commands.runOnce(() -> noteHandle.stop()));
+    NamedCommands.registerCommand("Ready", Commands.runOnce(() ->noteHandle.intake()));
+    NamedCommands.registerCommand("StopShoot", Commands.runOnce(() -> noteHandle.stop()));
+    NamedCommands.registerCommand("Fire", Commands.runOnce(() -> noteHandle.shoot()));
     NamedCommands.registerCommand("Aim", m_ArmCalculation.calculate());
 
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -195,6 +200,18 @@ public class RobotContainer {
 
   public void endzeroElevator() {
     m_ElevatorZeroCommand.cancel();
+  }
+
+  public void checkConflictShoot() {
+    if (!m_XboxDriver.x().getAsBoolean()) {
+      noteHandle.stop();
+    }
+  }
+
+  public void checkConflictIntake() {
+    if (!m_XboxDriver.rightTrigger().getAsBoolean()) {
+      noteHandle.stop();
+    }
   }
 
 }
