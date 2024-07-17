@@ -146,7 +146,7 @@ public class IntakeShooterSubsystem extends SubsystemBase {
     }
 
     public void AutonPrime() {
-        Shooter.set(.60);
+        Shooter.set(1);
     }
 
     public void shootAmp() {
@@ -163,6 +163,7 @@ public class IntakeShooterSubsystem extends SubsystemBase {
 
     public void shooterStop() {
         Shooter.set(0);
+        kicker(0);
     }
 
     public void kickerStop() {
@@ -170,8 +171,9 @@ public class IntakeShooterSubsystem extends SubsystemBase {
     }
 
     public void ShootingforAuton() {
-        AutonPrime();
         kicker(KickerSpeed);
+        AutonPrime();
+        
     }
 
     public Command AutonShooter() {
@@ -179,6 +181,7 @@ public class IntakeShooterSubsystem extends SubsystemBase {
     }
 
     public Command AutonStopShooter() {
+        kickerStop();
         return this.runOnce(() -> shooterStop());
     }
 
@@ -197,6 +200,7 @@ public class IntakeShooterSubsystem extends SubsystemBase {
     public void shooterPeriodic() {
         SmartDashboard.putNumber("Shooter Speed", SpeakerShooterSpeed);
         SmartDashboard.putNumber("Shooter RPM", Shooter.getVelocity().getValueAsDouble());
+        SmartDashboard.putNumber("TOF", TOF.getRange());
         // SmartDashboard.putNumber("Shooter Temp",
         // Shooter.getDeviceTemp().getValueAsDouble());
     }

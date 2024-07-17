@@ -167,8 +167,8 @@ public class ShoulderSubsystem extends SubsystemBase {
         // I learned about Ternary operators (https://www.w3schools.com/java/java_conditions_shorthand.asp)
         // This isn't a great use case but it works for now
         // yes I know that I should just use a global variable but I'm lazy (it took longer to write this than to actually move it lol)
-        boolean needsReset = (ShoulderL.getPosition().getValueAsDouble() < (tempPos - 5)
-                || ShoulderL.getPosition().getValueAsDouble() > (tempPos + 5));
+        boolean needsReset = (ShoulderL.getPosition().getValueAsDouble() < (tempPos - 3)
+                || ShoulderL.getPosition().getValueAsDouble() > (tempPos + 3));
                 SmartDashboard.putBoolean("needsReset", needsReset);
         if (needsReset) {
             // System.out.println("Reset shoulder motor position(s)");

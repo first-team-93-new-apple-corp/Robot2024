@@ -114,7 +114,7 @@ public class RobotContainer {
     m_XboxDriver.b().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Intake));
     //B
     m_XboxDriver.x().whileTrue(m_IntakeShooterSubsystem.AutonIntake());
-    m_XboxDriver.x().whileFalse(Commands.runOnce(() -> m_IntakeShooterSubsystem.stop()));
+    m_XboxDriver.x().whileFalse(Commands.run(() -> m_IntakeShooterSubsystem.stop()));
     m_XboxDriver.rightTrigger().whileTrue(m_IntakeShooterSubsystem.AutonShooter());
     m_XboxDriver.rightTrigger().whileFalse(m_IntakeShooterSubsystem.AutonStopShooter());
     m_XboxDriver.leftTrigger().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Shoot));
