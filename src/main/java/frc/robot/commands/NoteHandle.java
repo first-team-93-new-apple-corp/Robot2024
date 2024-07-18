@@ -17,7 +17,13 @@ public class NoteHandle{
     }
     public void shoot() {
         shooterSubsystem.shoot();
+    }
+    public void prime() {
         intakeSubsystem.shoot();
+    }
+    public void revShoot(){
+        shooterSubsystem.revShoot();
+        intakeSubsystem.revShoot();
     }
     public void amp() {
         shooterSubsystem.amp();

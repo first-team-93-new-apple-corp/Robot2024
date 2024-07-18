@@ -44,6 +44,7 @@ public class ArmCalculation extends SubsystemBase {
      */
     public void calculateSetpoint() {
         // we need a magic equation to calculate the setpoint...
+        // y =2.1983 x e^0.0226x is the formula!!!!!!! justin fix it NOW
         setpoint = 0;
         m_ShoulderSubsystem.toSetpoint(setpoint);
     }

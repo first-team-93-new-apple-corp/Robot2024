@@ -30,6 +30,10 @@ public class ShooterSubsystem {
         shooterMotor.set(shootSpeed);
     }
 
+    public void revShoot() {
+        shooterMotor.set(-0.2);
+    }
+
     public void amp() {
         shooterMotor.set(ampSpeed);
     }

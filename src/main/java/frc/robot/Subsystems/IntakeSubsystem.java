@@ -27,6 +27,9 @@ public class IntakeSubsystem {
     public void shoot() {
         intakeMotor.set(shootSpeed);
     }
+    public void revShoot(){
+        intakeMotor.set(-0.2);
+    }
     public void amp() {
         intakeMotor.set(ampSpeed);
     }
