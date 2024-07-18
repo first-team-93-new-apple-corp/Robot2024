@@ -3,7 +3,6 @@ package frc.robot.subsystems.Shooter.IO;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Servo;
 
 import com.revrobotics.CANSparkMax;
 import frc.robot.Constants.ShooterConstants;
@@ -19,7 +18,6 @@ public class ShooterIOReal implements ShooterIO {
     private final double AmpShooterSpeed;
     private final double KickerSpeed;
     private final double DribbleSpeed;
-    private final Servo ampServo;
 
     public ShooterIOReal(ShooterConstants constants) {
         KickerL = new CANSparkMax(constants.KickerL, MotorType.kBrushless);
@@ -28,7 +26,6 @@ public class ShooterIOReal implements ShooterIO {
         ShooterR = new TalonFX(constants.ShooterR, "rio");
         ShooterL.setInverted(true);
         KickerR.setInverted(true);
-        ampServo = new Servo(8);
 
         SpeakerShooterSpeed = constants.SpeakerShooterSpeed;
         MuzzleIntake = constants.MuzzleIntake;
@@ -134,13 +131,5 @@ public class ShooterIOReal implements ShooterIO {
         }
     }
 
-    @Override
-    public void ServoUp() {
-        ampServo.set(0.1);
-    }
 
-    public void ServoDown() {
-        ampServo.set(0.65);
-    }
-    
 }

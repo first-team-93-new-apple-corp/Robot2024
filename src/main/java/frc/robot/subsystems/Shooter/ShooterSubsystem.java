@@ -68,14 +68,6 @@ public class ShooterSubsystem extends SubsystemBase {
         m_Io.decreaseSpeed();
     }
 
-    public void ServoUp() {
-        m_Io.ServoUp();
-    }
-
-    public void ServoDown() {
-        m_Io.ServoDown();
-    }
-
     @Override
     public void periodic() {
         m_Io.updateValues(m_Inputs);

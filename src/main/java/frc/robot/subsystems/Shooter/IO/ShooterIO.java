@@ -38,7 +38,4 @@ public interface ShooterIO {
 
     public void decreaseSpeed();
 
-    public void ServoUp();
-
-    public void ServoDown();
 }

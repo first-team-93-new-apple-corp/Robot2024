@@ -49,6 +49,7 @@ import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystemFactory;
 import frc.robot.subsystems.Intake.IntakeSubsystem;
 import frc.robot.subsystems.Intake.IntakeSubsystemFactory;
+import frc.robot.subsystems.Shooter.ServoSubsystem;
 import frc.robot.subsystems.Shooter.ShooterSubsystem;
 import frc.robot.subsystems.Shooter.ShooterSubsystemFactory;
 import frc.robot.subsystems.Swerve.DriveConstants;
@@ -68,6 +69,7 @@ public class RobotContainer extends TimedRobot {
   public Mechanisms m_MechanismsSubsystem;
   private final SwerveDriveSubsystem m_SwerveDriveSubsystem;
   public final LEDSubsystem m_LedSubsystem;
+  public final ServoSubsystem m_ServoSubsystem;
   // --------------------------------------------COMMANDS--------------------------------------------
   public final ShooterCommand m_ShooterCommand;
   public final IntakeCommand m_IntakeCommand;
@@ -160,8 +162,8 @@ public class RobotContainer extends TimedRobot {
     m_Intake.onTrue(m_IntakeCommand.Intake());
     m_Intake.onFalse(m_IntakeCommand.StopIntake().alongWith(m_ShooterCommand.StopShooter()));
     // --------------------------------------------ELEVATOR + SHOOTER BUTTON BINDINGS--------------------------------------------
-    m_AMP.onTrue(m_ShooterCommand.ShootAmp().alongWith(m_ElevatorCommand.Amp()));
-    m_AMP.onFalse(m_ShooterCommand.StopShooter().alongWith(m_ElevatorCommand.Default()));
+    m_AMP.onTrue(m_ShooterCommand.ShootAmp().alongWith(m_ElevatorCommand.Amp()).alongWith(m_ServoSubsystem.Commands.ServoUp()));
+    m_AMP.onFalse(m_ShooterCommand.StopShooter().alongWith(m_ElevatorCommand.Default()).alongWith(m_ServoSubsystem.Commands.ServoDown()));
 
     m_Source.onTrue(m_ShooterCommand.IntakeFront().alongWith(m_ElevatorCommand.Source()));
     m_Source.onFalse(m_ShooterCommand.StopShooter().alongWith(m_ElevatorCommand.Default()));
@@ -206,6 +208,7 @@ public class RobotContainer extends TimedRobot {
     m_ElevatorSubsystem = ElevatorSubsystemFactory.build(constants.Elevator);
     m_ClimberSubsystem = ClimberSubsystemFactory.build(constants.Climber);
     m_VisionSubsystem = VisionSubsystemFactory.build(m_SwerveDriveSubsystem, constants.Vision);
+    m_ServoSubsystem = new ServoSubsystem();
     // --------------------------------------------SUBSYSTEMS--------------------------------------------
     if (Utils.isSimulation()) {
     m_MechanismsSubsystem = new Mechanisms(m_ElevatorSubsystem.ElevatorPostion, m_ClimberSubsystem.ClimberPostion);
