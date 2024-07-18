@@ -122,6 +122,8 @@ public class RobotContainer {
     m_XboxDriver.rightTrigger().onFalse(Commands.runOnce(() -> checkConflictShoot()));
     m_XboxDriver.x().onFalse(Commands.runOnce(() -> checkConflictIntake()));
     m_XboxDriver.leftTrigger().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Shoot));
+    m_XboxDriver.povUp().onTrue(Commands.runOnce(() -> m_ShoulderSubsystem.testup()));
+    m_XboxDriver.povDown().onTrue(Commands.runOnce(() -> m_ShoulderSubsystem.testdown()));
 
     m_XboxDriver.a().whileTrue(
         drivetrain.applyRequest(() -> drive
@@ -155,7 +157,7 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
 
     NamedCommands.registerCommand("StopIntake", Commands.runOnce(() -> noteHandle.stop()));
-    NamedCommands.registerCommand("Ready", Commands.runOnce(() ->noteHandle.intake()));
+    NamedCommands.registerCommand("Ready", Commands.runOnce(() -> noteHandle.intake()));
     NamedCommands.registerCommand("StopShoot", Commands.runOnce(() -> noteHandle.stop()));
     NamedCommands.registerCommand("Fire", Commands.runOnce(() -> noteHandle.shoot()));
     NamedCommands.registerCommand("Aim", m_ArmCalculation.calculate());

@@ -140,7 +140,14 @@ public class ShoulderSubsystem extends SubsystemBase {
     public double getRight() {
         return ShoulderR.getPosition().getValueAsDouble();
     }
-
+    public void testup() {
+        setpoint += 5;
+        toSetpoint(setpoint);
+    }
+    public void testdown() {
+        setpoint -= 5;
+        toSetpoint(setpoint);
+    }
     @Override
     public void periodic() {
         
