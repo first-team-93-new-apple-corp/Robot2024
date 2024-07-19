@@ -112,24 +112,28 @@ public class RobotContainer {
     m_ArmHelper = new ArmHelper(m_ShoulderSubsystem, m_ElevatorSubsystem);
 
     // // The funny buttons
-    // X
-    m_XboxDriver.y().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Amp));
     // Y
-    m_XboxDriver.b().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Intake));
+    m_XboxDriver.y().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Amp));
     // B
+    m_XboxDriver.b().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Intake));
+    // X
     m_XboxDriver.x().whileTrue(Commands.run(() -> noteHandle.intake()));
+    // Right trigger
     m_XboxDriver.rightTrigger().whileTrue(Commands.run(() -> noteHandle.shoot()));
     // m_XboxDriver.rightTrigger().onFalse(Commands.runOnce(() -> checkConflictShoot()));
     m_XboxDriver.rightTrigger().onFalse(Commands.runOnce(() -> noteHandle.stop()));
     // m_XboxDriver.x().onFalse(Commands.runOnce(() -> checkConflictIntake()));
     m_XboxDriver.x().onFalse(Commands.run(() -> noteHandle.stop()));
     // m_XboxDriver.leftTrigger().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Shoot));
+    // left trigger
     m_XboxDriver.leftTrigger().whileTrue(Commands.run(() -> noteHandle.prime()));
-    m_XboxDriver.leftTrigger().whileFalse(Commands.run(() -> noteHandle.stop()));
+    m_XboxDriver.leftTrigger().onFalse(Commands.run(() -> noteHandle.stop()));
+    // Pov Buttons
     m_XboxDriver.povUp().onTrue(Commands.runOnce(() -> m_ShoulderSubsystem.testup()));
     m_XboxDriver.povDown().onTrue(Commands.runOnce(() -> m_ShoulderSubsystem.testdown()));
-    m_XboxDriver.povLeft().whileTrue(Commands.runOnce(() -> noteHandle.revShoot()));
+    m_XboxDriver.povLeft().whileTrue(Commands.run(() -> noteHandle.revShoot()));
     m_XboxDriver.povLeft().onFalse(Commands.runOnce(() -> noteHandle.stop()));
+    // Funny a button
     m_XboxDriver.a().whileTrue(
         drivetrain.applyRequest(() -> drive
             .withVelocityX((-m_XboxDriver.getLeftY() * Math.abs(m_XboxDriver.getLeftY())) * MaxSpeed)
