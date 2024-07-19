@@ -123,7 +123,7 @@ public class RobotContainer {
     // m_XboxDriver.rightTrigger().onFalse(Commands.runOnce(() -> checkConflictShoot()));
     m_XboxDriver.rightTrigger().onFalse(Commands.runOnce(() -> noteHandle.stop()));
     // m_XboxDriver.x().onFalse(Commands.runOnce(() -> checkConflictIntake()));
-    m_XboxDriver.x().onFalse(Commands.run(() -> noteHandle.stop()));
+    m_XboxDriver.x().onFalse(Commands.runOnce(() -> noteHandle.stop()));
     // m_XboxDriver.leftTrigger().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Shoot));
     // left trigger
     m_XboxDriver.leftTrigger().whileTrue(Commands.run(() -> noteHandle.prime()));
@@ -165,10 +165,11 @@ public class RobotContainer {
     }
     drivetrain.registerTelemetry(logger::telemeterize);
 
-    NamedCommands.registerCommand("StopIntake", Commands.runOnce(() -> noteHandle.stop()));
-    NamedCommands.registerCommand("Ready", Commands.runOnce(() -> noteHandle.intake()));
-    NamedCommands.registerCommand("StopShoot", Commands.runOnce(() -> noteHandle.stop()));
-    NamedCommands.registerCommand("Fire", Commands.runOnce(() -> noteHandle.shoot()));
+    NamedCommands.registerCommand("StopShootIntake", Commands.runOnce(() -> noteHandle.stop()));
+    NamedCommands.registerCommand("Ready", Commands.run(() -> noteHandle.intake()));
+    NamedCommands.registerCommand("Fire", Commands.run(() -> noteHandle.shoot())
+    .alongWith(Commands.waitSeconds(3))
+    .andThen(Commands.run(() -> noteHandle.prime())));
     NamedCommands.registerCommand("Aim", m_ArmCalculation.calculate());
 
     autoChooser = AutoBuilder.buildAutoChooser();
