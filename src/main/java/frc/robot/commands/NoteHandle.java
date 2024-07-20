@@ -27,7 +27,7 @@ public class NoteHandle{
     }
     public void amp() {
         shooterSubsystem.amp();
-        intakeSubsystem.amp();
+        // intakeSubsystem.amp();
     }
     public void stop() {
         shooterSubsystem.stop();

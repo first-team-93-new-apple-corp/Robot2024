@@ -15,7 +15,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ARM_SETPOINTS;
-import frc.robot.Constants.xbox;
 import frc.robot.commands.ArmToSetpoint;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -42,13 +40,13 @@ import frc.robot.commands.NoteHandle;
 
 public class RobotContainer {
   // Constants / Other things
-  private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps / 2; // kSpeedAt12VoltsMps desired top speed
+  private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   // Joysticks / Controllers
   private final Joystick m_LeftStick = new Joystick(0);
   private final Joystick m_RightStick = new Joystick(1);
-  private final CommandXboxController m_XboxDriver = new CommandXboxController(0);
+  private final CommandXboxController m_XboxDriver = new CommandXboxController(2);
 
   // Joystick Buttons
   private final JoystickButton m_FieldRelativeButton = new JoystickButton(m_LeftStick, 12);
@@ -104,7 +102,8 @@ public class RobotContainer {
     // reset the field-centric heading on left bumper press
     m_FieldRelativeButton.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
-    m_XboxDriver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    // m_XboxDriver.leftBumper().onTrue(drivetrain.runOnce(() ->
+    // drivetrain.seedFieldRelative()));
 
     // Subsystems
     // m_ShoulderSubsystem.init();
@@ -120,19 +119,23 @@ public class RobotContainer {
     m_XboxDriver.x().whileTrue(Commands.run(() -> noteHandle.intake()));
     // Right trigger
     m_XboxDriver.rightTrigger().whileTrue(Commands.run(() -> noteHandle.shoot()));
-    // m_XboxDriver.rightTrigger().onFalse(Commands.runOnce(() -> checkConflictShoot()));
+    // m_XboxDriver.rightTrigger().onFalse(Commands.runOnce(() ->
+    // checkConflictShoot()));
     m_XboxDriver.rightTrigger().onFalse(Commands.runOnce(() -> noteHandle.stop()));
     // m_XboxDriver.x().onFalse(Commands.runOnce(() -> checkConflictIntake()));
     m_XboxDriver.x().onFalse(Commands.runOnce(() -> noteHandle.stop()));
-    // m_XboxDriver.leftTrigger().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Shoot));
+    // m_XboxDriver.leftTrigger().whileTrue(new ArmToSetpoint(m_ArmHelper,
+    // ARM_SETPOINTS.Shoot));
     // left trigger
     m_XboxDriver.leftTrigger().whileTrue(Commands.run(() -> noteHandle.prime()));
-    m_XboxDriver.leftTrigger().onFalse(Commands.run(() -> noteHandle.stop()));
+    m_XboxDriver.leftTrigger().onFalse(Commands.runOnce(() -> noteHandle.stop()));
     // Pov Buttons
     m_XboxDriver.povUp().onTrue(Commands.runOnce(() -> m_ShoulderSubsystem.testup()));
     m_XboxDriver.povDown().onTrue(Commands.runOnce(() -> m_ShoulderSubsystem.testdown()));
     m_XboxDriver.povLeft().whileTrue(Commands.run(() -> noteHandle.revShoot()));
     m_XboxDriver.povLeft().onFalse(Commands.runOnce(() -> noteHandle.stop()));
+    m_XboxDriver.leftBumper().whileTrue(Commands.run(() -> noteHandle.amp()));
+    m_XboxDriver.leftBumper().onFalse(Commands.runOnce(() -> noteHandle.stop()));
     // Funny a button
     m_XboxDriver.a().whileTrue(
         drivetrain.applyRequest(() -> drive
@@ -168,9 +171,12 @@ public class RobotContainer {
     NamedCommands.registerCommand("StopShootIntake", Commands.runOnce(() -> noteHandle.stop()));
     NamedCommands.registerCommand("Ready", Commands.run(() -> noteHandle.intake()));
     NamedCommands.registerCommand("Fire", Commands.run(() -> noteHandle.shoot())
-    .alongWith(Commands.waitSeconds(3))
-    .andThen(Commands.run(() -> noteHandle.prime())));
-    NamedCommands.registerCommand("Aim", m_ArmCalculation.calculate());
+        .alongWith(Commands.waitSeconds(3))
+        .andThen(Commands.run(() -> noteHandle.prime())));
+    NamedCommands.registerCommand("Aim", Commands.run(() -> noteHandle.revShoot())
+    .alongWith(Commands.waitSeconds(.75))
+    .andThen(Commands.runOnce(() -> noteHandle.stop())));
+    
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -214,16 +220,23 @@ public class RobotContainer {
     m_ElevatorZeroCommand.cancel();
   }
 
-  public void checkConflictShoot() {
-    if (!m_XboxDriver.x().getAsBoolean()) {
-      noteHandle.stop();
-    }
-  }
+  // public void checkConflictShoot() {
+  //   if (!m_XboxDriver.x().getAsBoolean()) {
+  //     noteHandle.stop();
+  //   }
+  // }
 
-  public void checkConflictIntake() {
-    if (!m_XboxDriver.rightTrigger().getAsBoolean()) {
-      noteHandle.stop();
-    }
-  }
+  // public void checkConflictIntake() {
+  //   if (!m_XboxDriver.rightTrigger().getAsBoolean()) {
+  //     noteHandle.stop();
+  //   }
+  // }
+
+  // public void checkConflict() {
+  //   if (!(m_XboxDriver.leftBumper().getAsBoolean() && m_XboxDriver.povLeft().getAsBoolean()
+  //       && m_XboxDriver.rightTrigger().getAsBoolean() && m_XboxDriver.leftTrigger().getAsBoolean())) {
+  //         noteHandle.stop();
+  //   }
+  // }
 
 }

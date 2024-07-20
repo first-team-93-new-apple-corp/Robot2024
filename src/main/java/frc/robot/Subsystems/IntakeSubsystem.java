@@ -9,7 +9,7 @@ public class IntakeSubsystem {
 
     private double intakeSpeed = 0.5;
     private double shootSpeed = 1;
-    private double ampSpeed = -0.2;
+    private double ampSpeed = 0.5;
 
     public IntakeSubsystem() {
         intakeMotor = new TalonFX(Constants.CTRE.Intake);
