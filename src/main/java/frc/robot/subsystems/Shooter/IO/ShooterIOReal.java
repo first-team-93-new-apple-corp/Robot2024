@@ -27,7 +27,8 @@ public class ShooterIOReal implements ShooterIO {
         ShooterL = new TalonFX(constants.ShooterL, "rio");
         ShooterR = new TalonFX(constants.ShooterR, "rio");
         ShooterL.setInverted(true);
-        KickerR.setInverted(true);
+        KickerR.setInverted(true)
+        ;
         ampServo = new Servo(8);
 
         SpeakerShooterSpeed = constants.SpeakerShooterSpeed;
