@@ -169,12 +169,12 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
 
     NamedCommands.registerCommand("StopShootIntake", Commands.runOnce(() -> noteHandle.stop()));
-    NamedCommands.registerCommand("Ready", Commands.run(() -> noteHandle.intake()));
-    NamedCommands.registerCommand("Fire", Commands.run(() -> noteHandle.shoot())
-        .alongWith(Commands.waitSeconds(3))
-        .andThen(Commands.run(() -> noteHandle.prime())));
+    NamedCommands.registerCommand("Ready", Commands.runOnce(() -> noteHandle.intake()));
+    NamedCommands.registerCommand("Fire", Commands.runOnce(() -> noteHandle.shoot())
+        .andThen(Commands.waitSeconds(3))
+        .andThen(Commands.runOnce(() -> noteHandle.prime())));
     NamedCommands.registerCommand("Aim", Commands.run(() -> noteHandle.revShoot())
-    .alongWith(Commands.waitSeconds(.75))
+    .andThen(Commands.waitSeconds(.75))
     .andThen(Commands.runOnce(() -> noteHandle.stop())));
     
 
@@ -201,6 +201,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("Elevator Position", m_ElevatorSubsystem.getPosition());
     SmartDashboard.putNumber("Shoulder L", m_ShoulderSubsystem.getLeft());
     SmartDashboard.putNumber("Shoulder R", m_ShoulderSubsystem.getRight());
+    SmartDashboard.putBoolean("Has Note", noteHandle.hasNote());
 
   }
 

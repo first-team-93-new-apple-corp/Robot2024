@@ -33,4 +33,7 @@ public class NoteHandle{
         shooterSubsystem.stop();
         intakeSubsystem.stop();
     }
+    public boolean hasNote() {
+        return intakeSubsystem.hasNote();
+    }
 }
