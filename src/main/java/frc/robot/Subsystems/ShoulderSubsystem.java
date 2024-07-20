@@ -9,7 +9,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -174,8 +173,8 @@ public class ShoulderSubsystem extends SubsystemBase {
         // I learned about Ternary operators (https://www.w3schools.com/java/java_conditions_shorthand.asp)
         // This isn't a great use case but it works for now
         // yes I know that I should just use a global variable but I'm lazy (it took longer to write this than to actually move it lol)
-        boolean needsReset = (ShoulderL.getPosition().getValueAsDouble() < (tempPos - 3)
-                || ShoulderL.getPosition().getValueAsDouble() > (tempPos + 3));
+        boolean needsReset = (ShoulderL.getPosition().getValueAsDouble() < (tempPos - 4)
+                || ShoulderL.getPosition().getValueAsDouble() > (tempPos + 4));
                 SmartDashboard.putBoolean("needsReset", needsReset);
         if (needsReset) {
             // System.out.println("Reset shoulder motor position(s)");
