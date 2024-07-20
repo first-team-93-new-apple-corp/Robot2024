@@ -170,12 +170,11 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("StopShootIntake", Commands.runOnce(() -> noteHandle.stop()));
     NamedCommands.registerCommand("Ready", Commands.runOnce(() -> noteHandle.intake()));
-    NamedCommands.registerCommand("Fire", Commands.runOnce(() -> noteHandle.shoot())
-        .andThen(Commands.waitSeconds(3))
-        .andThen(Commands.runOnce(() -> noteHandle.prime())));
-    NamedCommands.registerCommand("Aim", Commands.run(() -> noteHandle.revShoot())
+    NamedCommands.registerCommand("Fire", Commands.runOnce(() -> noteHandle.shoot()));
+    NamedCommands.registerCommand("Aim", Commands.runOnce(() -> noteHandle.revShoot())
     .andThen(Commands.waitSeconds(.75))
     .andThen(Commands.runOnce(() -> noteHandle.stop())));
+    NamedCommands.registerCommand("Kick", Commands.runOnce(() -> noteHandle.prime()));
     
 
     autoChooser = AutoBuilder.buildAutoChooser();

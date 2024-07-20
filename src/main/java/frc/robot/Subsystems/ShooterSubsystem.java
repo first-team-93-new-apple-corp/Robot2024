@@ -8,7 +8,7 @@ public class ShooterSubsystem {
     TalonFX shooterMotor;
 
     private double intakeSpeed = -0.2;
-    private double shootSpeed = 1;
+    private double shootSpeed = 0.8;
     private double ampSpeed = 0.4;
     public ShooterSubsystem() {
         shooterMotor = new TalonFX(Constants.CTRE.Shoot);

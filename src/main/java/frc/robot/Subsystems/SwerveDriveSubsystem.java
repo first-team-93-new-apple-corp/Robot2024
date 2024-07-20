@@ -54,7 +54,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
                                                                              // robot
                 new HolonomicPathFollowerConfig(new PIDConstants(3
                 , 0, 0.1),
-                        new PIDConstants(1.5, 0, 0.1),
+                        new PIDConstants(0, 0, 0),
                         TunerConstants.kSpeedAt12VoltsMps,
                         driveBaseRadius,                                                                                      //These values are deadzones, so to speak
                         new ReplanningConfig(true, true, .5,.25)),
