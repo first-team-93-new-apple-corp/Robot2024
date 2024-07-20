@@ -131,14 +131,5 @@ public class ShooterIOSim implements ShooterIO {
         }
     }
 
-    @Override
-    public void ServoUp() {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void ServoDown() {
-        // TODO Auto-generated method stub
-    }
     
 }
