@@ -31,8 +31,7 @@ public class ArmCalculation extends SubsystemBase {
         tY = values[1];
         tZ = values[2];
         distanceToTarget = Math.sqrt(Math.pow(tY, 2) + Math.pow(tZ, 2));
-        setpoint = distanceToTarget;
-        // m_ShoulderSubsystem.toSetpoint(setpoint);
+        setpoint = (13.389 * distanceToTarget) - (39.456);
         return setpoint;
     }
 
@@ -41,7 +40,9 @@ public class ArmCalculation extends SubsystemBase {
     }
     /*
      * List of working Limelight Distance | Shoulder Angle:
-     * 
-     * 
+     * 2.5 | -2.0
+     * 2.11 | -15.0
+     * 3.0 | 1.0
+     * 3.1 | 2.5
      */
 }
