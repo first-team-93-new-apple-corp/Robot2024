@@ -13,7 +13,7 @@ public class Vision extends SubsystemBase {
     private Double[] values;
     private Double[] defaultValues;
     private double rotation;
-    private PIDController pid = new PIDController(0.2, 0, 0.05);
+    private PIDController pid = new PIDController(0.05, 0, 0);
     // private SlewRateLimiter slew = new SlewRateLimiter(0.4);
     // private SwerveRequest.RobotCentric drivereq = new SwerveRequest.RobotCentric();
     public Vision() {

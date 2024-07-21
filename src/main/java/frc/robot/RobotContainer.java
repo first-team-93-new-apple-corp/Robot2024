@@ -73,8 +73,7 @@ public class RobotContainer {
 
   private ArmHelper m_ArmHelper;
   private ShoulderSubsystem m_ShoulderSubsystem = new ShoulderSubsystem();
-  private ArmCalculation m_ArmCalculation = new
-  ArmCalculation(m_ShoulderSubsystem);
+  private ArmCalculation m_ArmCalculation = new ArmCalculation(m_ShoulderSubsystem);
   private ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private Vision m_Vision = new Vision();
   private ElevatorZeroCommand m_ElevatorZeroCommand = new ElevatorZeroCommand(m_ElevatorSubsystem);
@@ -139,12 +138,13 @@ public class RobotContainer {
     m_XboxDriver.povLeft().onFalse(Commands.runOnce(() -> noteHandle.stop()));
     m_XboxDriver.leftBumper().whileTrue(Commands.run(() -> noteHandle.amp()));
     m_XboxDriver.leftBumper().onFalse(Commands.runOnce(() -> noteHandle.stop()));
+    m_XboxDriver.povRight().onTrue(m_ArmCalculation.calculate());
     // Funny a button
     m_XboxDriver.a().whileTrue(
         drivetrain.applyRequest(() -> drive
-            .withVelocityX((-m_XboxDriver.getLeftY() * Math.abs(m_XboxDriver.getLeftY())) * MaxSpeed)
-            .withVelocityY((-m_XboxDriver.getLeftX() * Math.abs(m_XboxDriver.getLeftX())) * MaxSpeed)
-            .withRotationalRate(m_Vision.pointToCalc())));
+        .withVelocityX(-m_LeftStick.getRawAxis(1) * MaxSpeed)
+        .withVelocityY(-m_LeftStick.getRawAxis(0) * MaxSpeed)
+        .withRotationalRate(m_Vision.pointToCalc())));
     // Drive Controls
     if (DriverStation.getJoystickIsXbox(0)) {
       drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -201,7 +201,6 @@ public class RobotContainer {
     SmartDashboard.putNumber("Shoulder L", m_ShoulderSubsystem.getLeft());
     SmartDashboard.putNumber("Shoulder R", m_ShoulderSubsystem.getRight());
     SmartDashboard.putBoolean("Has Note", noteHandle.hasNote());
-    SmartDashboard.putNumber("Theoretical distance", m_ArmCalculation.calculateSetpoint());
     if (lastSet != SmartDashboard.getNumber("Shoulder Test Setpoint", 0)) {
       lastSet = SmartDashboard.getNumber("Shoulder Test Setpoint", 0);
       m_ShoulderSubsystem.toSetpoint(lastSet);
