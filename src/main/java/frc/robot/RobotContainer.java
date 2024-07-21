@@ -73,16 +73,18 @@ public class RobotContainer {
 
   private ArmHelper m_ArmHelper;
   private ShoulderSubsystem m_ShoulderSubsystem = new ShoulderSubsystem();
-  private ArmCalculation m_ArmCalculation = new ArmCalculation(m_ShoulderSubsystem);
+  private ArmCalculation m_ArmCalculation = new
+  ArmCalculation(m_ShoulderSubsystem);
   private ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private Vision m_Vision = new Vision();
   private ElevatorZeroCommand m_ElevatorZeroCommand = new ElevatorZeroCommand(m_ElevatorSubsystem);
   private IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   private NoteHandle noteHandle = new NoteHandle(m_IntakeSubsystem, m_ShooterSubsystem);
+  private double lastSet = 0;
 
   private void configureBindings() {
-    // SmartDashboard.putNumber("Elevator Setpoint", 35);
+    SmartDashboard.putNumber("Shoulder Test Setpoint", 0);
     m_Vision.periodic();
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive
@@ -173,7 +175,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("Fire", Commands.runOnce(() -> noteHandle.shoot()));
     NamedCommands.registerCommand("Aim", Commands.runOnce(() -> noteHandle.revShoot()));
     NamedCommands.registerCommand("Kick", Commands.runOnce(() -> noteHandle.prime()));
-    
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -199,7 +200,11 @@ public class RobotContainer {
     SmartDashboard.putNumber("Shoulder L", m_ShoulderSubsystem.getLeft());
     SmartDashboard.putNumber("Shoulder R", m_ShoulderSubsystem.getRight());
     SmartDashboard.putBoolean("Has Note", noteHandle.hasNote());
-
+    SmartDashboard.putNumber("Theoretical distance", m_ArmCalculation.calculateSetpoint());
+    if (lastSet != SmartDashboard.getNumber("Shoulder Test Setpoint", 0)) {
+      lastSet = SmartDashboard.getNumber("Shoulder Test Setpoint", 0);
+      m_ShoulderSubsystem.toSetpoint(lastSet);
+    }
   }
 
   public Command getTeleopCommand() {
@@ -219,22 +224,24 @@ public class RobotContainer {
   }
 
   // public void checkConflictShoot() {
-  //   if (!m_XboxDriver.x().getAsBoolean()) {
-  //     noteHandle.stop();
-  //   }
+  // if (!m_XboxDriver.x().getAsBoolean()) {
+  // noteHandle.stop();
+  // }
   // }
 
   // public void checkConflictIntake() {
-  //   if (!m_XboxDriver.rightTrigger().getAsBoolean()) {
-  //     noteHandle.stop();
-  //   }
+  // if (!m_XboxDriver.rightTrigger().getAsBoolean()) {
+  // noteHandle.stop();
+  // }
   // }
 
   // public void checkConflict() {
-  //   if (!(m_XboxDriver.leftBumper().getAsBoolean() && m_XboxDriver.povLeft().getAsBoolean()
-  //       && m_XboxDriver.rightTrigger().getAsBoolean() && m_XboxDriver.leftTrigger().getAsBoolean())) {
-  //         noteHandle.stop();
-  //   }
+  // if (!(m_XboxDriver.leftBumper().getAsBoolean() &&
+  // m_XboxDriver.povLeft().getAsBoolean()
+  // && m_XboxDriver.rightTrigger().getAsBoolean() &&
+  // m_XboxDriver.leftTrigger().getAsBoolean())) {
+  // noteHandle.stop();
+  // }
   // }
 
 }
