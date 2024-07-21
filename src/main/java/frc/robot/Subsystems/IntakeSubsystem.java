@@ -10,9 +10,9 @@ import frc.robot.Constants;
 public class IntakeSubsystem {
     public TalonFX intakeMotor;
 
-    private double intakeSpeed = 0.5;
-    private double shootSpeed = 1;
-    private double ampSpeed = 0.5;
+    private double intakeSpeed = 0.75;
+    private double shootSpeed = .80;
+    private double ampSpeed = 0.4;
     private TimeOfFlight TOF;
     public IntakeSubsystem() {
         intakeMotor = new TalonFX(Constants.CTRE.Intake);
@@ -33,7 +33,7 @@ public class IntakeSubsystem {
         intakeMotor.set(shootSpeed);
     }
     public void revShoot(){
-        intakeMotor.set(-0.2);
+        intakeMotor.set(-0.1);
     }
     public void amp() {
         intakeMotor.set(ampSpeed);

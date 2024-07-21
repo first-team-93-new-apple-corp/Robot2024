@@ -170,12 +170,10 @@ public class RobotContainer {
     }
     drivetrain.registerTelemetry(logger::telemeterize);
 
-    NamedCommands.registerCommand("StopShootIntake", Commands.runOnce(() -> noteHandle.stop()));
+    NamedCommands.registerCommand("Stop", Commands.runOnce(() -> noteHandle.stop()));
     NamedCommands.registerCommand("Ready", Commands.runOnce(() -> noteHandle.intake()));
     NamedCommands.registerCommand("Fire", Commands.runOnce(() -> noteHandle.shoot()));
-    NamedCommands.registerCommand("Aim", Commands.runOnce(() -> noteHandle.revShoot())
-        .andThen(Commands.waitSeconds(.75))
-        .andThen(Commands.runOnce(() -> noteHandle.stop())));
+    NamedCommands.registerCommand("Aim", Commands.runOnce(() -> noteHandle.revShoot()));
     NamedCommands.registerCommand("Kick", Commands.runOnce(() -> noteHandle.prime()));
 
     autoChooser = AutoBuilder.buildAutoChooser();
