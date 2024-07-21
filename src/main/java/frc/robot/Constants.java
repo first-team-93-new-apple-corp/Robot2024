@@ -147,7 +147,7 @@ public final class Constants {
     public enum ARM_SETPOINTS {
         Intake(-20, -0.01, ARM_SECTOR.INTAKE),
         Amp(75, 75, ARM_SECTOR.AMP),
-        Shoot(0, 0, ARM_SECTOR.SHOOT);
+        Shoot(15, 0, ARM_SECTOR.SHOOT);
 
         private double shoulderPosition, elevatorPosition;
         private ARM_SECTOR desiredArmSector;

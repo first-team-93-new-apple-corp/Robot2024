@@ -118,6 +118,7 @@ public class RobotContainer {
     // B
     m_XboxDriver.b().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Intake));
     // X
+    m_XboxDriver.rightBumper().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Shoot));
     m_XboxDriver.x().whileTrue(Commands.run(() -> noteHandle.intake()));
     // Right trigger
     m_XboxDriver.rightTrigger().whileTrue(Commands.run(() -> noteHandle.shoot()));
