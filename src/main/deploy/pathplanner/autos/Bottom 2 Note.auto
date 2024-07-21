@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7792735585471171,
+      "y": 4.365853095342555
+    },
+    "rotation": -60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker Bottom To Bottom Note"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Speaker Bottom",
+  "choreoAuto": false
+}
