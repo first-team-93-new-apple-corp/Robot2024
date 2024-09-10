@@ -16,10 +16,8 @@ public class ServoSubsystem extends SubsystemBase {
     public void setServo(double Position) {
         AmpServo.set(Position);
     }
+    
 
-    /**
-     * Commands
-     */
     public class Commands {
         ServoSubsystem subsystem;
 

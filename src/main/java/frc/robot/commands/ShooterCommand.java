@@ -6,6 +6,7 @@ import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 
 public class ShooterCommand extends Command {
     private XboxController opController = new XboxController(2);
@@ -21,7 +22,7 @@ public class ShooterCommand extends Command {
     }
 
     public Command AutonShooter() {
-        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.ShootingforAuton());
+        return m_ShooterSubsystem.runOnce(() -> m_ShooterSubsystem.prime()).andThen(Commands.waitSeconds(1)).andThen(m_ShooterSubsystem.runOnce(()-> m_ShooterSubsystem.kicker(1)));
     }
 
     public Command AutonStopShooter() {

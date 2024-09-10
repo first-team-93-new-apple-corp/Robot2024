@@ -24,12 +24,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "StopShooter"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Alternate (B.R  R.L) Shoot (B.R  R.L) Grab"
@@ -51,12 +45,6 @@
           "type": "wait",
           "data": {
             "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShooter"
           }
         },
         {

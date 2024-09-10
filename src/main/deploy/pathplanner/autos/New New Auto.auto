@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7546440958976746,
-      "y": 4.439635753631592
+      "x": 0.7536618709564209,
+      "y": 4.427195072174072
     },
-    "rotation": 119.99999986287999
+    "rotation": 119.97736230039438
   },
   "command": {
     "type": "sequential",
@@ -14,18 +14,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "{CHOREO} {BR RL}  4 note.1"
+            "pathName": "{Choreo} {BR RL} 2 note far.1"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ResetField"
+            "pathName": "{Choreo} {BR RL} 2 note far.1"
           }
         }
       ]
     }
   },
-  "folder": "Choreo (BR RL)",
+  "folder": null,
   "choreoAuto": true
 }
