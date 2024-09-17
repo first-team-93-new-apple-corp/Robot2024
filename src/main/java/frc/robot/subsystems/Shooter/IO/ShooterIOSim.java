@@ -130,6 +130,5 @@ public class ShooterIOSim implements ShooterIO {
             SpeakerShooterSpeed -= 0.05; // -5%speed
         }
     }
-
     
 }
