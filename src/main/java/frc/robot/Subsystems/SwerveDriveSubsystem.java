@@ -14,6 +14,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
@@ -34,6 +35,9 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
         if (Utils.isSimulation()) {
             startSimThread();
         }
+    }
+    public Pose2d getpPose2d(){
+        return m_odometry.getEstimatedPosition();
     }
     public SwerveDriveSubsystem(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
