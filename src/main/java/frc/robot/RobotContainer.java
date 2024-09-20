@@ -135,7 +135,7 @@ public class RobotContainer {
       m_XboxDriver.rightBumper().whileTrue(new ArmToSetpoint(m_ArmHelper, ARM_SETPOINTS.Shoot));
       m_XboxDriver.x().whileTrue(Commands.run(() -> noteHandle.intake()));
       // Right trigger
-      m_XboxDriver.rightTrigger().whileTrue(Commands.run(() -> noteHandle.shoot()));
+      m_XboxDriver.rightTrigger().whileTrue(m_ArmCalculation.calculate());
       // m_XboxDriver.rightTrigger().onFalse(Commands.runOnce(() ->
       // checkConflictShoot()));
       m_XboxDriver.rightTrigger().onFalse(Commands.runOnce(() -> noteHandle.stop()));
@@ -151,10 +151,11 @@ public class RobotContainer {
       m_XboxDriver.povDown().onTrue(Commands.runOnce(() -> m_ShoulderSubsystem.testdown()));
       m_XboxDriver.povLeft().whileTrue(Commands.run(() -> noteHandle.revShoot()));
       m_XboxDriver.povLeft().onFalse(Commands.runOnce(() -> noteHandle.stop()));
-      m_XboxDriver.leftBumper().whileTrue(Commands.run(() -> m_ShooterSubsystem.autoSpeed()));
+      m_XboxDriver.leftBumper().whileTrue(Commands.run(() -> noteHandle.amp()));
       m_XboxDriver.leftBumper().onFalse(Commands.runOnce(() -> m_ShooterSubsystem.stop()));
-      m_XboxDriver.povRight().onTrue(m_ArmCalculation.calculate());
-      m_XboxDriver.povRight().onFalse(Commands.runOnce(() -> m_ShooterSubsystem.stop()));
+      // m_XboxDriver.povRight().onTrue();
+      // m_XboxDriver.povRight().onFalse(Commands.runOnce(() -> m_ShooterSubsystem.stop()));
+      // for right pov try to add auto aim toards the april tag, speaker
       // Funny a button
       m_XboxDriver.a().whileTrue(
           drivetrain.applyRequest(() -> drive
