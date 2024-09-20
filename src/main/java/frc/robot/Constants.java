@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 
 public final class Constants {
     public class goals {
-        public static Pose3d RedSpeaker = new Pose3d(0, 0, 0, new Rotation3d());
+        public static Pose3d RedSpeaker = new Pose3d(-1.0, 0, 2.032, new Rotation3d());
         public static Pose3d BlueSpeaker = new Pose3d(0, 0, 0, new Rotation3d());
     }
     public class Sensors {

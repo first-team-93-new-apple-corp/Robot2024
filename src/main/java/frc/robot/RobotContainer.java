@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -268,7 +269,7 @@ public class RobotContainer {
       lastSet = SmartDashboard.getNumber("Shoulder Test Setpoint", 0);
       m_ShoulderSubsystem.toSetpoint(lastSet);
     }
-    drivetrain.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("limelight-front"), 0);
+    drivetrain.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("limelight-front"), Timer.getFPGATimestamp());
   }
 
   public Command getTeleopCommand() {
