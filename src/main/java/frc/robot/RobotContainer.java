@@ -74,16 +74,17 @@ public class RobotContainer {
   // private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
   // private final SwerveRequest.PointWheelsAt point = new
   // SwerveRequest.PointWheelsAt();
+  private ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   private final Telemetry logger = new Telemetry(MaxSpeed);
   private double FieldRelativeOffset = 0;
   private ArmHelper m_ArmHelper;
   private ShoulderSubsystem m_ShoulderSubsystem = new ShoulderSubsystem();
-  private ArmCalculation m_ArmCalculation = new ArmCalculation(m_ShoulderSubsystem,() -> drivetrain.getpPose2d());
+  private ArmCalculation m_ArmCalculation = new ArmCalculation(m_ShoulderSubsystem, m_ShooterSubsystem, () -> drivetrain.getpPose2d());
   private ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private Vision m_Vision = new Vision(drivetrain.getPigeon2());
   private ElevatorZeroCommand m_ElevatorZeroCommand = new ElevatorZeroCommand(m_ElevatorSubsystem);
   private IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
-  private ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+  
   private NoteHandle noteHandle = new NoteHandle(m_IntakeSubsystem, m_ShooterSubsystem);
   private double lastSet = 0;
 
@@ -150,8 +151,8 @@ public class RobotContainer {
       m_XboxDriver.povDown().onTrue(Commands.runOnce(() -> m_ShoulderSubsystem.testdown()));
       m_XboxDriver.povLeft().whileTrue(Commands.run(() -> noteHandle.revShoot()));
       m_XboxDriver.povLeft().onFalse(Commands.runOnce(() -> noteHandle.stop()));
-      m_XboxDriver.leftBumper().whileTrue(Commands.run(() -> noteHandle.amp()));
-      m_XboxDriver.leftBumper().onFalse(Commands.runOnce(() -> noteHandle.stop()));
+      m_XboxDriver.leftBumper().whileTrue(Commands.run(() -> m_ShooterSubsystem.autoSpeed()));
+      m_XboxDriver.leftBumper().onFalse(Commands.runOnce(() -> m_ShooterSubsystem.stop()));
       m_XboxDriver.povRight().onTrue(m_ArmCalculation.calculate());
       // Funny a button
       m_XboxDriver.a().whileTrue(

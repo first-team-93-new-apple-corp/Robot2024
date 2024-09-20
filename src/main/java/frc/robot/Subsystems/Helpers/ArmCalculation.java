@@ -10,6 +10,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShoulderSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -25,14 +26,19 @@ public class ArmCalculation extends SubsystemBase {
     double c;
     double unclamped;
     double angleRad;
+    double[] points;
+    double speed;
+
     // deltaX^2 + deltaY^2 + deltaZ^2 = Distance^2!
     private double setpoint;
     ShoulderSubsystem m_ShoulderSubsystem;
+    ShooterSubsystem m_ShooterSubsystem;
     public Supplier<Pose2d> pose;
 
-    public ArmCalculation(ShoulderSubsystem m_ShoulderSubsystem2, Supplier<Pose2d> pose) {
+    public ArmCalculation(ShoulderSubsystem m_ShoulderSubsystem2, ShooterSubsystem m_ShooterSubsystem2, Supplier<Pose2d> pose) {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         this.m_ShoulderSubsystem = m_ShoulderSubsystem2;
+        this.m_ShooterSubsystem = m_ShooterSubsystem2;
         this.pose = pose;
     }
 
@@ -55,20 +61,36 @@ public class ArmCalculation extends SubsystemBase {
         //                     *((pose.get().getY() - Constants.goals.RedSpeaker.getY())))
         //                     +(((0 - Constants.goals.RedSpeaker.getZ()))
         //                     *((0 - Constants.goals.RedSpeaker.getZ()))));
-        b = (pose.get().getX() - Constants.goals.RedSpeaker.getX());
-        a = (Constants.goals.RedSpeaker.getZ());
-        c = ((a*a)+(b*b));
-        // d = ((a*a)+(b*b)+(c*c))
-        distanceToTarget = Math.sqrt(c);
+        // b = (pose.get().getX() - Constants.goals.RedSpeaker.getX());
+        // a = (Constants.goals.RedSpeaker.getZ());
+        // c = ((a*a)+(b*b));
+        // // d = ((a*a)+(b*b)+(c*c))
+        // distanceToTarget = Math.sqrt(c);
 
-        setpoint = Math.acos(b/(distanceToTarget));
-        angleRad = setpoint;
-        setpoint = Math.toDegrees(angleRad)+45-20-12;
-        unclamped = (setpoint);
+        // setpoint = Math.acos(b/(distanceToTarget));
+        // angleRad = setpoint;
+        // setpoint = Math.toDegrees(angleRad)+45-20-12;
+        // unclamped = (setpoint);
+
+
+
         setpoint = MathUtil.clamp(setpoint, -10, 30);
         m_ShoulderSubsystem.toSetpoint(setpoint);
-    }
+        m_ShooterSubsystem.set(speed);
 
+    }
+    public void isClosestTo(double xVal){
+        // double closestPoint = points.get(0);
+    }
+    double[] poseXPoints = {15, 14.5, 14, 13.5};
+    /*
+       * PoseX, Angle, Speed(optional)     
+     * 1 (15, -20, 0.5)
+     * 2 (14.5, -3, 0.5)
+     * 3 (14, )
+     * 4
+     * 5
+     */
     public Command calculate() {
         return this.runOnce(() -> calculateSetpoint());
     }
@@ -78,7 +100,7 @@ public class ArmCalculation extends SubsystemBase {
         SmartDashboard.putNumber("distancetotarget", distanceToTarget);
         SmartDashboard.putNumber("setpoint", setpoint);
         SmartDashboard.putNumber("unclamped Setpoint", unclamped);
-        SmartDashboard.putNumber("getx", pose.get().getX()- Constants.goals.RedSpeaker.getX());
+        SmartDashboard.putNumber("getx", pose.get().getX());
         SmartDashboard.putNumber("gety", pose.get().getY());
     }
     /*

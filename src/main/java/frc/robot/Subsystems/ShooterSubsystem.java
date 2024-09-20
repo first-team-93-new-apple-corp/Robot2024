@@ -10,12 +10,18 @@ public class ShooterSubsystem {
     private double intakeSpeed = -0.4;
     private double shootSpeed = .5; //0.8;
     private double ampSpeed = 0.4;
+    private double autoSpeed;
     public ShooterSubsystem() {
         shooterMotor = new TalonFX(Constants.CTRE.Shoot);
     }
 
     public void set(double in) {
         shooterMotor.set(in);
+        autoSpeed = in;
+    }
+
+    public void autoSpeed(){
+        shooterMotor.set(autoSpeed);
     }
 
     public void stop() {
@@ -25,7 +31,7 @@ public class ShooterSubsystem {
     public void intake() {
         shooterMotor.set(intakeSpeed);
     }
-
+    
     public void shoot() {
         shooterMotor.set(shootSpeed);
     }
