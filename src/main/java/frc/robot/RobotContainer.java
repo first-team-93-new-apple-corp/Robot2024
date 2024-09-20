@@ -154,6 +154,7 @@ public class RobotContainer {
       m_XboxDriver.leftBumper().whileTrue(Commands.run(() -> m_ShooterSubsystem.autoSpeed()));
       m_XboxDriver.leftBumper().onFalse(Commands.runOnce(() -> m_ShooterSubsystem.stop()));
       m_XboxDriver.povRight().onTrue(m_ArmCalculation.calculate());
+      m_XboxDriver.povRight().onFalse(Commands.runOnce(() -> m_ShooterSubsystem.stop()));
       // Funny a button
       m_XboxDriver.a().whileTrue(
           drivetrain.applyRequest(() -> drive

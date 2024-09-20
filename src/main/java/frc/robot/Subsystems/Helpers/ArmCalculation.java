@@ -28,6 +28,7 @@ public class ArmCalculation extends SubsystemBase {
     double angleRad;
     double[] points;
     double speed;
+    double test;
 
     // deltaX^2 + deltaY^2 + deltaZ^2 = Distance^2!
     private double setpoint;
@@ -35,7 +36,8 @@ public class ArmCalculation extends SubsystemBase {
     ShooterSubsystem m_ShooterSubsystem;
     public Supplier<Pose2d> pose;
 
-    public ArmCalculation(ShoulderSubsystem m_ShoulderSubsystem2, ShooterSubsystem m_ShooterSubsystem2, Supplier<Pose2d> pose) {
+    public ArmCalculation(ShoulderSubsystem m_ShoulderSubsystem2, ShooterSubsystem m_ShooterSubsystem2,
+            Supplier<Pose2d> pose) {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         this.m_ShoulderSubsystem = m_ShoulderSubsystem2;
         this.m_ShooterSubsystem = m_ShooterSubsystem2;
@@ -56,11 +58,11 @@ public class ArmCalculation extends SubsystemBase {
         // SmartDashboard.putNumber("Theoretical distance", distanceToTarget);
         // setpoint = (16.1086 * distanceToTarget) - (46.5057);
         // distanceToTarget = (((pose.get().getX() - Constants.goals.RedSpeaker.getX())
-        //                     *(pose.get().getX() - Constants.goals.RedSpeaker.getX()))
-        //                     +(((pose.get().getY() - Constants.goals.RedSpeaker.getY()))
-        //                     *((pose.get().getY() - Constants.goals.RedSpeaker.getY())))
-        //                     +(((0 - Constants.goals.RedSpeaker.getZ()))
-        //                     *((0 - Constants.goals.RedSpeaker.getZ()))));
+        // *(pose.get().getX() - Constants.goals.RedSpeaker.getX()))
+        // +(((pose.get().getY() - Constants.goals.RedSpeaker.getY()))
+        // *((pose.get().getY() - Constants.goals.RedSpeaker.getY())))
+        // +(((0 - Constants.goals.RedSpeaker.getZ()))
+        // *((0 - Constants.goals.RedSpeaker.getZ()))));
         // b = (pose.get().getX() - Constants.goals.RedSpeaker.getX());
         // a = (Constants.goals.RedSpeaker.getZ());
         // c = ((a*a)+(b*b));
@@ -72,19 +74,48 @@ public class ArmCalculation extends SubsystemBase {
         // setpoint = Math.toDegrees(angleRad)+45-20-12;
         // unclamped = (setpoint);
 
-
-
+        // m_ShooterSubsystem.set(speed);
+        test = findClossest((pose.get().getX()), poseXPoints);
+        if (test == 15.0) {
+            setpoint = -20;
+            speed = 0.5;
+        } else if (test == 14.5) {
+            setpoint = -3;
+            speed = 0.5;
+        } else if (test == 14.25) {
+            setpoint = 0;
+            speed = 0.6;
+        } else if (test == 14.0) {
+            setpoint = 3;
+            speed = 0.75;
+        } else {
+            setpoint = 10;
+            speed = 0;
+        }
+        m_ShooterSubsystem.set(speed);
         setpoint = MathUtil.clamp(setpoint, -10, 30);
         m_ShoulderSubsystem.toSetpoint(setpoint);
-        m_ShooterSubsystem.set(speed);
+    }
 
+    public double findClossest(double input, double[] array) {
+        double clossestValue = array[0];
+        double smallestDifference = Math.abs(input - clossestValue);
+
+        for (double value : array) {
+            double difference = Math.abs(input - value);
+            if (difference < smallestDifference) {
+                smallestDifference = difference;
+                clossestValue = value;
+
+            }
+        }
+        return clossestValue;
     }
-    public void isClosestTo(double xVal){
-        // double closestPoint = points.get(0);
-    }
-    double[] poseXPoints = {15, 14.5, 14, 13.5};
+
+    double[] poseXPoints = { 15, 14.5, 14.25, 14, 13.5 };
+
     /*
-       * PoseX, Angle, Speed(optional)     
+     * PoseX, Angle, Speed(optional)
      * 1 (15, -20, 0.5)
      * 2 (14.5, -3, 0.5)
      * 3 (14, )
@@ -96,12 +127,13 @@ public class ArmCalculation extends SubsystemBase {
     }
 
     @Override
-    public void periodic(){
+    public void periodic() {
         SmartDashboard.putNumber("distancetotarget", distanceToTarget);
         SmartDashboard.putNumber("setpoint", setpoint);
         SmartDashboard.putNumber("unclamped Setpoint", unclamped);
         SmartDashboard.putNumber("getx", pose.get().getX());
         SmartDashboard.putNumber("gety", pose.get().getY());
+        SmartDashboard.putNumber("test setpoing", test);
     }
     /*
      * List of working Limelight Distance | Shoulder Angle:
