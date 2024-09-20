@@ -15,6 +15,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -43,9 +44,11 @@ import frc.robot.subsystems.Helpers.Vision;
 
 public class RobotContainer {
   // Constants / Other things
+  private ChassisSpeeds speeds;
+  private ChassisSpeeds fieldSpeeds;
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
-
+  private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   // Joysticks / Controllers
   private final Joystick m_LeftStick = new Joystick(0);
   private final Joystick m_RightStick = new Joystick(1);
@@ -72,7 +75,7 @@ public class RobotContainer {
   // private final SwerveRequest.PointWheelsAt point = new
   // SwerveRequest.PointWheelsAt();
   private final Telemetry logger = new Telemetry(MaxSpeed);
-
+  private double FieldRelativeOffset = 0;
   private ArmHelper m_ArmHelper;
   private ShoulderSubsystem m_ShoulderSubsystem = new ShoulderSubsystem();
   private ArmCalculation m_ArmCalculation = new ArmCalculation(m_ShoulderSubsystem,() -> drivetrain.getpPose2d());
@@ -87,23 +90,30 @@ public class RobotContainer {
   private void configureBindings() {
     SmartDashboard.putNumber("Shoulder Test Setpoint", 0);
     m_Vision.periodic();
-    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive
-            .withVelocityX(
-                -m_LeftStick.getRawAxis(Constants.Thrustmaster.Axis.y)
-                    * MaxSpeed)
-            .withVelocityY(
-                -m_LeftStick.getRawAxis(Constants.Thrustmaster.Axis.x)
-                    * MaxSpeed)
-            .withRotationalRate(
-                -m_RightStick.getRawAxis(Constants.Thrustmaster.Axis.x)
-                    * MaxAngularRate)));
+    // drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+    //     drivetrain.applyRequest(() -> drive
+    //         .withVelocityX(
+    //             -m_LeftStick.getRawAxis(Constants.Thrustmaster.Axis.y)
+    //                 * MaxSpeed)
+    //         .withVelocityY(
+    //             -m_LeftStick.getRawAxis(Constants.Thrustmaster.Axis.x)
+    //                 * MaxSpeed)
+    //         .withRotationalRate(
+    //             -m_RightStick.getRawAxis(Constants.Thrustmaster.Axis.x)
+    //                 * MaxAngularRate)));
+    drivetrain.setDefaultCommand(
+      drivetrain.applyRequest(() -> m_swerveRequest
+      .withCenterOfRotation(DriveConstants.Center)
+      .withSpeeds(fieldSpeeds)));
     // Brake while held
     // m_JoystickTrigger.onTrue(drivetrain.applyRequest(() -> brake));
     // Points all in a direction
 
     // reset the field-centric heading on left bumper press
-    m_FieldRelativeButton.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    m_FieldRelativeButton.onTrue(
+      drivetrain.applyRequest(() -> m_swerveRequest
+       .withCenterOfRotation(DriveConstants.Center)
+       .withSpeeds(fieldSpeeds)));
 
     // m_XboxDriver.leftBumper().onTrue(drivetrain.runOnce(() ->
     // drivetrain.seedFieldRelative()));
@@ -161,15 +171,15 @@ public class RobotContainer {
                                 * Math.abs(m_XboxDriver.getRightX()))
                                 * MaxAngularRate)));
       } else {
-        drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() -> drive.withVelocityX(-m_LeftStick.getRawAxis(1) * MaxSpeed) // Drive forward
-                                                                                                     // with
-                // negative Y (forward)
-                .withVelocityY(-m_LeftStick.getRawAxis(0) * MaxSpeed) // Drive left with negative X (left)
-                .withRotationalRate(-m_RightStick.getRawAxis(0) * MaxAngularRate) // Drive counterclockwise with
-                                                                                  // negative
-                                                                                  // X (left)
-            ));
+        // drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+        //     drivetrain.applyRequest(() -> drive.withVelocityX(-m_LeftStick.getRawAxis(1) * MaxSpeed) // Drive forward with negative Y (forward)
+        //         .withVelocityY(-m_LeftStick.getRawAxis(0) * MaxSpeed) // Drive left with negative X (left)
+        //         .withRotationalRate(-m_RightStick.getRawAxis(0) * MaxAngularRate) // Drive counterclockwise with
+        //                                                                           // negative
+        //                                                                           // X (left)
+        //     ));
+        drivetrain.setDefaultCommand(drivetrain.applyRequest(() ->
+        m_swerveRequest.withCenterOfRotation(DriveConstants.Center).withSpeeds(fieldSpeeds)));
       }
     } else {
       System.out.println(DriverStation.getJoystickName(2));
@@ -254,7 +264,16 @@ public class RobotContainer {
     configureBindings();
   }
 
+
   public void updateValues() {
+    if(m_LeftStick.getRawButton(12)){
+      FieldRelativeOffset = drivetrain.getPigeon2().getRotation2d().getRadians();
+    }
+    speeds = new ChassisSpeeds(
+      (-m_LeftStick.getRawAxis(Constants.Thrustmaster.Axis.y) * MaxSpeed),
+      (-m_LeftStick.getRawAxis(Constants.Thrustmaster.Axis.x) * MaxSpeed),
+      (-m_RightStick.getRawAxis(Constants.Thrustmaster.Axis.x) * MaxAngularRate));
+    fieldSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, new Rotation2d(drivetrain.getPigeon2().getRotation2d().getRadians() ).rotateBy(Rotation2d.fromRadians(-FieldRelativeOffset)));
     SmartDashboard.putNumber("Shoulder Angle",
         m_ShoulderSubsystem.getPosition());
     SmartDashboard.putBoolean("Shoulder At Setpoint",
