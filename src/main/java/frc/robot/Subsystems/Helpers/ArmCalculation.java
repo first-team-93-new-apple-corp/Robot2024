@@ -21,11 +21,8 @@ public class ArmCalculation extends SubsystemBase {
     double distanceToTarget;
     double tZ;
     double tY;
-    double a;
-    double b;
-    double c;
-    double unclamped;
-    double angleRad;
+    double theda1;
+    double theda2;
     double[] points;
     double speed;
     double test;
@@ -51,48 +48,56 @@ public class ArmCalculation extends SubsystemBase {
     }
 
     public void calculateSetpoint() {
-        // values = getValues();
-        // tY = values[1];
-        // tZ = values[2];
-        // distanceToTarget = Math.sqrt(Math.pow(tY, 2) + Math.pow(tZ, 2));
-        // SmartDashboard.putNumber("Theoretical distance", distanceToTarget);
-        // setpoint = (16.1086 * distanceToTarget) - (46.5057);
-        // distanceToTarget = (((pose.get().getX() - Constants.goals.RedSpeaker.getX())
-        // *(pose.get().getX() - Constants.goals.RedSpeaker.getX()))
+        values = getValues();
+        tY = values[1];
+        tZ = values[2];
+        distanceToTarget = Math.sqrt(Math.pow(tY, 2) + Math.pow(tZ, 2));
+        
+        setpoint = (16.1086 * distanceToTarget) - (46.5057);
+        distanceToTarget = (((pose.get().getX() - Constants.goals.RedSpeaker.getX())
+        *(pose.get().getX() - Constants.goals.RedSpeaker.getX()))
+        
         // +(((pose.get().getY() - Constants.goals.RedSpeaker.getY()))
-        // *((pose.get().getY() - Constants.goals.RedSpeaker.getY())))
-        // +(((0 - Constants.goals.RedSpeaker.getZ()))
-        // *((0 - Constants.goals.RedSpeaker.getZ()))));
+        // *((pose.get().getY() - Constants.goals.RedSpeaker.getY()))));
+        +(((Constants.goals.RedSpeaker.getZ()))
+        *((Constants.goals.RedSpeaker.getZ()))));
+        SmartDashboard.putNumber("Theoretical distance", distanceToTarget);
         // b = (pose.get().getX() - Constants.goals.RedSpeaker.getX());
         // a = (Constants.goals.RedSpeaker.getZ());
         // c = ((a*a)+(b*b));
-        // // d = ((a*a)+(b*b)+(c*c))
-        // distanceToTarget = Math.sqrt(c);
-
+        // d = ((a*a)+(b*b)+(c*c));
+        
+        theda1 = Math.atan(Constants.goals.RedSpeaker.getZ()/(pose.get().getX() - Constants.goals.RedSpeaker.getX()));
+        theda2 = Math.toDegrees(theda1);
+        theda2 = Math.abs(theda2);
+        setpoint = (-theda2 + 40);
+        SmartDashboard.putNumber("Triangle", theda2);
+        SmartDashboard.putNumber("unClampedSetpoint", setpoint);
+        SmartDashboard.putNumber("Distance x", pose.get().getX() - Constants.goals.RedSpeaker.getX());
+        SmartDashboard.putNumber("Hight", Constants.goals.BlueSpeaker.getZ());
         // setpoint = Math.acos(b/(distanceToTarget));
         // angleRad = setpoint;
         // setpoint = Math.toDegrees(angleRad)+45-20-12;
-        // unclamped = (setpoint);
 
         // m_ShooterSubsystem.set(speed);
-        test = findClossest((pose.get().getX()), poseXPoints);
-        if (test == 15.0) {
-            setpoint = -20;
-            speed = 0.5;
-        } else if (test == 14.5) {
-            setpoint = -3;
-            speed = 0.5;
-        } else if (test == 14.25) {
-            setpoint = 0;
-            speed = 0.6;
-        } else if (test == 14.0) {
-            setpoint = 3;
-            speed = 0.75;
-        } else {
-            setpoint = 10;
-            speed = 0;
-        }
-        m_ShooterSubsystem.set(speed);
+        // test = findClossest((pose.get().getX()), poseXPoints);
+        // if (test == 15.0) {
+        //     setpoint = -20;
+        //     speed = 0.5;
+        // } else if (test == 14.5) {
+        //     setpoint = -3;
+        //     speed = 0.5;
+        // } else if (test == 14.25) {
+        //     setpoint = 0;
+        //     speed = 0.6;
+        // } else if (test == 14.0) {
+        //     setpoint = 3;
+        //     speed = 0.75;
+        // } else {
+        //     setpoint = 10;
+        //     speed = 0;
+        // }
+        // m_ShooterSubsystem.set(speed);
         setpoint = MathUtil.clamp(setpoint, -10, 30);
         m_ShoulderSubsystem.toSetpoint(setpoint);
     }
@@ -130,7 +135,7 @@ public class ArmCalculation extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("distancetotarget", distanceToTarget);
         SmartDashboard.putNumber("setpoint", setpoint);
-        SmartDashboard.putNumber("unclamped Setpoint", unclamped);
+        // SmartDashboard.putNumber("unclamped Setpoint", unclamped);
         SmartDashboard.putNumber("getx", pose.get().getX());
         SmartDashboard.putNumber("gety", pose.get().getY());
         SmartDashboard.putNumber("test setpoing", test);

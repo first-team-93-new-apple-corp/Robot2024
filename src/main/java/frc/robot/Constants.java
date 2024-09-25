@@ -5,8 +5,8 @@ import edu.wpi.first.math.geometry.Rotation3d;
 
 public final class Constants {
     public class goals {
-        public static Pose3d RedSpeaker = new Pose3d(-1.0, 0, 2.032, new Rotation3d());
-        public static Pose3d BlueSpeaker = new Pose3d(0, 0, 0, new Rotation3d());
+        public static Pose3d RedSpeaker = new Pose3d(16.15, 0, 2.032, new Rotation3d());
+        public static Pose3d BlueSpeaker = new Pose3d(0.15, 0, 2.032, new Rotation3d());
     }
     public class Sensors {
         public class DIO {
@@ -153,7 +153,7 @@ public final class Constants {
     // Formatted: Shoulder Angle, Elevator Pos, ARM_SECTOR
     public enum ARM_SETPOINTS {
         Intake(-20, -0.01, ARM_SECTOR.INTAKE),
-        Amp(75, 75, ARM_SECTOR.AMP),
+        Amp(67, 75, ARM_SECTOR.AMP),
         Shoot(15, 0, ARM_SECTOR.SHOOT);
 
         private double shoulderPosition, elevatorPosition;
