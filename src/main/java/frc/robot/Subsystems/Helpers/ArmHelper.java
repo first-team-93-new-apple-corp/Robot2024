@@ -95,7 +95,6 @@ public class ArmHelper extends SubsystemBase {
                     default:
                         return ARM_STATES.DO_NOTHING;
                 }
-
             default:
                 return ARM_STATES.DO_NOTHING;
         }

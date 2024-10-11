@@ -128,7 +128,7 @@ public class ArmCalculation extends SubsystemBase {
      * 5
      */
     public Command calculate() {
-        return this.runOnce(() -> calculateSetpoint());
+        return this.run(() -> calculateSetpoint());
     }
 
     @Override

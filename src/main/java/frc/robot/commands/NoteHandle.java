@@ -15,6 +15,16 @@ public class NoteHandle{
         shooterSubsystem.intake();
         intakeSubsystem.intake();
     }
+    public void upSpeed(){
+        shooterSubsystem.upSpeed();
+    }
+    public void downSpeed(){
+        shooterSubsystem.downSpeed();
+    }
+    public void demoIntake(){
+        shooterSubsystem.demoIntake();
+        intakeSubsystem.demoIntake();
+    }
     public void shoot() {
         shooterSubsystem.shoot();
     }

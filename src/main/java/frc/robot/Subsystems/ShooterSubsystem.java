@@ -8,7 +8,7 @@ public class ShooterSubsystem {
     TalonFX shooterMotor;
 
     private double intakeSpeed = -0.4;
-    private double shootSpeed = .5; //0.8;
+    private double shootSpeed = .95; //0.8;
     private double ampSpeed = 0.4;
     private double autoSpeed;
     public ShooterSubsystem() {
@@ -27,9 +27,17 @@ public class ShooterSubsystem {
     public void stop() {
         shooterMotor.set(0);
     }
-
+    public void upSpeed(){
+        shootSpeed += 10;
+    }
+    public void downSpeed(){
+        shootSpeed -= 10;
+    }
     public void intake() {
         shooterMotor.set(intakeSpeed);
+    }
+    public void demoIntake() {
+        shooterMotor.set(intakeSpeed/4);
     }
     
     public void shoot() {
