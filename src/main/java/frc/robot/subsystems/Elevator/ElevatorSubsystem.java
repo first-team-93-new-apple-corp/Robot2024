@@ -34,13 +34,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void runElevator(){
-        m_io.runElevator();
+        // m_io.runElevator();
     }
     public boolean atSetpoint(){
         return m_io.atSetpoint();
     }
     public void stopElevator(){
-        m_io.stopElevator();
+        // m_io.stopElevator();
     }
     public void toSetpoint(double newSetpoint){
         m_io.toSetpoint(newSetpoint);

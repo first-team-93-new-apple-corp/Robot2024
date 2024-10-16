@@ -46,10 +46,10 @@ public class Preflight extends Command {
                 rightFinished = true;
             }
         }
-        if(!elevatorFinished) {
-          elevatorCommand.preflight();  
+        // if(!elevatorFinished) {
+        //   elevatorCommand.preflight();  
           elevatorFinished = true;
-        } 
+        // } 
         
         // elevatorCommand.preflight();
         if (leftFinished && rightFinished && elevatorFinished) {

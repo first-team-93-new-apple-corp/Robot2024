@@ -3,7 +3,6 @@ package frc.robot.subsystems.Shooter.IO;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-
 import com.revrobotics.CANSparkMax;
 import frc.robot.Constants.ShooterConstants;
 
@@ -26,7 +25,6 @@ public class ShooterIOReal implements ShooterIO {
         ShooterR = new TalonFX(constants.ShooterR, "rio");
         ShooterL.setInverted(true);
         KickerR.setInverted(true);
-
         SpeakerShooterSpeed = constants.SpeakerShooterSpeed;
         MuzzleIntake = constants.MuzzleIntake;
         AmpShooterSpeed = constants.AmpShooterSpeed;

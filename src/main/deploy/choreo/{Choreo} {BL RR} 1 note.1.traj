@@ -1333,6 +1333,15 @@
           "name": "Shooter"
         }
       }
+    },
+    {
+      "timestamp": 0.01,
+      "command": {
+        "type": "wait",
+        "data": {
+          "waitTime": 0.5
+        }
+      }
     }
   ]
 }

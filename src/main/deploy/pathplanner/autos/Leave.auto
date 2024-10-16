@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.75,
-      "y": 6.7
+      "x": 0.4574735446429756,
+      "y": 7.25472706759367
     },
-    "rotation": -120.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -14,19 +14,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Shooter"
+            "name": "ResetField"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 10.0
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "StopShooter"
+            "pathName": "Leave"
           }
         }
       ]

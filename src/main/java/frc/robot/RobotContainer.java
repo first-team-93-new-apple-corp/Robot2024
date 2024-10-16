@@ -254,7 +254,7 @@ public class RobotContainer extends TimedRobot {
     // m_endSignalLogging = new JoystickButton(m_Joystick2, Constants.Thrustmaster.Right_Buttons.Bottom_Right);
     // --------------------------------------------NAMED COMMANDS--------------------------------------------
     NamedCommands.registerCommand("Intake", (m_IntakeCommand.Intake().alongWith(Commands.waitSeconds(1.5))).andThen(m_IntakeCommand.StopIntake().alongWith(m_ShooterCommand.StopShooter())));
-    NamedCommands.registerCommand("Shooter", m_ShooterCommand.AutonShooter().alongWith(Commands.waitSeconds(.5)).andThen(m_ShooterCommand.AutonStopShooter()));
+    NamedCommands.registerCommand("Shooter", m_ShooterCommand.AutonShooter().alongWith(Commands.waitSeconds(1.5)).andThen(m_ShooterCommand.AutonStopShooter()));
     NamedCommands.registerCommand("StopShooter", m_ShooterCommand.AutonStopShooter());
     NamedCommands.registerCommand("ShootAmp", m_ShooterCommand.AutonAmp());
     NamedCommands.registerCommand("DribbleNote", m_ShooterCommand.AutonDribbleNote());
