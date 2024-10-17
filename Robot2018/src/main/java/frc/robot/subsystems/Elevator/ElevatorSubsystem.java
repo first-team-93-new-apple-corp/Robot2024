@@ -11,6 +11,7 @@ public class ElevatorSubsystem implements Subsystem {
     private double upSpeed = -0.5;
     private double downSpeed = -0.05;
     public ElevatorSubsystem() {
+        //TODO: Quadrature Encoder?
         m_ElevatorMotor = new TalonSRX(6);
 
         m_ElevatorMotor.setNeutralMode(NeutralMode.Brake);
