@@ -9,12 +9,14 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Drivetrain.TankDriveSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
+import frc.robot.subsystems.Platforms.PlatformSubsystem;
 
 public class RobotContainer {
   private CommandXboxController m_XboxController = new CommandXboxController(0);
 
   private TankDriveSubsystem m_drivetrain = new TankDriveSubsystem();
   private ElevatorSubsystem m_elevator = new ElevatorSubsystem();
+  private PlatformSubsystem m_platforms = new PlatformSubsystem();
 
   public RobotContainer() {
     configureBindings();
@@ -29,6 +31,10 @@ public class RobotContainer {
     m_XboxController.povUp().whileTrue(m_elevator.run(() -> m_elevator.moveUp()));
     m_XboxController.povCenter().whileTrue(m_elevator.run(() -> m_elevator.stop()));
     
+    m_XboxController.b().whileTrue(m_platforms.run(() -> m_platforms.windUpRight()));
+    m_XboxController.x().whileTrue(m_platforms.run(() -> m_platforms.windDownRight()));
+    m_XboxController.povLeft().whileTrue(m_platforms.run(() -> m_platforms.windDownLeft()));
+    m_XboxController.povRight().whileTrue(m_platforms.run(() -> m_platforms.windUpLeft()));
 
 
   }
