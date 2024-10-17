@@ -8,11 +8,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Drivetrain.TankDriveSubsystem;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 
 public class RobotContainer {
   private CommandXboxController m_XboxController = new CommandXboxController(0);
 
   private TankDriveSubsystem m_drivetrain = new TankDriveSubsystem();
+  private ElevatorSubsystem m_elevator = new ElevatorSubsystem();
 
   public RobotContainer() {
     configureBindings();
@@ -22,6 +24,12 @@ public class RobotContainer {
     m_drivetrain.setDefaultCommand(
         m_drivetrain.run(
             () -> m_drivetrain.drive(m_XboxController.getLeftY(), m_XboxController.getRightX())));
+    
+    m_XboxController.povDown().whileTrue(m_elevator.run(() -> m_elevator.moveDown()));
+    m_XboxController.povUp().whileTrue(m_elevator.run(() -> m_elevator.moveUp()));
+    m_XboxController.povCenter().whileTrue(m_elevator.run(() -> m_elevator.stop()));
+    
+
 
   }
 

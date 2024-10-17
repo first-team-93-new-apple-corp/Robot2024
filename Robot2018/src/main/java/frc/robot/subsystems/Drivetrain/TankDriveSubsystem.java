@@ -17,12 +17,11 @@ public class TankDriveSubsystem implements Subsystem {
     public TankDriveSubsystem() {
         frontLeft = new VictorSPX(5);
         frontRight = new VictorSPX(4);
-        backLeft = new VictorSPX(0);
+        backLeft = new VictorSPX(11);
         backRight = new VictorSPX(10);
         
-        //TODO: This needs to be changed if the motors fight each other
-        backLeft.setInverted(false);
-        backRight.setInverted(false);
+        backLeft.setInverted(true);
+        frontLeft.setInverted(true);
 
         backLeft.follow(frontLeft);
         backRight.follow(frontRight);
