@@ -10,7 +10,7 @@ public class PlatformSubsystem implements Subsystem {
     private VictorSPX m_leftMotor;
     private VictorSPX m_rightMotor;
 
-    double windSpeed = 0.15;
+    double windSpeed = 0.25;
     public PlatformSubsystem() {
         m_leftMotor = new VictorSPX(2);
         m_rightMotor = new VictorSPX(3);
@@ -30,6 +30,11 @@ public class PlatformSubsystem implements Subsystem {
     }
     public void windDownRight() {
         m_rightMotor.set(VictorSPXControlMode.PercentOutput, -windSpeed);
+    }
+    public void stopWind() {
+        m_leftMotor.set(VictorSPXControlMode.PercentOutput, 0);
+        m_rightMotor.set(VictorSPXControlMode.PercentOutput, 0);
+        
     }
 
 }

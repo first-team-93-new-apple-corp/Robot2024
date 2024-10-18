@@ -7,7 +7,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class WristSubsystem implements Subsystem {
-    //TODO: Quadrature Encoder?
+    //TODO: Quadrature Encoder? 
+    // https://docs.wpilib.org/en/stable/docs/hardware/sensors/encoders-hardware.html
     private TalonSRX wristMotor;
     
     public WristSubsystem() {
@@ -15,10 +16,10 @@ public class WristSubsystem implements Subsystem {
         wristMotor.setNeutralMode(NeutralMode.Brake);
     }
     public void moveUp() {
-        wristMotor.set(TalonSRXControlMode.PercentOutput, 0.2);
+        wristMotor.set(TalonSRXControlMode.PercentOutput, 0.5);
     }
     public void moveDown() {
-        wristMotor.set(TalonSRXControlMode.PercentOutput, -0.2);
+        wristMotor.set(TalonSRXControlMode.PercentOutput, -0.3);
     }
     public void stop() {
         wristMotor.set(TalonSRXControlMode.PercentOutput, 0);

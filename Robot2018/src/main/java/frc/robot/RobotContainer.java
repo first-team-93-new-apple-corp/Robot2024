@@ -42,14 +42,19 @@ public class RobotContainer {
     m_XboxController.x().whileTrue(m_platforms.run(() -> m_platforms.windDownRight()));
     m_XboxController.povLeft().whileTrue(m_platforms.run(() -> m_platforms.windDownLeft()));
     m_XboxController.povRight().whileTrue(m_platforms.run(() -> m_platforms.windUpLeft()));
+    m_XboxController.y().whileTrue(m_platforms.run(() -> m_platforms.stopWind()));
 
     // Wrist
     m_XboxController.rightBumper().whileTrue(m_wrist.run(() -> m_wrist.moveUp()));
     m_XboxController.leftBumper().whileTrue(m_wrist.run(() -> m_wrist.moveDown()));
+    m_XboxController.rightBumper().onFalse(m_wrist.run(() -> m_wrist.stop()));
+    m_XboxController.leftBumper().onFalse(m_wrist.run(() -> m_wrist.stop()));
 
     // Intake
-    m_XboxController.leftTrigger().whileTrue(m_intake.run(() -> m_intake.intake()));
-    m_XboxController.leftTrigger().whileFalse(m_intake.run(() -> m_intake.stop()));
+    m_XboxController.rightTrigger().whileTrue(m_intake.run(() -> m_intake.intake()));
+    m_XboxController.rightTrigger().onFalse(m_intake.run(() -> m_intake.stop()));
+    m_XboxController.leftTrigger().whileTrue(m_intake.run(() -> m_intake.outtake()));
+    m_XboxController.leftTrigger().onFalse(m_intake.run(() -> m_intake.stop()));
 
   }
 

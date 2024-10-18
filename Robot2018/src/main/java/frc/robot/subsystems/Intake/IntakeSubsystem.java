@@ -14,23 +14,23 @@ public class IntakeSubsystem implements Subsystem {
     public IntakeSubsystem() {
         m_leftIntake = new PWMVictorSPX(0);
         m_rightIntake = new PWMVictorSPX(1);
-
+        m_rightIntake.setInverted(true);
         m_leftSensor = new AnalogInput(0);
         m_rightSensor = new AnalogInput(1);
     }
 
     public void intake() {
-        if (!(m_leftSensor.getVoltage() > 1 && m_rightSensor.getVoltage() > 1)) {
-            m_leftIntake.set(0.5);
-            m_rightIntake.set(0.5);
-        } else {
-            stop();
-        }
+        // if (!(m_leftSensor.getVoltage() > 1 && m_rightSensor.getVoltage() > 1)) {
+            m_leftIntake.set(1);
+            m_rightIntake.set(1);
+        // } else {
+        //     stop();
+        // }
     }
 
     public void outtake() {
-        m_leftIntake.set(-0.5);
-        m_rightIntake.set(-0.5);
+        m_leftIntake.set(-1);
+        m_rightIntake.set(-1);
     }
 
     public void stop() {
