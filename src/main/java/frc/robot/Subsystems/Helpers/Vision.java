@@ -28,8 +28,7 @@ public class Vision extends SubsystemBase {
     double pitch;
     double yaw;
     double area;
-    private PIDController pid = new PIDController(0.05, 0, 0);
-    private PIDController rotate = new PIDController(0.05, 0, 0);
+    private PIDController rotate = new PIDController(0.1, 0, 0);
 
     public Vision(Pigeon2 pigeon2) {
 
@@ -41,16 +40,10 @@ public class Vision extends SubsystemBase {
         defaultValues[3] = 0.;
         defaultValues[4] = 0.;
         defaultValues[5] = 0.;
-        rotate.setSetpoint(0);
-        rotate.setTolerance(2, 0.2);
-    }
-
-    public double pointToCalc() {
-        return -pid.calculate(rotation, 0);
     }
 
     public double turnToNote() {
-        return -rotate.calculate(yaw);
+        return rotate.calculate(yaw, 0);
     }
 
     @Override
@@ -66,7 +59,10 @@ public class Vision extends SubsystemBase {
         values = limelight.getDoubleArray(defaultValues);
         rotation = values[4];
         SmartDashboard.putNumberArray("limelight values", values);
-        SmartDashboard.putNumber("rotation", rotation);
+        SmartDashboard.putNumber("RotatePid", turnToNote());
         SmartDashboard.putNumber("yaw", yaw);
+    }
+    public boolean cameraHasNote(){
+        return result.hasTargets();
     }
 }
