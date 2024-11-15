@@ -10,7 +10,7 @@ public class PlatformSubsystem implements Subsystem {
     private VictorSPX m_leftMotor;
     private VictorSPX m_rightMotor;
 
-    double windSpeed = 0.25;
+    double windSpeed = 0.5;
     public PlatformSubsystem() {
         m_leftMotor = new VictorSPX(2);
         m_rightMotor = new VictorSPX(3);

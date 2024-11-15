@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class ElevatorSubsystem implements Subsystem {
     private TalonSRX m_ElevatorMotor;
-    private double upSpeed = -0.6;
-    private double downSpeed = -0.05;
+    private double upSpeed = -0.75;
+    private double downSpeed = 0.05;
     public ElevatorSubsystem() {
         //TODO: Quadrature Encoder?
         // https://docs.wpilib.org/en/stable/docs/hardware/sensors/encoders-hardware.html
@@ -28,7 +28,7 @@ public class ElevatorSubsystem implements Subsystem {
         m_ElevatorMotor.set(TalonSRXControlMode.PercentOutput, speed);
     }
     public void stop() {
-        m_ElevatorMotor.set(TalonSRXControlMode.PercentOutput, 0);
+        m_ElevatorMotor.set(TalonSRXControlMode.Disabled, 0);
     }
 
     public class ElevatorCommands {

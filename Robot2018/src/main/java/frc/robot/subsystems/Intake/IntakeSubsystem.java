@@ -29,8 +29,8 @@ public class IntakeSubsystem implements Subsystem {
     }
 
     public void outtake() {
-        m_leftIntake.set(-1);
-        m_rightIntake.set(-1);
+        m_leftIntake.set(-0.4);
+        m_rightIntake.set(-0.4);
     }
 
     public void stop() {
