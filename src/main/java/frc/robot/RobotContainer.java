@@ -4,93 +4,61 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.Autos;
+import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.HumanDrive;
-import frc.robot.subsystems.DriveConstants;
-import frc.robot.subsystems.SwerveDriveSubsystem;
-import frc.robot.subsystems.Telemetry;
-import frc.robot.subsystems.TunerConstants;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+/**
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * subsystems, commands, and trigger mappings) should be declared here.
+ */
 public class RobotContainer {
-  public final double MaxSpeed = DriveConstants.MaxSpeed;
-  public final double MaxAngularRate = DriveConstants.MaxAngularRate;
-  private final Joystick m_Joystick1 = new Joystick(0);
-  private final Joystick m_Joystick2 = new Joystick(1);
-  private final JoystickButton m_JoystickTrigger = new JoystickButton(m_Joystick1, 1);
-  private final JoystickButton m_fieldRelButton = new
-  JoystickButton(m_Joystick1,
-  Constants.Thrustmaster.Left_Buttons.Top_Middle);
-  private final JoystickButton m_JoystickButton2 = new
-  JoystickButton(m_Joystick1, 2);
-  private final SwerveDriveSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain
-  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
-                                                               // driving in open loop
-
-  private final SwerveRequest.RobotCentric robotDrive = new SwerveRequest.RobotCentric()
-      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-      .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
-
-  private HumanDrive m_HumanDrive = new HumanDrive(m_Joystick1, m_Joystick2, drivetrain, drive, robotDrive);
-
-  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-  private final SwerveRequest.Idle idle = new SwerveRequest.Idle();
-  private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-  private final Telemetry logger = new Telemetry(MaxSpeed);
-
-  // Configures the bindings to drive / control the swerve drive :)
-  private void configureBindings() {
-    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive
-            .withVelocityX(
-                m_HumanDrive.checkJoystickDeadzone(
-                    -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.y))
-                    * MaxSpeed)
-            .withVelocityY(
-                m_HumanDrive.checkJoystickDeadzone(
-                    -m_Joystick1.getRawAxis(Constants.Thrustmaster.Axis.x))
-                    * MaxSpeed)
-            .withRotationalRate(
-                m_HumanDrive.checkJoystickDeadzone(
-                    -m_Joystick2.getRawAxis(Constants.Thrustmaster.Axis.x))
-                    * MaxAngularRate)));
-    // Brake while held
-    m_JoystickTrigger.onTrue(drivetrain.applyRequest(() -> brake));
-    m_fieldRelButton.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-    // Points all in a direction
-    m_JoystickButton2.whileTrue(drivetrain
-    .applyRequest(
-    () -> point.withModuleDirection(new Rotation2d(-m_Joystick1.getRawAxis(0),
-    -m_Joystick1.getRawAxis(1)))));
-
-    // reset the field-centric heading on left bumper press
-
-    if (Utils.isSimulation()) {
-      drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
-    }
-    drivetrain.registerTelemetry(logger::telemeterize);
-  }
-
+  // The robot's subsystems and commands are defined here...
+  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  // Replace with CommandPS4Controller or CommandJoystick if needed
+  private final CommandXboxController m_driverController =
+      new CommandXboxController(0);
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    // Configure the trigger bindings
     configureBindings();
   }
 
-  public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+  /**
+   * Use this method to define your trigger->command mappings. Triggers can be created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * predicate, or via the named factories in {@link
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * joysticks}.
+   */
+  private void configureBindings() {
+    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+    new Trigger(m_exampleSubsystem::exampleCondition)
+        .onTrue(new ExampleCommand(m_exampleSubsystem));
+
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // cancelling on release.
+    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    m_driverController.a().onTrue(m_intakeSubsystem.Commands.intake());
   }
 
-  public Command getTeleopCommand() {
-    return m_HumanDrive;
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    // An example command will be run in autonomous
+    return Autos.exampleAuto(m_exampleSubsystem);
   }
 }
