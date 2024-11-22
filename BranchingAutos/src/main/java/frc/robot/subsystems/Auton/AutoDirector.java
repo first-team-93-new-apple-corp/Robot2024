@@ -1,13 +1,15 @@
 package frc.robot.subsystems.Auton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-
+  
 public class AutoDirector {
-    Subsystem[] subsystems;
-    AutoDirector( Subsystem[] subsystems){
+  AutoSubsystems subsystems;
+    public AutoDirector( AutoSubsystems subsystems){
         this.subsystems = subsystems;
 
     }
@@ -20,8 +22,11 @@ public class AutoDirector {
     return new Auto("doNothing", new InstantCommand(), new Pose2d());
   }
   private Auto shoot() {
-    AutoTracker paths = new AutoTracker();
+    List<String> paths = new ArrayList<>();
+    paths.add("path");
+
+    AutoTracker tracker = new AutoTracker(true, subsystems,paths);
     
-    return new Auto("simpleShootAuto", paths.asCommand(), null);
+    return new Auto("simpleShootAuto", tracker.asCommand(), null);
   }
 }
