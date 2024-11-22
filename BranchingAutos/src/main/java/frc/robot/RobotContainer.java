@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,7 +22,8 @@ import frc.robot.subsystems.Swerve.TunerConstants;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
+                                                                                      // max angular velocity
 
     private final CommandXboxController joystick = new CommandXboxController(0);
 
@@ -37,6 +39,14 @@ public class RobotContainer {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     public RobotContainer() {
+        AutoBuilder.configure(() -> (m_DriveSubsystem.getState().Pose),
+                m_DriveSubsystem::resetPose,
+                null,
+                null,
+                null,
+                null,
+                null,
+                m_DriveSubsystem);
         configureBindings();
         AutoDirector autoDirector = new AutoDirector(new AutoSubsystems(m_DriveSubsystem));
     }
@@ -45,18 +55,21 @@ public class RobotContainer {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         m_DriveSubsystem.setDefaultCommand(
-            // m_DriveSubsystem will execute this command periodically
-            m_DriveSubsystem.Commands.applyRequest(() ->
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
-        );
+                // m_DriveSubsystem will execute this command periodically
+                m_DriveSubsystem.Commands.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive
+                                                                                                                  // forward
+                                                                                                                  // with
+                                                                                                                  // negative
+                                                                                                                  // Y
+                                                                                                                  // (forward)
+                        .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                        .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with
+                                                                                    // negative X (left)
+                ));
 
         joystick.a().whileTrue(m_DriveSubsystem.Commands.applyRequest(() -> brake));
-        joystick.b().whileTrue(m_DriveSubsystem.Commands.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        ));
+        joystick.b().whileTrue(m_DriveSubsystem.Commands.applyRequest(
+                () -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
