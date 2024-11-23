@@ -7,17 +7,16 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.subsystems.Auton.AutoDirector;
 import frc.robot.subsystems.Auton.AutoSubsystems;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
+import frc.robot.subsystems.Swerve.Telemetry;
 import frc.robot.subsystems.Swerve.TunerConstants;
 
 public class RobotContainer {
@@ -37,18 +36,12 @@ public class RobotContainer {
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+    AutoDirector autoDirector;
 
     public RobotContainer() {
-        AutoBuilder.configure(() -> (m_DriveSubsystem.getState().Pose),
-                m_DriveSubsystem::resetPose,
-                null,
-                null,
-                null,
-                null,
-                null,
-                m_DriveSubsystem);
+        m_DriveSubsystem.configureAuto();
+        autoDirector = new AutoDirector(new AutoSubsystems(m_DriveSubsystem));
         configureBindings();
-        AutoDirector autoDirector = new AutoDirector(new AutoSubsystems(m_DriveSubsystem));
     }
 
     private void configureBindings() {
@@ -85,6 +78,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return Commands.print("No autonomous command configured");
+        return autoDirector.selection().command();
     }
 }
