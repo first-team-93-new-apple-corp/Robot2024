@@ -8,11 +8,9 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -21,8 +19,6 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.units.Measure;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -41,7 +37,6 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     private double m_lastSimTime;
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
-
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.fromDegrees(0);
     /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
@@ -83,15 +78,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
     }
 
     public void configureAuto() {
-        RobotConfig config = new RobotConfig(
-                100.0,
-                11.0,
-                new ModuleConfig(2, MaxSpeed, 1,
-                        new DCMotor(12, 3, 80, 80, 120,
-                                2),
-                        120, 0),
-                .8,
-                .8);
+        RobotConfig config = null;
         try {
             config = RobotConfig.fromGUISettings();
         } catch (Exception e) {
@@ -104,7 +91,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
                 () -> getState().Pose, // Robot pose supplier
                 this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
                 () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                (speeds, feedforwards) -> Commands.applyRequest(() -> autorequest2.withSpeeds(speeds)),
+                (speeds, feedforwards) -> setControl(autorequest2.withSpeeds(speeds)),
                 // RELATIVE ChassisSpeeds. Also optionally outputs
                 // individual module feedforwards11
                 new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for
