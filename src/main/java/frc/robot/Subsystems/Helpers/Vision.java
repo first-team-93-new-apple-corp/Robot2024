@@ -21,14 +21,13 @@ public class Vision extends SubsystemBase {
     Pigeon2 pigeon2;
     private Double[] values;
     private Double[] defaultValues;
-    private double rotation;
     PhotonCamera camera = new PhotonCamera("Microsoft_LifeCam_HD-3000");
     PhotonPipelineResult result;
     PhotonTrackedTarget target;
     double pitch;
     double yaw;
     double area;
-    private PIDController rotate = new PIDController(0.1, 0, 0);
+    private PIDController rotate = new PIDController(0.05, 0, 0);
 
     public Vision(Pigeon2 pigeon2) {
 
@@ -57,8 +56,8 @@ public class Vision extends SubsystemBase {
             area = target.getArea();
         }
         values = limelight.getDoubleArray(defaultValues);
-        rotation = values[4];
-        SmartDashboard.putNumberArray("limelight values", values);
+        // rotation = values[4];
+        // SmartDashboard.putNumberArray("limelight values", values);
         SmartDashboard.putNumber("RotatePid", turnToNote());
         SmartDashboard.putNumber("yaw", yaw);
     }

@@ -51,8 +51,8 @@ public class RobotContainer {
   private ChassisSpeeds fieldSpeeds;
   private ChassisSpeeds noteTrack;
   private ChassisSpeeds noteTrackAuto;
-  private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps / 1.25; // kSpeedAt12VoltsMps desired top speed
-  private double MaxAngularRate = (1.5 * Math.PI) / 1.25; // 3/4 of a rotation per second max angular velocity
+  private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
+  private double MaxAngularRate = (2 * Math.PI); // 3/4 of a rotation per second max angular velocity
   private SwerveRequest.ApplyChassisSpeeds m_swerveRequest = new SwerveRequest.ApplyChassisSpeeds();
   // Joysticks / Controllers
   // private final Joystick m_LeftStick = new Joystick(0);
@@ -192,7 +192,7 @@ public class RobotContainer {
     }
 
     noteTrack = new ChassisSpeeds(
-        MathUtil.clamp((checkDeadzone(-m_XboxDriver.getLeftY() * MaxSpeed)), 0, 1 * MaxSpeed),
+        Math.abs((checkDeadzone(-m_XboxDriver.getLeftY() * MaxSpeed))),
         0,
         m_Vision.turnToNote());
     noteTrackAuto = new ChassisSpeeds(
