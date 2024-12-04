@@ -1,10 +1,11 @@
 package frc.robot.subsystems.Auton;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
-
 import java.util.List;
 import java.util.function.Supplier;
+import static edu.wpi.first.units.Units.*;
 
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -20,6 +21,13 @@ public class AutoTracker {
     PathPlannerPath intakingpath;
     PathPlannerPath Shootingpath;
     PathConstraints constraints = new PathConstraints(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond), 15, 5, 10);
+
+    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) / 1.5; // kSpeedAt12Volts desired top speed
+    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+            .withDeadband(MaxSpeed * 0.02).withRotationalDeadband(MaxAngularRate * 0.02)
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+
     public AutoTracker( AutoSubsystems subsystems, List<AutoSector> paths, Supplier<Pose2d> initalPose){
         commands.addCommands(Commands.runOnce(() -> subsystems.driveSubsystem().resetPose(initalPose.get()), subsystems.driveSubsystem()));
         for (AutoSector autoSector : paths) {
@@ -28,7 +36,8 @@ public class AutoTracker {
                 Shootingpath = PathPlannerPath.fromPathFile(autoSector.ShootingPath());
                 commands.addCommands(AutoBuilder.followPath(intakingpath));
                 Commands.print("Vision Note Grab");
-                // commands.addCommands(Commands.runOnce(() -> subsystems.driveSubsystem()), subsystems.driveSubsystem()));
+                commands.addCommands(subsystems.driveSubsystem().Commands.applyRequest(() -> drive.withRotationalRate(2)).withTimeout(Math.PI));
+
                 commands.addCommands(AutoBuilder.pathfindThenFollowPath(Shootingpath, constraints));
                 Commands.print("Bang Bang (shot the note)");
             } catch (Exception e) {}

@@ -52,15 +52,9 @@ public class RobotContainer {
         // and Y is defined as to the left according to WPILib convention.
         m_DriveSubsystem.setDefaultCommand(
                 // m_DriveSubsystem will execute this command periodically
-                m_DriveSubsystem.Commands.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive
-                                                                                                                  // forward
-                                                                                                                  // with
-                                                                                                                  // negative
-                                                                                                                  // Y
-                                                                                                                  // (forward)
-                        .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                        .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with
-                                                                                    // negative X (left)
+                m_DriveSubsystem.Commands.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) 
+                        .withVelocityY(-joystick.getLeftX() * MaxSpeed) 
+                        .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
                 ));
 
         joystick.a().whileTrue(m_DriveSubsystem.Commands.applyRequest(() -> brake));
@@ -69,10 +63,10 @@ public class RobotContainer {
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-        joystick.back().and(joystick.y()).whileTrue(m_DriveSubsystem.Commands.sysIdDynamic(Direction.kForward));
-        joystick.back().and(joystick.x()).whileTrue(m_DriveSubsystem.Commands.sysIdDynamic(Direction.kReverse));
-        joystick.start().and(joystick.y()).whileTrue(m_DriveSubsystem.Commands.sysIdQuasistatic(Direction.kForward));
-        joystick.start().and(joystick.x()).whileTrue(m_DriveSubsystem.Commands.sysIdQuasistatic(Direction.kReverse));
+        // joystick.back().and(joystick.y()).whileTrue(m_DriveSubsystem.Commands.sysIdDynamic(Direction.kForward));
+        // joystick.back().and(joystick.x()).whileTrue(m_DriveSubsystem.Commands.sysIdDynamic(Direction.kReverse));
+        // joystick.start().and(joystick.y()).whileTrue(m_DriveSubsystem.Commands.sysIdQuasistatic(Direction.kForward));
+        // joystick.start().and(joystick.x()).whileTrue(m_DriveSubsystem.Commands.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(m_DriveSubsystem.runOnce(() -> m_DriveSubsystem.seedFieldCentric()));
