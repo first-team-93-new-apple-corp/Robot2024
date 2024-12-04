@@ -7,10 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.LED;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
+  private LED LedSubsystem = new LED();
   private final RobotContainer m_robotContainer;
 
   public Robot() {
@@ -23,7 +24,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -65,10 +68,13 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    LedSubsystem.applyRainbow();
+  }
 
   @Override
-  public void testExit() {}
+  public void testExit() {
+  }
 
   @Override
   public void simulationPeriodic() {

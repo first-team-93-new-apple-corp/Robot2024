@@ -33,7 +33,7 @@ public class AutoTracker {
             } catch (Exception e) {}
         }
         try {
-            commands.addCommands(AutoBuilder.followPath(PathPlannerPath.fromPathFile("Leave")));
+            // commands.addCommands(AutoBuilder.followPath(PathPlannerPath.fromPathFile("Leave")));
         } catch (Exception e) {}
     }
     public Command asCommand(){
