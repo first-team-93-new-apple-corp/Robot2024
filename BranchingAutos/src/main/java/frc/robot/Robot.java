@@ -64,17 +64,21 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
+    // LedSubsystem.blueStripe();
+
     CommandScheduler.getInstance().cancelAll();
   }
 
   @Override
   public void testPeriodic() {
-    LedSubsystem.applyRainbow();
+        // LedSubsystem.blueStripesRunning();
+        LedSubsystem.blueStripesRunning();
   }
 
   @Override
   public void testExit() {
   }
+
 
   @Override
   public void simulationPeriodic() {
