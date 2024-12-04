@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.LEDReader;
+import edu.wpi.first.wpilibj.util.Color;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -12,9 +13,11 @@ import edu.wpi.first.units.measure.Distance;
 public class LED {
     private final AddressableLED m_led;
     private final AddressableLEDBuffer m_ledBuffer;
-    private final LEDPattern m_rainbow = LEDPattern.rainbow(255, 128);
+    private final LEDPattern m_rainbow = LEDPattern.rainbow(255, 60);
     private static final Distance kLedSpacing = Feet.of(3/144.0);
     private final LEDPattern m_scrollingRainbow = m_rainbow.scrollAtAbsoluteSpeed(MetersPerSecond.of(1), kLedSpacing);
+    private final LEDPattern Red = LEDPattern.solid(Color.kRed);
+    private final LEDPattern Blue = LEDPattern.solid(Color.kBlue);
 
     public LED() {
         // PWM port 9
@@ -38,22 +41,6 @@ public class LED {
     }
     public void closeLED(){
         m_led.stop();
-    }
-    public void setRed(){
-        for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-            // Sets the specified LED to the RGB values for red
-            m_ledBuffer.setRGB(i, 255, 0, 0);
-         }
-         
-         m_led.setData(m_ledBuffer);
-    }
-    public void setWhite(){
-        for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-            // Sets the specified LED to the RGB values for red
-            m_ledBuffer.setRGB(i, 255, 255, 255);
-         }
-         
-         m_led.setData(m_ledBuffer);
     }
 
 }

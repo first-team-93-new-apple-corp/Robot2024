@@ -28,6 +28,7 @@ public class AutoTracker {
                 Shootingpath = PathPlannerPath.fromPathFile(autoSector.ShootingPath());
                 commands.addCommands(AutoBuilder.followPath(intakingpath));
                 Commands.print("Vision Note Grab");
+                // commands.addCommands(Commands.runOnce(() -> subsystems.driveSubsystem()), subsystems.driveSubsystem()));
                 commands.addCommands(AutoBuilder.pathfindThenFollowPath(Shootingpath, constraints));
                 Commands.print("Bang Bang (shot the note)");
             } catch (Exception e) {}
