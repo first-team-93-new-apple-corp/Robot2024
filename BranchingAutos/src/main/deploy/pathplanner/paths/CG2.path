@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5940605926822844,
-        "y": 6.028583787543563
+        "x": 6.067404192053465,
+        "y": 6.623242727701913
       },
       "isLocked": false,
       "linkedName": "SourceCenter"
     },
     {
       "anchor": {
-        "x": 2.1879141940102063,
-        "y": 6.9872307017341315
+        "x": 7.506601059712466,
+        "y": 5.859587246904706
       },
       "prevControl": {
-        "x": 1.9292226507888257,
-        "y": 6.233857850830599
+        "x": 5.479976899129619,
+        "y": 6.814156597903873
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SG1"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -45,10 +45,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Speaker Game Peices",
+  "folder": "Center Game Peices",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -179.16968451374197
+    "rotation": -179.4934018848929
   },
   "useDefaultConstraints": true
 }

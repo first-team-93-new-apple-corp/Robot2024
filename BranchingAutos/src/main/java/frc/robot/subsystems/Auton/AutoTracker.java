@@ -20,7 +20,7 @@ public class AutoTracker {
     SequentialCommandGroup commands = new SequentialCommandGroup();
     PathPlannerPath intakingpath;
     PathPlannerPath Shootingpath;
-    PathConstraints constraints = new PathConstraints(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond), 15, 5, 10);
+    PathConstraints constraints = new PathConstraints(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond), 10.2, 9, 30);
 
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) / 1.5; // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -35,15 +35,15 @@ public class AutoTracker {
                 intakingpath = PathPlannerPath.fromPathFile(autoSector.intakingPath());
                 Shootingpath = PathPlannerPath.fromPathFile(autoSector.ShootingPath());
                 commands.addCommands(AutoBuilder.followPath(intakingpath));
-                Commands.print("Vision Note Grab");
-                commands.addCommands(subsystems.driveSubsystem().Commands.applyRequest(() -> drive.withRotationalRate(2)).withTimeout(Math.PI));
+                commands.addCommands(Commands.print("Vision Note Grab"));
+                // commands.addCommands(subsystems.driveSubsystem().Commands.applyRequest(() -> drive.withRotationalRate(2)).withTimeout(Math.PI));
 
                 commands.addCommands(AutoBuilder.pathfindThenFollowPath(Shootingpath, constraints));
-                Commands.print("Bang Bang (shot the note)");
+                commands.addCommands(Commands.print("Bang Bang (shot the note)"));
             } catch (Exception e) {}
         }
         try {
-            // commands.addCommands(AutoBuilder.followPath(PathPlannerPath.fromPathFile("Leave")));
+            commands.addCommands(AutoBuilder.followPath(PathPlannerPath.fromPathFile("Leave")));
         } catch (Exception e) {}
     }
     public Command asCommand(){

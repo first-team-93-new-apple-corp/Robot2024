@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4357867303840994,
-        "y": 5.598058236601502
+        "x": 1.456099942611335,
+        "y": 5.595244965087426
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5940605926822844,
-        "y": 6.028583787543563
+        "x": 2.387800633984827,
+        "y": 5.820987820793337
       },
       "isLocked": false,
-      "linkedName": "SourceCenter"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.1879141940102063,
-        "y": 6.9872307017341315
+        "x": 7.580029471329069,
+        "y": 7.4309552554704394
       },
       "prevControl": {
-        "x": 1.9292226507888257,
-        "y": 6.233857850830599
+        "x": 6.637353878874375,
+        "y": 7.187703254108095
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SG1"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -45,10 +45,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Speaker Game Peices",
+  "folder": "Center Game Peices",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -179.16968451374197
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

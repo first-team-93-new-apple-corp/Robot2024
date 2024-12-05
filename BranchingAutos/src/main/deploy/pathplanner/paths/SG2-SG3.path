@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.206510763005428,
-        "y": 5.584187313829176
+        "x": 2.249126788056797,
+        "y": 5.598058236601502
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.664732538792745,
-        "y": 5.248854676650913
+        "x": 1.7073485638441142,
+        "y": 5.262725599423239
       },
       "isLocked": false,
       "linkedName": "SG2"
     },
     {
       "anchor": {
-        "x": 2.2252291777310824,
-        "y": 4.113976955226638
+        "x": 2.1756983764414763,
+        "y": 4.111991050457951
       },
       "prevControl": {
-        "x": 1.764595178589581,
-        "y": 4.684924475445252
+        "x": 1.715064377299975,
+        "y": 4.682938570676565
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,10 +33,10 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.2,
-    "maxAcceleration": 7.0,
-    "maxAngularVelocity": 848.0,
-    "maxAngularAcceleration": 1000.0,
+    "maxVelocity": 4.73,
+    "maxAcceleration": 10.2,
+    "maxAngularVelocity": 560.3527,
+    "maxAngularAcceleration": 1718.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
@@ -45,7 +45,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Speaker Game Peices",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
