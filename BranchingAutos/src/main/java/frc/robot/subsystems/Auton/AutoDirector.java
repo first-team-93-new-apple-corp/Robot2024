@@ -29,6 +29,7 @@ public class AutoDirector {
   public void AddAutos() {
     autoChooser.setDefaultOption(doNothing().name, doNothing());
     Autos.add(Speaker3());
+    Autos.add(straight());
     for (Auto auto : Autos) {
       autoChooser.addOption(auto.name, auto);
     }
@@ -38,6 +39,14 @@ public class AutoDirector {
   // ------------------------------------------Autos------------------------------------------
   public Auto doNothing() {
     return new Auto("doNothing", new InstantCommand(), new Pose2d());
+  }
+
+  public Auto straight(){
+    List<AutoSector> paths = new ArrayList<>();
+    paths.add(new AutoSector("TestingPath", "SC"));
+
+    AutoTracker tracker = new AutoTracker(subsystems, paths, () -> PositionConstants.Speaker());
+    return new Auto("straight", tracker.asCommand(), PositionConstants.Speaker());
   }
 
   public Auto Speaker3() {
