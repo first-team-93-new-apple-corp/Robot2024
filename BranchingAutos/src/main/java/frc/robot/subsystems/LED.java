@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import static edu.wpi.first.units.Units.*;
 
+import edu.wpi.first.math.Num;
 import edu.wpi.first.units.measure.Distance;
 
 public class LED implements Subsystem {
@@ -40,10 +41,18 @@ public class LED implements Subsystem {
         // Set the data
         m_led.setData(m_ledBuffer);
         m_led.start();
+
+
+        
+    }
+    public void LEDSOff(){
+        for (int i = 0; i < m_ledBuffer.getLength(); i++){
+            m_ledBuffer.setLED(i, Color.kBlack);
+        }
+        m_led.setData(m_ledBuffer);
     }
 
-    @SuppressWarnings("unused")
-	private void applyColorCycle(int LedSpacing, Color Color1, Color Color2) {
+    public void applyColorCycle(int LedSpacing, Color Color1, Color Color2) {
         for (var i = 0; i < m_ledBuffer.getLength(); i++) {
             int j = i;
             j += lastI;
@@ -54,7 +63,49 @@ public class LED implements Subsystem {
             }
         }
         lastI++;
-        if (lastI == 4) {
+        if (lastI == LedSpacing) {
+            lastI = 0;
+        }
+        m_led.setData(m_ledBuffer);
+    }
+    public void applyColorCycleV3(int LedSpacing, Color Color1, Color Color2, int cycles) {
+        for (int cycle = 0; cycle < cycles; cycle++) {
+            for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+                int j = i + lastI;
+                if (j % LedSpacing == 0 || j%LedSpacing == 1) {
+                    m_ledBuffer.setLED(i, Color1); 
+                } else {
+                    m_ledBuffer.setLED(i, Color2); 
+                }
+            }
+            lastI++;
+            if (lastI >= LedSpacing) {
+                lastI = 0;
+            }
+            m_led.setData(m_ledBuffer);
+            try {
+                Thread.sleep(75); 
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    public void applyColorCycleV2(Color Color, Color Color1, Color Color2, int Spacing) {
+        for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+            int j = i;
+            j += lastI;
+            if ((j % (Spacing)) == 0) {
+                m_ledBuffer.setLED(i, Color1);
+            } else if ((j % (Spacing)) == 1){
+                m_ledBuffer.setLED(i, Color);
+            }
+            else {
+                m_ledBuffer.setLED(i, Color2);
+            }
+        }
+        lastI++;
+        if (lastI == Spacing) {
             lastI = 0;
         }
         m_led.setData(m_ledBuffer);
@@ -68,12 +119,15 @@ public class LED implements Subsystem {
     public void closeLED() {
         m_led.stop();
     }
-    public class LEDCommand implements Subsystem{
+    public class LEDCommand{
         public LEDCommand(){
 
         }
         public Command applyColorCycle(int LedSpacing, Color Color1, Color Color2) {
             return run(() -> applyColorCycle(LedSpacing, Color1, Color2));
+        }
+        public Command test(int LedSpacing, Color Color1, Color Color2, int cycles){
+            return runOnce(() -> applyColorCycleV3(LedSpacing, Color1, Color2, cycles));
         }
     }
 }

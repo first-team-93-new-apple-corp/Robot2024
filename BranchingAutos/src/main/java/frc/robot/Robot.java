@@ -4,16 +4,24 @@
 
 package frc.robot;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.LED;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private final RobotContainer m_robotContainer;
+  // private final LED m_LED;
 
   public Robot() {
     m_robotContainer = new RobotContainer();
+    // m_LED = new LED();
+    
   }
 
   @Override
@@ -60,9 +68,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    // addPeriodic(() -> {
-    //   LedSubsystem.applyColorCycle(0, null, null);
-    // }, 0.05, 0.005);
+    addPeriodic(() -> {
+      // m_robotContainer.m_LED.applyColorCycle(4, Color.kBlue, Color.kBlack);
+      // m_robotContainer.m_LED.applyColorCycle(10, Color.kGreen, Color.kBlack, 2);
+    }, 0.075, 0.005);
   }
 
   @Override
@@ -76,6 +85,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
+    // m_robotContainer.getIdleLEDs().schedule();
+    m_robotContainer.m_LED.applyColorCycle(4, Color.kBlue, Color.kBlack);
   }
 
   @Override

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Auton.AutoDirector;
@@ -47,7 +48,7 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     // LEDs
-    private LED m_LED = new LED();
+    LED m_LED = new LED();
     private LEDCommand LEDCommand = m_LED.new LEDCommand();
 
     public RobotContainer() {
@@ -72,6 +73,7 @@ public class RobotContainer {
         joystick.b().whileTrue(m_DriveSubsystem.Commands.applyRequest(
                 () -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
         joystick.leftBumper().onTrue(m_DriveSubsystem.runOnce(() -> m_DriveSubsystem.seedFieldCentric()));
+        joystick.x().onTrue(LEDCommand.test(10, Color.kGreen, Color.kBlack, 25));
         m_DriveSubsystem.registerTelemetry(logger::telemeterize);
 
         // SYSID ROUTINES
@@ -83,6 +85,8 @@ public class RobotContainer {
         // joystick.start().and(joystick.x()).whileTrue(m_DriveSubsystem.Commands.sysIdQuasistatic(Direction.kReverse));
 
     }
+    
+
 
     public Command getAutonomousCommand() {
         return autoDirector.selection().command();
