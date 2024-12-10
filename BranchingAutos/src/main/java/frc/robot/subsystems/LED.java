@@ -68,11 +68,11 @@ public class LED implements Subsystem {
         }
         m_led.setData(m_ledBuffer);
     }
-    public void applyColorCycleV3(int LedSpacing, Color Color1, Color Color2, int cycles) {
+    public void twoColorCycle(int LedSpacing, Color Color1, Color Color2, int cycles, int timePerMoveMs) {
         for (int cycle = 0; cycle < cycles; cycle++) {
             for (int i = 0; i < m_ledBuffer.getLength(); i++) {
                 int j = i + lastI;
-                if (j % LedSpacing == 0 || j%LedSpacing == 1) {
+                if (j % LedSpacing == 0 || j%LedSpacing == 1 || j % LedSpacing == 2) {
                     m_ledBuffer.setLED(i, Color1); 
                 } else {
                     m_ledBuffer.setLED(i, Color2); 
@@ -84,7 +84,7 @@ public class LED implements Subsystem {
             }
             m_led.setData(m_ledBuffer);
             try {
-                Thread.sleep(75); 
+                Thread.sleep(timePerMoveMs); 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -110,7 +110,57 @@ public class LED implements Subsystem {
         }
         m_led.setData(m_ledBuffer);
     }
-
+    public void applyBlueShootingStar(int starLength, int speed, int cycles) {
+        Color starColor = new Color(0, 0, 125);
+        Color backgroundColor = new Color(0, 0, 0);
+        
+        for (int cycle = 0; cycle < cycles; cycle++) {
+            for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+                for (int j = 0; j < m_ledBuffer.getLength(); j++) {
+                    m_ledBuffer.setLED(j, backgroundColor);
+                }
+                for (int j = 0; j < starLength; j++) {
+                    int position = i-j;
+                    if (position >= 0 && position < m_ledBuffer.getLength()) {
+                        m_ledBuffer.setLED(position, starColor);
+                    }
+                }
+                m_led.setData(m_ledBuffer);
+                try {
+                    Thread.sleep(speed);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        LEDSOff();
+    }
+    public void applyBlueShootingStarV2(int starLength, int speed, int cycles) {
+        Color starColor = new Color(0, 0, 125);
+        Color backgroundColor = new Color(0, 0, 0);
+        
+        for (int cycle = 0; cycle < cycles; cycle++) {
+            for (int i = m_ledBuffer.getLength() - 1; i >= 0; i--) {  // Start from the end and move backward
+                for (int j = 0; j < m_ledBuffer.getLength(); j++) {
+                    m_ledBuffer.setLED(j, backgroundColor);  // Clear the LEDs
+                }
+                for (int j = 0; j < starLength; j++) {
+                    int position = i + j;  // This makes the shooting star go from the right to the left
+                    if (position >= 0 && position < m_ledBuffer.getLength()) {
+                        m_ledBuffer.setLED(position, starColor);  // Set the LED at the current position
+                    }
+                }
+                m_led.setData(m_ledBuffer);  // Send the updated LED buffer
+                try {
+                    Thread.sleep(speed);  // Delay for the shooting star effect speed
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        LEDSOff();  // Turn off all LEDs after the effect finishes
+    }
+    
     public void applyRainbow() {
         m_scrollingRainbow.applyTo(m_ledBuffer);
         m_led.setData(m_ledBuffer);
@@ -126,8 +176,17 @@ public class LED implements Subsystem {
         public Command applyColorCycle(int LedSpacing, Color Color1, Color Color2) {
             return run(() -> applyColorCycle(LedSpacing, Color1, Color2));
         }
-        public Command test(int LedSpacing, Color Color1, Color Color2, int cycles){
-            return runOnce(() -> applyColorCycleV3(LedSpacing, Color1, Color2, cycles));
+        public Command test(int LedSpacing, Color Color1, Color Color2, int cycles, int time){
+            return runOnce(() -> twoColorCycle(LedSpacing, Color1, Color2, cycles, time));
+        }
+        public Command shoot(){
+            return runOnce(() -> twoColorCycle(10, Color.kSeaGreen, Color.kBlack, 144, 25));
+        }
+        public Command test2(){
+            return runOnce(() -> applyBlueShootingStar(30, 2, 2));
+        }
+        public Command off(){
+            return runOnce(() -> LEDSOff());
         }
     }
 }

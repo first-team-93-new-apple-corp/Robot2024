@@ -21,7 +21,11 @@ public class Robot extends TimedRobot {
   public Robot() {
     m_robotContainer = new RobotContainer();
     // m_LED = new LED();
-    
+    // addPeriodic(() -> {
+    //   // m_robotContainer.m_LED.applyColorCycle(4, Color.kBlue, Color.kBlack);
+    //   m_robotContainer.m_LED.applyBlueShootingStar(30, 2, 1);
+    //   m_robotContainer.m_LED.applyBlueShootingStarV2(30, 2, 1);
+    //   }, 0.075, 0.005);
   }
 
   @Override
@@ -64,14 +68,12 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    
   }
 
   @Override
   public void teleopPeriodic() {
-    addPeriodic(() -> {
-      // m_robotContainer.m_LED.applyColorCycle(4, Color.kBlue, Color.kBlack);
-      // m_robotContainer.m_LED.applyColorCycle(10, Color.kGreen, Color.kBlack, 2);
-    }, 0.075, 0.005);
+
   }
 
   @Override
