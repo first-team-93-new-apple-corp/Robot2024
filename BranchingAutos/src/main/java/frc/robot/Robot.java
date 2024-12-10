@@ -21,11 +21,6 @@ public class Robot extends TimedRobot {
   public Robot() {
     m_robotContainer = new RobotContainer();
     // m_LED = new LED();
-    // addPeriodic(() -> {
-    //   // m_robotContainer.m_LED.applyColorCycle(4, Color.kBlue, Color.kBlack);
-    //   m_robotContainer.m_LED.applyBlueShootingStar(30, 2, 1);
-    //   m_robotContainer.m_LED.applyBlueShootingStarV2(30, 2, 1);
-    //   }, 0.075, 0.005);
   }
 
   @Override
@@ -87,8 +82,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
-    // m_robotContainer.getIdleLEDs().schedule();
-    m_robotContainer.m_LED.applyColorCycle(4, Color.kBlue, Color.kBlack);
+
   }
 
   @Override
