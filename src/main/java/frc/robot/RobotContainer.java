@@ -19,6 +19,7 @@ import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Auton.AutoDirector;
 import frc.robot.subsystems.Auton.AutoSubsystems;
 import frc.robot.subsystems.Controlles.ControllerIO;
+import frc.robot.subsystems.Controlles.SillyPOVIdea;
 import frc.robot.subsystems.Controlles.TwoStickDrive;
 import frc.robot.subsystems.Controlles.XboxDrive;
 import frc.robot.subsystems.LED.LEDCommand;
