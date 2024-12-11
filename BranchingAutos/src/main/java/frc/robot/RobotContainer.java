@@ -24,6 +24,7 @@ import frc.robot.subsystems.Auton.AutoDirector;
 import frc.robot.subsystems.Auton.AutoSubsystems;
 import frc.robot.subsystems.Controlles.ControllerIO;
 import frc.robot.subsystems.Controlles.TwoStickDrive;
+import frc.robot.subsystems.Controlles.XboxDrive;
 import frc.robot.subsystems.LED.LEDCommand;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 import frc.robot.subsystems.Swerve.Telemetry;
@@ -46,6 +47,7 @@ public class RobotContainer {
                                                                                                                    // motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+    private final SwerveRequest.ApplyFieldSpeeds applyFieldSpeeds = new SwerveRequest.ApplyFieldSpeeds();
     // Controls
     private final CommandXboxController Xbox = new CommandXboxController(2);
     private final CommandJoystick leftStick = new CommandJoystick(0);
@@ -69,7 +71,8 @@ public class RobotContainer {
 
 
 
-    private final ControllerIO Controller = new TwoStickDrive(0, 1);
+    private final ControllerIO Driver = new TwoStickDrive(0, 1);
+    // private final ControllerIO Driver = new XboxDrive(2);
 
     private void configureBindings() {
         // AUTON
@@ -78,29 +81,14 @@ public class RobotContainer {
         SmartDashboard.putData("PathPlanner AutoChooser", autoChooser);
         autoDirector = new AutoDirector(new AutoSubsystems(m_DriveSubsystem));
 
-        // DRIVE
-        // Note that X is defined as forward according to WPILib convention,
-        // // and Y is defined as to the left according to WPILib convention.
-        // m_DriveSubsystem.setDefaultCommand(
-        // m_DriveSubsystem.Commands.applyRequest(() ->
-        // drive.withVelocityX(-Xbox.getLeftY() * MaxSpeed)
-        // .withVelocityY(-Xbox.getLeftX() * MaxSpeed)
-        // .withRotationalRate(-Xbox.getRightX() *
-        // MaxAngularRate).withCenterOfRotation(getPOV())));
-        // m_DriveSubsystem.setDefaultCommand(
-        // m_DriveSubsystem.Commands.applyRequest(() ->
-        // drive.withVelocityX(-leftStick.getY() * MaxSpeed)
-        // .withVelocityY(-leftStick.getX() * MaxSpeed)
-        // .withRotationalRate(-RightStick.getX() * MaxAngularRate)
-        // .withCenterOfRotation(getPOV())));
-
+        // Drive
         m_DriveSubsystem.setDefaultCommand(m_DriveSubsystem.Commands.applyRequest(() -> drive
-            .withVelocityX(Controller.DriveLeft())
-            .withVelocityY(Controller.DriveUp())
-            .withRotationalRate(Controller.DriveTheta())
-            .withCenterOfRotation(Controller.POV())));
+            .withVelocityX(Driver.DriveLeft())
+            .withVelocityY(Driver.DriveUp())
+            .withRotationalRate(Driver.DriveTheta())
+            .withCenterOfRotation(Driver.POV())));
 
-        Controller.Seed().onTrue(m_DriveSubsystem.runOnce(() -> m_DriveSubsystem.seedFieldCentric()));
+        Driver.Seed().onTrue(m_DriveSubsystem.runOnce(() -> m_DriveSubsystem.seedFieldCentric()));
         // Xbox.a().whileTrue(m_DriveSubsystem.Commands.applyRequest(() -> brake));
         // Xbox.b().whileTrue(m_DriveSubsystem.Commands.applyRequest(
         // () -> point.withModuleDirection(new Rotation2d(-Xbox.getLeftY(),

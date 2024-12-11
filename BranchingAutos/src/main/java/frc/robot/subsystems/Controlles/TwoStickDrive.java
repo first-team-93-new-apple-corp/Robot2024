@@ -45,6 +45,27 @@ public class TwoStickDrive implements ControllerIO {
 
     @Override
     public Translation2d POV() {
+        // switch (LeftStick.getHID().getPOV()) {
+        //     case 0:
+        //         return POVs[2];
+        //     case 45:
+        //         return POVs[6];
+        //     case 90:
+        //         return POVs[3];
+        //     case 135:
+        //         return POVs[8];
+        //     case 180:
+        //         return POVs[4];
+        //     case 225:
+        //         return POVs[7];
+        //     case 270:
+        //         return POVs[5];
+        //     case 315:
+        //         return POVs[5];
+        //     default:
+        //         return POVs[0];
+        // }
+
         if (LeftStick.povLeft().getAsBoolean()) {
             return POVs[1];
         } else if (LeftStick.povUp().getAsBoolean()) {
