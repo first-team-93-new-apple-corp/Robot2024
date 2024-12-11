@@ -71,8 +71,8 @@ public class RobotContainer {
 
 
 
-    private final ControllerIO Driver = new TwoStickDrive(0, 1);
-    // private final ControllerIO Driver = new XboxDrive(2);
+    // private final ControllerIO Driver = new TwoStickDrive(0, 1);
+    private final ControllerIO Driver = new XboxDrive(2);
 
     private void configureBindings() {
         // AUTON

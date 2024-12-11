@@ -7,26 +7,47 @@ import frc.robot.subsystems.Swerve.TunerConstants;
 import static edu.wpi.first.units.Units.*;
 
 public interface ControllerIO {
-    //WIP
-    //FUTURE REWORK OF THE CONTROLLER IO I ALREADY MADE
+    // WIP
+    // FUTURE REWORK OF THE CONTROLLER IO I ALREADY MADE
     // -SAWYER
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
     public static double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
+    public static double POVDistance = .45;
+    public static double POVDistanceDiagonal = Math.sqrt(2 * (Math.pow(POVDistance, 2)));
+    public static Translation2d[] POVs = {
+            new Translation2d(0, 0), // Default
+            new Translation2d(POVDistance, 0), // Up 1
+            new Translation2d(POVDistanceDiagonal, -POVDistanceDiagonal), // up right 2
+            new Translation2d(0, -POVDistance), // Right 3
+            new Translation2d(-POVDistanceDiagonal, -POVDistanceDiagonal), // down right 4
+            new Translation2d(-POVDistance, 0), // Down 5
+            new Translation2d(-POVDistanceDiagonal, POVDistanceDiagonal), // down left 6
+            new Translation2d(0, POVDistance), // left 7
+            new Translation2d(POVDistanceDiagonal, POVDistanceDiagonal), // up left 8
+
+    };
+
     public double InputLeft();
+
     public double InputUp();
+
     public double InputTheta();
+
     public Translation2d POV();
+
     public Trigger Seed();
 
-    public default double DriveLeft(){
-        return InputLeft() *  MaxSpeed;
+    public Trigger Brake();
+
+    public default double DriveLeft() {
+        return InputLeft() * MaxSpeed;
     }
-    
-    public default double DriveUp(){
-        return InputUp() *  MaxSpeed;
+
+    public default double DriveUp() {
+        return InputUp() * MaxSpeed;
     }
-    
-    public default double DriveTheta(){
-        return InputTheta() *  MaxAngularRate;
+
+    public default double DriveTheta() {
+        return InputTheta() * MaxAngularRate;
     }
 }

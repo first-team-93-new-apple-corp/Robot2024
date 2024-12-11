@@ -29,12 +29,28 @@ public class XboxDrive implements ControllerIO {
 
     @Override
     public Translation2d POV() {
-        return new Translation2d(0, 0);
+        switch (Xbox.getHID().getPOV()) {
+            case 0:
+                return POVs[1];
+            case 90:
+                return POVs[3];
+            case 180:
+                return POVs[5];
+            case 270:
+                return POVs[7];
+            default:
+                return POVs[0];
+        }
     }
 
     @Override
     public Trigger Seed() {
         return Xbox.leftBumper();
+    }
+
+    @Override
+    public Trigger Brake() {
+        return Xbox.rightTrigger();
     }
 
 }
