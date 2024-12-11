@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Auton.AutoDirector;
 import frc.robot.subsystems.Auton.AutoSubsystems;
+import frc.robot.subsystems.Controlles.ControllerIO;
+import frc.robot.subsystems.Controlles.TwoStickDrive;
 import frc.robot.subsystems.LED.LEDCommand;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 import frc.robot.subsystems.Swerve.Telemetry;
@@ -58,47 +60,16 @@ public class RobotContainer {
 
     // LEDs
     LED m_LED = new LED();
-    private LEDCommand LEDCommand = m_LED.new LEDCommand();
+
+    LEDCommand LEDCommand = m_LED.new LEDCommand();
 
     public RobotContainer() {
         configureBindings();
     }
 
-    private double POVDistance = .45;
-    private double POVDistanceDiagonal = Math.sqrt(2 * (Math.pow(POVDistance, 2)));
-    private Translation2d[] POVs = {
-            new Translation2d(0, 0), // Default
-            new Translation2d(0, POVDistance), // left 1
-            new Translation2d(POVDistance, 0), // Up 2
-            new Translation2d(0, -POVDistance), // Right 3
-            new Translation2d(-POVDistance, 0), // Down 4
-            new Translation2d(POVDistanceDiagonal, POVDistanceDiagonal), // up left 5
-            new Translation2d(POVDistanceDiagonal, -POVDistanceDiagonal), // up right 6
-            new Translation2d(-POVDistanceDiagonal, POVDistanceDiagonal), // down left 7
-            new Translation2d(-POVDistanceDiagonal, -POVDistanceDiagonal) // down right 8
-    };
 
-    public Translation2d getPOV() {
-        if (leftStick.povLeft().getAsBoolean()) {
-            return POVs[1];
-        } else if (leftStick.povUp().getAsBoolean()) {
-            return POVs[2];
-        } else if (leftStick.povRight().getAsBoolean()) {
-            return POVs[3];
-        } else if (leftStick.povDown().getAsBoolean()) {
-            return POVs[4];
-        } else if (leftStick.povUpLeft().getAsBoolean()) {
-            return POVs[5];
-        } else if (leftStick.povUpRight().getAsBoolean()) {
-            return POVs[6];
-        } else if (leftStick.povDownLeft().getAsBoolean()) {
-            return POVs[7];
-        } else if (leftStick.povDownRight().getAsBoolean()) {
-            return POVs[8];
-        } else {
-            return POVs[0];
-        }
-    }
+
+    private final ControllerIO Controller = new TwoStickDrive(0, 1);
 
     private void configureBindings() {
         // AUTON
@@ -109,27 +80,37 @@ public class RobotContainer {
 
         // DRIVE
         // Note that X is defined as forward according to WPILib convention,
-        // and Y is defined as to the left according to WPILib convention.
+        // // and Y is defined as to the left according to WPILib convention.
         // m_DriveSubsystem.setDefaultCommand(
         // m_DriveSubsystem.Commands.applyRequest(() ->
         // drive.withVelocityX(-Xbox.getLeftY() * MaxSpeed)
         // .withVelocityY(-Xbox.getLeftX() * MaxSpeed)
         // .withRotationalRate(-Xbox.getRightX() *
         // MaxAngularRate).withCenterOfRotation(getPOV())));
-        m_DriveSubsystem.setDefaultCommand(
-                m_DriveSubsystem.Commands.applyRequest(() -> drive.withVelocityX(-leftStick.getY() * MaxSpeed)
-                        .withVelocityY(-leftStick.getX() * MaxSpeed)
-                        .withRotationalRate(-RightStick.getX() * MaxAngularRate)
-                        .withCenterOfRotation(getPOV())
-                        ));
-        leftStick.button(11).onTrue(m_DriveSubsystem.runOnce(() -> m_DriveSubsystem.seedFieldCentric()));
+        // m_DriveSubsystem.setDefaultCommand(
+        // m_DriveSubsystem.Commands.applyRequest(() ->
+        // drive.withVelocityX(-leftStick.getY() * MaxSpeed)
+        // .withVelocityY(-leftStick.getX() * MaxSpeed)
+        // .withRotationalRate(-RightStick.getX() * MaxAngularRate)
+        // .withCenterOfRotation(getPOV())));
+
+        m_DriveSubsystem.setDefaultCommand(m_DriveSubsystem.Commands.applyRequest(() -> drive
+            .withVelocityX(Controller.DriveLeft())
+            .withVelocityY(Controller.DriveUp())
+            .withRotationalRate(Controller.DriveTheta())
+            .withCenterOfRotation(Controller.POV())));
+
+        Controller.Seed().onTrue(m_DriveSubsystem.runOnce(() -> m_DriveSubsystem.seedFieldCentric()));
         // Xbox.a().whileTrue(m_DriveSubsystem.Commands.applyRequest(() -> brake));
         // Xbox.b().whileTrue(m_DriveSubsystem.Commands.applyRequest(
-        //     () -> point.withModuleDirection(new Rotation2d(-Xbox.getLeftY(), -Xbox.getLeftX()))));
-        // Xbox.leftBumper().onTrue(m_DriveSubsystem.runOnce(() -> m_DriveSubsystem.seedFieldCentric()));
-        Xbox.x().onTrue(LEDCommand.test(10, Color.kGreen, Color.kBlack, 25, 75).andThen(LEDCommand.off()));
-        Xbox.b().onTrue(LEDCommand.shoot().andThen(LEDCommand.off()));
-        Xbox.y().onTrue(LEDCommand.test2().andThen(LEDCommand.off()));
+        // () -> point.withModuleDirection(new Rotation2d(-Xbox.getLeftY(),
+        // -Xbox.getLeftX()))));
+        // Xbox.leftBumper().onTrue(m_DriveSubsystem.runOnce(() ->
+        // m_DriveSubsystem.seedFieldCentric()));
+        // Xbox.x().onTrue(LEDCommand.test(10, Color.kGreen, Color.kBlack, 25, 75).andThen(LEDCommand.off()));
+        // Xbox.b().onTrue(LEDCommand.shoot().andThen(LEDCommand.off()));
+        // Xbox.y().onTrue(LEDCommand.test2().andThen(LEDCommand.off()));
+        // Xbox.a().onTrue(getIdleLEDs());
         m_DriveSubsystem.registerTelemetry(logger::telemeterize);
 
         // SYSID ROUTINES

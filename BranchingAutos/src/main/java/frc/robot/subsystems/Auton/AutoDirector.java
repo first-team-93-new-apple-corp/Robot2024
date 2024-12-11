@@ -26,8 +26,8 @@ public class AutoDirector {
     AddAutos();
   }
 
-  public record Auto(String name, Command command, Pose2d initPose) {
-  }
+  public record Auto(String name, Command command, Pose2d initPose) {}
+
 
   public Auto selection() {
       return autoChooser.getSelected();

@@ -22,7 +22,7 @@ public class LED implements Subsystem {
     private LEDPattern m_RedBlueCycle;
 
     // Rainbow
-    private static final Distance kLedSpacing = Feet.of(3 / 144.0);
+    private static final Distance kLedSpacing = Feet.of(3 / 72.0);
     private final LEDPattern m_rainbow = LEDPattern.rainbow(255, 255);
     private final LEDPattern m_scrollingRainbow = m_rainbow.scrollAtAbsoluteSpeed(MetersPerSecond.of(1), kLedSpacing);
 
@@ -35,7 +35,7 @@ public class LED implements Subsystem {
 
         // Reuse buffer
         // Length is expensive to set, so only set it once, then just update data
-        m_ledBuffer = new AddressableLEDBuffer(144);
+        m_ledBuffer = new AddressableLEDBuffer(72);
         m_led.setLength(m_ledBuffer.getLength());
 
         // Set the data
@@ -114,12 +114,12 @@ public class LED implements Subsystem {
         if (reversed) {
             applyShootingStartReversed(starLength, speed, cycles);
         } else {
-            applyShootingStar(color, starLength, speed, cycles);
+            applyShootingStar(starLength, speed, cycles);
         }
     }
 
-    public void applyShootingStar(Color color, int starLength, int speed, int cycles) {
-        Color starColor = color;
+    public void applyShootingStar(int starLength, int speed, int cycles) {
+        Color starColor = new Color(0,0,255);
         Color backgroundColor = new Color(0, 0, 0);
 
         for (int cycle = 0; cycle < cycles; cycle++) {
@@ -192,7 +192,8 @@ public class LED implements Subsystem {
             return runOnce(() -> twoColorCycle(LedSpacing, Color1, Color2, cycles, time));
         }
 
-        public Command shoot() {
+        public Command 
+        shoot() {
             return runOnce(() -> twoColorCycle(10, Color.kSeaGreen, Color.kBlack, 144, 25));
         }
 
