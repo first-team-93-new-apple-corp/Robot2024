@@ -9,14 +9,10 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.LED;
@@ -29,32 +25,29 @@ import frc.robot.subsystems.LED.LEDCommand;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 import frc.robot.subsystems.Swerve.Telemetry;
 import frc.robot.subsystems.Swerve.TunerConstants;
+import frc.robot.subsystems.VisionIO.GamePiecePhoton;
 
 public class RobotContainer {
     // Drivetrain
-    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) / 1.5; // kSpeedAt12Volts desired top
+    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
                                                                                         // speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
                                                                                       // max angular velocity
     public final SwerveDriveSubsystem m_DriveSubsystem = TunerConstants.createDrivetrain();
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.02).withRotationalDeadband(MaxAngularRate * 0.02) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage).withCenterOfRotation(new Translation2d(0, 1)); // Use
-                                                                                                                   // open-loop
-                                                                                                                   // control
-                                                                                                                   // for
-                                                                                                                   // drive
-                                                                                                                   // motors
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-    private final SwerveRequest.ApplyFieldSpeeds applyFieldSpeeds = new SwerveRequest.ApplyFieldSpeeds();
+
     // Controls
     private final CommandXboxController Xbox = new CommandXboxController(2);
     private final CommandJoystick leftStick = new CommandJoystick(0);
     private final CommandJoystick RightStick = new CommandJoystick(1);
+    private final ControllerIO Driver = new TwoStickDrive(0, 1);
+    // private final ControllerIO Driver = new XboxDrive(2);
 
     // Auton
-    private SendableChooser<Command> autoChooser;
     AutoDirector autoDirector;
 
     // Logging
@@ -63,24 +56,18 @@ public class RobotContainer {
     // LEDs
     LED m_LED = new LED();
 
-    LEDCommand LEDCommand = m_LED.new LEDCommand();
-
     public RobotContainer() {
-        configureBindings();
-    }
+        m_DriveSubsystem.registerTelemetry(logger::telemeterize);
 
-
-
-    // private final ControllerIO Driver = new TwoStickDrive(0, 1);
-    private final ControllerIO Driver = new XboxDrive(2);
-
-    private void configureBindings() {
         // AUTON
         m_DriveSubsystem.configureAuto();
-        autoChooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("PathPlanner AutoChooser", autoChooser);
         autoDirector = new AutoDirector(new AutoSubsystems(m_DriveSubsystem));
+        configureBindings();
 
+    }
+
+    private GamePiecePhoton vision = new GamePiecePhoton();
+    private void configureBindings() {
         // Drive
         m_DriveSubsystem.setDefaultCommand(m_DriveSubsystem.Commands.applyRequest(() -> drive
             .withVelocityX(Driver.DriveLeft())
@@ -89,17 +76,14 @@ public class RobotContainer {
             .withCenterOfRotation(Driver.POV())));
 
         Driver.Seed().onTrue(m_DriveSubsystem.runOnce(() -> m_DriveSubsystem.seedFieldCentric()));
-        // Xbox.a().whileTrue(m_DriveSubsystem.Commands.applyRequest(() -> brake));
-        // Xbox.b().whileTrue(m_DriveSubsystem.Commands.applyRequest(
-        // () -> point.withModuleDirection(new Rotation2d(-Xbox.getLeftY(),
-        // -Xbox.getLeftX()))));
-        // Xbox.leftBumper().onTrue(m_DriveSubsystem.runOnce(() ->
-        // m_DriveSubsystem.seedFieldCentric()));
+        Driver.Brake().whileTrue(m_DriveSubsystem.Commands.applyRequest(() -> brake));
+        Xbox.b().whileTrue(m_DriveSubsystem.Commands.applyRequest(() -> drive.withRotationalRate(vision.turnToNote())));
+
+        //LEDS
         // Xbox.x().onTrue(LEDCommand.test(10, Color.kGreen, Color.kBlack, 25, 75).andThen(LEDCommand.off()));
         // Xbox.b().onTrue(LEDCommand.shoot().andThen(LEDCommand.off()));
         // Xbox.y().onTrue(LEDCommand.test2().andThen(LEDCommand.off()));
         // Xbox.a().onTrue(getIdleLEDs());
-        m_DriveSubsystem.registerTelemetry(logger::telemeterize);
 
         // SYSID ROUTINES
         // Run SysId routines when holding back/start and X/Y.
@@ -116,6 +100,6 @@ public class RobotContainer {
     }
 
     public Command getIdleLEDs() {
-        return LEDCommand.applyColorCycle(4, Color.kBlue, Color.kRed);
+        return m_LED.Commands.applyColorCycle(4, Color.kBlue, Color.kRed);
     }
 }

@@ -4,9 +4,6 @@
 
 package frc.robot;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;

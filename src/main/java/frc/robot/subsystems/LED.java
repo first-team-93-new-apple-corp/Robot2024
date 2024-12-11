@@ -9,13 +9,14 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.math.Num;
 import edu.wpi.first.units.measure.Distance;
 
 public class LED implements Subsystem {
     // LED Definitions
     private final AddressableLED m_led;
     private final AddressableLEDBuffer m_ledBuffer;
+
+    public final LEDCommand Commands = new LEDCommand();
 
     // Patterns
     @SuppressWarnings("unused")
@@ -180,9 +181,6 @@ public class LED implements Subsystem {
     }
 
     public class LEDCommand {
-        public LEDCommand() {
-
-        }
 
         public Command applyColorCycle(int LedSpacing, Color Color1, Color Color2) {
             return run(() -> applyColorCycle(LedSpacing, Color1, Color2));

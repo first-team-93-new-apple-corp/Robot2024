@@ -19,7 +19,7 @@ public class GamePiecePhoton extends SubsystemBase {
     PhotonTrackedTarget target;
     double pitch, yaw, area;
 
-    private PIDController rotate = new PIDController(0.05, 0, 0);
+    private PIDController rotate = new PIDController(0.04, 0, 0.001);
 
     public GamePiecePhoton() {
         rotate.setSetpoint(0);
@@ -27,7 +27,7 @@ public class GamePiecePhoton extends SubsystemBase {
     }
 
     public double turnToNote() {
-        return -rotate.calculate(yaw);
+        return rotate.calculate(yaw);
     }
 
     @Override
