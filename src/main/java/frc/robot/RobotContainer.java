@@ -103,4 +103,7 @@ public class RobotContainer {
     public Command getIdleLEDs() {
         return m_LED.Commands.applyColorCycle(4, Color.kBlue, Color.kRed);
     }
+    public void disableLockWheels() {
+        m_DriveSubsystem.Commands.applyRequest(() -> brake);
+    }
 }
