@@ -6,10 +6,12 @@ import frc.robot.subsystems.Swerve.TunerConstants;
 
 import static edu.wpi.first.units.Units.*;
 
-public interface ControllerIO {
-    // WIP
-    // FUTURE REWORK OF THE CONTROLLER IO I ALREADY MADE
-    // -SAWYER
+  /**
+   * The Interface that provides all the controlles of our robot
+   *
+   */
+public interface ControllerSchemeIO {
+
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
     public static double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
     public static double POVDistance = .45;

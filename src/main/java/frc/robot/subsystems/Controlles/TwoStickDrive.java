@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-public class TwoStickDrive implements ControllerIO {
+public class TwoStickDrive implements ControllerSchemeIO {
 
     private CommandJoystick LeftStick;
     private CommandJoystick RightStick;

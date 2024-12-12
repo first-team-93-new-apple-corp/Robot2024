@@ -1,19 +1,23 @@
 package frc.robot.subsystems.Controlles;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-public class SillyPOVIdea implements ControllerIO {
+public class SillyPOVIdea implements ControllerSchemeIO {
 
     private CommandJoystick LeftStick;
     private CommandJoystick RightStick;
 
-
+  /**
+   * An implementation of  {@link #the (ControllerSchemeIO)}
+   * <p> Uses left stick to generate center of rotations
+   */
     public SillyPOVIdea(int LeftPort, int RightPort) {
         LeftStick = new CommandJoystick(LeftPort);
         RightStick = new CommandJoystick(RightPort);
-
     }
 
     @Override

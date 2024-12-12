@@ -7,6 +7,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -34,19 +35,16 @@ public class GamePiecePhoton extends SubsystemBase {
     public void periodic() {
         results = camera.getAllUnreadResults();
         if (!results.isEmpty()) {
-            // Camera processed a new frame since last
-            // Get the last one in the list.
             result = results.get(results.size() - 1);
             if (result.hasTargets()) {
-                // At least one AprilTag was seen by the camera
                 target = result.getBestTarget();
 
                 yaw = target.getYaw();
                 pitch = target.getPitch();
                 area = target.getArea();
             }
-        }
-
+        }  
+        SmartDashboard.putBoolean("CameraConnected?", camera.isConnected());
         SmartDashboard.putNumber("Photon rotation", rotation);
         SmartDashboard.putNumber("Photon yaw", yaw);
     }

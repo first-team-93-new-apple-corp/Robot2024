@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-public class XboxDrive implements ControllerIO {
+public class XboxDrive implements ControllerSchemeIO {
 
     public CommandXboxController Xbox;
 

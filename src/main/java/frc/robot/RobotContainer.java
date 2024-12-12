@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Auton.AutoDirector;
 import frc.robot.subsystems.Auton.AutoSubsystems;
-import frc.robot.subsystems.Controlles.ControllerIO;
+import frc.robot.subsystems.Controlles.ControllerSchemeIO;
 import frc.robot.subsystems.Controlles.SillyPOVIdea;
 import frc.robot.subsystems.Controlles.TwoStickDrive;
 import frc.robot.subsystems.Controlles.XboxDrive;
@@ -45,7 +45,7 @@ public class RobotContainer {
     private final CommandXboxController Xbox = new CommandXboxController(2);
     private final CommandJoystick leftStick = new CommandJoystick(0);
     private final CommandJoystick RightStick = new CommandJoystick(1);
-    private final ControllerIO Driver = new TwoStickDrive(0, 1);
+    private final ControllerSchemeIO Driver = new SillyPOVIdea(0, 1);
     // private final ControllerIO Driver = new XboxDrive(2);
 
     // Auton
@@ -69,7 +69,6 @@ public class RobotContainer {
 
     private GamePiecePhoton vision = new GamePiecePhoton();
     private void configureBindings() {
-        // Drive
         m_DriveSubsystem.setDefaultCommand(m_DriveSubsystem.Commands.applyRequest(() -> drive
             .withVelocityX(Driver.DriveLeft())
             .withVelocityY(Driver.DriveUp())
