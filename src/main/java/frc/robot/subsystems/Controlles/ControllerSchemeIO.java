@@ -6,10 +6,10 @@ import frc.robot.subsystems.Swerve.TunerConstants;
 
 import static edu.wpi.first.units.Units.*;
 
-  /**
-   * The Interface that provides all the controlles of our robot
-   *
-   */
+/**
+ * The Interface that provides all the controlles of our robot
+ *
+ */
 public interface ControllerSchemeIO {
 
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
@@ -51,5 +51,28 @@ public interface ControllerSchemeIO {
 
     public default double DriveTheta() {
         return InputTheta() * MaxAngularRate;
+    }
+
+    public default Translation2d AngleToPOV(int Angle) {
+        switch (Angle) {
+            case 0:
+                return POVs[1];
+            case 45:
+                return POVs[2];
+            case 90:
+                return POVs[3];
+            case 135:
+                return POVs[4];
+            case 180:
+                return POVs[5];
+            case 225:
+                return POVs[6];
+            case 270:
+                return POVs[7];
+            case 315:
+                return POVs[8];
+            default:
+                return POVs[0];
+        }
     }
 }

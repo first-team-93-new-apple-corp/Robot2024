@@ -1,6 +1,5 @@
 package frc.robot.subsystems.Controlles;
 
-
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,10 +14,12 @@ public class POVDriveV2 implements ControllerSchemeIO {
     private CommandJoystick RightStick;
     private Supplier<Double> robotAngle;
     private double Angle;
-  /**
-   * An implementation of  {@link #the (ControllerSchemeIO)}
-   * <p> Uses left stick to generate center of rotation with FeildRel
-   */
+
+    /**
+     * An implementation of {@link #the (ControllerSchemeIO)}
+     * <p>
+     * Uses left stick to generate center of rotation with FeildRel
+     */
     public POVDriveV2(int LeftPort, int RightPort, Supplier<Double> robotAngle) {
         LeftStick = new CommandJoystick(LeftPort);
         RightStick = new CommandJoystick(RightPort);
@@ -51,30 +52,13 @@ public class POVDriveV2 implements ControllerSchemeIO {
 
     @Override
     public Translation2d POV() {
+        Translation2d POV;
         if (LeftStick.button(2).getAsBoolean()) {
-            return new Translation2d(-LeftStick.getY() ,-LeftStick.getX()).rotateAround(new Translation2d(0,0), Rotation2d.fromDegrees(180-Angle));
+            POV = new Translation2d(-LeftStick.getY(), -LeftStick.getX());
         } else {
-            switch (LeftStick.getHID().getPOV()) {
-                case 0:
-                    return POVs[1];
-                case 45:
-                    return POVs[2];
-                case 90:
-                    return POVs[3];
-                case 135:
-                    return POVs[4];
-                case 180:
-                    return POVs[5];
-                case 225:
-                    return POVs[6];
-                case 270:
-                    return POVs[7];
-                case 315:
-                    return POVs[8];
-                default:
-                    return POVs[0];
-            }
+            POV = AngleToPOV(LeftStick.getHID().getPOV());
         }
+        return POV.rotateAround(new Translation2d(0, 0), Rotation2d.fromDegrees(180 - Angle));
     }
 
     @Override
@@ -83,7 +67,7 @@ public class POVDriveV2 implements ControllerSchemeIO {
     }
 
     @Override
-    public Trigger Brake(){
+    public Trigger Brake() {
         return RightStick.trigger();
     }
 
