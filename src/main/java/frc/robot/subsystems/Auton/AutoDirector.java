@@ -76,6 +76,7 @@ public class AutoDirector {
     paths.add(CG3);
     paths.add(CG4);
     paths.add(CG5);
+    
     AutoTracker tracker = new AutoTracker(subsystems, paths, () -> PositionConstants.Speaker());
     return new Auto("8GamePiece", tracker.asCommand(), PositionConstants.Speaker() );
   }

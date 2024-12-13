@@ -19,6 +19,7 @@ import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Auton.AutoDirector;
 import frc.robot.subsystems.Auton.AutoSubsystems;
 import frc.robot.subsystems.Controlles.ControllerSchemeIO;
+import frc.robot.subsystems.Controlles.POVDriveV2;
 import frc.robot.subsystems.Controlles.SillyPOVIdea;
 import frc.robot.subsystems.Controlles.TwoStickDrive;
 import frc.robot.subsystems.Controlles.XboxDrive;
@@ -45,7 +46,7 @@ public class RobotContainer {
     private final CommandXboxController Xbox = new CommandXboxController(2);
     private final CommandJoystick leftStick = new CommandJoystick(0);
     private final CommandJoystick RightStick = new CommandJoystick(1);
-    private final ControllerSchemeIO Driver = new SillyPOVIdea(0, 1);
+    private final ControllerSchemeIO Driver = new POVDriveV2(0, 1, () -> m_DriveSubsystem.getState().Pose.getRotation().getDegrees());
     // private final ControllerIO Driver = new XboxDrive(2);
 
     // Auton
@@ -77,7 +78,7 @@ public class RobotContainer {
 
         Driver.Seed().onTrue(m_DriveSubsystem.runOnce(() -> m_DriveSubsystem.seedFieldCentric()));
         Driver.Brake().whileTrue(m_DriveSubsystem.Commands.applyRequest(() -> brake));
-        Xbox.b().whileTrue(m_DriveSubsystem.Commands.applyRequest(() -> drive.withRotationalRate(vision.turnToNote())));
+        Xbox.b().whileTrue(m_DriveSubsystem.Commands.applyRequest(() -> drive.withRotationalRate(vision.turnToNote()).withVelocityY(leftStick.getX()).withVelocityY(vision.orbitNote())));
 
         //LEDS
         // Xbox.x().onTrue(LEDCommand.test(10, Color.kGreen, Color.kBlack, 25, 75).andThen(LEDCommand.off()));
