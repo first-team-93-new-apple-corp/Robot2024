@@ -33,26 +33,7 @@ public class TwoStickDrive implements ControllerSchemeIO {
 
     @Override
     public Translation2d POV() {
-        switch (LeftStick.getHID().getPOV()) {
-            case 0:
-                return POVs[1];
-            case 45:
-                return POVs[2];
-            case 90:
-                return POVs[3];
-            case 135:
-                return POVs[4];
-            case 180:
-                return POVs[5];
-            case 225:
-                return POVs[6];
-            case 270:
-                return POVs[7];
-            case 315:
-                return POVs[8];
-            default:
-                return POVs[0];
-        }
+        return AngleToPOV(LeftStick.getHID().getPOV());
     }
 
     @Override
@@ -65,4 +46,8 @@ public class TwoStickDrive implements ControllerSchemeIO {
         return RightStick.trigger();
     }
 
+    @Override
+    public Trigger robotRel() {
+        return LeftStick.trigger();
+    }
 }

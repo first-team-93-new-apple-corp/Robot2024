@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Controlles;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Swerve.TunerConstants;
 
@@ -41,6 +42,8 @@ public interface ControllerSchemeIO {
 
     public Trigger Brake();
 
+    public Trigger robotRel();
+
     public default double DriveLeft() {
         return InputLeft() * MaxSpeed;
     }
@@ -51,6 +54,10 @@ public interface ControllerSchemeIO {
 
     public default double DriveTheta() {
         return InputTheta() * MaxAngularRate;
+    }
+
+    public default ChassisSpeeds Speeds(){
+        return new ChassisSpeeds(DriveLeft(), DriveUp(), DriveTheta());
     }
 
     public default Translation2d AngleToPOV(int Angle) {

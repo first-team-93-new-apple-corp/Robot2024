@@ -20,7 +20,7 @@ import frc.robot.subsystems.Auton.AutoDirector;
 import frc.robot.subsystems.Auton.AutoSubsystems;
 import frc.robot.subsystems.Controlles.ControllerSchemeIO;
 import frc.robot.subsystems.Controlles.POVDriveV2;
-import frc.robot.subsystems.Controlles.SillyPOVIdea;
+import frc.robot.subsystems.Controlles.POVDriveV1;
 import frc.robot.subsystems.Controlles.TwoStickDrive;
 import frc.robot.subsystems.Controlles.XboxDrive;
 import frc.robot.subsystems.LED.LEDCommand;
@@ -39,9 +39,13 @@ public class RobotContainer {
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.02).withRotationalDeadband(MaxAngularRate * 0.02) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+    private final SwerveRequest.RobotCentric driveRobot = new SwerveRequest.RobotCentric()
+            .withDeadband(MaxSpeed * 0.02).withRotationalDeadband(MaxAngularRate * 0.02) // Add a 10% deadband
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-
+    private final SwerveRequest.FieldCentricFacingAngle a = new SwerveRequest.FieldCentricFacingAngle();
+    
     // Controls
     private final CommandXboxController Xbox = new CommandXboxController(2);
     private final CommandJoystick leftStick = new CommandJoystick(0);
@@ -71,6 +75,12 @@ public class RobotContainer {
     private GamePiecePhoton vision = new GamePiecePhoton();
     private void configureBindings() {
         m_DriveSubsystem.setDefaultCommand(m_DriveSubsystem.Commands.applyRequest(() -> drive
+            .withVelocityX(Driver.DriveLeft())
+            .withVelocityY(Driver.DriveUp())
+            .withRotationalRate(Driver.DriveTheta())
+            .withCenterOfRotation(Driver.POV())));
+
+        Driver.robotRel().whileTrue(m_DriveSubsystem.Commands.applyRequest(() -> driveRobot
             .withVelocityX(Driver.DriveLeft())
             .withVelocityY(Driver.DriveUp())
             .withRotationalRate(Driver.DriveTheta())

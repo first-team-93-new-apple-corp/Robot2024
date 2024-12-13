@@ -52,5 +52,9 @@ public class XboxDrive implements ControllerSchemeIO {
     public Trigger Brake() {
         return Xbox.rightTrigger();
     }
-
+    
+    @Override
+    public Trigger robotRel() {
+        return Xbox.a();
+    }
 }

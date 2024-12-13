@@ -6,7 +6,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-public class SillyPOVIdea implements ControllerSchemeIO {
+public class POVDriveV1 implements ControllerSchemeIO {
 
     private CommandJoystick LeftStick;
     private CommandJoystick RightStick;
@@ -15,7 +15,7 @@ public class SillyPOVIdea implements ControllerSchemeIO {
    * An implementation of  {@link #the (ControllerSchemeIO)}
    * <p> Uses left stick to generate center of rotations
    */
-    public SillyPOVIdea(int LeftPort, int RightPort) {
+    public POVDriveV1(int LeftPort, int RightPort) {
         LeftStick = new CommandJoystick(LeftPort);
         RightStick = new CommandJoystick(RightPort);
     }
@@ -60,6 +60,11 @@ public class SillyPOVIdea implements ControllerSchemeIO {
     @Override
     public Trigger Brake(){
         return RightStick.trigger();
+    }
+
+    @Override
+    public Trigger robotRel() {
+        return LeftStick.trigger();
     }
 
 }
