@@ -19,11 +19,11 @@ import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Auton.AutoDirector;
 import frc.robot.subsystems.Auton.AutoSubsystems;
 import frc.robot.subsystems.Controlles.ControllerSchemeIO;
+import frc.robot.subsystems.Controlles.DriverAssistTwoStick;
 import frc.robot.subsystems.Controlles.POVDriveV2;
 import frc.robot.subsystems.Controlles.POVDriveV1;
 import frc.robot.subsystems.Controlles.TwoStickDrive;
 import frc.robot.subsystems.Controlles.XboxDrive;
-import frc.robot.subsystems.LED.LEDCommand;
 import frc.robot.subsystems.Swerve.SwerveDriveSubsystem;
 import frc.robot.subsystems.Swerve.Telemetry;
 import frc.robot.subsystems.Swerve.TunerConstants;
@@ -44,13 +44,12 @@ public class RobotContainer {
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-    private final SwerveRequest.FieldCentricFacingAngle a = new SwerveRequest.FieldCentricFacingAngle();
-    
     // Controls
     private final CommandXboxController Xbox = new CommandXboxController(2);
     private final CommandJoystick leftStick = new CommandJoystick(0);
     private final CommandJoystick RightStick = new CommandJoystick(1);
-    private final ControllerSchemeIO Driver = new POVDriveV2(0, 1, () -> m_DriveSubsystem.getState().Pose.getRotation().getDegrees());
+    // private final ControllerSchemeIO Driver = new POVDriveV2(0, 1, () -> m_DriveSubsystem.getState().Pose.getRotation().getDegrees());
+    private final ControllerSchemeIO Driver = new DriverAssistTwoStick(0, 1, () -> m_DriveSubsystem.getState().Pose);
     // private final ControllerIO Driver = new XboxDrive(2);
 
     // Auton

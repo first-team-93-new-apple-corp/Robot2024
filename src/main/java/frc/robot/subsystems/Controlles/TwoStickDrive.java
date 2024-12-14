@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class TwoStickDrive implements ControllerSchemeIO {
 
-    private CommandJoystick LeftStick;
-    private CommandJoystick RightStick;
+    public CommandJoystick LeftStick;
+    public CommandJoystick RightStick;
 
 
     public TwoStickDrive(int LeftPort, int RightPort) {
