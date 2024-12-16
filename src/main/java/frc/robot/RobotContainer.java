@@ -48,8 +48,8 @@ public class RobotContainer {
     private final CommandXboxController Xbox = new CommandXboxController(2);
     private final CommandJoystick leftStick = new CommandJoystick(0);
     private final CommandJoystick RightStick = new CommandJoystick(1);
-    // private final ControllerSchemeIO Driver = new POVDriveV2(0, 1, () -> m_DriveSubsystem.getState().Pose.getRotation().getDegrees());
-    private final ControllerSchemeIO Driver = new DriverAssistTwoStick(0, 1, () -> m_DriveSubsystem.getState().Pose);
+    private final ControllerSchemeIO Driver = new POVDriveV2(0, 1, () -> m_DriveSubsystem.getState().Pose.getRotation().getDegrees());
+    // private final ControllerSchemeIO Driver = new DriverAssistTwoStick(0, 1, () -> m_DriveSubsystem.getState().Pose);
     // private final ControllerIO Driver = new XboxDrive(2);
 
     // Auton
