@@ -20,12 +20,15 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 /**
@@ -94,7 +97,7 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
                 () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 (speeds, feedforwards) -> setControl(autorequest2.withSpeeds(speeds)),
                 // RELATIVE ChassisSpeeds. Also optionally outputs
-                // individual module feedforwards11
+                // individual module feedforwards
                 new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for
                                                 // holonomic drive trains
                         new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
@@ -131,6 +134,30 @@ public class SwerveDriveSubsystem extends SwerveDrivetrain implements Subsystem 
             return sysID.m_sysIdRoutineToApply.dynamic(direction);
         }
 
+        private SwerveRequest.RobotCentric drive = new SwerveRequest.RobotCentric();
+        private double wheelMath(double startWheelPos, double endWheelPos, double DistanceToWheel){
+            double rots = (endWheelPos/2048) - (startWheelPos/2048);
+            return DistanceToWheel/(2*Math.PI*rots);
+        }
+        private double WheelDistance = Math.sqrt(
+            Math.pow(TunerConstants.BackLeft.LocationX, 2) + 
+            Math.pow(TunerConstants.BackLeft.LocationX, 2));
+        public Command Wheel() {
+            Rotation2d rot = getRotation3d().toRotation2d();
+            double Wheel1 = getModule(1).getDriveMotor().getPosition().getValueAsDouble();
+            return Log("Wheel1", Wheel1)
+                    .andThen(applyRequest(() -> drive.withRotationalRate(Math.PI/4))
+                            .raceWith(new WaitCommand(8)))
+                    .andThen(Log("Wheel1", getModule(1).getDriveMotor().getPosition().getValueAsDouble()))
+                    .andThen(Log("Wheel math", wheelMath(Wheel1, getModule(1).getDriveMotor().getPosition().getValueAsDouble(), WheelDistance )));
+        }
+
+        private Command Log(String name, double num) {
+            return runOnce(() -> {
+                SignalLogger.writeDouble(name, num);
+                SmartDashboard.putNumber(name, num);
+        });
+        }
     }
 
     @Override

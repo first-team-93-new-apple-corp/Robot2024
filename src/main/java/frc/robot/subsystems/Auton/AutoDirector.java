@@ -38,6 +38,7 @@ public class AutoDirector {
     Autos.add(Speaker3());
     Autos.add(EightGP());
     Autos.add(straight());
+    Autos.add(Wheels());
     for (Auto auto : Autos) {
       autoChooser.addOption(auto.name, auto);
     }
@@ -55,6 +56,10 @@ public class AutoDirector {
 
     AutoTracker tracker = new AutoTracker(subsystems, paths, () -> PositionConstants.Speaker());
     return new Auto("straight", tracker.asCommand(), PositionConstants.Speaker());
+  }
+
+  public Auto Wheels(){
+    return new Auto("Silly Wheel Number Maker", subsystems.driveSubsystem().Commands.Wheel(), null);
   }
 
   public Auto Speaker3() {
